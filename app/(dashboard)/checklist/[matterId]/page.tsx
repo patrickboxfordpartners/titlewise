@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useEffect, use } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock } from "lucide-react"
+import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { PrintButton } from "@/components/print-button"
 
 type Item = {
   id: string
@@ -123,11 +125,14 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
             <p className="text-sm text-slate-500">{matter.propertyAddress} - {matter.transactionType}</p>
             {matter.closingDate && <p className="text-xs text-slate-400 mt-0.5">Closing: {new Date(matter.closingDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>}
           </div>
-          {matter.status === "active" && (
-            <button onClick={closeMatter} className="text-xs text-slate-500 hover:text-slate-700 border border-slate-200 px-3 py-1.5 rounded-md">
-              Close Matter
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            <PrintButton label="Print Checklist" />
+            {matter.status === "active" && (
+              <button onClick={closeMatter} className="text-xs text-slate-500 hover:text-slate-700 border border-slate-200 px-3 py-1.5 rounded-md">
+                Close Matter
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Progress */}
@@ -139,6 +144,33 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
           <span className="text-xs text-slate-400">{complete}/{total}</span>
         </div>
       </div>
+
+      {/* Quick actions — open tools pre-filled with this matter */}
+      {matter.status === "active" && (
+        <div className="flex flex-wrap gap-2 pb-2">
+          <Link
+            href={`/status-update?clientName=${encodeURIComponent(matter.clientName)}&propertyAddress=${encodeURIComponent(matter.propertyAddress)}&transactionType=${encodeURIComponent(matter.transactionType)}`}
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-700 border border-slate-200 hover:border-blue-300 bg-white px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <FileText className="h-3.5 w-3.5" />
+            Status Update
+          </Link>
+          <Link
+            href="/title-analysis"
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-700 border border-slate-200 hover:border-blue-300 bg-white px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <FileSearch className="h-3.5 w-3.5" />
+            Title Analysis
+          </Link>
+          <Link
+            href="/cd-reviewer"
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-700 border border-slate-200 hover:border-blue-300 bg-white px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <FileCheck className="h-3.5 w-3.5" />
+            CD Review
+          </Link>
+        </div>
+      )}
 
       {/* Items grouped by party */}
       <div className="space-y-4">

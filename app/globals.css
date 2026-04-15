@@ -28,3 +28,42 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+@media print {
+  /* Hide nav, sidebar, and all interactive controls */
+  aside,
+  header,
+  nav,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Ensure main content fills the page */
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Clean card borders for print */
+  .rounded-xl,
+  .rounded-lg {
+    border-radius: 4px !important;
+    border: 1px solid #e2e8f0 !important;
+    break-inside: avoid;
+  }
+
+  /* Avoid breaking across pages mid-section */
+  .space-y-4 > * {
+    break-inside: avoid;
+  }
+
+  body {
+    font-size: 12px;
+    color: #0f172a;
+    background: white;
+  }
+
+  a[href]::after {
+    content: none !important;
+  }
+}

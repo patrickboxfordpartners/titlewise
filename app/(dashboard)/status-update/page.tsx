@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-import { Copy, Check, Loader2, RotateCcw } from "lucide-react"
+import { Copy, Check, Loader2, RotateCcw, Mail } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const CLOSING_STAGES = [
@@ -59,6 +59,19 @@ function StatusUpdateContent() {
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState("")
+
+  // Auto-fill attorney name and firm from profile
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        setForm((prev) => ({
+          ...prev,
+          ...(data.name && !prev.attorneyName ? { attorneyName: data.name } : {}),
+        }))
+      })
+      .catch(() => {})
+  }, [])
 
   // Pre-fill from URL params (re-generate from history)
   useEffect(() => {
@@ -129,6 +142,15 @@ function StatusUpdateContent() {
     await navigator.clipboard.writeText(output)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  function handleMailto() {
+    // Extract subject line if present (format: "Subject: ...")
+    const subjectMatch = output.match(/^Subject:\s*(.+)/m)
+    const subject = subjectMatch ? subjectMatch[1].trim() : `Closing Update — ${form.propertyAddress}`
+    const body = output.replace(/^Subject:.*\n?/m, "").trim()
+    const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.location.href = mailto
   }
 
   return (
@@ -284,6 +306,13 @@ function StatusUpdateContent() {
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                   Clear
+                </button>
+                <button
+                  onClick={handleMailto}
+                  className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  Open in Email
                 </button>
                 <button
                   onClick={handleCopy}

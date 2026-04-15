@@ -10,8 +10,9 @@ const planDetails = {
   solo: {
     features: [
       "1 attorney seat",
-      "Status Update Generator",
-      "Title Commitment Analyzer",
+      "All 8 tools (Status Update, Title Analysis, CD Review, Wire Verification, HOA Review, Fee Estimate, Tax Proration, Checklists)",
+      "History & re-generate",
+      "PDF export",
       "Email support",
     ],
   },
@@ -19,7 +20,7 @@ const planDetails = {
     features: [
       "Up to 5 attorney seats",
       "All Solo features",
-      "Team shared history",
+      "Shared history across firm",
       "Priority email support",
     ],
   },

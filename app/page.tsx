@@ -1,12 +1,12 @@
 import Link from "next/link"
-import { FileText, FileSearch, Clock, CheckCircle } from "lucide-react"
+import { FileText, FileSearch, Clock, CheckCircle, FileCheck, Shield, Building, DollarSign, Calculator, ClipboardList } from "lucide-react"
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "TitleWise",
   applicationCategory: "BusinessApplication",
-  description: "AI-powered tools for real estate closing attorneys — status update generation and title commitment analysis.",
+  description: "AI-powered tools for real estate closing attorneys — 8 tools covering every stage of the closing workflow.",
   offers: {
     "@type": "AggregateOffer",
     lowPrice: "99",
@@ -20,21 +20,48 @@ const features = [
   {
     icon: FileText,
     title: "Status Update Generator",
-    description:
-      "Enter your file details and get a professional client update email drafted in seconds. Attorneys write these constantly — now they take 30 seconds.",
+    description: "Draft a professional client update email in seconds. Attorneys write these constantly — now they take 30 seconds.",
   },
   {
     icon: FileSearch,
     title: "Title Commitment Analyzer",
-    description:
-      "Paste in a title commitment and get a plain-English breakdown of Schedule B exceptions, requirements, and anything that needs attention.",
-    badge: null,
+    description: "Plain-English breakdown of Schedule B requirements, exceptions, and red flags. Upload PDF or paste text.",
+  },
+  {
+    icon: FileCheck,
+    title: "Closing Disclosure Reviewer",
+    description: "Compare a CD against contract terms and instantly flag discrepancies in price, dates, credits, and names.",
+  },
+  {
+    icon: Shield,
+    title: "Wire Fraud Prevention",
+    description: "Analyze wire instructions for fraud indicators and generate a ready-to-send verification email.",
+  },
+  {
+    icon: Building,
+    title: "HOA Document Reviewer",
+    description: "Extract monthly dues, special assessments, restrictions, and litigation from HOA/condo documents.",
+  },
+  {
+    icon: DollarSign,
+    title: "Fee Estimate Generator",
+    description: "Generate a professional fee estimate letter for client intake in seconds.",
+  },
+  {
+    icon: Calculator,
+    title: "Tax Proration Calculator",
+    description: "Calculate buyer/seller property tax prorations with per-diem breakdown and copy-ready output.",
+  },
+  {
+    icon: ClipboardList,
+    title: "Closing Checklist Tracker",
+    description: "Auto-generated checklists by transaction type. Track items across parties from contract to recording.",
   },
 ]
 
 const bullets = [
+  "8 tools covering every stage of the closing workflow",
   "Built for real estate closing attorneys, not title companies",
-  "No legal advice — just time-saving drafts that you review and send",
   "Plain English output your clients actually understand",
   "Saves 30+ minutes per file, every day",
 ]
@@ -92,24 +119,18 @@ export default function HomePage() {
 
       {/* Features */}
       <section className="max-w-5xl mx-auto px-6 pb-16">
-        <div className="grid md:grid-cols-2 gap-5">
-          {features.map(({ icon: Icon, title, description, badge }) => (
-            <div
-              key={title}
-              className="bg-slate-50 rounded-2xl border border-slate-200 p-6"
-            >
-              <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-4 shadow-sm">
-                <Icon className="h-5 w-5 text-blue-600" />
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-slate-900">Everything you need to close faster</h2>
+          <p className="text-slate-500 text-sm mt-2">8 tools built around the real estate closing workflow</p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {features.map(({ icon: Icon, title, description }) => (
+            <div key={title} className="bg-slate-50 rounded-xl border border-slate-200 p-4">
+              <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-3 shadow-sm">
+                <Icon className="h-4 w-4 text-blue-600" />
               </div>
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-                {badge && (
-                  <span className="text-[10px] font-medium bg-white text-slate-500 border border-slate-200 px-1.5 py-0.5 rounded">
-                    {badge}
-                  </span>
-                )}
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed">{description}</p>
+              <h3 className="text-sm font-semibold text-slate-900 mb-1">{title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">{description}</p>
             </div>
           ))}
         </div>

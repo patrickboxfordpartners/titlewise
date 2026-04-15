@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Loader2, AlertTriangle, CheckCircle, Flag, Upload, Building } from "lucide-react"
+import { Loader2, AlertTriangle, CheckCircle, Flag, Upload } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { PrintButton } from "@/components/print-button"
 
 type Restriction = { category: string; detail: string; flagged: boolean }
 type RedFlag = { severity: "high" | "medium"; issue: string; detail: string }
@@ -83,7 +84,10 @@ export default function HOAReviewerPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-900">{review.association.name ?? "Unknown Association"}</p>
-            <button onClick={() => { setReview(null); setDocs("") }} className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 px-3 py-1.5 rounded-md">Review another</button>
+            <div className="flex items-center gap-2">
+              <PrintButton label="Export PDF" />
+              <button onClick={() => { setReview(null); setDocs("") }} className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 px-3 py-1.5 rounded-md">Review another</button>
+            </div>
           </div>
 
           {/* Summary */}

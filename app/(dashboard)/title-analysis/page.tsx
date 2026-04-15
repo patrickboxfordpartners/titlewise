@@ -3,6 +3,7 @@
 import { useState, useRef } from "react"
 import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag, Upload } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { PrintButton } from "@/components/print-button"
 
 type Requirement = {
   item: string
@@ -186,12 +187,15 @@ export default function TitleAnalysisPage() {
                   .join(" · ")}
               </p>
             </div>
+            <div className="flex items-center gap-2">
+              <PrintButton label="Export PDF" />
             <button
               onClick={() => { setAnalysis(null); setCommitment("") }}
               className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 px-3 py-1.5 rounded-md transition-colors"
             >
               Analyze another
             </button>
+            </div>
           </div>
 
           {/* Stats */}

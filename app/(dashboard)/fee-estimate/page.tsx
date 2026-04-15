@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Copy, Check, Loader2, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -38,6 +38,19 @@ export default function FeeEstimatePage() {
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        setForm((prev) => ({
+          ...prev,
+          ...(data.name && !prev.attorneyName ? { attorneyName: data.name } : {}),
+          ...(data.firmName && !prev.firmName ? { firmName: data.firmName } : {}),
+        }))
+      })
+      .catch(() => {})
+  }, [])
 
   function set(field: keyof FormData, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))

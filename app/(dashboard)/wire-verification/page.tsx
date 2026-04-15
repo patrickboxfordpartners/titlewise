@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Loader2, Shield, AlertTriangle, Copy, Check, ChevronDown, ChevronUp } from "lucide-react"
+import { Loader2, Shield, AlertTriangle, Copy, Check, Mail } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type RedFlag = { severity: "critical" | "high" | "medium"; issue: string; detail: string }
@@ -49,6 +49,13 @@ export default function WireVerificationPage() {
     if (!result) return
     await navigator.clipboard.writeText(result.verificationEmail)
     setCopied(true); setTimeout(() => setCopied(false), 2000)
+  }
+
+  function openInEmail() {
+    if (!result) return
+    const subject = encodeURIComponent("Wire Instruction Verification Request")
+    const body = encodeURIComponent(result.verificationEmail)
+    window.location.href = `mailto:?subject=${subject}&body=${body}`
   }
 
   return (
@@ -160,9 +167,14 @@ export default function WireVerificationPage() {
           <div className="bg-white rounded-xl border border-slate-200 p-5">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-semibold text-slate-800">Verification Email (Ready to Send)</h2>
-              <button onClick={copyEmail} className={cn("flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors", copied ? "bg-green-50 text-green-700" : "bg-blue-50 text-blue-700 hover:bg-blue-100")}>
-                {copied ? <><Check className="h-3.5 w-3.5" /> Copied</> : <><Copy className="h-3.5 w-3.5" /> Copy</>}
-              </button>
+              <div className="flex gap-2">
+                <button onClick={openInEmail} className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                  <Mail className="h-3.5 w-3.5" /> Open in Email
+                </button>
+                <button onClick={copyEmail} className={cn("flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors", copied ? "bg-green-50 text-green-700" : "bg-blue-50 text-blue-700 hover:bg-blue-100")}>
+                  {copied ? <><Check className="h-3.5 w-3.5" /> Copied</> : <><Copy className="h-3.5 w-3.5" /> Copy</>}
+                </button>
+              </div>
             </div>
             <pre className="text-sm text-slate-600 whitespace-pre-wrap font-mono bg-slate-50 rounded-lg p-3 max-h-64 overflow-y-auto">{result.verificationEmail}</pre>
           </div>

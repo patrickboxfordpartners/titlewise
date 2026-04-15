@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Loader2, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { PrintButton } from "@/components/print-button"
 
 type Discrepancy = { field: string; cdValue: string; contractValue: string; severity: "high" | "medium" | "low"; recommendation: string }
 type Warning = { issue: string; detail: string; severity: "high" | "medium" }
@@ -79,9 +80,12 @@ export default function CDReviewerPage() {
               <p className="text-sm font-medium text-slate-900">{review.property.address ?? "Address not found"}</p>
               <p className="text-xs text-slate-500 mt-0.5">{[review.property.buyer, review.property.seller].filter(Boolean).join(" / ")}</p>
             </div>
-            <button onClick={() => { setReview(null); setCd(""); setContract("") }} className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 px-3 py-1.5 rounded-md transition-colors">
-              Review another
-            </button>
+            <div className="flex items-center gap-2">
+              <PrintButton label="Export PDF" />
+              <button onClick={() => { setReview(null); setCd(""); setContract("") }} className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 px-3 py-1.5 rounded-md transition-colors">
+                Review another
+              </button>
+            </div>
           </div>
 
           {/* Stats */}
