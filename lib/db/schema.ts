@@ -51,6 +51,34 @@ export const titleAnalyses = pgTable("title_analyses", {
   index("idx_title_analyses_created").on(table.createdAt),
 ])
 
+export const matters = pgTable("matters", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  clientName: text("client_name").notNull(),
+  propertyAddress: text("property_address").notNull(),
+  transactionType: text("transaction_type").notNull(),
+  closingDate: timestamp("closing_date"),
+  status: text("status").default("active"), // active | closed
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_matters_user_id").on(table.userId),
+])
+
+export const checklistItems = pgTable("checklist_items", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  matterId: uuid("matter_id").notNull().references(() => matters.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  assignedTo: text("assigned_to"), // buyer | seller | lender | title_company | attorney | agent
+  status: text("status").default("pending"), // pending | in_progress | complete
+  dueDate: timestamp("due_date"),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_checklist_items_matter_id").on(table.matterId),
+])
+
 export const processedEvents = pgTable("processed_events", {
   id: text("id").primaryKey(),
   processedAt: timestamp("processed_at").defaultNow().notNull(),
@@ -62,3 +90,7 @@ export type StatusUpdate = typeof statusUpdates.$inferSelect
 export type NewStatusUpdate = typeof statusUpdates.$inferInsert
 export type TitleAnalysis = typeof titleAnalyses.$inferSelect
 export type NewTitleAnalysis = typeof titleAnalyses.$inferInsert
+export type Matter = typeof matters.$inferSelect
+export type NewMatter = typeof matters.$inferInsert
+export type ChecklistItem = typeof checklistItems.$inferSelect
+export type NewChecklistItem = typeof checklistItems.$inferInsert

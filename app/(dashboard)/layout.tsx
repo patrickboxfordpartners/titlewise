@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
-import { FileText, LayoutDashboard, FileSearch, Clock, Settings, Menu, X, Calculator, DollarSign, FileCheck, Shield, Building } from "lucide-react"
+import { FileText, LayoutDashboard, FileSearch, Clock, Settings, Menu, X, Calculator, DollarSign, FileCheck, Shield, Building, ClipboardList } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 
@@ -16,6 +16,7 @@ const nav = [
   { href: "/hoa-reviewer", label: "HOA Reviewer", icon: Building },
   { href: "/fee-estimate", label: "Fee Estimate", icon: DollarSign },
   { href: "/proration-calculator", label: "Tax Proration", icon: Calculator },
+  { href: "/checklist", label: "Checklists", icon: ClipboardList },
   { href: "/history", label: "History", icon: Clock },
   { href: "/settings", label: "Settings", icon: Settings },
 ]
