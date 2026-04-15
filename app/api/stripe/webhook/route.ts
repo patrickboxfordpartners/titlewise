@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { db } from "@/lib/db"
-import { users } from "@/lib/db/schema"
+import { users, processedEvents } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import type Stripe from "stripe"
 import { logger } from "@/lib/logger"
@@ -20,6 +20,12 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     logger.error("stripe/webhook", "Signature verification failed", { error: String(err) })
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
+  }
+
+  // Idempotency check — skip if already processed
+  const existing = await db.select().from(processedEvents).where(eq(processedEvents.id, event.id)).limit(1)
+  if (existing.length > 0) {
+    return NextResponse.json({ received: true, duplicate: true })
   }
 
   try {
@@ -83,6 +89,13 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     logger.error("stripe/webhook", `Error processing ${event.type}`, { error: String(err) })
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
+  }
+
+  // Mark as processed
+  try {
+    await db.insert(processedEvents).values({ id: event.id })
+  } catch {
+    // Non-critical — if this fails, worst case is re-processing on retry
   }
 
   return NextResponse.json({ received: true })

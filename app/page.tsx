@@ -1,6 +1,21 @@
 import Link from "next/link"
 import { FileText, FileSearch, Clock, CheckCircle } from "lucide-react"
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "TitleWise",
+  applicationCategory: "BusinessApplication",
+  description: "AI-powered tools for real estate closing attorneys — status update generation and title commitment analysis.",
+  offers: {
+    "@type": "AggregateOffer",
+    lowPrice: "99",
+    highPrice: "499",
+    priceCurrency: "USD",
+    offerCount: "3",
+  },
+}
+
 const features = [
   {
     icon: FileText,
@@ -27,6 +42,10 @@ const bullets = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Nav */}
       <header className="border-b border-slate-100">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">

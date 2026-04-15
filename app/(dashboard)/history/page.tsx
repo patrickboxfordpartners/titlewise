@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { FileText, FileSearch, Clock, Copy, Check, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react"
+import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
+import { FileText, FileSearch, Clock, Copy, Check, ChevronDown, ChevronUp, AlertTriangle, Search, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type StatusUpdateEntry = {
@@ -10,6 +11,11 @@ type StatusUpdateEntry = {
   propertyAddress: string
   transactionType: string
   closingStage: string
+  completedItems: string | null
+  outstandingItems: string | null
+  upcomingDeadlines: string | null
+  additionalNotes: string | null
+  tone: string | null
   generatedEmail: string | null
   createdAt: string
 }
@@ -25,27 +31,55 @@ type TitleAnalysisEntry = {
 type Tab = "updates" | "analyses"
 
 export default function HistoryPage() {
+  const router = useRouter()
   const [tab, setTab] = useState<Tab>("updates")
   const [updates, setUpdates] = useState<StatusUpdateEntry[]>([])
   const [analyses, setAnalyses] = useState<TitleAnalysisEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<string | null>(null)
+  const [search, setSearch] = useState("")
+  const [debouncedSearch, setDebouncedSearch] = useState("")
+
+  // Debounce search
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search), 300)
+    return () => clearTimeout(t)
+  }, [search])
+
+  const fetchHistory = useCallback(async () => {
+    setLoading(true)
+    const params = debouncedSearch ? `?q=${encodeURIComponent(debouncedSearch)}` : ""
+    const res = await fetch(`/api/history${params}`)
+    const data = await res.json()
+    setUpdates(data.updates ?? [])
+    setAnalyses(data.analyses ?? [])
+    setLoading(false)
+  }, [debouncedSearch])
 
   useEffect(() => {
-    fetch("/api/history")
-      .then((res) => res.json())
-      .then((data) => {
-        setUpdates(data.updates ?? [])
-        setAnalyses(data.analyses ?? [])
-      })
-      .finally(() => setLoading(false))
-  }, [])
+    fetchHistory()
+  }, [fetchHistory])
 
   async function handleCopy(id: string, text: string) {
     await navigator.clipboard.writeText(text)
     setCopiedId(id)
     setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  function handleRegenerate(u: StatusUpdateEntry) {
+    const params = new URLSearchParams({
+      clientName: u.clientName,
+      propertyAddress: u.propertyAddress,
+      transactionType: u.transactionType,
+      closingStage: u.closingStage,
+      ...(u.completedItems && { completedItems: u.completedItems }),
+      ...(u.outstandingItems && { outstandingItems: u.outstandingItems }),
+      ...(u.upcomingDeadlines && { upcomingDeadlines: u.upcomingDeadlines }),
+      ...(u.additionalNotes && { additionalNotes: u.additionalNotes }),
+      ...(u.tone && { tone: u.tone }),
+    })
+    router.push(`/status-update?${params.toString()}`)
   }
 
   function formatDate(dateStr: string) {
@@ -63,6 +97,18 @@ export default function HistoryPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-slate-900">History</h1>
         <p className="text-sm text-slate-500 mt-1">Past generated emails and title analyses.</p>
+      </div>
+
+      {/* Search */}
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search by client name or property address..."
+          className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
+        />
       </div>
 
       {/* Tabs */}
@@ -93,7 +139,7 @@ export default function HistoryPage() {
         <div className="text-center py-16 text-sm text-slate-400">Loading...</div>
       ) : tab === "updates" ? (
         updates.length === 0 ? (
-          <EmptyState icon={FileText} message="No status updates yet" />
+          <EmptyState icon={FileText} message={search ? "No matching updates" : "No status updates yet"} />
         ) : (
           <div className="space-y-2">
             {updates.map((u) => {
@@ -112,7 +158,7 @@ export default function HistoryPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-xs text-slate-400 flex items-center gap-1">
+                      <span className="text-xs text-slate-400 hidden sm:flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatDate(u.createdAt)}
                       </span>
@@ -121,7 +167,14 @@ export default function HistoryPage() {
                   </button>
                   {isExpanded && u.generatedEmail && (
                     <div className="px-5 pb-4 border-t border-slate-100 pt-3">
-                      <div className="flex justify-end mb-2">
+                      <div className="flex justify-end gap-2 mb-2">
+                        <button
+                          onClick={() => handleRegenerate(u)}
+                          className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700 px-2.5 py-1 rounded-md hover:bg-slate-100 transition-colors"
+                        >
+                          <RotateCcw className="h-3 w-3" />
+                          Re-generate
+                        </button>
                         <button
                           onClick={() => handleCopy(u.id, u.generatedEmail!)}
                           className={cn(
@@ -143,7 +196,7 @@ export default function HistoryPage() {
           </div>
         )
       ) : analyses.length === 0 ? (
-        <EmptyState icon={FileSearch} message="No title analyses yet" />
+        <EmptyState icon={FileSearch} message={search ? "No matching analyses" : "No title analyses yet"} />
       ) : (
         <div className="space-y-2">
           {analyses.map((a) => {
@@ -163,7 +216,7 @@ export default function HistoryPage() {
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-slate-400 flex items-center gap-1 shrink-0">
+                  <span className="text-xs text-slate-400 hidden sm:flex items-center gap-1 shrink-0">
                     <Clock className="h-3 w-3" />
                     {formatDate(a.createdAt)}
                   </span>

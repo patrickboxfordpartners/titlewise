@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Copy, Check, Loader2, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -44,11 +45,36 @@ const initialForm: FormData = {
 }
 
 export default function StatusUpdatePage() {
+  return (
+    <Suspense>
+      <StatusUpdateContent />
+    </Suspense>
+  )
+}
+
+function StatusUpdateContent() {
+  const searchParams = useSearchParams()
   const [form, setForm] = useState<FormData>(initialForm)
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState("")
+
+  // Pre-fill from URL params (re-generate from history)
+  useEffect(() => {
+    const prefill: Partial<FormData> = {}
+    const fields: (keyof FormData)[] = [
+      "clientName", "propertyAddress", "transactionType", "closingStage",
+      "completedItems", "outstandingItems", "upcomingDeadlines", "additionalNotes", "tone",
+    ]
+    for (const field of fields) {
+      const val = searchParams.get(field)
+      if (val) prefill[field] = val
+    }
+    if (Object.keys(prefill).length > 0) {
+      setForm((prev) => ({ ...prev, ...prefill }))
+    }
+  }, [searchParams])
 
   function set(field: keyof FormData, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))

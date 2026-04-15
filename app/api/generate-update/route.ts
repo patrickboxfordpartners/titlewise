@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { anthropic, buildStatusUpdatePrompt } from "@/lib/anthropic"
 import { db } from "@/lib/db"
 import { statusUpdates } from "@/lib/db/schema"
-import { getOrCreateUser } from "@/lib/db/get-user"
+import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 
@@ -61,6 +61,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: firstError }, { status: 400 })
   }
 
+  // Subscription check
+  const user = await getOrCreateUser(userId)
+  const access = await checkSubscriptionAccess(user)
+  if (!access.allowed) {
+    return NextResponse.json({ error: access.message }, { status: 403 })
+  }
+
   const prompt = buildStatusUpdatePrompt(parsed.data)
 
   // Streaming mode
@@ -86,9 +93,8 @@ export async function POST(req: NextRequest) {
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`))
             controller.close()
 
-            // Persist after stream completes
+            // Persist + increment usage after stream completes
             try {
-              const user = await getOrCreateUser(userId)
               await db.insert(statusUpdates).values({
                 userId: user.id,
                 clientName: parsed.data.clientName,
@@ -102,6 +108,7 @@ export async function POST(req: NextRequest) {
                 tone: parsed.data.tone,
                 generatedEmail: fullText,
               })
+              await incrementUsage(user.id)
             } catch (dbErr) {
               logger.error("generate-update", "DB write failed", { error: String(dbErr) })
             }
@@ -139,9 +146,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No response generated. Please try again." }, { status: 502 })
     }
 
-    // Persist to database
+    // Persist + increment usage
     try {
-      const user = await getOrCreateUser(userId)
       await db.insert(statusUpdates).values({
         userId: user.id,
         clientName: parsed.data.clientName,
@@ -155,6 +161,7 @@ export async function POST(req: NextRequest) {
         tone: parsed.data.tone,
         generatedEmail: textBlock.text,
       })
+      await incrementUsage(user.id)
     } catch (dbErr) {
       logger.error("generate-update", "DB write failed", { error: String(dbErr) })
     }

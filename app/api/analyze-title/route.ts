@@ -1,10 +1,10 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
-import { anthropic } from "@/lib/anthropic"
+import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { db } from "@/lib/db"
 import { titleAnalyses } from "@/lib/db/schema"
-import { getOrCreateUser } from "@/lib/db/get-user"
+import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 
@@ -14,7 +14,9 @@ const requestSchema = z.object({
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney analyzing a title commitment.
 Your job is to extract and explain key information in plain English that a client or junior attorney can understand.
-Always respond with valid JSON matching the exact structure requested. Never include markdown code blocks in your response.`
+Always respond with valid JSON matching the exact structure requested. Never include markdown code blocks in your response.
+
+${SAFETY_PREAMBLE}`
 
 const buildTitlePrompt = (commitment: string) => `Analyze this title commitment and return a JSON object with the following structure:
 
@@ -115,6 +117,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: firstError }, { status: 400 })
   }
 
+  // Subscription check
+  const user = await getOrCreateUser(userId)
+  const access = await checkSubscriptionAccess(user)
+  if (!access.allowed) {
+    return NextResponse.json({ error: access.message }, { status: 403 })
+  }
+
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
@@ -144,9 +153,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Analysis format was unexpected. Please try again." }, { status: 502 })
     }
 
-    // Persist to database (non-blocking)
+    // Persist + increment usage
     try {
-      const user = await getOrCreateUser(userId)
       await db.insert(titleAnalyses).values({
         userId: user.id,
         propertyAddress: validated.data.property.address,
@@ -154,6 +162,7 @@ export async function POST(req: NextRequest) {
         analysis: validated.data,
         redFlagCount: validated.data.redFlags.length,
       })
+      await incrementUsage(user.id)
     } catch (dbErr) {
       logger.error("analyze-title", "DB write failed", { error: String(dbErr) })
     }

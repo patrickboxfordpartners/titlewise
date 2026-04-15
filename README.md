@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TitleWise
+
+AI-powered tools for real estate closing attorneys. Save 30+ minutes per file.
+
+## Features
+
+- **Status Update Generator** -- Enter file details, get a professional client update email in seconds. Supports streaming for instant feedback.
+- **Title Commitment Analyzer** -- Paste or upload a PDF title commitment and get a structured breakdown of requirements, exceptions, and red flags.
+- **History** -- All generated content saved and searchable. Re-generate from past entries with one click.
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- TypeScript (strict)
+- Tailwind CSS 4
+- Clerk (auth)
+- Neon PostgreSQL + Drizzle ORM
+- Stripe (subscriptions, billing portal)
+- Anthropic Claude (AI generation)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install
+npm install
+
+# Copy env file and fill in keys
+cp .env.local.example .env.local
+
+# Push schema to database
+npm run db:push
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Required Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Source |
+|----------|--------|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | clerk.com |
+| `CLERK_SECRET_KEY` | clerk.com |
+| `DATABASE_URL` | neon.tech |
+| `STRIPE_SECRET_KEY` | stripe.com |
+| `STRIPE_WEBHOOK_SECRET` | stripe.com |
+| `ANTHROPIC_API_KEY` | console.anthropic.com |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+```
+app/
+  (marketing)/     # Public pages (pricing)
+  (dashboard)/     # Auth-gated pages (dashboard, tools, history, settings)
+  api/
+    generate-update/   # Status update AI generation (streaming + non-streaming)
+    analyze-title/     # Title commitment AI analysis
+    parse-pdf/         # PDF text extraction
+    history/           # User history retrieval
+    settings/          # Profile management
+    stripe/
+      checkout/        # Subscription checkout session
+      webhook/         # Stripe event handler (idempotent)
+      portal/          # Billing portal redirect
+lib/
+  db/                  # Drizzle schema, connection, user helpers
+  anthropic.ts         # Claude client + prompt builders
+  stripe.ts            # Stripe client
+  plans.ts             # Subscription tier config
+  rate-limit.ts        # Per-user rate limiting
+  logger.ts            # Structured JSON logging
+  env.ts               # Environment variable validation
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Subscription Model
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Tier | Price | Seats |
+|------|-------|-------|
+| Solo | $99/mo | 1 |
+| Small Firm | $249/mo | 5 |
+| Team | $499/mo | 15 |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+14-day free trial on signup. 5 free generations/month on free tier.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev          # Start dev server
+npm run build        # Production build
+npm run lint         # ESLint
+npm run db:generate  # Generate Drizzle migrations
+npm run db:push      # Push schema to database
+npm run db:studio    # Open Drizzle Studio
+```
