@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 232 44" fill="none">
+  <!-- Icon: blue rounded square -->
+  <rect width="44" height="44" rx="10" fill="#2563EB"/>
+  <!-- TW lettermark in white -->
+  <text x="22" y="30" text-anchor="middle" font-family="'Arial Black', 'Arial', sans-serif" font-size="17" font-weight="900" letter-spacing="-1" fill="white">TW</text>
+
+  <!-- Wordmark: TITLE bold slate-800, wise regular slate-500 -->
+  <text x="56" y="31" font-family="'Arial', 'Helvetica Neue', sans-serif" font-size="22">
+    <tspan font-weight="700" fill="#1e293b">TITLE</tspan><tspan font-weight="400" fill="#64748b">wise</tspan>
+  </text>
+</svg>
