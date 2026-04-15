@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
-  <rect width="180" height="180" rx="40" fill="#2563EB"/>
-  <text x="90" y="125" text-anchor="middle" font-family="'Arial Black', 'Arial', sans-serif" font-size="78" font-weight="900" letter-spacing="-3" fill="white">TW</text>
+  <!-- Document icon scaled up for apple touch icon -->
+  <g transform="translate(35, 15)">
+    <path d="M8 0 L72 0 L110 40 L110 155 Q110 165 100 165 L8 165 Q0 165 0 155 L0 8 Q0 0 8 0 Z" fill="#2563EB"/>
+    <path d="M72 0 L110 40 L72 40 Z" fill="#1d4ed8"/>
+    <line x1="20" y1="75" x2="90" y2="75" stroke="white" stroke-width="9" stroke-linecap="round"/>
+    <line x1="20" y1="100" x2="90" y2="100" stroke="white" stroke-width="9" stroke-linecap="round"/>
+    <line x1="20" y1="125" x2="60" y2="125" stroke="white" stroke-width="9" stroke-linecap="round"/>
+  </g>
 </svg>
