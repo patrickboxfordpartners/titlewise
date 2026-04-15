@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
-import { FileText, LayoutDashboard, FileSearch, Clock, Settings, Menu, X } from "lucide-react"
+import { FileText, LayoutDashboard, FileSearch, Clock, Settings, Menu, X, Calculator, DollarSign, FileCheck, Shield, Building } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 
@@ -11,6 +11,11 @@ const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/status-update", label: "Status Update", icon: FileText },
   { href: "/title-analysis", label: "Title Analysis", icon: FileSearch },
+  { href: "/cd-reviewer", label: "CD Reviewer", icon: FileCheck },
+  { href: "/wire-verification", label: "Wire Verification", icon: Shield },
+  { href: "/hoa-reviewer", label: "HOA Reviewer", icon: Building },
+  { href: "/fee-estimate", label: "Fee Estimate", icon: DollarSign },
+  { href: "/proration-calculator", label: "Tax Proration", icon: Calculator },
   { href: "/history", label: "History", icon: Clock },
   { href: "/settings", label: "Settings", icon: Settings },
 ]
