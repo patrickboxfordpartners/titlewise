@@ -7,6 +7,6 @@
 
   <!-- Wordmark -->
   <text x="46" y="40" font-family="'Arial', 'Helvetica Neue', sans-serif" font-size="34">
-    <tspan font-weight="700" fill="#1e293b">TITLE</tspan><tspan font-weight="300" fill="#94a3b8">wise</tspan>
+    <tspan font-weight="700" fill="#1e293b">TITLE</tspan><tspan dx="5" font-weight="300" fill="#94a3b8">wise</tspan>
   </text>
 </svg>
