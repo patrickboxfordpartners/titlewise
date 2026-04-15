@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag } from "lucide-react"
+import { useState, useRef } from "react"
+import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag, Upload } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type Requirement = {
@@ -40,7 +40,9 @@ export default function TitleAnalysisPage() {
   const [commitment, setCommitment] = useState("")
   const [analysis, setAnalysis] = useState<Analysis | null>(null)
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState("")
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     requirements: true,
     exceptions: true,
@@ -51,10 +53,33 @@ export default function TitleAnalysisPage() {
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }))
   }
 
+  async function handlePdfUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setError("")
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+      const res = await fetch("/api/parse-pdf", { method: "POST", body: formData })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to parse PDF")
+      }
+      const data = await res.json()
+      setCommitment(data.text)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to parse PDF")
+    } finally {
+      setUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ""
+    }
+  }
+
   async function handleAnalyze() {
     setError("")
     if (commitment.trim().length < 100) {
-      setError("Paste the full title commitment text before analyzing.")
+      setError("Paste or upload a title commitment before analyzing.")
       return
     }
     setLoading(true)
@@ -93,20 +118,48 @@ export default function TitleAnalysisPage() {
 
       {!analysis ? (
         <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
-          <label className="text-xs font-medium text-slate-600">
-            Paste Title Commitment Text
-          </label>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-medium text-slate-600">
+              Paste Title Commitment Text
+            </label>
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handlePdfUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 disabled:text-blue-400 transition-colors"
+              >
+                {uploading ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Extracting text...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="h-3.5 w-3.5" />
+                    Upload PDF
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
           <textarea
             value={commitment}
             onChange={(e) => setCommitment(e.target.value)}
-            placeholder="Paste the full text of the title commitment here (Schedule A, B-I, B-II)..."
+            placeholder="Paste the full text of the title commitment here (Schedule A, B-I, B-II), or upload a PDF..."
             rows={18}
             className="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono resize-none"
           />
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button
             onClick={handleAnalyze}
-            disabled={loading}
+            disabled={loading || uploading}
             className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {loading ? (

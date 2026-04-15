@@ -3,13 +3,14 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
-import { FileText, LayoutDashboard, FileSearch } from "lucide-react"
+import { FileText, LayoutDashboard, FileSearch, Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/status-update", label: "Status Update", icon: FileText },
   { href: "/title-analysis", label: "Title Analysis", icon: FileSearch },
+  { href: "/history", label: "History", icon: Clock },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

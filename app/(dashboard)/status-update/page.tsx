@@ -66,14 +66,32 @@ export default function StatusUpdatePage() {
       const res = await fetch("/api/generate-update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, stream: true }),
       })
       if (!res.ok) {
         const data = await res.json()
         throw new Error(data.error || "Generation failed")
       }
-      const data = await res.json()
-      setOutput(data.email)
+
+      const reader = res.body?.getReader()
+      if (!reader) throw new Error("No response stream")
+
+      const decoder = new TextDecoder()
+      let buffer = ""
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split("\n\n")
+        buffer = lines.pop() || ""
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue
+          const json = JSON.parse(line.slice(6))
+          if (json.error) throw new Error(json.error)
+          if (json.done) break
+          if (json.text) setOutput((prev) => prev + json.text)
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")
     } finally {

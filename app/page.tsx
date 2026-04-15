@@ -13,7 +13,7 @@ const features = [
     title: "Title Commitment Analyzer",
     description:
       "Paste in a title commitment and get a plain-English breakdown of Schedule B exceptions, requirements, and anything that needs attention.",
-    badge: "Coming Soon",
+    badge: null,
   },
 ]
 

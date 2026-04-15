@@ -1,13 +1,17 @@
+"use client"
+
 import Link from "next/link"
+import { useAuth } from "@clerk/nextjs"
 import { Check } from "lucide-react"
 import { PLANS } from "@/lib/plans"
+import { useState } from "react"
 
 const planDetails = {
   solo: {
     features: [
       "1 attorney seat",
       "Status Update Generator",
-      "Title Commitment Analyzer (coming soon)",
+      "Title Commitment Analyzer",
       "Email support",
     ],
   },
@@ -31,6 +35,35 @@ const planDetails = {
 }
 
 export default function PricingPage() {
+  const { isSignedIn } = useAuth()
+  const [loading, setLoading] = useState<string | null>(null)
+
+  async function handleSubscribe(planKey: string) {
+    if (!isSignedIn) {
+      window.location.href = "/sign-up"
+      return
+    }
+
+    setLoading(planKey)
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planKey }),
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        alert(data.error || "Something went wrong")
+      }
+    } catch {
+      alert("Failed to start checkout")
+    } finally {
+      setLoading(null)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Nav */}
@@ -91,16 +124,17 @@ export default function PricingPage() {
                     ))}
                   </ul>
 
-                  <Link
-                    href="/sign-up"
+                  <button
+                    onClick={() => handleSubscribe(key)}
+                    disabled={loading === key}
                     className={`block w-full py-2.5 rounded-lg text-sm font-medium text-center transition-colors ${
                       isPopular
-                        ? "bg-blue-600 hover:bg-blue-700 text-white"
-                        : "border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50"
+                        ? "bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-400"
+                        : "border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 disabled:opacity-50"
                     }`}
                   >
-                    Start Free Trial
-                  </Link>
+                    {loading === key ? "Redirecting..." : "Start Free Trial"}
+                  </button>
                 </div>
               )
             }

@@ -1,6 +1,16 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod/v4"
 import { anthropic } from "@/lib/anthropic"
+import { db } from "@/lib/db"
+import { titleAnalyses } from "@/lib/db/schema"
+import { getOrCreateUser } from "@/lib/db/get-user"
+import { checkRateLimit } from "@/lib/rate-limit"
+import { logger } from "@/lib/logger"
+
+const requestSchema = z.object({
+  commitment: z.string().min(100, "Please paste a complete title commitment (at least 100 characters)."),
+})
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney analyzing a title commitment.
 Your job is to extract and explain key information in plain English that a client or junior attorney can understand.
@@ -52,34 +62,109 @@ Rules:
 Title Commitment:
 ${commitment}`
 
+const analysisSchema = z.object({
+  property: z.object({
+    address: z.string().nullable(),
+    type: z.string().nullable(),
+    owners: z.string().nullable(),
+    amount: z.string().nullable(),
+  }),
+  scheduleA: z.object({ summary: z.string() }),
+  requirements: z.array(z.object({
+    item: z.string(),
+    description: z.string(),
+    flagged: z.boolean(),
+  })),
+  exceptions: z.array(z.object({
+    item: z.string(),
+    description: z.string(),
+    flagged: z.boolean(),
+  })),
+  redFlags: z.array(z.object({
+    severity: z.enum(["high", "medium"]),
+    issue: z.string(),
+    detail: z.string(),
+  })),
+  summary: z.string(),
+})
+
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const body = await req.json()
-  const { commitment } = body
-
-  if (!commitment || commitment.trim().length < 100) {
-    return NextResponse.json({ error: "Please paste a complete title commitment." }, { status: 400 })
+  const { allowed } = checkRateLimit(userId)
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Rate limit exceeded. Please try again later." },
+      { status: 429, headers: { "X-RateLimit-Remaining": "0" } }
+    )
   }
 
-  const message = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 4096,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: "user", content: buildTitlePrompt(commitment) }],
-  })
-
-  const raw = message.content[0].type === "text" ? message.content[0].text.trim() : ""
-
-  let analysis
+  let body: unknown
   try {
-    analysis = JSON.parse(raw)
+    body = await req.json()
   } catch {
-    return NextResponse.json({ error: "Failed to parse analysis. Please try again." }, { status: 500 })
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }
 
-  return NextResponse.json({ analysis })
+  const parsed = requestSchema.safeParse(body)
+  if (!parsed.success) {
+    const firstError = parsed.error.issues[0]?.message ?? "Validation failed"
+    return NextResponse.json({ error: firstError }, { status: 400 })
+  }
+
+  try {
+    const message = await anthropic.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 4096,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: "user", content: buildTitlePrompt(parsed.data.commitment) }],
+    })
+
+    const textBlock = message.content.find((block) => block.type === "text")
+    if (!textBlock || textBlock.type !== "text") {
+      return NextResponse.json({ error: "No response generated. Please try again." }, { status: 502 })
+    }
+
+    const raw = textBlock.text.trim()
+
+    let rawJson: unknown
+    try {
+      rawJson = JSON.parse(raw)
+    } catch {
+      logger.error("analyze-title", "Failed to parse JSON response", { preview: raw.slice(0, 200) })
+      return NextResponse.json({ error: "Failed to parse analysis. Please try again." }, { status: 502 })
+    }
+
+    const validated = analysisSchema.safeParse(rawJson)
+    if (!validated.success) {
+      logger.error("analyze-title", "Response failed schema validation", { issues: validated.error.issues })
+      return NextResponse.json({ error: "Analysis format was unexpected. Please try again." }, { status: 502 })
+    }
+
+    // Persist to database (non-blocking)
+    try {
+      const user = await getOrCreateUser(userId)
+      await db.insert(titleAnalyses).values({
+        userId: user.id,
+        propertyAddress: validated.data.property.address,
+        commitmentText: parsed.data.commitment,
+        analysis: validated.data,
+        redFlagCount: validated.data.redFlags.length,
+      })
+    } catch (dbErr) {
+      logger.error("analyze-title", "DB write failed", { error: String(dbErr) })
+    }
+
+    return NextResponse.json({ analysis: validated.data })
+  } catch (err) {
+    logger.error("analyze-title", "Anthropic API error", { error: String(err) })
+    const message = err instanceof Error ? err.message : "Unknown error"
+    if (message.includes("rate_limit") || message.includes("429")) {
+      return NextResponse.json({ error: "AI service is busy. Please try again in a moment." }, { status: 429 })
+    }
+    return NextResponse.json({ error: "Failed to analyze title commitment. Please try again." }, { status: 502 })
+  }
 }
