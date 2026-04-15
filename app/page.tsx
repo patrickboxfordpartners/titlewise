@@ -76,7 +76,7 @@ export default function HomePage() {
       {/* Nav */}
       <header className="border-b border-slate-100">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <img src="/logo.svg" alt="TitleWise" className="h-7 w-auto" />
+          <img src="/logo.svg" alt="TitleWise" className="h-9 w-auto" />
           <div className="flex items-center gap-3">
             <Link href="/sign-in" className="text-sm text-slate-600 hover:text-slate-900 font-medium transition-colors">
               Sign in
@@ -159,7 +159,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-slate-100 py-6">
         <div className="max-w-5xl mx-auto px-6 flex items-center justify-between">
-          <img src="/logo.svg" alt="TitleWise" className="h-6 w-auto" />
+          <img src="/logo.svg" alt="TitleWise" className="h-8 w-auto" />
           <Link href="/pricing" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
             Pricing
           </Link>

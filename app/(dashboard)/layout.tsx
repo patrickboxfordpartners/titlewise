@@ -25,7 +25,7 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
   return (
     <>
       <div className="h-14 px-4 flex items-center border-b border-slate-200 shrink-0">
-        <img src="/logo.svg" alt="TitleWise" className="h-7 w-auto" />
+        <img src="/logo.svg" alt="TitleWise" className="h-9 w-auto" />
       </div>
 
       <nav className="flex-1 p-3 space-y-0.5">
@@ -73,7 +73,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Mobile header */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-40">
-        <img src="/logo.svg" alt="TitleWise" className="h-7 w-auto" />
+        <img src="/logo.svg" alt="TitleWise" className="h-9 w-auto" />
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="p-1.5 rounded-md hover:bg-slate-100 transition-colors"

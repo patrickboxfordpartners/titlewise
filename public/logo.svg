@@ -1,18 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 218 44" fill="none">
-  <!-- Document icon: 24w x 36h, centered vertically -->
-  <g transform="translate(0, 4)">
-    <!-- Body with folded corner -->
-    <path d="M2 0 L16 0 L24 8 L24 34 Q24 36 22 36 L2 36 Q0 36 0 34 L0 2 Q0 0 2 0 Z" fill="#2563EB"/>
-    <!-- Fold triangle -->
-    <path d="M16 0 L24 8 L16 8 Z" fill="#1d4ed8"/>
-    <!-- Content lines -->
-    <line x1="5" y1="16" x2="19" y2="16" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="5" y1="22" x2="19" y2="22" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="5" y1="28" x2="13" y2="28" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 54" fill="none">
+  <!-- Abstract: two offset rectangles suggesting layered documents -->
+  <!-- Back page: slate -->
+  <rect x="10" y="3" width="24" height="32" rx="4" fill="#94a3b8"/>
+  <!-- Front page: blue -->
+  <rect x="2" y="11" width="24" height="32" rx="4" fill="#2563EB"/>
 
   <!-- Wordmark -->
-  <text x="33" y="32" font-family="'Arial', 'Helvetica Neue', sans-serif" font-size="27">
+  <text x="46" y="40" font-family="'Arial', 'Helvetica Neue', sans-serif" font-size="34">
     <tspan font-weight="700" fill="#1e293b">TITLE</tspan><tspan font-weight="300" fill="#94a3b8">wise</tspan>
   </text>
 </svg>

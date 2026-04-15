@@ -71,7 +71,7 @@ export default function PricingPage() {
       <header className="border-b border-slate-100">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/">
-            <img src="/logo.svg" alt="TitleWise" className="h-7 w-auto" />
+            <img src="/logo.svg" alt="TitleWise" className="h-9 w-auto" />
           </Link>
           <Link href="/sign-up" className="text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors">
             Get Started
