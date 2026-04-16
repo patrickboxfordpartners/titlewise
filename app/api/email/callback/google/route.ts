@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Exchange code for tokens
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  const { origin } = new URL(req.url)
   const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
       code,
       client_id: process.env.GOOGLE_CLIENT_ID!,
       client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-      redirect_uri: `${appUrl}/api/email/callback/google`,
+      redirect_uri: `${origin}/api/email/callback/google`,
       grant_type: "authorization_code",
     }),
   })

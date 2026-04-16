@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Exchange code for tokens
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  const { origin } = new URL(req.url)
   const tokenRes = await fetch("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
       code,
       client_id: process.env.MICROSOFT_CLIENT_ID!,
       client_secret: process.env.MICROSOFT_CLIENT_SECRET!,
-      redirect_uri: `${appUrl}/api/email/callback/outlook`,
+      redirect_uri: `${origin}/api/email/callback/outlook`,
       grant_type: "authorization_code",
       scope: "Mail.Send offline_access",
     }),

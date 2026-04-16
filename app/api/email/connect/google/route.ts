@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import { randomBytes } from "crypto"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
-export async function GET() {
+export async function GET(req: Request) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
@@ -11,8 +11,8 @@ export async function GET() {
   const nonce = randomBytes(16).toString("hex")
   const state = Buffer.from(`${user.id}:${nonce}`).toString("base64url")
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  const redirectUri = `${appUrl}/api/email/callback/google`
+  const { origin } = new URL(req.url)
+  const redirectUri = `${origin}/api/email/callback/google`
 
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID!,
