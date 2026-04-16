@@ -11,8 +11,8 @@ export async function GET(req: Request) {
   const nonce = randomBytes(16).toString("hex")
   const state = Buffer.from(`${user.id}:${nonce}`).toString("base64url")
 
-  const { origin } = new URL(req.url)
-  const redirectUri = `${origin}/api/email/callback/outlook`
+  const redirectUri = process.env.OUTLOOK_REDIRECT_URI!
+  if (!redirectUri) throw new Error("OUTLOOK_REDIRECT_URI env var is not set")
 
   const params = new URLSearchParams({
     client_id: process.env.MICROSOFT_CLIENT_ID!,
