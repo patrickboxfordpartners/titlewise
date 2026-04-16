@@ -60,9 +60,19 @@ export async function GET(req: NextRequest) {
     refresh_token?: string
     access_token?: string
     error?: string
+    error_description?: string
   }
 
   if (!tokenRes.ok || !tokenData.refresh_token) {
+    console.error("[outlook-callback] Token exchange failed:", {
+      status: tokenRes.status,
+      error: tokenData.error,
+      description: tokenData.error_description,
+      hasRefreshToken: !!tokenData.refresh_token,
+      hasAccessToken: !!tokenData.access_token,
+      redirectUri: process.env.OUTLOOK_REDIRECT_URI,
+      tenant,
+    })
     return NextResponse.redirect(new URL("/settings?error=oauth_token_failed", req.url))
   }
 
