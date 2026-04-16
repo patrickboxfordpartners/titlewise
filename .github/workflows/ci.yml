@@ -29,5 +29,5 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_placeholder
-          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          NEXT_PUBLIC_APP_URL: https://titlewise.app
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder

@@ -1,16 +1,12 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
 import { ClerkProvider } from "@clerk/nextjs"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -19,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s | TitleWise",
   },
   description:
-    "TitleWise helps real estate closing attorneys save time with AI-powered status update generation and title commitment analysis.",
+    "TitleWise gives closing attorneys AI-powered tools that handle the repetitive work — status updates, title analysis, CD review, wire verification, and more. Save 30+ minutes per file.",
   keywords: [
     "real estate closing attorney",
     "title commitment analyzer",
@@ -27,17 +23,21 @@ export const metadata: Metadata = {
     "legal tech",
     "AI attorney tools",
     "real estate closing software",
+    "closing disclosure reviewer",
+    "wire fraud prevention",
   ],
+  metadataBase: new URL("https://titlewise.app"),
   openGraph: {
     type: "website",
     title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
-    description: "Save 30+ minutes per file with AI-powered status updates and title commitment analysis.",
+    description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
     siteName: "TitleWise",
+    url: "https://titlewise.app",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
-    description: "Save 30+ minutes per file with AI-powered status updates and title commitment analysis.",
+    description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
   },
   robots: {
     index: true,
@@ -52,7 +52,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <html lang="en" className={`${inter.className} h-full antialiased`}>
         <body className="min-h-full flex flex-col">{children}</body>
       </html>
     </ClerkProvider>

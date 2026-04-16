@@ -7,8 +7,8 @@ import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
-  closingDisclosure: z.string().min(100, "Paste the full Closing Disclosure text."),
-  contractTerms: z.string().min(50, "Provide the key contract terms for comparison."),
+  closingDisclosure: z.string().min(100, "Paste the full Closing Disclosure text.").max(500_000, "Document text is too long (max 500,000 characters)."),
+  contractTerms: z.string().min(50, "Provide the key contract terms for comparison.").max(500_000, "Document text is too long (max 500,000 characters)."),
 })
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney reviewing a Closing Disclosure against the purchase/sale contract terms.
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unexpected review format. Please try again." }, { status: 502 })
     }
 
-    try { await incrementUsage(user.id) } catch {}
+    try { await incrementUsage(user.id) } catch (err) { logger.error("review-cd", "Failed to increment usage", { error: String(err) }) }
 
     return NextResponse.json({ review: validated.data })
   } catch (err) {

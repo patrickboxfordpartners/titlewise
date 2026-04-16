@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No response generated." }, { status: 502 })
     }
 
-    try { await incrementUsage(user.id) } catch {}
+    try { await incrementUsage(user.id) } catch (err) { logger.error("generate-fee-estimate", "Failed to increment usage", { error: String(err) }) }
 
     return NextResponse.json({ estimate: textBlock.text })
   } catch (err) {

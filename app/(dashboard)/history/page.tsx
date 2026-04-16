@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { FileText, FileSearch, Clock, Copy, Check, ChevronDown, ChevronUp, AlertTriangle, Search, RotateCcw } from "lucide-react"
+import { motion } from "framer-motion"
+import { FileText, FileSearch, Clock, Copy, Check, ChevronDown, ChevronUp, AlertTriangle, Search, RotateCcw, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type StatusUpdateEntry = {
@@ -41,7 +42,6 @@ export default function HistoryPage() {
   const [search, setSearch] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
 
-  // Debounce search
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 300)
     return () => clearTimeout(t)
@@ -94,30 +94,45 @@ export default function HistoryPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-slate-900">History</h1>
-        <p className="text-sm text-slate-500 mt-1">Past generated emails and title analyses.</p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-6"
+      >
+        <h1 className="text-2xl font-semibold text-foreground">History</h1>
+        <p className="text-sm text-muted-foreground mt-1">Past generated emails and title analyses.</p>
+      </motion.div>
 
       {/* Search */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.35 }}
+        className="relative mb-4"
+      >
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by client name or property address..."
-          className="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
+          className="w-full pl-9 pr-3 py-2 text-sm bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50 text-foreground"
         />
-      </div>
+      </motion.div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-slate-100 rounded-lg p-1 mb-6 w-fit">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.35 }}
+        className="flex gap-1 bg-muted/40 border border-border rounded-lg p-1 mb-6 w-fit"
+      >
         <button
           onClick={() => setTab("updates")}
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-            tab === "updates" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+            tab === "updates" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground"
           )}
         >
           <FileText className="h-3.5 w-3.5" />
@@ -127,70 +142,87 @@ export default function HistoryPage() {
           onClick={() => setTab("analyses")}
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-            tab === "analyses" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+            tab === "analyses" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground"
           )}
         >
           <FileSearch className="h-3.5 w-3.5" />
           Title Analyses ({analyses.length})
         </button>
-      </div>
+      </motion.div>
 
       {loading ? (
-        <div className="text-center py-16 text-sm text-slate-400">Loading...</div>
+        <div className="text-center py-16">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground/40 mx-auto" />
+        </div>
       ) : tab === "updates" ? (
         updates.length === 0 ? (
           <EmptyState icon={FileText} message={search ? "No matching updates" : "No status updates yet"} />
         ) : (
           <div className="space-y-2">
-            {updates.map((u) => {
+            {updates.map((u, i) => {
               const isExpanded = expandedId === u.id
               return (
-                <div key={u.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <motion.div
+                  key={u.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04, duration: 0.3 }}
+                  className="bg-card rounded-xl border border-border overflow-hidden"
+                >
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : u.id)}
-                    className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-slate-50 transition-colors"
+                    className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-muted/30 transition-colors"
                   >
                     <div className="flex items-center gap-3 text-left min-w-0">
-                      <FileText className="h-4 w-4 text-blue-500 shrink-0" />
+                      <FileText className="h-4 w-4 text-primary shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate">{u.clientName}</p>
-                        <p className="text-xs text-slate-400 truncate">{u.propertyAddress} - {u.closingStage}</p>
+                        <p className="text-sm font-medium text-foreground truncate">{u.clientName}</p>
+                        <p className="text-xs text-muted-foreground truncate">{u.propertyAddress} · {u.closingStage}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <span className="text-xs text-slate-400 hidden sm:flex items-center gap-1">
+                      <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatDate(u.createdAt)}
                       </span>
-                      {isExpanded ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                      <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                        <ChevronDown className="h-4 w-4 text-muted-foreground/60" />
+                      </motion.div>
                     </div>
                   </button>
                   {isExpanded && u.generatedEmail && (
-                    <div className="px-5 pb-4 border-t border-slate-100 pt-3">
-                      <div className="flex justify-end gap-2 mb-2">
-                        <button
-                          onClick={() => handleRegenerate(u)}
-                          className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700 px-2.5 py-1 rounded-md hover:bg-slate-100 transition-colors"
-                        >
-                          <RotateCcw className="h-3 w-3" />
-                          Re-generate
-                        </button>
-                        <button
-                          onClick={() => handleCopy(u.id, u.generatedEmail!)}
-                          className={cn(
-                            "flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md transition-colors",
-                            copiedId === u.id ? "bg-green-50 text-green-700" : "bg-blue-50 text-blue-700 hover:bg-blue-100"
-                          )}
-                        >
-                          {copiedId === u.id ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
-                        </button>
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 pb-4 border-t border-border pt-3">
+                        <div className="flex justify-end gap-2 mb-2">
+                          <button
+                            onClick={() => handleRegenerate(u)}
+                            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground px-2.5 py-1 rounded-md hover:bg-muted/50 transition-colors"
+                          >
+                            <RotateCcw className="h-3 w-3" />
+                            Re-generate
+                          </button>
+                          <button
+                            onClick={() => handleCopy(u.id, u.generatedEmail!)}
+                            className={cn(
+                              "flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md transition-colors",
+                              copiedId === u.id ? "bg-green-500/10 text-green-600" : "bg-primary/10 text-primary hover:bg-primary/20"
+                            )}
+                          >
+                            {copiedId === u.id ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
+                          </button>
+                        </div>
+                        <pre className="text-sm text-foreground/80 whitespace-pre-wrap font-mono bg-muted/40 rounded-lg p-3 max-h-64 overflow-y-auto border border-border">
+                          {u.generatedEmail}
+                        </pre>
                       </div>
-                      <pre className="text-sm text-slate-600 whitespace-pre-wrap font-mono bg-slate-50 rounded-lg p-3 max-h-64 overflow-y-auto">
-                        {u.generatedEmail}
-                      </pre>
-                    </div>
+                    </motion.div>
                   )}
-                </div>
+                </motion.div>
               )
             })}
           </div>
@@ -199,32 +231,38 @@ export default function HistoryPage() {
         <EmptyState icon={FileSearch} message={search ? "No matching analyses" : "No title analyses yet"} />
       ) : (
         <div className="space-y-2">
-          {analyses.map((a) => {
+          {analyses.map((a, i) => {
             const summary = (a.analysis as { summary?: string })?.summary
             return (
-              <div key={a.id} className="bg-white rounded-xl border border-slate-200 px-5 py-4">
+              <motion.div
+                key={a.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.3 }}
+                className="bg-card rounded-xl border border-border px-5 py-4"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0">
-                    <FileSearch className="h-4 w-4 text-blue-500 shrink-0" />
-                    <p className="text-sm font-medium text-slate-800 truncate">
+                    <FileSearch className="h-4 w-4 text-primary shrink-0" />
+                    <p className="text-sm font-medium text-foreground truncate">
                       {a.propertyAddress ?? "Unknown property"}
                     </p>
                     {(a.redFlagCount ?? 0) > 0 && (
-                      <span className="flex items-center gap-1 text-xs font-medium text-red-600 bg-red-50 px-1.5 py-0.5 rounded shrink-0">
+                      <span className="flex items-center gap-1 text-xs font-medium text-red-600 bg-red-500/10 px-1.5 py-0.5 rounded shrink-0">
                         <AlertTriangle className="h-3 w-3" />
                         {a.redFlagCount} flag{a.redFlagCount === 1 ? "" : "s"}
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-slate-400 hidden sm:flex items-center gap-1 shrink-0">
+                  <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1 shrink-0">
                     <Clock className="h-3 w-3" />
                     {formatDate(a.createdAt)}
                   </span>
                 </div>
                 {summary && (
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed line-clamp-2">{summary}</p>
+                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed line-clamp-2">{summary}</p>
                 )}
-              </div>
+              </motion.div>
             )
           })}
         </div>
@@ -235,12 +273,17 @@ export default function HistoryPage() {
 
 function EmptyState({ icon: Icon, message }: { icon: typeof FileText; message: string }) {
   return (
-    <div className="text-center py-16">
-      <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
-        <Icon className="h-5 w-5 text-slate-400" />
+    <motion.div
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="text-center py-16"
+    >
+      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+        <Icon className="h-5 w-5 text-primary" />
       </div>
-      <p className="text-sm text-slate-500">{message}</p>
-      <p className="text-xs text-slate-400 mt-1">Generated content will appear here automatically.</p>
-    </div>
+      <p className="text-sm text-muted-foreground">{message}</p>
+      <p className="text-xs text-muted-foreground/60 mt-1">Generated content will appear here automatically.</p>
+    </motion.div>
   )
 }

@@ -7,7 +7,7 @@ import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
-  hoaDocuments: z.string().min(100, "Paste the HOA/condo document text."),
+  hoaDocuments: z.string().min(100, "Paste the HOA/condo document text.").max(500_000, "Document text is too long (max 500,000 characters)."),
 })
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney reviewing HOA/condominium association documents.
@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unexpected format." }, { status: 502 })
     }
 
-    try { await incrementUsage(user.id) } catch {}
+    try { await incrementUsage(user.id) } catch (err) { logger.error("review-hoa", "Failed to increment usage", { error: String(err) }) }
     return NextResponse.json({ review: validated.data })
   } catch (err) {
     logger.error("review-hoa", "API error", { error: String(err) })

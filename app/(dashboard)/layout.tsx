@@ -6,6 +6,7 @@ import { UserButton } from "@clerk/nextjs"
 import { FileText, LayoutDashboard, FileSearch, Clock, Settings, Menu, X, Calculator, DollarSign, FileCheck, Shield, Building, ClipboardList } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
+import { Logo } from "@/components/logo"
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -24,8 +25,8 @@ const nav = [
 function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
   return (
     <>
-      <div className="h-14 px-4 flex items-center border-b border-slate-200 shrink-0">
-        <img src="/logo.svg" alt="TitleWise" className="h-9 w-auto" />
+      <div className="h-14 px-4 flex items-center border-b border-border shrink-0">
+        <Logo href="/dashboard" />
       </div>
 
       <nav className="flex-1 p-3 space-y-0.5">
@@ -37,8 +38,8 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
             className={cn(
               "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors",
               pathname === href
-                ? "bg-blue-50 text-blue-700"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
             <Icon className="h-4 w-4 shrink-0" />
@@ -47,9 +48,9 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
         ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-200 flex items-center gap-2 shrink-0">
+      <div className="p-4 border-t border-border flex items-center gap-2 shrink-0">
         <UserButton />
-        <span className="text-xs text-slate-500 truncate">My Account</span>
+        <span className="text-xs text-muted-foreground truncate">My Account</span>
       </div>
     </>
   )
@@ -59,26 +60,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Close mobile nav on route change
   useEffect(() => {
     setMobileOpen(false)
   }, [pathname])
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="flex h-screen bg-secondary">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-60 bg-white border-r border-slate-200 flex-col shrink-0">
+      <aside className="hidden md:flex w-60 bg-card border-r border-border flex-col shrink-0">
         <SidebarContent pathname={pathname} />
       </aside>
 
       {/* Mobile header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-40">
-        <img src="/logo.svg" alt="TitleWise" className="h-9 w-auto" />
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border flex items-center justify-between px-4 z-40">
+        <Logo href="/dashboard" />
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-1.5 rounded-md hover:bg-slate-100 transition-colors"
+          className="p-1.5 rounded-md hover:bg-muted transition-colors"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
-          {mobileOpen ? <X className="h-5 w-5 text-slate-600" /> : <Menu className="h-5 w-5 text-slate-600" />}
+          {mobileOpen ? <X className="h-5 w-5 text-muted-foreground" /> : <Menu className="h-5 w-5 text-muted-foreground" />}
         </button>
       </div>
 
@@ -86,7 +87,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {mobileOpen && (
         <>
           <div className="md:hidden fixed inset-0 bg-black/30 z-40" onClick={() => setMobileOpen(false)} />
-          <aside className="md:hidden fixed top-0 left-0 w-64 h-full bg-white z-50 flex flex-col shadow-xl">
+          <aside className="md:hidden fixed top-0 left-0 w-64 h-full bg-card z-50 flex flex-col shadow-xl">
             <SidebarContent pathname={pathname} onNavigate={() => setMobileOpen(false)} />
           </aside>
         </>

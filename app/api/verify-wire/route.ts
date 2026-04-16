@@ -7,7 +7,7 @@ import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
-  wireInstructions: z.string().min(20, "Paste the wire instructions."),
+  wireInstructions: z.string().min(20, "Paste the wire instructions.").max(500_000, "Document text is too long (max 500,000 characters)."),
   previousInstructions: z.string().optional().default(""),
   transactionContext: z.string().optional().default(""),
   recipientExpected: z.string().optional().default(""),
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unexpected format." }, { status: 502 })
     }
 
-    try { await incrementUsage(user.id) } catch {}
+    try { await incrementUsage(user.id) } catch (err) { logger.error("verify-wire", "Failed to increment usage", { error: String(err) }) }
 
     return NextResponse.json({ result: validated.data })
   } catch (err) {

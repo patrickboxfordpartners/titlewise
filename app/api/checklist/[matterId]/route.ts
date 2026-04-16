@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
 import { matters, checklistItems } from "@/lib/db/schema"
-import { eq, and, asc } from "drizzle-orm"
+import { eq, and, asc, desc } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
 // GET — get matter with all checklist items
@@ -72,7 +72,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ ma
   if (addParsed.success) {
     const maxOrder = await db.select({ sortOrder: checklistItems.sortOrder })
       .from(checklistItems).where(eq(checklistItems.matterId, matterId))
-      .orderBy(asc(checklistItems.sortOrder)).limit(1)
+      .orderBy(desc(checklistItems.sortOrder)).limit(1)
     const nextOrder = (maxOrder[0]?.sortOrder ?? 0) + 100
 
     const [item] = await db.insert(checklistItems).values({

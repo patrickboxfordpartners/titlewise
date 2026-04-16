@@ -9,7 +9,7 @@ import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
-  commitment: z.string().min(100, "Please paste a complete title commitment (at least 100 characters)."),
+  commitment: z.string().min(100, "Please paste a complete title commitment (at least 100 characters).").max(500_000, "Document text is too long (max 500,000 characters)."),
 })
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney analyzing a title commitment.

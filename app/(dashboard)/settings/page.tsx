@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Loader2, ExternalLink } from "lucide-react"
+import { motion } from "framer-motion"
+import { Loader2, ExternalLink, Check } from "lucide-react"
 
 type Settings = {
   name: string | null
@@ -59,7 +60,7 @@ export default function SettingsPage() {
   if (!settings) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
+        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground/40" />
       </div>
     )
   }
@@ -79,79 +80,102 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-10">
-      <h1 className="text-2xl font-semibold text-slate-900 mb-6">Settings</h1>
+      <motion.h1
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="text-2xl font-semibold text-foreground mb-6"
+      >
+        Settings
+      </motion.h1>
 
       {/* Profile */}
-      <section className="bg-white rounded-xl border border-slate-200 p-5 mb-4">
-        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-4">Profile</h2>
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.4 }}
+        className="bg-card rounded-xl border border-border p-5 mb-4"
+      >
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Profile</h2>
         <div className="space-y-3">
           <div>
-            <label className="text-xs font-medium text-slate-500 block mb-1">Email</label>
-            <p className="text-sm text-slate-700">{settings.email}</p>
+            <label className="text-xs font-medium text-muted-foreground block mb-1">Email</label>
+            <p className="text-sm text-foreground">{settings.email}</p>
           </div>
           <div>
-            <label className="text-xs font-medium text-slate-500 block mb-1">Name</label>
+            <label className="text-xs font-medium text-muted-foreground block mb-1">Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-slate-500 block mb-1">Firm Name</label>
+            <label className="text-xs font-medium text-muted-foreground block mb-1">Firm Name</label>
             <input
               type="text"
               value={firmName}
               onChange={(e) => setFirmName(e.target.value)}
               placeholder="e.g. Smith & Associates"
-              className="w-full text-sm text-slate-800 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputClass}
             />
           </div>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {saving ? "Saving..." : saved ? "Saved" : "Save Changes"}
+            {saving ? (
+              <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Saving...</>
+            ) : saved ? (
+              <><Check className="h-3.5 w-3.5" /> Saved</>
+            ) : (
+              "Save Changes"
+            )}
           </button>
         </div>
-      </section>
+      </motion.section>
 
       {/* Subscription */}
-      <section className="bg-white rounded-xl border border-slate-200 p-5 mb-4">
-        <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide mb-4">Subscription</h2>
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.18, duration: 0.4 }}
+        className="bg-card rounded-xl border border-border p-5 mb-4"
+      >
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Subscription</h2>
         <div className="space-y-2 text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-slate-500">Status</span>
-            <span className="font-medium text-slate-800">
+            <span className="text-muted-foreground">Status</span>
+            <span className="font-medium text-foreground">
               {statusLabel[settings.subscriptionStatus ?? "inactive"] ?? settings.subscriptionStatus}
             </span>
           </div>
           {settings.subscriptionTier && (
             <div className="flex items-center justify-between">
-              <span className="text-slate-500">Plan</span>
-              <span className="font-medium text-slate-800 capitalize">{settings.subscriptionTier.replace("_", " ")}</span>
+              <span className="text-muted-foreground">Plan</span>
+              <span className="font-medium text-foreground capitalize">{settings.subscriptionTier.replace("_", " ")}</span>
             </div>
           )}
           {trialActive && (
             <div className="flex items-center justify-between">
-              <span className="text-slate-500">Trial</span>
-              <span className="font-medium text-blue-600">{daysLeft} days remaining</span>
+              <span className="text-muted-foreground">Trial</span>
+              <span className="font-medium text-primary">{daysLeft} days remaining</span>
             </div>
           )}
           <div className="flex items-center justify-between">
-            <span className="text-slate-500">Generations this month</span>
-            <span className="font-medium text-slate-800">{settings.monthlyUsageCount ?? 0}</span>
+            <span className="text-muted-foreground">Generations this month</span>
+            <span className="font-medium text-foreground">{settings.monthlyUsageCount ?? 0}</span>
           </div>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-slate-100 flex gap-3">
+        <div className="mt-4 pt-4 border-t border-border flex gap-3">
           {settings.hasStripeCustomer ? (
             <button
               onClick={handlePortal}
               disabled={portalLoading}
-              className="flex items-center gap-1.5 px-4 py-2 border border-slate-200 hover:bg-slate-50 text-sm font-medium text-slate-700 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 border border-border hover:bg-muted/40 text-sm font-medium text-foreground rounded-lg transition-colors"
             >
               {portalLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ExternalLink className="h-3.5 w-3.5" />}
               Manage Billing
@@ -159,13 +183,15 @@ export default function SettingsPage() {
           ) : (
             <a
               href="/pricing"
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Subscribe
             </a>
           )}
         </div>
-      </section>
+      </motion.section>
     </div>
   )
 }
+
+const inputClass = "w-full text-sm text-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
