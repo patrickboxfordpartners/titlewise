@@ -1,8 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Loader2, ExternalLink, Check } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Loader2, ExternalLink, Check, Mail, AlertCircle } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 type Settings = {
   name: string | null
@@ -15,13 +18,29 @@ type Settings = {
   hasStripeCustomer: boolean
 }
 
+type EmailStatus = { google: boolean; outlook: boolean }
+
 export default function SettingsPage() {
+  return (
+    <Suspense>
+      <SettingsContent />
+    </Suspense>
+  )
+}
+
+function SettingsContent() {
+  const searchParams = useSearchParams()
   const [settings, setSettings] = useState<Settings | null>(null)
+  const [emailStatus, setEmailStatus] = useState<EmailStatus>({ google: false, outlook: false })
   const [name, setName] = useState("")
   const [firmName, setFirmName] = useState("")
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [portalLoading, setPortalLoading] = useState(false)
+  const [disconnecting, setDisconnecting] = useState<"google" | "outlook" | null>(null)
+
+  const connectedParam = searchParams.get("connected")
+  const errorParam = searchParams.get("error")
 
   useEffect(() => {
     fetch("/api/settings")
@@ -31,7 +50,10 @@ export default function SettingsPage() {
         setName(data.name ?? "")
         setFirmName(data.firmName ?? "")
       })
-  }, [])
+    fetch("/api/email/status")
+      .then((r) => r.json())
+      .then((data: EmailStatus) => setEmailStatus(data))
+  }, [connectedParam]) // re-fetch when returning from OAuth
 
   async function handleSave() {
     setSaving(true)
@@ -57,6 +79,13 @@ export default function SettingsPage() {
     }
   }
 
+  async function handleDisconnect(provider: "google" | "outlook") {
+    setDisconnecting(provider)
+    await fetch(`/api/email/disconnect?provider=${provider}`, { method: "DELETE" })
+    setEmailStatus((prev) => ({ ...prev, [provider]: false }))
+    setDisconnecting(null)
+  }
+
   if (!settings) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -78,6 +107,22 @@ export default function SettingsPage() {
     ? Math.ceil((new Date(settings.trialEndsAt!).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : 0
 
+  const oauthBannerText: Record<string, string> = {
+    google: "Gmail connected successfully.",
+    outlook: "Outlook connected successfully.",
+    oauth_denied: "Connection cancelled.",
+    oauth_invalid: "Invalid OAuth response.",
+    oauth_invalid_state: "Session mismatch — please try again.",
+    oauth_token_failed: "Could not exchange authorization code. Please try again.",
+  }
+
+  const bannerText = connectedParam
+    ? oauthBannerText[connectedParam]
+    : errorParam
+    ? oauthBannerText[errorParam]
+    : null
+  const bannerIsError = !!errorParam
+
   return (
     <div className="max-w-2xl mx-auto px-6 py-10">
       <motion.h1
@@ -88,6 +133,26 @@ export default function SettingsPage() {
       >
         Settings
       </motion.h1>
+
+      {/* OAuth result banner */}
+      <AnimatePresence>
+        {bannerText && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className={cn(
+              "flex items-center gap-2 rounded-lg border px-4 py-3 mb-4 text-sm",
+              bannerIsError
+                ? "bg-red-500/8 border-red-500/20 text-red-700"
+                : "bg-green-500/8 border-green-500/20 text-green-700"
+            )}
+          >
+            {bannerIsError ? <AlertCircle className="h-4 w-4 shrink-0" /> : <Check className="h-4 w-4 shrink-0" />}
+            {bannerText}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Profile */}
       <motion.section
@@ -104,22 +169,11 @@ export default function SettingsPage() {
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground block mb-1">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={inputClass}
-            />
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground block mb-1">Firm Name</label>
-            <input
-              type="text"
-              value={firmName}
-              onChange={(e) => setFirmName(e.target.value)}
-              placeholder="e.g. Smith & Associates"
-              className={inputClass}
-            />
+            <input type="text" value={firmName} onChange={(e) => setFirmName(e.target.value)} placeholder="e.g. Smith & Associates" className={inputClass} />
           </div>
           <button
             onClick={handleSave}
@@ -137,11 +191,97 @@ export default function SettingsPage() {
         </div>
       </motion.section>
 
-      {/* Subscription */}
+      {/* Connected Email Accounts */}
       <motion.section
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.18, duration: 0.4 }}
+        className="bg-card rounded-xl border border-border p-5 mb-4"
+      >
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Connected Email</h2>
+        <p className="text-xs text-muted-foreground mb-4">
+          Send emails directly from TitleWise using your own inbox.
+        </p>
+        <div className="space-y-3">
+          {/* Gmail */}
+          <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Gmail</p>
+                <p className="text-xs text-muted-foreground">
+                  {emailStatus.google ? "Connected — sends from your Gmail account" : "Not connected"}
+                </p>
+              </div>
+            </div>
+            {emailStatus.google ? (
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-1 text-xs font-medium text-green-600">
+                  <Check className="h-3.5 w-3.5" /> Connected
+                </span>
+                <button
+                  onClick={() => handleDisconnect("google")}
+                  disabled={disconnecting === "google"}
+                  className="text-xs text-muted-foreground hover:text-red-600 border border-border px-2.5 py-1 rounded-md transition-colors disabled:opacity-50"
+                >
+                  {disconnecting === "google" ? <Loader2 className="h-3 w-3 animate-spin" /> : "Disconnect"}
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/api/email/connect/google"
+                className="text-xs font-medium px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors"
+              >
+                Connect Gmail
+              </a>
+            )}
+          </div>
+
+          {/* Outlook */}
+          <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                <Mail className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">Outlook / Microsoft 365</p>
+                <p className="text-xs text-muted-foreground">
+                  {emailStatus.outlook ? "Connected — sends from your Outlook account" : "Not connected"}
+                </p>
+              </div>
+            </div>
+            {emailStatus.outlook ? (
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-1 text-xs font-medium text-green-600">
+                  <Check className="h-3.5 w-3.5" /> Connected
+                </span>
+                <button
+                  onClick={() => handleDisconnect("outlook")}
+                  disabled={disconnecting === "outlook"}
+                  className="text-xs text-muted-foreground hover:text-red-600 border border-border px-2.5 py-1 rounded-md transition-colors disabled:opacity-50"
+                >
+                  {disconnecting === "outlook" ? <Loader2 className="h-3 w-3 animate-spin" /> : "Disconnect"}
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/api/email/connect/outlook"
+                className="text-xs font-medium px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors"
+              >
+                Connect Outlook
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Subscription */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.26, duration: 0.4 }}
         className="bg-card rounded-xl border border-border p-5 mb-4"
       >
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Subscription</h2>
@@ -181,10 +321,7 @@ export default function SettingsPage() {
               Manage Billing
             </button>
           ) : (
-            <a
-              href="/pricing"
-              className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium rounded-lg transition-colors"
-            >
+            <a href="/pricing" className="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium rounded-lg transition-colors">
               Subscribe
             </a>
           )}

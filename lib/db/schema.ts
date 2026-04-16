@@ -15,6 +15,8 @@ export const users = pgTable("users", {
   trialEndsAt: timestamp("trial_ends_at"),
   monthlyUsageCount: integer("monthly_usage_count").default(0),
   usageResetAt: timestamp("usage_reset_at"),
+  googleRefreshToken: text("google_refresh_token"),
+  outlookRefreshToken: text("outlook_refresh_token"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })

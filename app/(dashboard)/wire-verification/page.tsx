@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Loader2, Shield, AlertTriangle, Copy, Check, Mail } from "lucide-react"
+import { Loader2, Shield, AlertTriangle, Copy, Check, Mail, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 
@@ -34,6 +34,17 @@ export default function WireVerificationPage() {
   const [error, setError] = useState("")
   const [copied, setCopied] = useState(false)
   const [showPrevious, setShowPrevious] = useState(false)
+  const [emailConnected, setEmailConnected] = useState(false)
+  const [sendTo, setSendTo] = useState("")
+  const [sendMode, setSendMode] = useState<"idle" | "compose" | "sending" | "sent">("idle")
+  const [sendError, setSendError] = useState("")
+
+  useEffect(() => {
+    fetch("/api/email/status")
+      .then((r) => r.json())
+      .then((data: { google: boolean; outlook: boolean }) => setEmailConnected(data.google || data.outlook))
+      .catch(() => {})
+  }, [])
 
   async function handleAnalyze() {
     setError("")
@@ -56,6 +67,30 @@ export default function WireVerificationPage() {
     if (!result) return
     await navigator.clipboard.writeText(result.verificationEmail)
     setCopied(true); setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleSend() {
+    if (!result || !sendTo.trim()) return
+    setSendMode("sending")
+    setSendError("")
+    try {
+      const res = await fetch("/api/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: sendTo,
+          subject: "Wire Instruction Verification Request",
+          body: result.verificationEmail,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Send failed")
+      setSendMode("sent")
+      setTimeout(() => { setSendMode("idle"); setSendTo("") }, 3000)
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : "Send failed")
+      setSendMode("compose")
+    }
   }
 
   function openInEmail() {
@@ -267,6 +302,19 @@ export default function WireVerificationPage() {
                   >
                     <Mail className="h-3.5 w-3.5" /> Open in Email
                   </button>
+                  {emailConnected && sendMode !== "sent" && (
+                    <button
+                      onClick={() => setSendMode(sendMode === "compose" ? "idle" : "compose")}
+                      className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                    >
+                      <Send className="h-3.5 w-3.5" /> Send
+                    </button>
+                  )}
+                  {sendMode === "sent" && (
+                    <span className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 text-green-600">
+                      <Check className="h-3.5 w-3.5" /> Sent
+                    </span>
+                  )}
                   <button
                     onClick={copyEmail}
                     className={cn(
@@ -278,6 +326,43 @@ export default function WireVerificationPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Inline send compose */}
+              <AnimatePresence>
+                {(sendMode === "compose" || sendMode === "sending") && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden mb-3"
+                  >
+                    <div className="flex gap-2 p-3 bg-muted/30 rounded-lg border border-border">
+                      <input
+                        type="email"
+                        value={sendTo}
+                        onChange={(e) => setSendTo(e.target.value)}
+                        placeholder="Recipient email address"
+                        onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                        className="flex-1 text-sm text-foreground bg-card border border-border rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
+                      />
+                      <button
+                        onClick={handleSend}
+                        disabled={sendMode === "sending" || !sendTo.trim()}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 disabled:opacity-60 text-white text-xs font-medium rounded-md transition-colors"
+                      >
+                        {sendMode === "sending" ? (
+                          <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Sending...</>
+                        ) : (
+                          <><Send className="h-3.5 w-3.5" /> Send</>
+                        )}
+                      </button>
+                    </div>
+                    {sendError && <p className="text-xs text-red-500 mt-1 px-1">{sendError}</p>}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <pre className="text-sm text-foreground/80 whitespace-pre-wrap font-mono bg-muted/40 rounded-lg p-3 max-h-64 overflow-y-auto border border-border">
                 {result.verificationEmail}
               </pre>

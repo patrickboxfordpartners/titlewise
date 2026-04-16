@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Copy, Check, Loader2, RotateCcw, Mail } from "lucide-react"
+import { Copy, Check, Loader2, RotateCcw, Mail, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 
@@ -61,6 +61,10 @@ function StatusUpdateContent() {
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState("")
+  const [emailConnected, setEmailConnected] = useState(false)
+  const [sendTo, setSendTo] = useState("")
+  const [sendMode, setSendMode] = useState<"idle" | "compose" | "sending" | "sent">("idle")
+  const [sendError, setSendError] = useState("")
 
   useEffect(() => {
     fetch("/api/settings")
@@ -70,6 +74,12 @@ function StatusUpdateContent() {
           ...prev,
           ...(data.name && !prev.attorneyName ? { attorneyName: data.name } : {}),
         }))
+      })
+      .catch(() => {})
+    fetch("/api/email/status")
+      .then((r) => r.json())
+      .then((data: { google: boolean; outlook: boolean }) => {
+        setEmailConnected(data.google || data.outlook)
       })
       .catch(() => {})
   }, [])
@@ -142,6 +152,29 @@ function StatusUpdateContent() {
     await navigator.clipboard.writeText(output)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  async function handleSend() {
+    if (!sendTo.trim()) return
+    setSendMode("sending")
+    setSendError("")
+    const subjectMatch = output.match(/^Subject:\s*(.+)/m)
+    const subject = subjectMatch ? subjectMatch[1].trim() : `Closing Update — ${form.propertyAddress}`
+    const body = output.replace(/^Subject:.*\n?/m, "").trim()
+    try {
+      const res = await fetch("/api/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to: sendTo, subject, body }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Send failed")
+      setSendMode("sent")
+      setTimeout(() => { setSendMode("idle"); setSendTo("") }, 3000)
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : "Send failed")
+      setSendMode("compose")
+    }
   }
 
   function handleMailto() {
@@ -366,7 +399,7 @@ function StatusUpdateContent() {
                   className="flex gap-2"
                 >
                   <button
-                    onClick={() => setOutput("")}
+                    onClick={() => { setOutput(""); setSendMode("idle") }}
                     className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
@@ -379,6 +412,20 @@ function StatusUpdateContent() {
                     <Mail className="h-3.5 w-3.5" />
                     Open in Email
                   </button>
+                  {emailConnected && sendMode !== "sent" && (
+                    <button
+                      onClick={() => setSendMode(sendMode === "compose" ? "idle" : "compose")}
+                      className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      Send
+                    </button>
+                  )}
+                  {sendMode === "sent" && (
+                    <span className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 text-green-600">
+                      <Check className="h-3.5 w-3.5" /> Sent
+                    </span>
+                  )}
                   <button
                     onClick={handleCopy}
                     className={cn(
@@ -389,21 +436,51 @@ function StatusUpdateContent() {
                     )}
                   >
                     {copied ? (
-                      <>
-                        <Check className="h-3.5 w-3.5" />
-                        Copied
-                      </>
+                      <><Check className="h-3.5 w-3.5" /> Copied</>
                     ) : (
-                      <>
-                        <Copy className="h-3.5 w-3.5" />
-                        Copy
-                      </>
+                      <><Copy className="h-3.5 w-3.5" /> Copy</>
                     )}
                   </button>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
+
+          {/* Inline send compose */}
+          <AnimatePresence>
+            {sendMode === "compose" || sendMode === "sending" ? (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden mb-3"
+              >
+                <div className="flex gap-2 p-3 bg-muted/30 rounded-lg border border-border">
+                  <input
+                    type="email"
+                    value={sendTo}
+                    onChange={(e) => setSendTo(e.target.value)}
+                    placeholder="Recipient email address"
+                    onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                    className="flex-1 text-sm text-foreground bg-card border border-border rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={sendMode === "sending" || !sendTo.trim()}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 disabled:opacity-60 text-white text-xs font-medium rounded-md transition-colors"
+                  >
+                    {sendMode === "sending" ? (
+                      <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Sending...</>
+                    ) : (
+                      <><Send className="h-3.5 w-3.5" /> Send</>
+                    )}
+                  </button>
+                </div>
+                {sendError && <p className="text-xs text-red-500 mt-1 px-1">{sendError}</p>}
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
 
           {/* Streaming view with blinking cursor */}
           {loading && output ? (
