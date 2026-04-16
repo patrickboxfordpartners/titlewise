@@ -2,7 +2,8 @@ import { decryptToken } from "./crypto"
 
 export async function getOutlookAccessToken(encryptedRefreshToken: string): Promise<string> {
   const refreshToken = decryptToken(encryptedRefreshToken)
-  const res = await fetch("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
+  const tenant = process.env.MICROSOFT_TENANT_ID ?? "common"
+  const res = await fetch(`https://login.microsoftonline.com/${tenant}/oauth2/v2.0/token`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({

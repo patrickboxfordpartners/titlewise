@@ -22,8 +22,9 @@ export async function GET(req: Request) {
     state,
   })
 
+  const tenant = process.env.MICROSOFT_TENANT_ID ?? "common"
   const response = NextResponse.redirect(
-    `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${params.toString()}`
+    `https://login.microsoftonline.com/${tenant}/oauth2/v2.0/authorize?${params.toString()}`
   )
   response.cookies.set("oauth_nonce", nonce, {
     httpOnly: true,
