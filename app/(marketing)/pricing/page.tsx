@@ -195,7 +195,7 @@ export default function PricingPage() {
                     size="lg"
                     disabled={loading === key}
                   >
-                    {loading === key ? "Redirecting..." : <>Start Free Trial {isPopular && <ArrowRight className="ml-1 h-4 w-4" />}</>}
+                    {loading === key ? "Redirecting..." : <>Get Started {isPopular && <ArrowRight className="ml-1 h-4 w-4" />}</>}
                   </Button>
                 </button>
               </motion.div>

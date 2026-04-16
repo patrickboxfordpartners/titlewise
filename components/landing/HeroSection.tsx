@@ -50,7 +50,7 @@ export default function HeroSection() {
           >
             <Link href="/sign-up">
               <Button variant="hero" size="lg" className="text-base px-8">
-                Start Free Trial <ArrowRight className="ml-1 h-4 w-4" />
+                Get Started <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
             </Link>
             <Link href="/pricing">
@@ -65,7 +65,7 @@ export default function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            No credit card required · Cancel anytime
+            Cancel anytime
           </motion.p>
         </motion.div>
       </div>

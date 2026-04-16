@@ -56,7 +56,6 @@ export async function POST(req: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
       subscription_data: {
         metadata: { plan: planKey, clerkId: userId },
-        trial_period_days: 14,
       },
       metadata: { clerkId: userId, plan: planKey },
     })

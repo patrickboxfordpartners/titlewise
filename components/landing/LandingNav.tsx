@@ -32,7 +32,7 @@ export default function LandingNav() {
             Sign in
           </Link>
           <Link href="/sign-up">
-            <Button size="sm">Start Free Trial</Button>
+            <Button size="sm">Get Started</Button>
           </Link>
         </div>
       </div>

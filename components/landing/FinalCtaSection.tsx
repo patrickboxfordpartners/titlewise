@@ -26,7 +26,7 @@ export default function FinalCtaSection() {
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/sign-up">
               <Button variant="hero" size="lg" className="text-base px-10">
-                Start Your Free Trial <ArrowRight className="ml-1 h-4 w-4" />
+                Get Started <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
             </Link>
             <Link href="/pricing">
@@ -36,7 +36,7 @@ export default function FinalCtaSection() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            No credit card required · All 8 tools included
+            All 8 tools included · Cancel anytime
           </p>
         </motion.div>
       </div>

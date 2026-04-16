@@ -96,16 +96,11 @@ function SettingsContent() {
 
   const statusLabel: Record<string, string> = {
     active: "Active",
-    trialing: "Trial",
+    trialing: "Active",
     inactive: "Free",
     canceled: "Canceled",
     past_due: "Past Due",
   }
-
-  const trialActive = settings.trialEndsAt && new Date(settings.trialEndsAt) > new Date()
-  const daysLeft = trialActive
-    ? Math.ceil((new Date(settings.trialEndsAt!).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-    : 0
 
   const oauthBannerText: Record<string, string> = {
     google: "Gmail connected successfully.",
@@ -296,12 +291,6 @@ function SettingsContent() {
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">Plan</span>
               <span className="font-medium text-foreground capitalize">{settings.subscriptionTier.replace("_", " ")}</span>
-            </div>
-          )}
-          {trialActive && (
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Trial</span>
-              <span className="font-medium text-primary">{daysLeft} days remaining</span>
             </div>
           )}
           <div className="flex items-center justify-between">
