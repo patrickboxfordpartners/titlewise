@@ -18,6 +18,12 @@ if (!key) {
 
 const stripe = new Stripe(key)
 
+const plans = [
+  { key: "solo", tier: "solo", monthly: 9900, annual: 95040 },
+  { key: "small_firm", tier: "small_firm", monthly: 24900, annual: 238800 },
+  { key: "team", tier: "team", monthly: 49900, annual: 479040 },
+] as const
+
 async function main() {
   console.log("Creating TitleWise product...")
   const product = await stripe.products.create({
@@ -25,33 +31,30 @@ async function main() {
     description: "AI tools for real estate closing attorneys",
   })
 
-  console.log("Creating prices...")
-  const solo = await stripe.prices.create({
-    product: product.id,
-    unit_amount: 9900,
-    currency: "usd",
-    recurring: { interval: "month" },
-    metadata: { tier: "solo" },
-    lookup_key: "titlewise_solo_monthly",
-  })
+  console.log("Creating monthly and annual prices...")
+  const prices: Record<string, { monthly: string; annual: string }> = {}
 
-  const smallFirm = await stripe.prices.create({
-    product: product.id,
-    unit_amount: 24900,
-    currency: "usd",
-    recurring: { interval: "month" },
-    metadata: { tier: "small_firm" },
-    lookup_key: "titlewise_small_firm_monthly",
-  })
+  for (const plan of plans) {
+    const monthly = await stripe.prices.create({
+      product: product.id,
+      unit_amount: plan.monthly,
+      currency: "usd",
+      recurring: { interval: "month" },
+      metadata: { tier: plan.tier },
+      lookup_key: `titlewise_${plan.key}_monthly`,
+    })
 
-  const team = await stripe.prices.create({
-    product: product.id,
-    unit_amount: 49900,
-    currency: "usd",
-    recurring: { interval: "month" },
-    metadata: { tier: "team" },
-    lookup_key: "titlewise_team_monthly",
-  })
+    const annual = await stripe.prices.create({
+      product: product.id,
+      unit_amount: plan.annual,
+      currency: "usd",
+      recurring: { interval: "year" },
+      metadata: { tier: plan.tier },
+      lookup_key: `titlewise_${plan.key}_annual`,
+    })
+
+    prices[plan.key] = { monthly: monthly.id, annual: annual.id }
+  }
 
   console.log("Configuring customer portal...")
   await stripe.billingPortal.configurations.create({
@@ -65,10 +68,13 @@ async function main() {
     },
   })
 
-  console.log("\n--- Add these to .env.local ---\n")
-  console.log(`STRIPE_SOLO_PRICE_ID=${solo.id}`)
-  console.log(`STRIPE_SMALL_FIRM_PRICE_ID=${smallFirm.id}`)
-  console.log(`STRIPE_TEAM_PRICE_ID=${team.id}`)
+  console.log("\n--- Add these to .env.local and Vercel ---\n")
+  console.log(`STRIPE_SOLO_PRICE_ID=${prices.solo.monthly}`)
+  console.log(`STRIPE_SOLO_ANNUAL_PRICE_ID=${prices.solo.annual}`)
+  console.log(`STRIPE_SMALL_FIRM_PRICE_ID=${prices.small_firm.monthly}`)
+  console.log(`STRIPE_SMALL_FIRM_ANNUAL_PRICE_ID=${prices.small_firm.annual}`)
+  console.log(`STRIPE_TEAM_PRICE_ID=${prices.team.monthly}`)
+  console.log(`STRIPE_TEAM_ANNUAL_PRICE_ID=${prices.team.annual}`)
   console.log(`\nProduct ID: ${product.id}`)
 }
 

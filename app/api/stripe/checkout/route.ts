@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
   plan: z.enum(["solo", "small_firm", "team"] as const),
+  annual: z.boolean().optional().default(false),
 })
 
 export async function POST(req: NextRequest) {
@@ -30,7 +31,8 @@ export async function POST(req: NextRequest) {
 
   const planKey = parsed.data.plan as PlanKey
   const plan = PLANS[planKey]
-  if (!plan.priceId) {
+  const priceId = parsed.data.annual ? plan.annualPriceId : plan.monthlyPriceId
+  if (!priceId) {
     return NextResponse.json({ error: "Plan not configured yet" }, { status: 400 })
   }
 
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
-      line_items: [{ price: plan.priceId, quantity: 1 }],
+      line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?subscribed=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
       subscription_data: {
