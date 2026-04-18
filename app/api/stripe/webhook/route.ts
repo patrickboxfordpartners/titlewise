@@ -5,6 +5,8 @@ import { users, processedEvents } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import type Stripe from "stripe"
 import { logger } from "@/lib/logger"
+import { sendDripEmail } from "@/lib/email/drip"
+import { clerkClient } from "@clerk/nextjs/server"
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
@@ -47,6 +49,19 @@ export async function POST(req: NextRequest) {
           .where(eq(users.clerkId, clerkId))
 
         logger.info("stripe/webhook", "Subscription activated", { clerkId, plan })
+
+        // Send welcome drip email (non-fatal)
+        try {
+          const clerk = await clerkClient()
+          const clerkUser = await clerk.users.getUser(clerkId)
+          const email = clerkUser.emailAddresses[0]?.emailAddress
+          const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ")
+          if (email) {
+            await sendDripEmail({ to: email, name, plan: plan ?? "solo", sequence: "welcome" })
+          }
+        } catch (dripErr) {
+          logger.error("stripe/webhook", "Welcome drip failed (non-fatal)", { error: String(dripErr) })
+        }
         break
       }
 
