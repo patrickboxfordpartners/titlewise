@@ -17,6 +17,8 @@ export const users = pgTable("users", {
   usageResetAt: timestamp("usage_reset_at"),
   googleRefreshToken: text("google_refresh_token"),
   outlookRefreshToken: text("outlook_refresh_token"),
+  dripDay3SentAt: timestamp("drip_day3_sent_at"),
+  dripDay7SentAt: timestamp("drip_day7_sent_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
