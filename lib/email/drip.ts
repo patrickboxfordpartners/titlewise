@@ -1,7 +1,16 @@
-import { Resend } from "resend"
+import nodemailer from "nodemailer"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = "TITLEwise <hello@titlewise.app>"
+const transporter = nodemailer.createTransport({
+  host: "email-smtp.us-east-1.amazonaws.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.SES_SMTP_USER,
+    pass: process.env.SES_SMTP_PASS,
+  },
+})
+
+const FROM = "TITLEwise <hello@boxfordpartners.com>"
 
 type DripSequence = "welcome" | "day3" | "day7"
 
@@ -89,24 +98,14 @@ export async function sendDripEmail({
   plan: string
   sequence: DripSequence
 }) {
-  if (!process.env.RESEND_API_KEY) {
-    console.warn("[drip] RESEND_API_KEY not set, skipping drip email")
+  if (!process.env.SES_SMTP_USER || !process.env.SES_SMTP_PASS) {
+    console.warn("[drip] SES credentials not set, skipping drip email")
     return
   }
 
   const { subject, html } = getEmailContent(sequence, name, plan)
 
-  const { error } = await resend.emails.send({
-    from: FROM,
-    to,
-    subject,
-    html,
-  })
-
-  if (error) {
-    console.error("[drip] Resend error:", error)
-    throw error
-  }
+  await transporter.sendMail({ from: FROM, to, subject, html })
 
   console.log(`[drip] Sent ${sequence} to ${to}`)
 }
