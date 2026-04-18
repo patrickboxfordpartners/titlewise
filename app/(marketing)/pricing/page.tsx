@@ -93,7 +93,7 @@ export default function PricingPage() {
         >
           <h1 className="text-4xl font-bold text-foreground tracking-tight">Simple, predictable pricing</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Choose the plan that fits your practice. No credit card required to start.
+            Choose the plan that fits your practice.
           </p>
         </motion.div>
 
@@ -222,7 +222,7 @@ export default function PricingPage() {
             <AccordionItem value="trial">
               <AccordionTrigger className="text-sm font-medium text-foreground">How do I get started?</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">
-                Sign up and get instant access to all 8 tools. No credit card required. Explore at your own pace and choose a plan when you're ready.
+                Select a plan below and you'll be set up in minutes. Billing starts immediately when you subscribe. Monthly plans renew each month; annual plans renew once per year at a 20% discount.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="billing">

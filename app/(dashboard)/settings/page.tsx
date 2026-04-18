@@ -13,7 +13,6 @@ type Settings = {
   firmName: string | null
   subscriptionStatus: string | null
   subscriptionTier: string | null
-  trialEndsAt: string | null
   monthlyUsageCount: number | null
   hasStripeCustomer: boolean
 }
@@ -96,8 +95,7 @@ function SettingsContent() {
 
   const statusLabel: Record<string, string> = {
     active: "Active",
-    trialing: "Active",
-    inactive: "Free",
+    inactive: "Inactive",
     canceled: "Canceled",
     past_due: "Past Due",
   }
