@@ -10,5 +10,6 @@ export async function GET() {
   return NextResponse.json({
     google: !!user.googleRefreshToken,
     outlook: !!user.outlookRefreshToken,
+    outlookAvailable: !!(process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET),
   })
 }

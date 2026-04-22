@@ -59,7 +59,56 @@ const CASH_ITEMS: TemplateItem[] = [
   { title: "Final walkthrough completed", assignedTo: "buyer", sortOrder: 22 },
 ]
 
-export function getTemplateItems(transactionType: string): TemplateItem[] {
+// State-specific checklist additions
+const STATE_ITEMS: Record<string, TemplateItem[]> = {
+  NH: [
+    { title: "NH transfer tax calculated and paid (1.5% of consideration)", assignedTo: "attorney", sortOrder: 50 },
+    { title: "NH real estate transfer tax stamps affixed to deed", assignedTo: "attorney", sortOrder: 51 },
+    { title: "RETT form (CD-57) completed and filed with Registry of Deeds", assignedTo: "attorney", sortOrder: 52 },
+    { title: "NH does not require attorney at closing — confirm title agent is licensed", assignedTo: "attorney", sortOrder: 53 },
+  ],
+  MA: [
+    { title: "MA deed excise tax calculated ($4.56 per $1,000 of consideration)", assignedTo: "attorney", sortOrder: 50 },
+    { title: "MA smoke/CO detector compliance certificate obtained", assignedTo: "seller", sortOrder: 51 },
+    { title: "MA Title 5 septic inspection completed (if applicable)", assignedTo: "seller", sortOrder: 52 },
+    { title: "MA attorney required at closing — confirm bar license", assignedTo: "attorney", sortOrder: 53 },
+    { title: "6(d) certificate obtained from condo association (if applicable)", assignedTo: "attorney", sortOrder: 54 },
+  ],
+  NY: [
+    { title: "NY mansion tax calculated (1% on purchases over $1M)", assignedTo: "attorney", sortOrder: 50 },
+    { title: "NY transfer tax calculated (0.4% of purchase price)", assignedTo: "attorney", sortOrder: 51 },
+    { title: "NYC RPT (Real Property Transfer Tax) if applicable", assignedTo: "attorney", sortOrder: 52 },
+    { title: "ACRIS filing completed for NYC properties", assignedTo: "attorney", sortOrder: 53 },
+    { title: "Co-op board approval obtained (if applicable)", assignedTo: "buyer", sortOrder: 54 },
+  ],
+  CA: [
+    { title: "CA documentary transfer tax calculated ($1.10 per $1,000 of equity)", assignedTo: "attorney", sortOrder: 50 },
+    { title: "Preliminary title report reviewed (not a title commitment)", assignedTo: "attorney", sortOrder: 51 },
+    { title: "Natural hazard disclosure report obtained", assignedTo: "seller", sortOrder: 52 },
+    { title: "FIRPTA withholding analyzed (if foreign seller)", assignedTo: "attorney", sortOrder: 53 },
+    { title: "Proposition 19 reassessment analysis completed", assignedTo: "attorney", sortOrder: 54 },
+  ],
+  FL: [
+    { title: "FL doc stamp tax on deed calculated ($0.70 per $100 consideration)", assignedTo: "attorney", sortOrder: 50 },
+    { title: "FL intangible tax on mortgage calculated ($0.002 per $1)", assignedTo: "attorney", sortOrder: 51 },
+    { title: "Homestead exemption application prepared (if primary residence)", assignedTo: "buyer", sortOrder: 52 },
+    { title: "FL hurricane insurance binder reviewed", assignedTo: "buyer", sortOrder: 53 },
+  ],
+  TX: [
+    { title: "TX title commitment Form T-7 reviewed", assignedTo: "attorney", sortOrder: 50 },
+    { title: "TX survey exception evaluated (T-19 endorsement if needed)", assignedTo: "attorney", sortOrder: 51 },
+    { title: "TX homestead designation reviewed for restrictions", assignedTo: "attorney", sortOrder: 52 },
+    { title: "TX no state income tax — confirm no withholding required", assignedTo: "attorney", sortOrder: 53 },
+  ],
+  PA: [
+    { title: "PA realty transfer tax calculated (1% state + local rate)", assignedTo: "attorney", sortOrder: 50 },
+    { title: "PA Act 68 notice provided to buyer", assignedTo: "attorney", sortOrder: 51 },
+    { title: "PA seller disclosure statement (RESDL) signed", assignedTo: "seller", sortOrder: 52 },
+    { title: "Sewage facilities permit (if applicable)", assignedTo: "seller", sortOrder: 53 },
+  ],
+}
+
+export function getTemplateItems(transactionType: string, state?: string | null): TemplateItem[] {
   const specific = {
     Purchase: PURCHASE_ITEMS,
     Sale: SALE_ITEMS,
@@ -67,5 +116,15 @@ export function getTemplateItems(transactionType: string): TemplateItem[] {
     "Cash Purchase": CASH_ITEMS,
   }[transactionType] ?? []
 
-  return [...COMMON_ITEMS, ...specific].sort((a, b) => a.sortOrder - b.sortOrder)
+  const stateItems = state ? (STATE_ITEMS[state.toUpperCase()] ?? []) : []
+
+  return [...COMMON_ITEMS, ...specific, ...stateItems].sort((a, b) => a.sortOrder - b.sortOrder)
 }
+
+export const US_STATES = [
+  "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+  "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+  "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+  "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+  "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY",
+] as const

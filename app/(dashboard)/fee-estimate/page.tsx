@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Copy, Check, Loader2, RotateCcw, DollarSign } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { PrintButton } from "@/components/print-button"
 
 const TRANSACTION_TYPES = ["Purchase", "Sale", "Refinance", "Cash Purchase", "Commercial", "HELOC"]
 const PROPERTY_TYPES = ["Single Family", "Condo/Townhouse", "Multi-Family", "Commercial", "Land"]
@@ -196,6 +197,7 @@ export default function FeeEstimatePage() {
                   <button onClick={() => setOutput("")} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
                     <RotateCcw className="h-3.5 w-3.5" /> Clear
                   </button>
+                  <PrintButton label="Export PDF" />
                   <button
                     onClick={handleCopy}
                     className={cn(

@@ -6,6 +6,7 @@ import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag, Uplo
 import { cn } from "@/lib/utils"
 import { PrintButton } from "@/components/print-button"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { trackEvent, EVENTS } from "@/lib/analytics"
 
 type Requirement = { item: string; description: string; flagged: boolean }
 type Exception = { item: string; description: string; flagged: boolean }
@@ -79,6 +80,7 @@ export default function TitleAnalysisPage() {
       }
       const data = await res.json()
       setAnalysis(data.analysis)
+      trackEvent(EVENTS.TITLE_ANALYZED, { redFlagCount: data.analysis?.redFlags?.length ?? 0 })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong")
     } finally {

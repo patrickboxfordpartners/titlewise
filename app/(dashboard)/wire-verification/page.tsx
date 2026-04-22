@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Loader2, Shield, AlertTriangle, Copy, Check, Mail, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { PrintButton } from "@/components/print-button"
+import { trackEvent, EVENTS } from "@/lib/analytics"
 
 type RedFlag = { severity: "critical" | "high" | "medium"; issue: string; detail: string }
 type Change = { field: string; previous: string; current: string; risk: "high" | "medium" }
@@ -30,6 +32,7 @@ export default function WireVerificationPage() {
   const [context, setContext] = useState("")
   const [expected, setExpected] = useState("")
   const [result, setResult] = useState<Result | null>(null)
+  const [institutionalDeviations, setInstitutionalDeviations] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [copied, setCopied] = useState(false)
@@ -59,6 +62,8 @@ export default function WireVerificationPage() {
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Analysis failed") }
       const data = await res.json()
       setResult(data.result)
+      setInstitutionalDeviations(data.institutionalDeviations ?? [])
+      trackEvent(EVENTS.WIRE_VERIFIED, { riskLevel: data.result?.riskLevel, hasDeviations: (data.institutionalDeviations?.length ?? 0) > 0 })
     } catch (err) { setError(err instanceof Error ? err.message : "Something went wrong") }
     finally { setLoading(false) }
   }
@@ -201,13 +206,34 @@ export default function WireVerificationPage() {
                 <Shield className="h-4 w-4" />
                 Risk Level: {riskConfig[result.riskLevel].label}
               </motion.div>
-              <button
-                onClick={() => { setResult(null); setWire(""); setPrevious("") }}
-                className="text-xs text-muted-foreground hover:text-foreground border border-border px-3 py-1.5 rounded-md transition-colors"
-              >
-                Analyze another
-              </button>
+              <div className="flex items-center gap-2">
+                <PrintButton label="Export PDF" />
+                <button
+                  onClick={() => { setResult(null); setWire(""); setPrevious("") }}
+                  className="text-xs text-muted-foreground hover:text-foreground border border-border px-3 py-1.5 rounded-md transition-colors"
+                >
+                  Analyze another
+                </button>
+              </div>
             </motion.div>
+
+            {/* Institutional memory deviations */}
+            {institutionalDeviations.length > 0 && (
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
+                <h2 className="text-xs font-semibold text-red-600 uppercase tracking-wide mb-3 flex items-center gap-2">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  Institutional Memory Alert
+                </h2>
+                <ul className="space-y-1.5">
+                  {institutionalDeviations.map((d, i) => (
+                    <li key={i} className="text-sm text-red-700 dark:text-red-400 flex gap-2">
+                      <span className="shrink-0">•</span>{d}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-red-600/70 mt-2">This routing number has been used in previous verifications with different details. Verify directly with the lender before wiring funds.</p>
+              </motion.div>
+            )}
 
             {/* Extracted details */}
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl border border-border p-5">

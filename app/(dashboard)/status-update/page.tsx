@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Copy, Check, Loader2, RotateCcw, Mail, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { PrintButton } from "@/components/print-button"
+import { trackEvent, EVENTS } from "@/lib/analytics"
 
 const CLOSING_STAGES = [
   "Contract Signed",
@@ -145,6 +147,7 @@ function StatusUpdateContent() {
       setError(err instanceof Error ? err.message : "Something went wrong")
     } finally {
       setLoading(false)
+      if (output) trackEvent(EVENTS.STATUS_UPDATE_GENERATED)
     }
   }
 
@@ -441,6 +444,7 @@ function StatusUpdateContent() {
                       <><Copy className="h-3.5 w-3.5" /> Copy</>
                     )}
                   </button>
+                  <PrintButton label="Export PDF" />
                 </motion.div>
               )}
             </AnimatePresence>

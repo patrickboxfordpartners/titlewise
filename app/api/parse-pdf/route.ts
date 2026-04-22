@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Rate limit
-  const rl = checkRateLimit(userId)
+  const rl = await checkRateLimit(userId)
   if (!rl.allowed) {
     return NextResponse.json(
       { error: "Rate limit exceeded. Try again later." },

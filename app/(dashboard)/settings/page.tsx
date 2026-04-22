@@ -14,10 +14,12 @@ type Settings = {
   subscriptionStatus: string | null
   subscriptionTier: string | null
   monthlyUsageCount: number | null
+  usageResetAt: string | null
+  trialEndsAt: string | null
   hasStripeCustomer: boolean
 }
 
-type EmailStatus = { google: boolean; outlook: boolean }
+type EmailStatus = { google: boolean; outlook: boolean; outlookAvailable: boolean }
 
 export default function SettingsPage() {
   return (
@@ -30,7 +32,7 @@ export default function SettingsPage() {
 function SettingsContent() {
   const searchParams = useSearchParams()
   const [settings, setSettings] = useState<Settings | null>(null)
-  const [emailStatus, setEmailStatus] = useState<EmailStatus>({ google: false, outlook: false })
+  const [emailStatus, setEmailStatus] = useState<EmailStatus>({ google: false, outlook: false, outlookAvailable: false })
   const [name, setName] = useState("")
   const [firmName, setFirmName] = useState("")
   const [saving, setSaving] = useState(false)
@@ -258,13 +260,17 @@ function SettingsContent() {
                   {disconnecting === "outlook" ? <Loader2 className="h-3 w-3 animate-spin" /> : "Disconnect"}
                 </button>
               </div>
-            ) : (
+            ) : emailStatus.outlookAvailable ? (
               <a
                 href="/api/email/connect/outlook"
                 className="text-xs font-medium px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors"
               >
                 Connect Outlook
               </a>
+            ) : (
+              <span className="text-xs text-muted-foreground px-3 py-1.5">
+                Coming soon
+              </span>
             )}
           </div>
         </div>
@@ -295,6 +301,23 @@ function SettingsContent() {
             <span className="text-muted-foreground">Generations this month</span>
             <span className="font-medium text-foreground">{settings.monthlyUsageCount ?? 0}</span>
           </div>
+          {settings.usageResetAt && (
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Usage resets</span>
+              <span className="font-medium text-foreground">
+                {new Date(new Date(settings.usageResetAt).getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </span>
+            </div>
+          )}
+          {settings.subscriptionStatus === "trialing" && settings.trialEndsAt && (
+            <div className="flex items-center justify-between">
+              <span className="text-muted-foreground">Trial ends</span>
+              <span className={`font-medium ${new Date(settings.trialEndsAt) < new Date(Date.now() + 3 * 86400000) ? "text-red-500" : "text-foreground"}`}>
+                {new Date(settings.trialEndsAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                {" "}({Math.max(0, Math.ceil((new Date(settings.trialEndsAt).getTime() - Date.now()) / 86400000))} days left)
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="mt-4 pt-4 border-t border-border flex gap-3">
@@ -314,7 +337,103 @@ function SettingsContent() {
           )}
         </div>
       </motion.section>
+
+      {/* Team */}
+      {(settings.subscriptionTier === "small_firm" || settings.subscriptionTier === "team") && (
+        <TeamSection />
+      )}
     </div>
+  )
+}
+
+function TeamSection() {
+  const [data, setData] = useState<{ members: any[]; pending: any[]; seatLimit: number; seatsUsed: number } | null>(null)
+  const [email, setEmail] = useState("")
+  const [inviting, setInviting] = useState(false)
+  const [inviteResult, setInviteResult] = useState<{ url?: string; error?: string } | null>(null)
+
+  useEffect(() => {
+    fetch("/api/team").then(r => r.json()).then(setData)
+  }, [])
+
+  async function handleInvite() {
+    if (!email.trim()) return
+    setInviting(true)
+    setInviteResult(null)
+    const res = await fetch("/api/team", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim() }),
+    })
+    const d = await res.json()
+    if (d.error) setInviteResult({ error: d.error })
+    else { setInviteResult({ url: d.inviteUrl }); setEmail(""); fetch("/api/team").then(r => r.json()).then(setData) }
+    setInviting(false)
+  }
+
+  async function handleRevoke(id: string) {
+    await fetch(`/api/team?id=${id}`, { method: "DELETE" })
+    fetch("/api/team").then(r => r.json()).then(setData)
+  }
+
+  if (!data) return null
+
+  return (
+    <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4 }} className="bg-card rounded-xl border border-border p-5 mb-4">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Team</h2>
+        <span className="text-xs text-muted-foreground">{data.seatsUsed} of {data.seatLimit} seats used</span>
+      </div>
+
+      {/* Invite form */}
+      <div className="flex gap-2 mb-4">
+        <input
+          type="email"
+          placeholder="colleague@lawfirm.com"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && handleInvite()}
+          className="flex-1 text-sm text-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+        />
+        <button onClick={handleInvite} disabled={inviting || !email.trim()} className="px-4 py-2 bg-primary hover:bg-primary/90 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors">
+          {inviting ? "Inviting..." : "Invite"}
+        </button>
+      </div>
+
+      {inviteResult?.error && <p className="text-xs text-red-500 mb-3">{inviteResult.error}</p>}
+      {inviteResult?.url && (
+        <div className="mb-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+          <p className="text-xs text-green-700 dark:text-green-400 font-medium mb-1">Invite link generated (email sending coming soon)</p>
+          <p className="text-xs font-mono text-muted-foreground break-all">{inviteResult.url}</p>
+        </div>
+      )}
+
+      {/* Active members */}
+      {data.members.length > 0 && (
+        <div className="space-y-2 mb-3">
+          <p className="text-xs font-medium text-muted-foreground">Active</p>
+          {data.members.map((m: any) => (
+            <div key={m.id} className="flex items-center justify-between text-sm py-1.5">
+              <span>{m.invitedEmail}</span>
+              <button onClick={() => handleRevoke(m.id)} className="text-xs text-red-500 hover:text-red-600 transition-colors">Remove</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Pending invites */}
+      {data.pending.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-medium text-muted-foreground">Pending Invites</p>
+          {data.pending.map((m: any) => (
+            <div key={m.id} className="flex items-center justify-between text-sm py-1.5 text-muted-foreground">
+              <span>{m.invitedEmail}</span>
+              <button onClick={() => handleRevoke(m.id)} className="text-xs hover:text-foreground transition-colors">Cancel</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </motion.section>
   )
 }
 

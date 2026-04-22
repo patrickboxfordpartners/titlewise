@@ -19,6 +19,8 @@ export const users = pgTable("users", {
   outlookRefreshToken: text("outlook_refresh_token"),
   dripDay3SentAt: timestamp("drip_day3_sent_at"),
   dripDay7SentAt: timestamp("drip_day7_sent_at"),
+  rateLimitCount: integer("rate_limit_count").default(0),
+  rateLimitWindowStart: timestamp("rate_limit_window_start"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
@@ -26,6 +28,7 @@ export const users = pgTable("users", {
 export const statusUpdates = pgTable("status_updates", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
   clientName: text("client_name").notNull(),
   propertyAddress: text("property_address").notNull(),
   transactionType: text("transaction_type").notNull(),
@@ -45,6 +48,7 @@ export const statusUpdates = pgTable("status_updates", {
 export const titleAnalyses = pgTable("title_analyses", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
   propertyAddress: text("property_address"),
   commitmentText: text("commitment_text").notNull(),
   analysis: jsonb("analysis").notNull(),
@@ -62,7 +66,9 @@ export const matters = pgTable("matters", {
   propertyAddress: text("property_address").notNull(),
   transactionType: text("transaction_type").notNull(),
   closingDate: timestamp("closing_date"),
+  state: text("state"), // US state abbreviation e.g. "NH", "MA"
   status: text("status").default("active"), // active | closed
+  portalToken: text("portal_token").unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
@@ -82,6 +88,41 @@ export const checklistItems = pgTable("checklist_items", {
 }, (table) => [
   index("idx_checklist_items_matter_id").on(table.matterId),
 ])
+
+export const wireInstructions = pgTable("wire_instructions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  lenderName: text("lender_name"),
+  bankName: text("bank_name"),
+  routingNumber: text("routing_number"),
+  accountNumber: text("account_number"), // stored masked
+  beneficiary: text("beneficiary"),
+  verifiedAt: timestamp("verified_at").defaultNow().notNull(),
+  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_wire_instructions_user").on(table.userId),
+  index("idx_wire_instructions_routing").on(table.routingNumber),
+])
+
+export type WireInstruction = typeof wireInstructions.$inferSelect
+
+export const teamMembers = pgTable("team_members", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  ownerId: uuid("owner_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  invitedEmail: text("invited_email").notNull(),
+  inviteToken: text("invite_token").notNull().unique(),
+  status: text("status").default("pending"), // pending | accepted | revoked
+  role: text("role").default("member"), // member | admin
+  joinedUserId: uuid("joined_user_id").references(() => users.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  acceptedAt: timestamp("accepted_at"),
+}, (table) => [
+  index("idx_team_members_owner").on(table.ownerId),
+  index("idx_team_members_token").on(table.inviteToken),
+])
+
+export type TeamMember = typeof teamMembers.$inferSelect
 
 export const processedEvents = pgTable("processed_events", {
   id: text("id").primaryKey(),

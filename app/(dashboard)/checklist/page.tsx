@@ -5,6 +5,7 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Loader2, Plus, FolderOpen, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { US_STATES } from "@/lib/checklist-templates"
 
 type Matter = {
   id: string
@@ -25,7 +26,7 @@ export default function ChecklistPage() {
   const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
   const [creating, setCreating] = useState(false)
-  const [form, setForm] = useState({ clientName: "", propertyAddress: "", transactionType: "Purchase", closingDate: "" })
+  const [form, setForm] = useState({ clientName: "", propertyAddress: "", transactionType: "Purchase", closingDate: "", state: "" })
 
   useEffect(() => {
     fetch("/api/checklist")
@@ -125,6 +126,13 @@ export default function ChecklistPage() {
                     onChange={(e) => setForm({ ...form, closingDate: e.target.value })}
                     className={inputClass}
                   />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground block mb-1">State <span className="text-muted-foreground/60">(optional — adds state-specific items)</span></label>
+                  <select value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} className={inputClass}>
+                    <option value="">Select state...</option>
+                    {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
                 </div>
               </div>
               <button

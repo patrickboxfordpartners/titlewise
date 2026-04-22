@@ -14,6 +14,14 @@ type Review = {
   discrepancies: Discrepancy[]
   warnings: Warning[]
   verified: string[]
+  trid?: {
+    bucketA_violations?: Array<{ fee: string; le_amount?: string | null; cd_amount?: string | null; variance?: string | null; cure_required?: boolean }>
+    bucketB_violations?: Array<{ fee: string; category_total_le?: string | null; category_total_cd?: string | null; over_10pct?: boolean }>
+    bucketC_fees?: string[]
+    cure_amount?: string | null
+    trid_compliant?: boolean | null
+    trid_notes?: string
+  }
   summary: string
 }
 
@@ -281,6 +289,42 @@ export default function CDReviewerPage() {
                 )}
               </AnimatePresence>
             </motion.div>
+
+            {/* TRID Compliance */}
+            {review.trid && (
+              <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                className={`rounded-xl border p-5 ${review.trid.trid_compliant === false ? "bg-red-500/10 border-red-500/30" : review.trid.trid_compliant === true ? "bg-green-500/10 border-green-500/20" : "bg-card border-border"}`}>
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">TRID Compliance</h2>
+                  {review.trid.trid_compliant === true && <span className="text-xs font-semibold text-green-600 bg-green-500/10 px-2 py-1 rounded-md">Compliant</span>}
+                  {review.trid.trid_compliant === false && <span className="text-xs font-semibold text-red-600 bg-red-500/10 px-2 py-1 rounded-md">Violations Found</span>}
+                  {review.trid.cure_amount && <span className="text-xs font-semibold text-red-600">Cure required: {review.trid.cure_amount}</span>}
+                </div>
+                {review.trid.trid_notes && <p className="text-sm text-foreground/80 mb-3">{review.trid.trid_notes}</p>}
+                {(review.trid.bucketA_violations?.length ?? 0) > 0 && (
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-red-600 uppercase tracking-wide mb-2">Bucket A Violations (Zero Tolerance)</p>
+                    {review.trid.bucketA_violations!.map((v, i) => (
+                      <div key={i} className="text-sm text-foreground/80 mb-1">
+                        <span className="font-medium">{v.fee}</span>: LE {v.le_amount} → CD {v.cd_amount}
+                        {v.variance && <span className="text-red-500 ml-2">+{v.variance} over tolerance</span>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {(review.trid.bucketB_violations?.length ?? 0) > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-wide mb-2">Bucket B Violations (10% Tolerance)</p>
+                    {review.trid.bucketB_violations!.map((v, i) => (
+                      <div key={i} className="text-sm text-foreground/80 mb-1">
+                        <span className="font-medium">{v.fee}</span>: LE total {v.category_total_le} → CD total {v.category_total_cd}
+                        {v.over_10pct && <span className="text-amber-500 ml-2">Exceeds 10% tolerance</span>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

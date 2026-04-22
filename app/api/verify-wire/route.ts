@@ -1,5 +1,8 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextRequest, NextResponse } from "next/server"
+import { db } from "@/lib/db"
+import { wireInstructions } from "@/lib/db/schema"
+import { eq, and } from "drizzle-orm"
 import { z } from "zod/v4"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
@@ -97,7 +100,7 @@ export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const { allowed } = checkRateLimit(userId)
+  const { allowed } = await checkRateLimit(userId)
   if (!allowed) return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 })
 
   let body: unknown
@@ -135,7 +138,49 @@ export async function POST(req: NextRequest) {
 
     try { await incrementUsage(user.id) } catch (err) { logger.error("verify-wire", "Failed to increment usage", { error: String(err) }) }
 
-    return NextResponse.json({ result: validated.data })
+    const result = validated.data
+    const deviations: string[] = []
+
+    // Institutional memory: compare against known-good wires for this routing number
+    if (result.extracted.routingNumber) {
+      try {
+        const known = await db
+          .select()
+          .from(wireInstructions)
+          .where(and(
+            eq(wireInstructions.userId, user.id),
+            eq(wireInstructions.routingNumber, result.extracted.routingNumber),
+          ))
+          .limit(5)
+
+        if (known.length > 0) {
+          const knownBanks = [...new Set(known.map(w => w.bankName).filter(Boolean))]
+          const knownBeneficiaries = [...new Set(known.map(w => w.beneficiary).filter(Boolean))]
+
+          if (result.extracted.bankName && knownBanks.length > 0 && !knownBanks.includes(result.extracted.bankName)) {
+            deviations.push(`Bank name "${result.extracted.bankName}" differs from previous uses of this routing number (previously: ${knownBanks.join(", ")})`)
+          }
+          if (result.extracted.beneficiary && knownBeneficiaries.length > 0 && !knownBeneficiaries.some(b => result.extracted.beneficiary?.toLowerCase().includes(b?.toLowerCase() ?? ""))) {
+            deviations.push(`Beneficiary "${result.extracted.beneficiary}" differs from previous uses (previously: ${knownBeneficiaries.join(", ")})`)
+          }
+        }
+
+        // Store this wire for future comparisons if low/medium risk
+        if (result.riskLevel === "low" || result.riskLevel === "medium") {
+          await db.insert(wireInstructions).values({
+            userId: user.id,
+            bankName: result.extracted.bankName,
+            routingNumber: result.extracted.routingNumber,
+            accountNumber: result.extracted.accountNumber ? `****${result.extracted.accountNumber.slice(-4)}` : null,
+            beneficiary: result.extracted.beneficiary,
+          })
+        }
+      } catch (err) {
+        logger.error("verify-wire", "Institutional memory check failed (non-blocking)", { error: String(err) })
+      }
+    }
+
+    return NextResponse.json({ result, institutionalDeviations: deviations })
   } catch (err) {
     logger.error("verify-wire", "API error", { error: String(err) })
     return NextResponse.json({ error: "Failed to analyze. Please try again." }, { status: 502 })

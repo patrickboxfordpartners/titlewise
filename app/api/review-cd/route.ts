@@ -46,6 +46,32 @@ function buildPrompt(cd: string, contract: string) {
   "verified": [
     "list of fields that match correctly between CD and contract"
   ],
+  "trid": {
+    "bucketA_violations": [
+      {
+        "fee": "fee name",
+        "le_amount": "amount on Loan Estimate",
+        "cd_amount": "amount on CD",
+        "tolerance": "zero tolerance",
+        "variance": "dollar amount over tolerance",
+        "cure_required": true
+      }
+    ],
+    "bucketB_violations": [
+      {
+        "fee": "fee name",
+        "le_amount": "amount on Loan Estimate",
+        "cd_amount": "amount on CD",
+        "category_total_le": "total of all Bucket B fees on LE",
+        "category_total_cd": "total of all Bucket B fees on CD",
+        "over_10pct": true
+      }
+    ],
+    "bucketC_fees": ["list of fee names that are Bucket C (no tolerance limit)"],
+    "cure_amount": "total dollar amount that must be cured to borrower, or null if no cure required",
+    "trid_compliant": true or false,
+    "trid_notes": "plain-English explanation of TRID status"
+  },
   "summary": "3-5 sentence overall assessment. State whether the CD is ready for closing or needs corrections."
 }
 
@@ -57,6 +83,13 @@ Rules:
 - Low severity: formatting differences, immaterial variances under $50
 - If information is missing from either document, note it as a warning
 - Be specific about what the discrepancy is and how to fix it
+
+TRID Tolerance Rules (CFPB TRID - 12 CFR 1026.19):
+- Bucket A (Zero Tolerance): Lender charges (origination fee, discount points, transfer taxes paid by borrower, upfront MIP/funding fee). ANY increase = violation requiring cure.
+- Bucket B (10% Tolerance): Title services (if borrower uses lender-selected provider), recording fees, pest inspections. SUM of Bucket B fees cannot increase by more than 10%.
+- Bucket C (No Tolerance): Title services (if borrower selects provider), homeowner's insurance, prepaid interest, escrow setup. Can change freely.
+- Cure deadline: 3 business days before consummation, or at consummation with 60-day cure period.
+- If you cannot identify LE amounts, note trid_compliant as null with explanation.
 
 Closing Disclosure:
 ${cd}
@@ -85,6 +118,28 @@ const analysisSchema = z.object({
     severity: z.enum(["high", "medium"]),
   })),
   verified: z.array(z.string()),
+  trid: z.object({
+    bucketA_violations: z.array(z.object({
+      fee: z.string(),
+      le_amount: z.string().nullable().optional(),
+      cd_amount: z.string().nullable().optional(),
+      tolerance: z.string().optional(),
+      variance: z.string().nullable().optional(),
+      cure_required: z.boolean().optional(),
+    })).optional(),
+    bucketB_violations: z.array(z.object({
+      fee: z.string(),
+      le_amount: z.string().nullable().optional(),
+      cd_amount: z.string().nullable().optional(),
+      category_total_le: z.string().nullable().optional(),
+      category_total_cd: z.string().nullable().optional(),
+      over_10pct: z.boolean().optional(),
+    })).optional(),
+    bucketC_fees: z.array(z.string()).optional(),
+    cure_amount: z.string().nullable().optional(),
+    trid_compliant: z.boolean().nullable().optional(),
+    trid_notes: z.string().optional(),
+  }).optional(),
   summary: z.string(),
 })
 
@@ -94,7 +149,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { allowed } = checkRateLimit(userId)
+  const { allowed } = await checkRateLimit(userId)
   if (!allowed) {
     return NextResponse.json({ error: "Rate limit exceeded." }, { status: 429 })
   }

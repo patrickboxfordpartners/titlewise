@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck } from "lucide-react"
+import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck, Share2, Check, Bot, AlertTriangle, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PrintButton } from "@/components/print-button"
 
@@ -38,6 +38,56 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   const [newTitle, setNewTitle] = useState("")
   const [newAssigned, setNewAssigned] = useState("")
   const [adding, setAdding] = useState(false)
+  const [portalUrl, setPortalUrl] = useState<string | null>(null)
+  const [sharingPortal, setSharingPortal] = useState(false)
+  const [copiedPortal, setCopiedPortal] = useState(false)
+  const [agentRunning, setAgentRunning] = useState(false)
+  const [agentReport, setAgentReport] = useState<any | null>(null)
+  const [showAgentReport, setShowAgentReport] = useState(false)
+
+  async function runAgent() {
+    if (!matter) return
+    setAgentRunning(true)
+    setAgentReport(null)
+    try {
+      const res = await fetch("/api/agent/analyze-matter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ matterId: matter.id }),
+      })
+      const d = await res.json()
+      if (d.report) {
+        setAgentReport(d)
+        setShowAgentReport(true)
+        // Reload items if agent updated any
+        if (d.updatedItems > 0) {
+          const r = await fetch(`/api/checklist/${matter.id}`)
+          const data = await r.json()
+          if (data.items) setItems(data.items)
+        }
+      }
+    } catch {
+      alert("Agent analysis failed. Please try again.")
+    } finally {
+      setAgentRunning(false)
+    }
+  }
+
+  async function sharePortal() {
+    if (!matter) return
+    setSharingPortal(true)
+    const res = await fetch(`/api/checklist/portal?matterId=${matter.id}`, { method: "POST" })
+    const d = await res.json()
+    if (d.url) setPortalUrl(d.url)
+    setSharingPortal(false)
+  }
+
+  function copyPortalUrl() {
+    if (!portalUrl) return
+    navigator.clipboard.writeText(portalUrl)
+    setCopiedPortal(true)
+    setTimeout(() => setCopiedPortal(false), 2000)
+  }
 
   async function fetchData() {
     const res = await fetch(`/api/checklist/${matterId}`)
@@ -144,8 +194,26 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
               </p>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={runAgent}
+              disabled={agentRunning}
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-violet-500/10 text-violet-600 hover:bg-violet-500/20 transition-colors disabled:opacity-50"
+            >
+              {agentRunning ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Bot className="h-3.5 w-3.5" />}
+              {agentRunning ? "Analyzing..." : "Run Agent"}
+            </button>
             <PrintButton label="Print Checklist" />
+            <button
+              onClick={portalUrl ? copyPortalUrl : sharePortal}
+              disabled={sharingPortal}
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors disabled:opacity-50"
+            >
+              {sharingPortal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> :
+               copiedPortal ? <Check className="h-3.5 w-3.5" /> :
+               <Share2 className="h-3.5 w-3.5" />}
+              {copiedPortal ? "Copied!" : portalUrl ? "Copy Link" : "Share Portal"}
+            </button>
             {matter.status === "active" && (
               <button
                 onClick={closeMatter}
@@ -265,6 +333,73 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
       </div>
 
       {/* Add item */}
+      {/* Agent Report */}
+      {showAgentReport && agentReport?.report && (
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-4 bg-violet-500/10 border border-violet-500/30 rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Bot className="h-4 w-4 text-violet-600" />
+              <h3 className="text-sm font-semibold text-violet-700 dark:text-violet-400">Closing Coordinator Report</h3>
+              {agentReport.updatedItems > 0 && (
+                <span className="text-xs bg-violet-500/20 text-violet-700 dark:text-violet-300 px-2 py-0.5 rounded-md">{agentReport.updatedItems} items auto-updated</span>
+              )}
+            </div>
+            <button onClick={() => setShowAgentReport(false)} className="text-xs text-muted-foreground hover:text-foreground">Dismiss</button>
+          </div>
+
+          <div className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md ${
+            agentReport.report.overall_status === "on_track" ? "bg-green-500/10 text-green-700" :
+            agentReport.report.overall_status === "needs_attention" ? "bg-amber-500/10 text-amber-700" :
+            "bg-red-500/10 text-red-700"
+          }`}>
+            {agentReport.report.overall_status?.replace(/_/g, " ").toUpperCase()}
+          </div>
+
+          <p className="text-sm text-foreground/80">{agentReport.report.status_summary}</p>
+
+          {agentReport.report.immediate_actions?.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Immediate Actions</p>
+              {agentReport.report.immediate_actions.map((a: any, i: number) => (
+                <div key={i} className="flex gap-2 text-sm mb-2">
+                  <span className={`shrink-0 text-xs font-bold mt-0.5 ${a.urgency === "today" ? "text-red-500" : a.urgency === "this_week" ? "text-amber-500" : "text-muted-foreground"}`}>
+                    {a.urgency?.replace(/_/g, " ")}
+                  </span>
+                  <div>
+                    <span className="font-medium">{a.action}</span>
+                    <span className="text-muted-foreground ml-2">→ {a.assigned_to}</span>
+                    {a.reason && <p className="text-xs text-muted-foreground mt-0.5">{a.reason}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {agentReport.report.blockers?.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-red-600 uppercase tracking-wide mb-2 flex items-center gap-1">
+                <AlertTriangle className="h-3 w-3" /> Blockers
+              </p>
+              {agentReport.report.blockers.map((b: any, i: number) => (
+                <div key={i} className="text-sm mb-2">
+                  <span className="font-medium">{b.item}</span>
+                  {b.resolution && <p className="text-xs text-muted-foreground mt-0.5">Fix: {b.resolution}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {agentReport.report.draft_status_email && (
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Draft Status Email (saved to History)</p>
+              <div className="bg-card border border-border rounded-lg p-3 text-xs font-mono whitespace-pre-wrap">
+                {`Subject: ${agentReport.report.draft_status_email.subject}\n\n${agentReport.report.draft_status_email.body}`}
+              </div>
+            </div>
+          )}
+        </motion.div>
+      )}
+
       {matter.status === "active" && (
         <motion.div
           initial={{ opacity: 0, y: 8 }}

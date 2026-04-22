@@ -41,6 +41,8 @@ export default function HistoryPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
+  const [fromDate, setFromDate] = useState("")
+  const [toDate, setToDate] = useState("")
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 300)
@@ -49,13 +51,17 @@ export default function HistoryPage() {
 
   const fetchHistory = useCallback(async () => {
     setLoading(true)
-    const params = debouncedSearch ? `?q=${encodeURIComponent(debouncedSearch)}` : ""
-    const res = await fetch(`/api/history${params}`)
+    const params = new URLSearchParams()
+    if (debouncedSearch) params.set("q", debouncedSearch)
+    if (fromDate) params.set("from", fromDate)
+    if (toDate) params.set("to", toDate)
+    params.set("limit", "100")
+    const res = await fetch(`/api/history?${params.toString()}`)
     const data = await res.json()
     setUpdates(data.updates ?? [])
     setAnalyses(data.analyses ?? [])
     setLoading(false)
-  }, [debouncedSearch])
+  }, [debouncedSearch, fromDate, toDate])
 
   useEffect(() => {
     fetchHistory()
@@ -119,6 +125,23 @@ export default function HistoryPage() {
           placeholder="Search by client name or property address..."
           className="w-full pl-9 pr-3 py-2 text-sm bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50 text-foreground"
         />
+      </motion.div>
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.35 }} className="flex gap-2 mb-4">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>From</span>
+          <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)}
+            className="text-sm bg-card border border-border rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary text-foreground" />
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>To</span>
+          <input type="date" value={toDate} onChange={e => setToDate(e.target.value)}
+            className="text-sm bg-card border border-border rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary text-foreground" />
+        </div>
+        {(fromDate || toDate) && (
+          <button onClick={() => { setFromDate(""); setToDate("") }} className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+            <RotateCcw className="h-3 w-3" /> Clear dates
+          </button>
+        )}
       </motion.div>
 
       {/* Tabs */}

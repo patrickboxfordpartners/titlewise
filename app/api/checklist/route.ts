@@ -12,6 +12,7 @@ const createSchema = z.object({
   propertyAddress: z.string().min(1),
   transactionType: z.enum(["Purchase", "Sale", "Refinance", "Cash Purchase"]),
   closingDate: z.string().optional(),
+  state: z.string().max(2).optional(),
 })
 
 // GET — list all matters with item counts
@@ -57,10 +58,11 @@ export async function POST(req: NextRequest) {
     propertyAddress: parsed.data.propertyAddress,
     transactionType: parsed.data.transactionType,
     closingDate: parsed.data.closingDate ? new Date(parsed.data.closingDate) : null,
+    state: parsed.data.state?.toUpperCase() ?? null,
   }).returning()
 
-  // Auto-generate checklist items from template
-  const templateItems = getTemplateItems(parsed.data.transactionType)
+  // Auto-generate checklist items from template (including state-specific items)
+  const templateItems = getTemplateItems(parsed.data.transactionType, parsed.data.state)
   if (templateItems.length > 0) {
     await db.insert(checklistItems).values(
       templateItems.map((t) => ({
