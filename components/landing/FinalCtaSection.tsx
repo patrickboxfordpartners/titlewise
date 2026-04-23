@@ -21,7 +21,7 @@ export default function FinalCtaSection() {
             Ready to close smarter?
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Join hundreds of real estate attorneys who've streamlined their practice with TitleWise.
+            Join real estate attorneys who are closing faster and smarter with TitleWise.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/sign-up">
@@ -36,7 +36,7 @@ export default function FinalCtaSection() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
-            All 8 tools included · Cancel anytime
+            12 tools + AI agent -- Plans from $149/mo -- Cancel anytime
           </p>
         </motion.div>
       </div>

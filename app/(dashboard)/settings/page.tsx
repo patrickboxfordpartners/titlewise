@@ -339,7 +339,7 @@ function SettingsContent() {
       </motion.section>
 
       {/* Team */}
-      {(settings.subscriptionTier === "small_firm" || settings.subscriptionTier === "team") && (
+      {(settings.subscriptionTier === "small_firm" || settings.subscriptionTier === "pro" || settings.subscriptionTier === "enterprise") && (
         <TeamSection />
       )}
     </div>

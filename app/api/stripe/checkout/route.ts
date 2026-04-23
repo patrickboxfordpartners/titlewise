@@ -7,7 +7,7 @@ import { getOrCreateUser } from "@/lib/db/get-user"
 import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
-  plan: z.enum(["solo", "small_firm", "team"] as const),
+  plan: z.enum(["solo", "small_firm", "pro", "enterprise"] as const),
   annual: z.boolean().optional().default(false),
 })
 

@@ -32,7 +32,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
           >
-            Stop spending time on emails. Start spending it on closings.
+            Your AI closing coordinator. From intake to clear-to-close.
           </motion.h1>
           <motion.p
             className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground"
@@ -40,7 +40,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25 }}
           >
-            TitleWise gives closing attorneys AI-powered tools that handle the repetitive work — so you can focus on the files that need your expertise.
+            TitleWise is the AI-powered closing platform built for real estate attorneys. Document analysis, compliance checks, wire fraud protection, client portals, and an autonomous agent that moves your matters forward -- all in one place.
           </motion.p>
           <motion.div
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
@@ -65,7 +65,7 @@ export default function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Cancel anytime
+            Plans from $149/mo -- Cancel anytime
           </motion.p>
         </motion.div>
       </div>

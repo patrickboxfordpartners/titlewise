@@ -5,7 +5,8 @@ import { motion, useInView, useMotionValue, useTransform, animate } from "framer
 
 const stats = [
   { value: 30, suffix: "+", label: "Minutes saved per file", prefix: "" },
-  { value: 8, suffix: "", label: "AI-powered tools", prefix: "" },
+  { value: 12, suffix: "", label: "AI-powered tools", prefix: "" },
+  { value: 7, suffix: "", label: "State-specific templates", prefix: "" },
   { value: 99, suffix: "%", label: "Accuracy rate", prefix: "" },
 ]
 
@@ -35,7 +36,7 @@ export default function StatsSection() {
   return (
     <section className="bg-section-dark py-12">
       <div className="container mx-auto px-6">
-        <div className="mx-auto grid max-w-3xl grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+        <div className="mx-auto grid max-w-4xl grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}

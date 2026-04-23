@@ -6,10 +6,14 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 
 const benefits = [
-  "8 tools covering every stage of the closing workflow",
+  "12 tools and an autonomous AI agent covering every stage of the closing workflow",
   "Built for real estate closing attorneys, not title companies",
+  "State-specific checklist templates for NH, MA, NY, CA, FL, TX, PA",
+  "Client-facing portals so buyers and sellers can track progress themselves",
+  "Wire fraud institutional memory that protects your firm across every matter",
+  "TRID compliance engine with automatic Bucket A/B/C classification",
   "Plain English output your clients actually understand",
-  "Saves 30+ minutes per file, every day",
+  "PDF exports, full-text search, and complete document version history",
 ]
 
 export default function BenefitsSection() {

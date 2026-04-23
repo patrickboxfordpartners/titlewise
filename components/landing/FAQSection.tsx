@@ -7,7 +7,7 @@ const faqs = [
   {
     value: "what",
     question: "What is TITLEwise?",
-    answer: "TITLEwise is an AI-powered toolkit built specifically for real estate attorneys. It automates time-consuming tasks like title analysis, closing disclosure review, fee estimation, tax proration, and more — so you can close faster with fewer errors.",
+    answer: "TITLEwise is an AI-powered closing platform built specifically for real estate attorneys. It combines 12 document analysis tools, an autonomous closing coordinator agent, client portals, TRID compliance checks, and wire fraud protection -- so you can close faster with fewer errors.",
   },
   {
     value: "security",
@@ -17,17 +17,27 @@ const faqs = [
   {
     value: "tools",
     question: "Which tools are included?",
-    answer: "Every plan includes all 8 tools: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Verification, HOA Document Reviewer, Fee Estimator, Tax Proration Calculator, and Closing Checklists.",
+    answer: "Every plan includes 8 core tools: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Verification, HOA Document Reviewer, Fee Estimator, Tax Proration Calculator, and state-specific Closing Checklists. Higher plans add the Autonomous Closing Agent, Client Matter Portal, TRID Compliance Engine, and Wire Fraud Institutional Memory.",
+  },
+  {
+    value: "agent",
+    question: "What does the AI closing agent do?",
+    answer: "The autonomous closing coordinator analyzes your entire matter, auto-updates checklist items as they're completed, drafts status update emails, and flags potential issues -- all without you lifting a finger. It's available on Pro and Enterprise plans.",
+  },
+  {
+    value: "portal",
+    question: "How does the client portal work?",
+    answer: "Share a secure link with your client and they can track checklist progress, closing status, and key milestones in real time. No login required for clients -- just a unique, secure URL. Available on Small Firm plans and above.",
+  },
+  {
+    value: "states",
+    question: "Which states are supported?",
+    answer: "TITLEwise includes state-specific checklist templates for NH, MA, NY, CA, FL, TX, and PA, with more states being added regularly. The document analysis tools work with closings in all 50 states.",
   },
   {
     value: "integration",
     question: "Does it integrate with my existing workflow?",
     answer: "Yes. TITLEwise works alongside your current tools. Upload documents in standard formats (PDF, DOCX), review AI-generated insights, and export results as polished PDFs ready for clients or co-counsel.",
-  },
-  {
-    value: "accuracy",
-    question: "How accurate is the AI analysis?",
-    answer: "Our models are fine-tuned on real estate legal documents and continuously improved. Every output is designed to assist — not replace — your professional judgment, giving you a reliable first pass that saves hours of manual review.",
   },
   {
     value: "cancel",

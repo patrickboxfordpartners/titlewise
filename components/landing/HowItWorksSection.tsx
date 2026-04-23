@@ -1,12 +1,13 @@
 "use client"
 
-import { FileText, FileSearch, Zap } from "lucide-react"
+import { FileText, FileSearch, Zap, Bot } from "lucide-react"
 import { motion } from "framer-motion"
 
 const steps = [
   { step: "01", icon: FileText, title: "Upload", description: "Drop in your title commitment, closing disclosure, HOA docs, or wire instructions." },
-  { step: "02", icon: FileSearch, title: "Review", description: "TitleWise analyzes the document and highlights what matters — red flags, discrepancies, and key terms." },
-  { step: "03", icon: Zap, title: "Export", description: "Get a polished, client-ready output in seconds — emails, summaries, checklists, and more." },
+  { step: "02", icon: FileSearch, title: "Analyze", description: "TitleWise reviews the document across compliance, fraud, and accuracy checks -- flagging what matters." },
+  { step: "03", icon: Bot, title: "Automate", description: "The AI agent updates your checklists, drafts client emails, and moves matters forward automatically." },
+  { step: "04", icon: Zap, title: "Close", description: "Export polished PDFs, share client portals, and clear-to-close with confidence." },
 ]
 
 export default function HowItWorksSection() {
@@ -24,11 +25,11 @@ export default function HowItWorksSection() {
             How it works
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Three steps to a faster closing workflow
+            Four steps to a faster closing workflow
           </p>
         </motion.div>
 
-        <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-4">
           {steps.map((item, i) => (
             <motion.div
               key={item.step}
@@ -38,7 +39,7 @@ export default function HowItWorksSection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
             >
-              {i < 2 && (
+              {i < 3 && (
                 <div className="absolute top-10 left-[60%] hidden w-[80%] border-t border-dashed border-border md:block" />
               )}
               <motion.div

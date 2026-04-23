@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useAuth } from "@clerk/nextjs"
-import { Check, ArrowRight } from "lucide-react"
+import { Check, X, ArrowRight } from "lucide-react"
 import { PLANS } from "@/lib/plans"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -13,28 +13,71 @@ import { Logo } from "@/components/logo"
 const planDetails = {
   solo: {
     features: [
-      "1 attorney seat",
-      "All 8 tools (Status Update, Title Analysis, CD Review, Wire Verification, HOA Review, Fee Estimate, Tax Proration, Checklists)",
-      "History & re-generate",
-      "PDF export",
-      "Email support",
+      { text: "1 attorney seat", included: true },
+      { text: "100 generations / month", included: true },
+      { text: "All 8 core tools", included: true },
+      { text: "State-specific checklists (7 states)", included: true },
+      { text: "PDF export on all tools", included: true },
+      { text: "Full-text search & date filters", included: true },
+      { text: "Document version history", included: true },
+      { text: "Email support", included: true },
+      { text: "Wire fraud institutional memory", included: false },
+      { text: "Client matter portal", included: false },
+      { text: "TRID compliance engine", included: false },
+      { text: "Autonomous closing agent", included: false },
     ],
   },
   small_firm: {
     features: [
-      "Up to 5 attorney seats",
-      "All Solo features",
-      "Shared history across firm",
-      "Priority email support",
+      { text: "Up to 5 attorney seats", included: true },
+      { text: "500 generations / month", included: true },
+      { text: "All 8 core tools", included: true },
+      { text: "State-specific checklists (7 states)", included: true },
+      { text: "PDF export on all tools", included: true },
+      { text: "Full-text search & date filters", included: true },
+      { text: "Document version history", included: true },
+      { text: "Wire fraud institutional memory", included: true },
+      { text: "Client matter portal", included: true },
+      { text: "Team invitations & seat management", included: true },
+      { text: "Priority email support", included: true },
+      { text: "TRID compliance engine", included: false },
+      { text: "Autonomous closing agent", included: false },
     ],
   },
-  team: {
+  pro: {
     features: [
-      "Up to 15 attorney seats",
-      "All Small Firm features",
-      "API access",
-      "Dedicated onboarding",
-      "Priority support",
+      { text: "Up to 10 attorney seats", included: true },
+      { text: "1,500 generations / month", included: true },
+      { text: "All 8 core tools", included: true },
+      { text: "State-specific checklists (7 states)", included: true },
+      { text: "PDF export on all tools", included: true },
+      { text: "Full-text search & date filters", included: true },
+      { text: "Document version history", included: true },
+      { text: "Wire fraud institutional memory", included: true },
+      { text: "Client matter portal", included: true },
+      { text: "Team invitations & seat management", included: true },
+      { text: "TRID compliance engine", included: true },
+      { text: "Autonomous closing agent", included: true },
+      { text: "Priority support", included: true },
+    ],
+  },
+  enterprise: {
+    features: [
+      { text: "Up to 25 attorney seats", included: true },
+      { text: "5,000 generations / month", included: true },
+      { text: "All 8 core tools", included: true },
+      { text: "State-specific checklists (7 states)", included: true },
+      { text: "PDF export on all tools", included: true },
+      { text: "Full-text search & date filters", included: true },
+      { text: "Document version history", included: true },
+      { text: "Wire fraud institutional memory", included: true },
+      { text: "Client matter portal", included: true },
+      { text: "Team invitations & seat management", included: true },
+      { text: "TRID compliance engine", included: true },
+      { text: "Autonomous closing agent", included: true },
+      { text: "API access", included: true },
+      { text: "Dedicated onboarding", included: true },
+      { text: "Priority support", included: true },
     ],
   },
 }
@@ -93,7 +136,7 @@ export default function PricingPage() {
         >
           <h1 className="text-4xl font-bold text-foreground tracking-tight">Simple, predictable pricing</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Choose the plan that fits your practice.
+            Choose the plan that fits your practice. Scale up as you grow.
           </p>
         </motion.div>
 
@@ -125,10 +168,10 @@ export default function PricingPage() {
         </motion.div>
 
         {/* Plans */}
-        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-4">
           {entries.map(([key, plan], i) => {
             const details = planDetails[key]
-            const isPopular = key === "small_firm"
+            const isPopular = key === "pro"
             const displayPrice = annual ? Math.round(plan.price * 0.8) : plan.price
             return (
               <motion.div
@@ -177,9 +220,13 @@ export default function PricingPage() {
 
                 <ul className="mt-8 space-y-3">
                   {details.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm text-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      {f}
+                    <li key={f.text} className={`flex items-start gap-3 text-sm ${f.included ? "text-foreground" : "text-muted-foreground/50"}`}>
+                      {f.included ? (
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      ) : (
+                        <X className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/30" />
+                      )}
+                      {f.text}
                     </li>
                   ))}
                 </ul>
@@ -231,10 +278,22 @@ export default function PricingPage() {
                 Billing starts when you select a plan. Monthly plans are billed on the same date each month. Annual plans are billed once per year upfront at a 20% discount.
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="switch">
-              <AccordionTrigger className="text-sm font-medium text-foreground">Can I switch plans later?</AccordionTrigger>
+            <AccordionItem value="upgrade">
+              <AccordionTrigger className="text-sm font-medium text-foreground">Can I upgrade later?</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">
-                Absolutely. You can upgrade or downgrade at any time. Upgrades take effect immediately with a prorated charge; downgrades apply at the next billing cycle.
+                Absolutely. You can upgrade at any time and the change takes effect immediately with a prorated charge. Start with Solo and move to Pro when you need the AI agent and TRID compliance -- no data is lost.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="agent">
+              <AccordionTrigger className="text-sm font-medium text-foreground">What does the autonomous closing agent do?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                The AI closing agent analyzes your entire matter, automatically updates checklist items, drafts status update emails, and flags potential issues. It runs from the matter detail page with one click. Available on Pro and Enterprise plans.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="portal">
+              <AccordionTrigger className="text-sm font-medium text-foreground">How does the client portal work?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Generate a shareable link for any matter. Your client can view checklist progress and closing status in real time without needing a TITLEwise account. Available on Small Firm, Pro, and Enterprise plans.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="cancel">
@@ -246,7 +305,7 @@ export default function PricingPage() {
             <AccordionItem value="seats">
               <AccordionTrigger className="text-sm font-medium text-foreground">How do attorney seats work?</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">
-                Each seat is a separate login for an attorney in your firm. The Solo plan includes 1 seat, Small Firm up to 5, and Team up to 15. Need more? Contact us for a custom plan.
+                Each seat is a separate login for an attorney in your firm. Solo includes 1, Small Firm up to 5, Pro up to 10, and Enterprise up to 25. Team management with invitations is available on Small Firm and above. Need more seats? Contact us.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="security">

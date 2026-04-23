@@ -15,31 +15,31 @@ const jsonLd = {
   "@type": "SoftwareApplication",
   name: "TitleWise",
   applicationCategory: "BusinessApplication",
-  description: "AI-powered tools for real estate closing attorneys — 8 tools covering every stage of the closing workflow.",
+  description: "AI-powered closing platform for real estate attorneys — 12 tools, autonomous closing agent, client portals, TRID compliance, and wire fraud protection.",
   url: "https://titlewise.app",
   offers: {
     "@type": "AggregateOffer",
-    lowPrice: "99",
-    highPrice: "499",
+    lowPrice: "149",
+    highPrice: "999",
     priceCurrency: "USD",
-    offerCount: "3",
+    offerCount: "4",
   },
 }
 
 export const metadata = {
-  title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
-  description: "TitleWise gives closing attorneys AI-powered tools that handle the repetitive work — status updates, title analysis, CD review, wire verification, and more. Save 30+ minutes per file.",
+  title: "TitleWise — AI Closing Platform for Real Estate Attorneys",
+  description: "TitleWise is the AI-powered closing platform for real estate attorneys. 12 tools, autonomous closing agent, client portals, TRID compliance, and wire fraud protection. From intake to clear-to-close.",
   openGraph: {
     type: "website" as const,
-    title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
-    description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
+    title: "TitleWise — AI Closing Platform for Real Estate Attorneys",
+    description: "From intake to clear-to-close. 12 AI tools, autonomous closing agent, client portals, and compliance checks built for real estate attorneys.",
     siteName: "TitleWise",
     url: "https://titlewise.app",
   },
   twitter: {
     card: "summary" as const,
-    title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
-    description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
+    title: "TitleWise — AI Closing Platform for Real Estate Attorneys",
+    description: "From intake to clear-to-close. 12 AI tools, autonomous closing agent, client portals, and compliance checks built for real estate attorneys.",
   },
 }
 

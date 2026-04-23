@@ -1,23 +1,30 @@
 "use client"
 
 import Link from "next/link"
-import { FileText, FileSearch, Shield, DollarSign, Calculator, ClipboardList, ArrowRight, FileCheck, Building } from "lucide-react"
+import { FileText, FileSearch, Shield, DollarSign, Calculator, ClipboardList, ArrowRight, FileCheck, Building, Bot, Users, Scale, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { useState } from "react"
 
-const tools = [
-  { icon: FileText, title: "Status Update Generator", description: "Draft a professional client update email in seconds.", href: "/sign-up" },
-  { icon: FileSearch, title: "Title Commitment Analyzer", description: "Plain-English breakdown of Schedule B requirements, exceptions, and red flags.", href: "/sign-up" },
-  { icon: FileCheck, title: "Closing Disclosure Reviewer", description: "Compare a CD against contract terms and flag discrepancies.", href: "/sign-up" },
-  { icon: Shield, title: "Wire Fraud Prevention", description: "Analyze wire instructions for fraud indicators and generate verification emails.", href: "/sign-up" },
-  { icon: Building, title: "HOA Document Reviewer", description: "Extract monthly dues, assessments, restrictions, and litigation from HOA docs.", href: "/sign-up" },
-  { icon: DollarSign, title: "Fee Estimate Generator", description: "Generate a professional fee estimate letter for client intake.", href: "/sign-up" },
-  { icon: Calculator, title: "Tax Proration Calculator", description: "Calculate buyer/seller tax prorations with per-diem breakdown.", href: "/sign-up" },
-  { icon: ClipboardList, title: "Closing Checklist Tracker", description: "Auto-generated checklists by transaction type.", href: "/sign-up" },
+const coreTools = [
+  { icon: FileText, title: "Status Update Generator", description: "Draft professional client update emails in seconds." },
+  { icon: FileSearch, title: "Title Commitment Analyzer", description: "Plain-English breakdown of Schedule B requirements, exceptions, and red flags." },
+  { icon: FileCheck, title: "Closing Disclosure Reviewer", description: "Compare a CD against contract terms and flag discrepancies." },
+  { icon: Shield, title: "Wire Fraud Prevention", description: "Analyze wire instructions for fraud indicators and generate verification emails." },
+  { icon: Building, title: "HOA Document Reviewer", description: "Extract dues, assessments, restrictions, and litigation from HOA docs." },
+  { icon: DollarSign, title: "Fee Estimate Generator", description: "Generate a professional fee estimate letter for client intake." },
+  { icon: Calculator, title: "Tax Proration Calculator", description: "Calculate buyer/seller tax prorations with per-diem breakdown." },
+  { icon: ClipboardList, title: "Closing Checklist Tracker", description: "State-specific checklists for NH, MA, NY, CA, FL, TX, PA and more." },
 ]
 
-function ToolCard({ tool, index }: { tool: typeof tools[0]; index: number }) {
+const premiumFeatures = [
+  { icon: Bot, title: "Autonomous Closing Agent", description: "AI agent that analyzes your matter, updates checklists, and drafts status emails automatically.", badge: "Pro" },
+  { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "Small Firm+" },
+  { icon: Scale, title: "TRID Compliance Engine", description: "Automatic Bucket A/B/C fee classification and tolerance cure amount calculation.", badge: "Pro" },
+  { icon: Brain, title: "Wire Fraud Memory", description: "Institutional memory that stores verified wires and flags routing number deviations across matters.", badge: "Small Firm+" },
+]
+
+function ToolCard({ tool, index }: { tool: typeof coreTools[0]; index: number }) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -29,31 +36,57 @@ function ToolCard({ tool, index }: { tool: typeof tools[0]; index: number }) {
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
     >
-      <Link href={tool.href}>
+      <motion.div
+        className="group h-full rounded-xl border border-border bg-card p-6 transition-colors duration-200 hover:border-primary/30"
+        whileHover={{ y: -6, boxShadow: "0 12px 24px -8px hsl(222 47% 11% / 0.08)" }}
+        transition={{ duration: 0.25 }}
+      >
         <motion.div
-          className="group h-full rounded-xl border border-border bg-card p-6 transition-colors duration-200 hover:border-primary/30"
-          whileHover={{ y: -6, boxShadow: "0 12px 24px -8px hsl(222 47% 11% / 0.08)" }}
-          transition={{ duration: 0.25 }}
+          className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"
+          animate={hovered ? { rotate: 8, scale: 1.1 } : { rotate: 0, scale: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
         >
+          <tool.icon className="h-5 w-5 text-primary" />
+        </motion.div>
+        <h3 className="font-semibold text-foreground text-sm">{tool.title}</h3>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tool.description}</p>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function PremiumCard({ feature, index }: { feature: typeof premiumFeatures[0]; index: number }) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 + 0.2, duration: 0.4 }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+    >
+      <motion.div
+        className="group h-full rounded-xl border border-primary/20 bg-card p-6 transition-colors duration-200 hover:border-primary/40"
+        whileHover={{ y: -6, boxShadow: "0 12px 24px -8px hsl(222 47% 11% / 0.12)" }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="flex items-start justify-between mb-4">
           <motion.div
-            className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"
+            className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10"
             animate={hovered ? { rotate: 8, scale: 1.1 } : { rotate: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
           >
-            <tool.icon className="h-5 w-5 text-primary" />
+            <feature.icon className="h-5 w-5 text-primary" />
           </motion.div>
-          <h3 className="font-semibold text-foreground text-sm">{tool.title}</h3>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{tool.description}</p>
-          <motion.div
-            className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary"
-            initial={{ opacity: 0, x: -8 }}
-            animate={hovered ? { opacity: 1, x: 0 } : { opacity: 0, x: -8 }}
-            transition={{ duration: 0.2 }}
-          >
-            Try it now <ArrowRight className="h-3 w-3" />
-          </motion.div>
-        </motion.div>
-      </Link>
+          <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-wide">
+            {feature.badge}
+          </span>
+        </div>
+        <h3 className="font-semibold text-foreground text-sm">{feature.title}</h3>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{feature.description}</p>
+      </motion.div>
     </motion.div>
   )
 }
@@ -73,13 +106,39 @@ export default function FeaturesSection() {
             Everything you need to close faster
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            8 tools built around the real estate closing workflow
+            12 tools and an autonomous AI agent -- built around the real estate closing workflow
           </p>
         </motion.div>
 
+        {/* Core Tools */}
+        <motion.div
+          className="mx-auto mb-4 max-w-6xl"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Core Tools -- Included in all plans</p>
+        </motion.div>
+
         <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {tools.map((tool, i) => (
+          {coreTools.map((tool, i) => (
             <ToolCard key={tool.title} tool={tool} index={i} />
+          ))}
+        </div>
+
+        {/* Premium Features */}
+        <motion.div
+          className="mx-auto mt-16 mb-4 max-w-6xl"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Advanced Capabilities -- Available on higher plans</p>
+        </motion.div>
+
+        <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {premiumFeatures.map((feature, i) => (
+            <PremiumCard key={feature.title} feature={feature} index={i} />
           ))}
         </div>
 
@@ -92,7 +151,7 @@ export default function FeaturesSection() {
         >
           <Link href="/sign-up">
             <Button variant="hero" size="lg" className="text-base px-10">
-              Try All 8 Tools Free <ArrowRight className="ml-1 h-4 w-4" />
+              Get Started <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           </Link>
         </motion.div>
