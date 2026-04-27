@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { db } from "@/lib/db/db"
+import { db } from "@/lib/db"
 import { contactSubmissions } from "@/lib/db/schema"
 import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 import { z } from "zod"
