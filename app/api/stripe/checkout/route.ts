@@ -56,6 +56,7 @@ export async function POST(req: NextRequest) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?subscribed=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
+      allow_promotion_codes: true,
       subscription_data: {
         metadata: { plan: planKey, clerkId: userId },
         description: `TitleWise ${plan.name} - ${plan.description}`,
