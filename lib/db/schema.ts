@@ -129,6 +129,20 @@ export const processedEvents = pgTable("processed_events", {
   processedAt: timestamp("processed_at").defaultNow().notNull(),
 })
 
+export const contactSubmissions = pgTable("contact_submissions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  firmName: text("firm_name"),
+  message: text("message").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_contact_submissions_created").on(table.createdAt),
+  index("idx_contact_submissions_email").on(table.email),
+])
+
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 export type StatusUpdate = typeof statusUpdates.$inferSelect
@@ -139,3 +153,5 @@ export type Matter = typeof matters.$inferSelect
 export type NewMatter = typeof matters.$inferInsert
 export type ChecklistItem = typeof checklistItems.$inferSelect
 export type NewChecklistItem = typeof checklistItems.$inferInsert
+export type ContactSubmission = typeof contactSubmissions.$inferSelect
+export type NewContactSubmission = typeof contactSubmissions.$inferInsert

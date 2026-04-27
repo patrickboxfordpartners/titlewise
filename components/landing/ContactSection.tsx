@@ -13,7 +13,7 @@ export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
 
@@ -35,10 +35,24 @@ export default function ContactSection() {
     }
 
     setSubmitting(true)
-    setTimeout(() => {
-      setSubmitting(false)
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(trimmed),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Failed to submit")
+      }
+
       setSubmitted(true)
-    }, 800)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit. Please try again.")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleReset = () => {

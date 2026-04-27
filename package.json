@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "verify:prod": "node scripts/verify-production-env.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.89.0",
@@ -28,6 +29,7 @@
     "nodemailer": "^8.0.5",
     "pdf-parse": "^2.4.5",
     "posthog-js": "^1.369.3",
+    "postmark": "^4.0.7",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.0",

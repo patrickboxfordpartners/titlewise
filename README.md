@@ -90,4 +90,17 @@ npm run lint         # ESLint
 npm run db:generate  # Generate Drizzle migrations
 npm run db:push      # Push schema to database
 npm run db:studio    # Open Drizzle Studio
+npm run verify:prod  # Verify production environment configuration
 ```
+
+## Production Deployment
+
+See [PRODUCTION_DEPLOYMENT.md](./PRODUCTION_DEPLOYMENT.md) for complete production setup guide.
+
+**Quick steps:**
+1. Create production Clerk instance (pk_live_ keys)
+2. Create production Stripe products and webhooks
+3. Create production database
+4. Copy `.env.production.template` to `.env.production` and fill in all values
+5. Run `npm run verify:prod` to validate configuration
+6. Deploy to Vercel
