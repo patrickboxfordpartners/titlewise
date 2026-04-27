@@ -31,7 +31,7 @@ export default function LandingNav() {
           <Link href="/sign-in" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Sign in
           </Link>
-          <Link href="/sign-up">
+          <Link href="/pricing">
             <Button size="sm">Get Started</Button>
           </Link>
         </div>

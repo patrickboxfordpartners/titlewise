@@ -44,11 +44,12 @@ const PRODUCTS = [
     key: 'solo',
     name: 'TitleWise Solo',
     description: 'For solo practitioners',
-    monthlyPrice: 9900, // $99.00 in cents
-    annualPrice: 7900,  // $79.00 in cents (20% off)
+    monthlyPrice: 14900, // $149.00 in cents
+    annualPrice: 11920,  // $119.20 in cents (20% off)
     features: [
       '1 attorney seat',
-      'All 8 AI tools',
+      '100 generations/month',
+      'All 12 core tools',
       'History & re-generate',
       'PDF export',
       'Email support',
@@ -58,27 +59,45 @@ const PRODUCTS = [
     key: 'small_firm',
     name: 'TitleWise Small Firm',
     description: 'Up to 5 attorneys',
-    monthlyPrice: 24900, // $249.00
-    annualPrice: 19900,  // $199.00 (20% off)
+    monthlyPrice: 34900, // $349.00
+    annualPrice: 27920,  // $279.20 (20% off)
     features: [
       'Up to 5 attorney seats',
+      '500 generations/month',
       'All Solo features',
-      'Shared history across firm',
+      'Client portal',
+      'Wire fraud memory',
       'Priority email support',
     ],
   },
   {
-    key: 'team',
-    name: 'TitleWise Team',
-    description: 'Up to 15 attorneys',
-    monthlyPrice: 49900, // $499.00
-    annualPrice: 39900,  // $399.00 (20% off)
+    key: 'pro',
+    name: 'TitleWise Pro',
+    description: 'Full platform with AI agent',
+    monthlyPrice: 59900, // $599.00
+    annualPrice: 47920,  // $479.20 (20% off)
     features: [
-      'Up to 15 attorney seats',
+      'Up to 10 attorney seats',
+      '1500 generations/month',
       'All Small Firm features',
-      'API access',
-      'Dedicated onboarding',
+      'AI closing agent',
+      'TRID engine',
       'Priority support',
+    ],
+  },
+  {
+    key: 'enterprise',
+    name: 'TitleWise Enterprise',
+    description: 'Unlimited power for large firms',
+    monthlyPrice: 99900, // $999.00
+    annualPrice: 79920,  // $799.20 (20% off)
+    features: [
+      'Up to 25 attorney seats',
+      '5000 generations/month',
+      'All Pro features',
+      'Custom integrations',
+      'Dedicated account manager',
+      'SLA guarantee',
     ],
   },
 ];
@@ -154,8 +173,10 @@ async function main() {
   console.log(`STRIPE_SOLO_ANNUAL_PRICE_ID=${results.solo.annualPriceId}`);
   console.log(`STRIPE_SMALL_FIRM_PRICE_ID=${results.small_firm.monthlyPriceId}`);
   console.log(`STRIPE_SMALL_FIRM_ANNUAL_PRICE_ID=${results.small_firm.annualPriceId}`);
-  console.log(`STRIPE_TEAM_PRICE_ID=${results.team.monthlyPriceId}`);
-  console.log(`STRIPE_TEAM_ANNUAL_PRICE_ID=${results.team.annualPriceId}`);
+  console.log(`STRIPE_PRO_PRICE_ID=${results.pro.monthlyPriceId}`);
+  console.log(`STRIPE_PRO_ANNUAL_PRICE_ID=${results.pro.annualPriceId}`);
+  console.log(`STRIPE_ENTERPRISE_PRICE_ID=${results.enterprise.monthlyPriceId}`);
+  console.log(`STRIPE_ENTERPRISE_ANNUAL_PRICE_ID=${results.enterprise.annualPriceId}`);
 
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
   console.log('📌 Next Steps:\n');

@@ -48,7 +48,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.35 }}
           >
-            <Link href="/sign-up">
+            <Link href="/pricing">
               <Button variant="hero" size="lg" className="text-base px-8">
                 Get Started <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
