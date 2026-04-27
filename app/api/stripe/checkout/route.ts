@@ -58,8 +58,22 @@ export async function POST(req: NextRequest) {
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
       subscription_data: {
         metadata: { plan: planKey, clerkId: userId },
+        description: `TitleWise ${plan.name} - ${plan.description}`,
       },
       metadata: { clerkId: userId, plan: planKey },
+      billing_address_collection: "auto",
+      customer_update: {
+        address: "auto",
+        name: "auto",
+      },
+      phone_number_collection: {
+        enabled: true,
+      },
+      custom_text: {
+        submit: {
+          message: "Start your TitleWise subscription today. Cancel anytime.",
+        },
+      },
     })
 
     return NextResponse.json({ url: session.url })
