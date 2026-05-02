@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Copy, Check, Loader2, RotateCcw, Mail, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -58,6 +59,7 @@ export default function StatusUpdatePage() {
 
 function StatusUpdateContent() {
   const searchParams = useSearchParams()
+  const matterId = searchParams.get("matterId") ?? undefined
   const [form, setForm] = useState<FormData>(initialForm)
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
@@ -117,7 +119,7 @@ function StatusUpdateContent() {
       const res = await fetch("/api/generate-update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, stream: true }),
+        body: JSON.stringify({ ...form, stream: true, ...(matterId ? { matterId } : {}) }),
       })
       if (!res.ok) {
         const data = await res.json()
@@ -201,7 +203,14 @@ function StatusUpdateContent() {
         transition={{ duration: 0.4 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-semibold text-foreground">Status Update Generator</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-foreground">Status Update Generator</h1>
+          {matterId && (
+            <Link href={`/checklist/${matterId}`} className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">
+              ← Back to matter
+            </Link>
+          )}
+        </div>
         <p className="text-sm text-muted-foreground mt-1">
           Fill in the file details and get a professional client update email in seconds.
         </p>

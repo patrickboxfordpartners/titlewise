@@ -10,6 +10,7 @@ import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
   commitment: z.string().min(100, "Please paste a complete title commitment (at least 100 characters).").max(500_000, "Document text is too long (max 500,000 characters)."),
+  matterId: z.string().uuid().optional(),
 })
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney analyzing a title commitment.
@@ -161,6 +162,7 @@ export async function POST(req: NextRequest) {
         commitmentText: parsed.data.commitment,
         analysis: validated.data,
         redFlagCount: validated.data.redFlags.length,
+        matterId: parsed.data.matterId ?? null,
       })
       await incrementUsage(user.id)
     } catch (dbErr) {

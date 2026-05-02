@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import {
   FileText, FileSearch, ArrowRight, FileCheck,
   Shield, Building, DollarSign, Calculator, ClipboardList,
-  Bot, Users, Scale, Brain, Lock, Clock, AlertCircle,
+  Bot, Users, Scale, Brain, Lock, Clock, AlertCircle, FolderOpen, CheckCircle, Plus,
 } from "lucide-react"
 import { PLANS } from "@/lib/plans"
 
@@ -23,6 +23,17 @@ type RecentItem = {
   href: string
   icon: typeof FileText
   createdAt: string
+}
+
+type OpenMatter = {
+  id: string
+  clientName: string
+  propertyAddress: string
+  transactionType: string
+  closingDate: string | null
+  totalItems: number
+  completedItems: number
+  updatedAt: string
 }
 
 const coreTools = [
@@ -123,6 +134,7 @@ function hasFeatureAccess(tier: string | null, requiredPlans: string[]): boolean
 export default function DashboardPage() {
   const [plan, setPlan] = useState<UserPlan | null>(null)
   const [recent, setRecent] = useState<RecentItem[]>([])
+  const [openMatters, setOpenMatters] = useState<OpenMatter[]>([])
 
   useEffect(() => {
     fetch("/api/settings")
@@ -132,6 +144,14 @@ export default function DashboardPage() {
         subscriptionStatus: data.subscriptionStatus,
         name: data.name ?? null,
       }))
+      .catch(() => {})
+
+    fetch("/api/checklist")
+      .then((r) => r.json())
+      .then((data) => {
+        const active = (data.matters ?? []).filter((m: OpenMatter & { status: string }) => m.status === "active")
+        setOpenMatters(active.slice(0, 4))
+      })
       .catch(() => {})
 
     fetch("/api/history?limit=4")
@@ -152,7 +172,7 @@ export default function DashboardPage() {
           })),
         ]
         items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        setRecent(items.slice(0, 4))
+        setRecent(items.slice(0, 3))
       })
       .catch(() => {})
   }, [])
@@ -186,6 +206,87 @@ export default function DashboardPage() {
           </p>
           <Link href="/settings" className="text-xs font-semibold text-amber-700 hover:text-amber-900 transition-colors shrink-0">
             Complete Profile →
+          </Link>
+        </motion.div>
+      )}
+
+      {openMatters.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05, duration: 0.35 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Open Matters</p>
+            <Link href="/checklist" className="text-xs text-primary hover:underline flex items-center gap-1">
+              <Plus className="h-3 w-3" /> New matter
+            </Link>
+          </div>
+          <div className="grid gap-2">
+            {openMatters.map((m) => {
+              const pct = m.totalItems > 0 ? Math.round((m.completedItems / m.totalItems) * 100) : 0
+              return (
+                <Link
+                  key={m.id}
+                  href={`/checklist/${m.id}`}
+                  className="group bg-card rounded-xl border border-border p-4 hover:border-primary/30 hover:shadow-sm transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-foreground truncate">{m.clientName}</p>
+                      <p className="text-xs text-muted-foreground truncate">{m.propertyAddress} · {m.transactionType}</p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {m.closingDate && (
+                        <span className="text-[10px] text-muted-foreground/60">
+                          {new Date(m.closingDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </span>
+                      )}
+                      <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1 h-1.5 bg-muted/50 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${pct === 100 ? "bg-green-500" : "bg-primary"}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+                      <CheckCircle className="h-3 w-3" />
+                      {m.completedItems}/{m.totalItems}
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </motion.div>
+      )}
+
+      {openMatters.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05, duration: 0.35 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Open Matters</p>
+          </div>
+          <Link
+            href="/checklist"
+            className="group flex items-center gap-3 bg-card rounded-xl border border-dashed border-border p-4 hover:border-primary/30 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center">
+              <FolderOpen className="h-4 w-4 text-muted-foreground" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-foreground">No open matters</p>
+              <p className="text-xs text-muted-foreground">Create a matter to start tracking a closing</p>
+            </div>
+            <Plus className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
           </Link>
         </motion.div>
       )}

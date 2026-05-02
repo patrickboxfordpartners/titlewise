@@ -1,6 +1,9 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Copy, Check, Loader2, RotateCcw, DollarSign } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -35,7 +38,9 @@ const initialForm: FormData = {
   attorneyName: "",
 }
 
-export default function FeeEstimatePage() {
+function FeeEstimateContent() {
+  const searchParams = useSearchParams()
+  const matterId = searchParams.get("matterId") ?? undefined
   const [form, setForm] = useState<FormData>(initialForm)
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
@@ -71,7 +76,7 @@ export default function FeeEstimatePage() {
       const res = await fetch("/api/generate-fee-estimate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, ...(matterId ? { matterId } : {}) }),
       })
       if (!res.ok) {
         const data = await res.json()
@@ -100,7 +105,10 @@ export default function FeeEstimatePage() {
         transition={{ duration: 0.4 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-semibold text-foreground">Fee Estimate Generator</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-foreground">Fee Estimate Generator</h1>
+          {matterId && <Link href={`/checklist/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
+        </div>
         <p className="text-sm text-muted-foreground mt-1">
           Generate a professional fee estimate letter for new client intake.
         </p>
@@ -275,3 +283,7 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 }
 
 const inputClass = "w-full text-sm text-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+
+export default function FeeEstimatePage() {
+  return <Suspense><FeeEstimateContent /></Suspense>
+}

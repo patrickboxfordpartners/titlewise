@@ -1,6 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Loader2, AlertTriangle, CheckCircle, XCircle, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -25,7 +28,9 @@ type Review = {
   summary: string
 }
 
-export default function CDReviewerPage() {
+function CDReviewerContent() {
+  const searchParams = useSearchParams()
+  const matterId = searchParams.get("matterId") ?? undefined
   const [cd, setCd] = useState("")
   const [contract, setContract] = useState("")
   const [review, setReview] = useState<Review | null>(null)
@@ -43,7 +48,7 @@ export default function CDReviewerPage() {
       const res = await fetch("/api/review-cd", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ closingDisclosure: cd, contractTerms: contract }),
+        body: JSON.stringify({ closingDisclosure: cd, contractTerms: contract, ...(matterId ? { matterId } : {}) }),
       })
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Review failed") }
       const data = await res.json()
@@ -69,7 +74,10 @@ export default function CDReviewerPage() {
         transition={{ duration: 0.4 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-semibold text-foreground">Closing Disclosure Reviewer</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-foreground">Closing Disclosure Reviewer</h1>
+          {matterId && <Link href={`/checklist/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
+        </div>
         <p className="text-sm text-muted-foreground mt-1">
           Compare a Closing Disclosure against contract terms to find discrepancies before closing.
         </p>
@@ -330,4 +338,8 @@ export default function CDReviewerPage() {
       </AnimatePresence>
     </div>
   )
+}
+
+export default function CDReviewerPage() {
+  return <Suspense><CDReviewerContent /></Suspense>
 }

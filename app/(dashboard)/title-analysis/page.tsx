@@ -1,6 +1,9 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag, Upload, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -20,7 +23,9 @@ type Analysis = {
   summary: string
 }
 
-export default function TitleAnalysisPage() {
+function TitleAnalysisContent() {
+  const searchParams = useSearchParams()
+  const matterId = searchParams.get("matterId") ?? undefined
   const [commitment, setCommitment] = useState("")
   const [showHint, setShowHint] = useState(false)
   const [analysis, setAnalysis] = useState<Analysis | null>(null)
@@ -73,7 +78,7 @@ export default function TitleAnalysisPage() {
       const res = await fetch("/api/analyze-title", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ commitment }),
+        body: JSON.stringify({ commitment, ...(matterId ? { matterId } : {}) }),
       })
       if (!res.ok) {
         const data = await res.json()
@@ -101,7 +106,14 @@ export default function TitleAnalysisPage() {
         transition={{ duration: 0.4 }}
         className="mb-6"
       >
-        <h1 className="text-2xl font-semibold text-foreground">Title Commitment Analyzer</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-foreground">Title Commitment Analyzer</h1>
+          {matterId && (
+            <Link href={`/checklist/${matterId}`} className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">
+              ← Back to matter
+            </Link>
+          )}
+        </div>
         <p className="text-sm text-muted-foreground mt-1">
           Paste a title commitment and get a plain-English breakdown of requirements, exceptions, and red flags.
         </p>
@@ -482,4 +494,8 @@ function ItemRow({ item, description, flagged }: { item: string; description: st
       </div>
     </div>
   )
+}
+
+export default function TitleAnalysisPage() {
+  return <Suspense><TitleAnalysisContent /></Suspense>
 }

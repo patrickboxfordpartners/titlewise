@@ -14,6 +14,7 @@ const requestSchema = z.object({
   previousInstructions: z.string().optional().default(""),
   transactionContext: z.string().optional().default(""),
   recipientExpected: z.string().optional().default(""),
+  matterId: z.string().uuid().optional(),
 })
 
 const SYSTEM_PROMPT = `You are a real estate closing attorney specializing in wire fraud prevention.
@@ -173,6 +174,7 @@ export async function POST(req: NextRequest) {
             routingNumber: result.extracted.routingNumber,
             accountNumber: result.extracted.accountNumber ? `****${result.extracted.accountNumber.slice(-4)}` : null,
             beneficiary: result.extracted.beneficiary,
+            matterId: parsed.data.matterId ?? null,
           })
         }
       } catch (err) {

@@ -18,6 +18,7 @@ const requestSchema = z.object({
   additionalServices: z.string().optional().default(""),
   firmName: z.string().optional().default(""),
   attorneyName: z.string().min(1, "Attorney name is required"),
+  matterId: z.string().uuid().optional(),
 })
 
 function buildPrompt(data: z.infer<typeof requestSchema>) {
@@ -102,6 +103,7 @@ export async function POST(req: NextRequest) {
         transactionType: parsed.data.transactionType,
         jurisdiction: parsed.data.jurisdiction,
         generatedLetter: textBlock.text,
+        matterId: parsed.data.matterId ?? null,
       })
     } catch (err) { logger.error("generate-fee-estimate", "Failed to save history", { error: String(err) }) }
 

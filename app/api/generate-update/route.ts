@@ -32,6 +32,7 @@ const requestSchema = z.object({
   attorneyName: z.string().min(1, "Attorney name is required"),
   tone: z.enum(["professional", "semi-formal"]).optional().default("professional"),
   stream: z.boolean().optional().default(false),
+  matterId: z.string().uuid().optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -107,6 +108,7 @@ export async function POST(req: NextRequest) {
                 additionalNotes: parsed.data.additionalNotes || null,
                 tone: parsed.data.tone,
                 generatedEmail: fullText,
+                matterId: parsed.data.matterId ?? null,
               })
               await incrementUsage(user.id)
             } catch (dbErr) {
@@ -160,6 +162,7 @@ export async function POST(req: NextRequest) {
         additionalNotes: parsed.data.additionalNotes || null,
         tone: parsed.data.tone,
         generatedEmail: textBlock.text,
+        matterId: parsed.data.matterId ?? null,
       })
       await incrementUsage(user.id)
     } catch (dbErr) {

@@ -10,6 +10,7 @@ import { logger } from "@/lib/logger"
 
 const requestSchema = z.object({
   hoaDocuments: z.string().min(100, "Paste the HOA/condo document text.").max(500_000, "Document text is too long (max 500,000 characters)."),
+  matterId: z.string().uuid().optional(),
 })
 
 const SYSTEM_PROMPT = `You are an expert real estate closing attorney reviewing HOA/condominium association documents.
@@ -157,6 +158,7 @@ export async function POST(req: NextRequest) {
         associationName: r.association?.name ?? null,
         redFlagCount: Array.isArray(r.redFlags) ? r.redFlags.length : 0,
         result: validated.data as Record<string, unknown>,
+        matterId: parsed.data.matterId ?? null,
       })
     } catch (err) { logger.error("review-hoa", "Failed to save history", { error: String(err) }) }
 

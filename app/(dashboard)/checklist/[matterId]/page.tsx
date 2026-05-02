@@ -4,7 +4,7 @@ import { useState, useEffect, use } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck, Share2, Check, Bot, AlertTriangle, ChevronDown } from "lucide-react"
+import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck, Share2, Check, Bot, AlertTriangle, ChevronDown, Building, DollarSign, Shield } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PrintButton } from "@/components/print-button"
 
@@ -44,6 +44,9 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   const [agentRunning, setAgentRunning] = useState(false)
   const [agentReport, setAgentReport] = useState<any | null>(null)
   const [showAgentReport, setShowAgentReport] = useState(false)
+  const [activity, setActivity] = useState<ActivityItem[]>([])
+
+  type ActivityItem = { id: string; type: string; label: string; sub: string; createdAt: string }
 
   async function runAgent() {
     if (!matter) return
@@ -98,7 +101,24 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
     setLoading(false)
   }
 
+  async function fetchActivity() {
+    const res = await fetch(`/api/checklist/${matterId}/activity`)
+    if (!res.ok) return
+    const data = await res.json()
+    const items: ActivityItem[] = [
+      ...(data.updates ?? []).map((u: any) => ({ id: "u-" + u.id, type: "status", label: u.closingStage, sub: "Status Update", createdAt: u.createdAt })),
+      ...(data.analyses ?? []).map((a: any) => ({ id: "a-" + a.id, type: "title", label: a.propertyAddress ?? "Title Analysis", sub: `Title Analysis${a.redFlagCount ? ` · ${a.redFlagCount} flags` : ""}`, createdAt: a.createdAt })),
+      ...(data.cdReviews ?? []).map((r: any) => ({ id: "cd-" + r.id, type: "cd", label: r.propertyAddress ?? "CD Review", sub: `CD Review${r.discrepancyCount ? ` · ${r.discrepancyCount} discrepancies` : ""}`, createdAt: r.createdAt })),
+      ...(data.hoaReviews ?? []).map((r: any) => ({ id: "hoa-" + r.id, type: "hoa", label: r.associationName ?? "HOA Review", sub: `HOA Review${r.redFlagCount ? ` · ${r.redFlagCount} flags` : ""}`, createdAt: r.createdAt })),
+      ...(data.feeEstimates ?? []).map((r: any) => ({ id: "fee-" + r.id, type: "fee", label: r.clientName, sub: `Fee Estimate · ${r.transactionType}`, createdAt: r.createdAt })),
+      ...(data.wireInstructions ?? []).map((r: any) => ({ id: "wire-" + r.id, type: "wire", label: r.bankName ?? "Wire Check", sub: r.beneficiary ?? "Wire Verification", createdAt: r.createdAt })),
+    ]
+    items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    setActivity(items)
+  }
+
   useEffect(() => { fetchData() }, [matterId])
+  useEffect(() => { fetchActivity() }, [matterId])
 
   async function toggleStatus(item: Item) {
     const currentIdx = STATUS_CYCLE.indexOf(item.status as typeof STATUS_CYCLE[number])
@@ -250,12 +270,15 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
         >
           {[
             {
-              href: `/status-update?clientName=${encodeURIComponent(matter.clientName)}&propertyAddress=${encodeURIComponent(matter.propertyAddress)}&transactionType=${encodeURIComponent(matter.transactionType)}`,
+              href: `/status-update?matterId=${matter.id}&clientName=${encodeURIComponent(matter.clientName)}&propertyAddress=${encodeURIComponent(matter.propertyAddress)}&transactionType=${encodeURIComponent(matter.transactionType)}`,
               icon: FileText,
               label: "Status Update",
             },
-            { href: "/title-analysis", icon: FileSearch, label: "Title Analysis" },
-            { href: "/cd-reviewer", icon: FileCheck, label: "CD Review" },
+            { href: `/title-analysis?matterId=${matter.id}`, icon: FileSearch, label: "Title Analysis" },
+            { href: `/cd-reviewer?matterId=${matter.id}`, icon: FileCheck, label: "CD Review" },
+            { href: `/wire-verification?matterId=${matter.id}`, icon: Shield, label: "Wire Check" },
+            { href: `/hoa-reviewer?matterId=${matter.id}`, icon: Building, label: "HOA Review" },
+            { href: `/fee-estimate?matterId=${matter.id}&clientName=${encodeURIComponent(matter.clientName)}&transactionType=${encodeURIComponent(matter.transactionType)}`, icon: DollarSign, label: "Fee Estimate" },
           ].map(({ href, icon: Icon, label }) => (
             <Link
               key={label}
@@ -266,6 +289,39 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
               {label}
             </Link>
           ))}
+        </motion.div>
+      )}
+
+      {/* Activity feed */}
+      {activity.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25, duration: 0.35 }}
+          className="mb-6"
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">Tool Activity</p>
+          <div className="bg-card rounded-xl border border-border divide-y divide-border/50">
+            {activity.slice(0, 6).map((item) => (
+              <div key={item.id} className="flex items-center gap-3 px-4 py-2.5">
+                <div className="shrink-0 w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
+                  {item.type === "status" && <FileText className="h-3.5 w-3.5 text-primary" />}
+                  {item.type === "title" && <FileSearch className="h-3.5 w-3.5 text-primary" />}
+                  {item.type === "cd" && <FileCheck className="h-3.5 w-3.5 text-primary" />}
+                  {item.type === "hoa" && <Building className="h-3.5 w-3.5 text-primary" />}
+                  {item.type === "fee" && <DollarSign className="h-3.5 w-3.5 text-primary" />}
+                  {item.type === "wire" && <Shield className="h-3.5 w-3.5 text-primary" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium text-foreground truncate">{item.label}</p>
+                  <p className="text-[10px] text-muted-foreground">{item.sub}</p>
+                </div>
+                <span className="text-[10px] text-muted-foreground/60 shrink-0">
+                  {new Date(item.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </span>
+              </div>
+            ))}
+          </div>
         </motion.div>
       )}
 
