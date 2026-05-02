@@ -55,14 +55,15 @@ export async function GET(req: NextRequest) {
   }
 
   const [allUpdates, allAnalyses, allCdReviews, allHoaReviews, allFeeEstimates] = await Promise.all([
-    db.select().from(statusUpdates).where(and(...updatesFilters)).orderBy(desc(statusUpdates.createdAt)).limit(limit),
+    db.select({ id: statusUpdates.id, clientName: statusUpdates.clientName, propertyAddress: statusUpdates.propertyAddress, transactionType: statusUpdates.transactionType, closingStage: statusUpdates.closingStage, completedItems: statusUpdates.completedItems, outstandingItems: statusUpdates.outstandingItems, upcomingDeadlines: statusUpdates.upcomingDeadlines, additionalNotes: statusUpdates.additionalNotes, tone: statusUpdates.tone, generatedEmail: statusUpdates.generatedEmail, matterId: statusUpdates.matterId, createdAt: statusUpdates.createdAt })
+      .from(statusUpdates).where(and(...updatesFilters)).orderBy(desc(statusUpdates.createdAt)).limit(limit),
     db.select({ id: titleAnalyses.id, propertyAddress: titleAnalyses.propertyAddress, redFlagCount: titleAnalyses.redFlagCount, analysis: titleAnalyses.analysis, matterId: titleAnalyses.matterId, createdAt: titleAnalyses.createdAt })
       .from(titleAnalyses).where(and(...analysesFilters)).orderBy(desc(titleAnalyses.createdAt)).limit(limit),
-    db.select({ id: cdReviews.id, propertyAddress: cdReviews.propertyAddress, buyer: cdReviews.buyer, discrepancyCount: cdReviews.discrepancyCount, createdAt: cdReviews.createdAt })
+    db.select({ id: cdReviews.id, propertyAddress: cdReviews.propertyAddress, buyer: cdReviews.buyer, seller: cdReviews.seller, discrepancyCount: cdReviews.discrepancyCount, result: cdReviews.result, matterId: cdReviews.matterId, createdAt: cdReviews.createdAt })
       .from(cdReviews).where(and(...cdFilters)).orderBy(desc(cdReviews.createdAt)).limit(limit),
-    db.select({ id: hoaReviews.id, associationName: hoaReviews.associationName, redFlagCount: hoaReviews.redFlagCount, createdAt: hoaReviews.createdAt })
+    db.select({ id: hoaReviews.id, associationName: hoaReviews.associationName, redFlagCount: hoaReviews.redFlagCount, result: hoaReviews.result, matterId: hoaReviews.matterId, createdAt: hoaReviews.createdAt })
       .from(hoaReviews).where(and(...hoaFilters)).orderBy(desc(hoaReviews.createdAt)).limit(limit),
-    db.select({ id: feeEstimates.id, clientName: feeEstimates.clientName, transactionType: feeEstimates.transactionType, jurisdiction: feeEstimates.jurisdiction, createdAt: feeEstimates.createdAt })
+    db.select({ id: feeEstimates.id, clientName: feeEstimates.clientName, transactionType: feeEstimates.transactionType, jurisdiction: feeEstimates.jurisdiction, generatedLetter: feeEstimates.generatedLetter, matterId: feeEstimates.matterId, createdAt: feeEstimates.createdAt })
       .from(feeEstimates).where(and(...feeFilters)).orderBy(desc(feeEstimates.createdAt)).limit(limit),
   ])
 
