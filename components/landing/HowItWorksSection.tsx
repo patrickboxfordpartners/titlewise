@@ -18,7 +18,7 @@ export default function HowItWorksSection() {
           className="mx-auto mb-16 max-w-2xl text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-bold text-foreground md:text-4xl tracking-tight">
@@ -36,7 +36,7 @@ export default function HowItWorksSection() {
               className="relative text-center"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.01 }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
             >
               {i < 3 && (

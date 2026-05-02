@@ -31,7 +31,7 @@ function ToolCard({ tool, index }: { tool: typeof coreTools[0]; index: number })
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, amount: 0.01 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
@@ -62,7 +62,7 @@ function PremiumCard({ feature, index }: { feature: typeof premiumFeatures[0]; i
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, amount: 0.01 }}
       transition={{ delay: index * 0.1 + 0.2, duration: 0.4 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
@@ -99,7 +99,7 @@ export default function FeaturesSection() {
           className="mx-auto mb-16 max-w-2xl text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-bold text-foreground md:text-4xl tracking-tight">
@@ -115,7 +115,7 @@ export default function FeaturesSection() {
           className="mx-auto mb-4 max-w-6xl"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Core Tools -- Included in all plans</p>
         </motion.div>
@@ -131,7 +131,7 @@ export default function FeaturesSection() {
           className="mx-auto mt-16 mb-4 max-w-6xl"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Advanced Capabilities -- Available on higher plans</p>
         </motion.div>
@@ -146,7 +146,7 @@ export default function FeaturesSection() {
           className="mx-auto mt-16 max-w-xl text-center"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.4 }}
         >
           <Link href="/sign-up">

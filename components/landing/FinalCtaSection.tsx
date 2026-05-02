@@ -13,7 +13,7 @@ export default function FinalCtaSection() {
           className="mx-auto max-w-2xl text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.5 }}
         >
           <Zap className="mx-auto h-10 w-10 text-primary mb-6" />

@@ -11,7 +11,7 @@ export default function TestimonialSection() {
           className="mx-auto max-w-3xl text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.5 }}
         >
           <div className="flex justify-center gap-1 mb-6">
@@ -20,7 +20,7 @@ export default function TestimonialSection() {
                 key={i}
                 initial={{ opacity: 0, scale: 0 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, amount: 0.01 }}
                 transition={{ delay: i * 0.08 + 0.2 }}
               >
                 <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />

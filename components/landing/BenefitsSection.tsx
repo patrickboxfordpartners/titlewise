@@ -25,7 +25,7 @@ export default function BenefitsSection() {
             className="text-3xl font-bold text-white md:text-4xl tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ duration: 0.5 }}
           >
             Designed for how closing attorneys actually work
@@ -34,7 +34,7 @@ export default function BenefitsSection() {
             className="mt-3 text-base text-white/60"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             Not a general-purpose AI tool. Not built for title companies. Built for you.
@@ -46,7 +46,7 @@ export default function BenefitsSection() {
                 className="flex items-center gap-3"
                 initial={{ opacity: 0, x: -16 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, amount: 0.01 }}
                 transition={{ delay: i * 0.1 + 0.2, duration: 0.4 }}
               >
                 <CheckCircle className="h-5 w-5 shrink-0 text-primary" />
@@ -58,7 +58,7 @@ export default function BenefitsSection() {
             className="mt-10"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ delay: 0.5 }}
           >
             <Link href="/sign-up">

@@ -67,7 +67,7 @@ export default function ContactSection() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-3xl font-bold text-foreground tracking-tight md:text-4xl">
