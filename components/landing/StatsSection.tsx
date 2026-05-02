@@ -7,20 +7,33 @@ const stats = [
   { value: 30, suffix: "+", label: "Minutes saved per file", prefix: "" },
   { value: 12, suffix: "", label: "AI-powered tools", prefix: "" },
   { value: 7, suffix: "", label: "State-specific templates", prefix: "" },
-  { value: 99, suffix: "%", label: "Accuracy rate", prefix: "" },
+  { value: 30, suffix: "s", label: "Avg. status update time", prefix: "< " },
 ]
 
 function AnimatedCounter({ value, suffix, prefix }: { value: number; suffix: string; prefix: string }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true })
+  const inView = useInView(ref, { once: true, margin: "0px" })
   const count = useMotionValue(0)
   const rounded = useTransform(count, (v) => `${prefix}${Math.round(v)}${suffix}`)
+  const started = useRef(false)
+
+  const runAnimation = () => {
+    if (started.current) return
+    started.current = true
+    animate(count, value, { duration: 1.5, ease: "easeOut" })
+  }
 
   useEffect(() => {
-    if (inView) {
-      animate(count, value, { duration: 1.5, ease: "easeOut" })
-    }
-  }, [inView, count, value])
+    if (inView) runAnimation()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView])
+
+  useEffect(() => {
+    // Fallback: always animate within 400ms (stats section is near top of page)
+    const t = setTimeout(runAnimation, 400)
+    return () => clearTimeout(t)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const unsub = rounded.on("change", (v) => {
@@ -29,7 +42,7 @@ function AnimatedCounter({ value, suffix, prefix }: { value: number; suffix: str
     return unsub
   }, [rounded])
 
-  return <span ref={ref}>0</span>
+  return <span ref={ref}>{prefix}0{suffix}</span>
 }
 
 export default function StatsSection() {

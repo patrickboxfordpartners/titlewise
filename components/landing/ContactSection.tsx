@@ -78,7 +78,7 @@ export default function ContactSection() {
             </p>
             <div className="mt-8 space-y-4">
               {[
-                "Personalized walkthrough of all 8 tools",
+                "Personalized walkthrough of all 12 tools",
                 "Tailored to your firm's workflow",
                 "No obligation — just answers",
               ].map((item) => (

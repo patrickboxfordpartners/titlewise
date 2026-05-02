@@ -53,9 +53,9 @@ export default function HeroSection() {
                 Get Started <ArrowRight className="ml-1 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/pricing">
+            <Link href="#contact">
               <Button variant="hero-outline" size="lg" className="text-base px-8">
-                View Pricing
+                Request a Demo
               </Button>
             </Link>
           </motion.div>

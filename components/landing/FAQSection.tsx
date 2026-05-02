@@ -17,7 +17,7 @@ const faqs = [
   {
     value: "tools",
     question: "Which tools are included?",
-    answer: "Every plan includes 8 core tools: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Verification, HOA Document Reviewer, Fee Estimator, Tax Proration Calculator, and state-specific Closing Checklists. Higher plans add the Autonomous Closing Agent, Client Matter Portal, TRID Compliance Engine, and Wire Fraud Institutional Memory.",
+    answer: "Every plan includes 8 core tools: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Fraud Prevention, HOA Document Reviewer, Fee Estimate Generator, Tax Proration Calculator, and state-specific Closing Checklist Tracker. Higher plans add the Autonomous Closing Agent, Client Matter Portal, TRID Compliance Engine, and Wire Fraud Memory — 12 tools total.",
   },
   {
     value: "agent",
