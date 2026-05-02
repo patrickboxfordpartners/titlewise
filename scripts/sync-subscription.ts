@@ -23,7 +23,7 @@ if (!DATABASE_URL) {
 async function main() {
   console.log('\n🔄 Syncing subscription to database\n');
 
-  const sql = neon(DATABASE_URL);
+  const sql = neon(DATABASE_URL!);
   const db = drizzle(sql, { schema: { users } });
 
   // Get the Stripe subscription details

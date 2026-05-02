@@ -2,9 +2,6 @@ import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
-  experimental: {
-    instrumentationHook: true,
-  },
   async headers() {
     return [
       {
@@ -29,6 +26,7 @@ export default withSentryConfig(nextConfig, {
   project: "titlewise-app",
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  hideSourceMaps: true,
-  disableLogger: true,
+  sourcemaps: {
+    disable: true,
+  },
 })
