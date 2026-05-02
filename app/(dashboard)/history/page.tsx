@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { FileText, FileSearch, Clock, Copy, Check, ChevronDown, ChevronUp, AlertTriangle, Search, RotateCcw, Loader2 } from "lucide-react"
+import { FileText, FileSearch, Clock, Copy, Check, ChevronDown, ChevronUp, AlertTriangle, Search, RotateCcw, Loader2, FileCheck, Building, DollarSign } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type StatusUpdateEntry = {
@@ -29,13 +29,20 @@ type TitleAnalysisEntry = {
   createdAt: string
 }
 
-type Tab = "updates" | "analyses"
+type CdReviewEntry = { id: string; propertyAddress: string | null; buyer: string | null; discrepancyCount: number | null; createdAt: string }
+type HoaReviewEntry = { id: string; associationName: string | null; redFlagCount: number | null; createdAt: string }
+type FeeEstimateEntry = { id: string; clientName: string; transactionType: string; jurisdiction: string | null; createdAt: string }
+
+type Tab = "updates" | "analyses" | "cd" | "hoa" | "fees"
 
 export default function HistoryPage() {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>("updates")
   const [updates, setUpdates] = useState<StatusUpdateEntry[]>([])
   const [analyses, setAnalyses] = useState<TitleAnalysisEntry[]>([])
+  const [cdReviewsList, setCdReviews] = useState<CdReviewEntry[]>([])
+  const [hoaReviewsList, setHoaReviews] = useState<HoaReviewEntry[]>([])
+  const [feeEstimatesList, setFeeEstimates] = useState<FeeEstimateEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<string | null>(null)
@@ -60,6 +67,9 @@ export default function HistoryPage() {
     const data = await res.json()
     setUpdates(data.updates ?? [])
     setAnalyses(data.analyses ?? [])
+    setCdReviews(data.cdReviews ?? [])
+    setHoaReviews(data.hoaReviews ?? [])
+    setFeeEstimates(data.feeEstimates ?? [])
     setLoading(false)
   }, [debouncedSearch, fromDate, toDate])
 
@@ -107,7 +117,7 @@ export default function HistoryPage() {
         className="mb-6"
       >
         <h1 className="text-2xl font-semibold text-foreground">History</h1>
-        <p className="text-sm text-muted-foreground mt-1">Past generated emails and title analyses.</p>
+        <p className="text-sm text-muted-foreground mt-1">Complete record of all analyses and generated documents.</p>
       </motion.div>
 
       {/* Search */}
@@ -149,28 +159,27 @@ export default function HistoryPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.35 }}
-        className="flex gap-1 bg-muted/40 border border-border rounded-lg p-1 mb-6 w-fit"
+        className="flex flex-wrap gap-1 bg-muted/40 border border-border rounded-lg p-1 mb-6"
       >
-        <button
-          onClick={() => setTab("updates")}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-            tab === "updates" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <FileText className="h-3.5 w-3.5" />
-          Status Updates ({updates.length})
-        </button>
-        <button
-          onClick={() => setTab("analyses")}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-            tab === "analyses" ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <FileSearch className="h-3.5 w-3.5" />
-          Title Analyses ({analyses.length})
-        </button>
+        {([
+          { key: "updates", icon: FileText, label: "Status Updates", count: updates.length },
+          { key: "analyses", icon: FileSearch, label: "Title Analyses", count: analyses.length },
+          { key: "cd", icon: FileCheck, label: "CD Reviews", count: cdReviewsList.length },
+          { key: "hoa", icon: Building, label: "HOA Reviews", count: hoaReviewsList.length },
+          { key: "fees", icon: DollarSign, label: "Fee Estimates", count: feeEstimatesList.length },
+        ] as const).map(({ key, icon: Icon, label, count }) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+              tab === key ? "bg-card text-foreground shadow-sm border border-border" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Icon className="h-3.5 w-3.5" />
+            {label} ({count})
+          </button>
+        ))}
       </motion.div>
 
       {loading ? (
@@ -250,45 +259,103 @@ export default function HistoryPage() {
             })}
           </div>
         )
-      ) : analyses.length === 0 ? (
-        <EmptyState icon={FileSearch} message={search ? "No matching analyses" : "No title analyses yet"} />
-      ) : (
-        <div className="space-y-2">
-          {analyses.map((a, i) => {
-            const summary = (a.analysis as { summary?: string })?.summary
-            return (
-              <motion.div
-                key={a.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04, duration: 0.3 }}
-                className="bg-card rounded-xl border border-border px-5 py-4"
-              >
+      ) : tab === "analyses" ? (
+        analyses.length === 0 ? (
+          <EmptyState icon={FileSearch} message={search ? "No matching analyses" : "No title analyses yet"} />
+        ) : (
+          <div className="space-y-2">
+            {analyses.map((a, i) => {
+              const summary = (a.analysis as { summary?: string })?.summary
+              return (
+                <motion.div key={a.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04, duration: 0.3 }} className="bg-card rounded-xl border border-border px-5 py-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <FileSearch className="h-4 w-4 text-primary shrink-0" />
+                      <p className="text-sm font-medium text-foreground truncate">{a.propertyAddress ?? "Unknown property"}</p>
+                      {(a.redFlagCount ?? 0) > 0 && (
+                        <span className="flex items-center gap-1 text-xs font-medium text-red-600 bg-red-500/10 px-1.5 py-0.5 rounded shrink-0">
+                          <AlertTriangle className="h-3 w-3" />{a.redFlagCount} flag{a.redFlagCount === 1 ? "" : "s"}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1 shrink-0"><Clock className="h-3 w-3" />{formatDate(a.createdAt)}</span>
+                  </div>
+                  {summary && <p className="text-xs text-muted-foreground mt-2 leading-relaxed line-clamp-2">{summary}</p>}
+                </motion.div>
+              )
+            })}
+          </div>
+        )
+      ) : tab === "cd" ? (
+        cdReviewsList.length === 0 ? (
+          <EmptyState icon={FileCheck} message={search ? "No matching CD reviews" : "No CD reviews yet"} />
+        ) : (
+          <div className="space-y-2">
+            {cdReviewsList.map((r, i) => (
+              <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04, duration: 0.3 }} className="bg-card rounded-xl border border-border px-5 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 min-w-0">
-                    <FileSearch className="h-4 w-4 text-primary shrink-0" />
-                    <p className="text-sm font-medium text-foreground truncate">
-                      {a.propertyAddress ?? "Unknown property"}
-                    </p>
-                    {(a.redFlagCount ?? 0) > 0 && (
-                      <span className="flex items-center gap-1 text-xs font-medium text-red-600 bg-red-500/10 px-1.5 py-0.5 rounded shrink-0">
-                        <AlertTriangle className="h-3 w-3" />
-                        {a.redFlagCount} flag{a.redFlagCount === 1 ? "" : "s"}
+                    <FileCheck className="h-4 w-4 text-primary shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{r.propertyAddress ?? "Unknown property"}</p>
+                      {r.buyer && <p className="text-xs text-muted-foreground truncate">{r.buyer}</p>}
+                    </div>
+                    {(r.discrepancyCount ?? 0) > 0 && (
+                      <span className="flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-500/10 px-1.5 py-0.5 rounded shrink-0">
+                        <AlertTriangle className="h-3 w-3" />{r.discrepancyCount} discrepanc{r.discrepancyCount === 1 ? "y" : "ies"}
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1 shrink-0">
-                    <Clock className="h-3 w-3" />
-                    {formatDate(a.createdAt)}
-                  </span>
+                  <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1 shrink-0"><Clock className="h-3 w-3" />{formatDate(r.createdAt)}</span>
                 </div>
-                {summary && (
-                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed line-clamp-2">{summary}</p>
-                )}
               </motion.div>
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        )
+      ) : tab === "hoa" ? (
+        hoaReviewsList.length === 0 ? (
+          <EmptyState icon={Building} message={search ? "No matching HOA reviews" : "No HOA reviews yet"} />
+        ) : (
+          <div className="space-y-2">
+            {hoaReviewsList.map((r, i) => (
+              <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04, duration: 0.3 }} className="bg-card rounded-xl border border-border px-5 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Building className="h-4 w-4 text-primary shrink-0" />
+                    <p className="text-sm font-medium text-foreground truncate">{r.associationName ?? "HOA Review"}</p>
+                    {(r.redFlagCount ?? 0) > 0 && (
+                      <span className="flex items-center gap-1 text-xs font-medium text-red-600 bg-red-500/10 px-1.5 py-0.5 rounded shrink-0">
+                        <AlertTriangle className="h-3 w-3" />{r.redFlagCount} flag{r.redFlagCount === 1 ? "" : "s"}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1 shrink-0"><Clock className="h-3 w-3" />{formatDate(r.createdAt)}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )
+      ) : (
+        feeEstimatesList.length === 0 ? (
+          <EmptyState icon={DollarSign} message={search ? "No matching fee estimates" : "No fee estimates yet"} />
+        ) : (
+          <div className="space-y-2">
+            {feeEstimatesList.map((r, i) => (
+              <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04, duration: 0.3 }} className="bg-card rounded-xl border border-border px-5 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <DollarSign className="h-4 w-4 text-primary shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{r.clientName}</p>
+                      <p className="text-xs text-muted-foreground truncate">{r.transactionType}{r.jurisdiction ? ` · ${r.jurisdiction}` : ""}</p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-muted-foreground/60 hidden sm:flex items-center gap-1 shrink-0"><Clock className="h-3 w-3" />{formatDate(r.createdAt)}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )
       )}
     </div>
   )

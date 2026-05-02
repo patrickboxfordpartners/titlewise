@@ -143,6 +143,52 @@ export const contactSubmissions = pgTable("contact_submissions", {
   index("idx_contact_submissions_email").on(table.email),
 ])
 
+export const cdReviews = pgTable("cd_reviews", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  propertyAddress: text("property_address"),
+  buyer: text("buyer"),
+  seller: text("seller"),
+  discrepancyCount: integer("discrepancy_count").default(0),
+  result: jsonb("result").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_cd_reviews_user_id").on(table.userId),
+  index("idx_cd_reviews_created").on(table.createdAt),
+])
+
+export const hoaReviews = pgTable("hoa_reviews", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  associationName: text("association_name"),
+  redFlagCount: integer("red_flag_count").default(0),
+  result: jsonb("result").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_hoa_reviews_user_id").on(table.userId),
+  index("idx_hoa_reviews_created").on(table.createdAt),
+])
+
+export const feeEstimates = pgTable("fee_estimates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  clientName: text("client_name").notNull(),
+  transactionType: text("transaction_type").notNull(),
+  jurisdiction: text("jurisdiction"),
+  generatedLetter: text("generated_letter"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_fee_estimates_user_id").on(table.userId),
+  index("idx_fee_estimates_created").on(table.createdAt),
+])
+
+export type CdReview = typeof cdReviews.$inferSelect
+export type HoaReview = typeof hoaReviews.$inferSelect
+export type FeeEstimate = typeof feeEstimates.$inferSelect
+
 // API Keys table (Enterprise tier)
 export const apiKeys = pgTable("api_keys", {
   id: uuid("id").primaryKey().defaultRandom(),

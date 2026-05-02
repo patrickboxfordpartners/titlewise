@@ -5,6 +5,8 @@ import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { db } from "@/lib/db"
+import { feeEstimates } from "@/lib/db/schema"
 
 const requestSchema = z.object({
   clientName: z.string().min(1, "Client name is required"),
@@ -92,6 +94,16 @@ export async function POST(req: NextRequest) {
     }
 
     try { await incrementUsage(user.id) } catch (err) { logger.error("generate-fee-estimate", "Failed to increment usage", { error: String(err) }) }
+
+    try {
+      await db.insert(feeEstimates).values({
+        userId: user.id,
+        clientName: parsed.data.clientName,
+        transactionType: parsed.data.transactionType,
+        jurisdiction: parsed.data.jurisdiction,
+        generatedLetter: textBlock.text,
+      })
+    } catch (err) { logger.error("generate-fee-estimate", "Failed to save history", { error: String(err) }) }
 
     return NextResponse.json({ estimate: textBlock.text })
   } catch (err) {

@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { users, statusUpdates, titleAnalyses } from "@/lib/db/schema"
+import { users, statusUpdates, titleAnalyses, cdReviews, hoaReviews, feeEstimates } from "@/lib/db/schema"
 import { eq, desc, and, ilike, or, sql } from "drizzle-orm"
 
 export async function GET(req: NextRequest) {
@@ -24,21 +24,24 @@ export async function GET(req: NextRequest) {
 
   const updatesFilters = [eq(statusUpdates.userId, user.id)]
   const analysesFilters = [eq(titleAnalyses.userId, user.id)]
+  const cdFilters = [eq(cdReviews.userId, user.id)]
+  const hoaFilters = [eq(hoaReviews.userId, user.id)]
+  const feeFilters = [eq(feeEstimates.userId, user.id)]
 
   if (q) {
-    updatesFilters.push(
-      or(
-        ilike(statusUpdates.clientName, `%${q}%`),
-        ilike(statusUpdates.propertyAddress, `%${q}%`),
-      )!
-    )
+    updatesFilters.push(or(ilike(statusUpdates.clientName, `%${q}%`), ilike(statusUpdates.propertyAddress, `%${q}%`))!)
     analysesFilters.push(ilike(titleAnalyses.propertyAddress, `%${q}%`))
+    cdFilters.push(or(ilike(cdReviews.propertyAddress, `%${q}%`), ilike(cdReviews.buyer, `%${q}%`))!)
+    feeFilters.push(or(ilike(feeEstimates.clientName, `%${q}%`), ilike(feeEstimates.jurisdiction, `%${q}%`))!)
   }
 
   if (from) {
     const fromDate = new Date(from)
     updatesFilters.push(sql`${statusUpdates.createdAt} >= ${fromDate}`)
     analysesFilters.push(sql`${titleAnalyses.createdAt} >= ${fromDate}`)
+    cdFilters.push(sql`${cdReviews.createdAt} >= ${fromDate}`)
+    hoaFilters.push(sql`${hoaReviews.createdAt} >= ${fromDate}`)
+    feeFilters.push(sql`${feeEstimates.createdAt} >= ${fromDate}`)
   }
 
   if (to) {
@@ -46,29 +49,22 @@ export async function GET(req: NextRequest) {
     toDate.setHours(23, 59, 59, 999)
     updatesFilters.push(sql`${statusUpdates.createdAt} <= ${toDate}`)
     analysesFilters.push(sql`${titleAnalyses.createdAt} <= ${toDate}`)
+    cdFilters.push(sql`${cdReviews.createdAt} <= ${toDate}`)
+    hoaFilters.push(sql`${hoaReviews.createdAt} <= ${toDate}`)
+    feeFilters.push(sql`${feeEstimates.createdAt} <= ${toDate}`)
   }
 
-  const [allUpdates, allAnalyses] = await Promise.all([
-    db
-      .select()
-      .from(statusUpdates)
-      .where(and(...updatesFilters))
-      .orderBy(desc(statusUpdates.createdAt))
-      .limit(limit),
-    db
-      .select({
-        id: titleAnalyses.id,
-        propertyAddress: titleAnalyses.propertyAddress,
-        redFlagCount: titleAnalyses.redFlagCount,
-        analysis: titleAnalyses.analysis,
-        matterId: titleAnalyses.matterId,
-        createdAt: titleAnalyses.createdAt,
-      })
-      .from(titleAnalyses)
-      .where(and(...analysesFilters))
-      .orderBy(desc(titleAnalyses.createdAt))
-      .limit(limit),
+  const [allUpdates, allAnalyses, allCdReviews, allHoaReviews, allFeeEstimates] = await Promise.all([
+    db.select().from(statusUpdates).where(and(...updatesFilters)).orderBy(desc(statusUpdates.createdAt)).limit(limit),
+    db.select({ id: titleAnalyses.id, propertyAddress: titleAnalyses.propertyAddress, redFlagCount: titleAnalyses.redFlagCount, analysis: titleAnalyses.analysis, matterId: titleAnalyses.matterId, createdAt: titleAnalyses.createdAt })
+      .from(titleAnalyses).where(and(...analysesFilters)).orderBy(desc(titleAnalyses.createdAt)).limit(limit),
+    db.select({ id: cdReviews.id, propertyAddress: cdReviews.propertyAddress, buyer: cdReviews.buyer, discrepancyCount: cdReviews.discrepancyCount, createdAt: cdReviews.createdAt })
+      .from(cdReviews).where(and(...cdFilters)).orderBy(desc(cdReviews.createdAt)).limit(limit),
+    db.select({ id: hoaReviews.id, associationName: hoaReviews.associationName, redFlagCount: hoaReviews.redFlagCount, createdAt: hoaReviews.createdAt })
+      .from(hoaReviews).where(and(...hoaFilters)).orderBy(desc(hoaReviews.createdAt)).limit(limit),
+    db.select({ id: feeEstimates.id, clientName: feeEstimates.clientName, transactionType: feeEstimates.transactionType, jurisdiction: feeEstimates.jurisdiction, createdAt: feeEstimates.createdAt })
+      .from(feeEstimates).where(and(...feeFilters)).orderBy(desc(feeEstimates.createdAt)).limit(limit),
   ])
 
-  return NextResponse.json({ updates: allUpdates, analyses: allAnalyses })
+  return NextResponse.json({ updates: allUpdates, analyses: allAnalyses, cdReviews: allCdReviews, hoaReviews: allHoaReviews, feeEstimates: allFeeEstimates })
 }

@@ -1,3 +1,5 @@
+import { db } from "@/lib/db"
+import { hoaReviews } from "@/lib/db/schema"
 import { auth } from "@clerk/nextjs/server"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
@@ -147,6 +149,17 @@ export async function POST(req: NextRequest) {
     }
 
     try { await incrementUsage(user.id) } catch (err) { logger.error("review-hoa", "Failed to increment usage", { error: String(err) }) }
+
+    try {
+      const r = validated.data as { association?: { name?: string }; redFlags?: unknown[] }
+      await db.insert(hoaReviews).values({
+        userId: user.id,
+        associationName: r.association?.name ?? null,
+        redFlagCount: Array.isArray(r.redFlags) ? r.redFlags.length : 0,
+        result: validated.data as Record<string, unknown>,
+      })
+    } catch (err) { logger.error("review-hoa", "Failed to save history", { error: String(err) }) }
+
     return NextResponse.json({ review: validated.data })
   } catch (err) {
     logger.error("review-hoa", "API error", { error: String(err) })

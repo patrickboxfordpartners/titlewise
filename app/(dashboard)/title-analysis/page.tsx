@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag, Upload } from "lucide-react"
+import { Loader2, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, Flag, Upload, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PrintButton } from "@/components/print-button"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
@@ -22,6 +22,7 @@ type Analysis = {
 
 export default function TitleAnalysisPage() {
   const [commitment, setCommitment] = useState("")
+  const [showHint, setShowHint] = useState(false)
   const [analysis, setAnalysis] = useState<Analysis | null>(null)
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -147,6 +148,23 @@ export default function TitleAnalysisPage() {
                 </button>
               </div>
             </div>
+            <button
+              onClick={() => setShowHint((v) => !v)}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Info className="h-3.5 w-3.5" />
+              What to include
+              {showHint ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+            </button>
+            {showHint && (
+              <div className="rounded-lg bg-primary/5 border border-primary/10 px-4 py-3 text-xs text-muted-foreground space-y-1">
+                <p className="font-medium text-foreground mb-1.5">Paste the full commitment, including:</p>
+                <p>• <strong>Schedule A</strong> — property description, vesting, loan amount</p>
+                <p>• <strong>Schedule B-I</strong> — requirements (liens, payoffs, conditions)</p>
+                <p>• <strong>Schedule B-II</strong> — exceptions (easements, covenants, restrictions)</p>
+                <p className="mt-1.5 text-muted-foreground/70">Partial pastes work but may miss red flags in excluded sections.</p>
+              </div>
+            )}
             <textarea
               value={commitment}
               onChange={(e) => setCommitment(e.target.value)}

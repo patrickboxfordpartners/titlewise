@@ -140,9 +140,15 @@ export default function WireVerificationPage() {
 
               <button
                 onClick={() => setShowPrevious(!showPrevious)}
-                className="text-xs text-primary hover:text-primary/80 font-medium transition-colors"
+                className={cn(
+                  "flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-lg border transition-colors",
+                  showPrevious
+                    ? "bg-primary/10 text-primary border-primary/20"
+                    : "bg-muted/50 text-muted-foreground border-border hover:text-foreground hover:border-border/80"
+                )}
               >
-                {showPrevious ? "Hide" : "Compare with"} previous instructions
+                <Shield className="h-3.5 w-3.5" />
+                {showPrevious ? "Hide" : "Compare with previous"} — detect routing number changes
               </button>
 
               <AnimatePresence>

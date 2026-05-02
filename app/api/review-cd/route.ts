@@ -5,6 +5,8 @@ import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { db } from "@/lib/db"
+import { cdReviews } from "@/lib/db/schema"
 
 const requestSchema = z.object({
   closingDisclosure: z.string().min(100, "Paste the full Closing Disclosure text.").max(500_000, "Document text is too long (max 500,000 characters)."),
@@ -196,6 +198,18 @@ export async function POST(req: NextRequest) {
     }
 
     try { await incrementUsage(user.id) } catch (err) { logger.error("review-cd", "Failed to increment usage", { error: String(err) }) }
+
+    try {
+      const r = validated.data as { property?: { address?: string; buyer?: string; seller?: string }; discrepancies?: unknown[] }
+      await db.insert(cdReviews).values({
+        userId: user.id,
+        propertyAddress: r.property?.address ?? null,
+        buyer: r.property?.buyer ?? null,
+        seller: r.property?.seller ?? null,
+        discrepancyCount: Array.isArray(r.discrepancies) ? r.discrepancies.length : 0,
+        result: validated.data as Record<string, unknown>,
+      })
+    } catch (err) { logger.error("review-cd", "Failed to save history", { error: String(err) }) }
 
     return NextResponse.json({ review: validated.data })
   } catch (err) {

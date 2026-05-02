@@ -6,13 +6,23 @@ import { useState, useEffect } from "react"
 import {
   FileText, FileSearch, ArrowRight, FileCheck,
   Shield, Building, DollarSign, Calculator, ClipboardList,
-  Bot, Users, Scale, Brain, Lock,
+  Bot, Users, Scale, Brain, Lock, Clock, AlertCircle,
 } from "lucide-react"
 import { PLANS } from "@/lib/plans"
 
 type UserPlan = {
   subscriptionTier: string | null
   subscriptionStatus: string | null
+  name: string | null
+}
+
+type RecentItem = {
+  id: string
+  label: string
+  sub: string
+  href: string
+  icon: typeof FileText
+  createdAt: string
 }
 
 const coreTools = [
@@ -112,6 +122,7 @@ function hasFeatureAccess(tier: string | null, requiredPlans: string[]): boolean
 
 export default function DashboardPage() {
   const [plan, setPlan] = useState<UserPlan | null>(null)
+  const [recent, setRecent] = useState<RecentItem[]>([])
 
   useEffect(() => {
     fetch("/api/settings")
@@ -119,9 +130,34 @@ export default function DashboardPage() {
       .then((data) => setPlan({
         subscriptionTier: data.subscriptionTier,
         subscriptionStatus: data.subscriptionStatus,
+        name: data.name ?? null,
       }))
       .catch(() => {})
+
+    fetch("/api/history?limit=4")
+      .then((r) => r.json())
+      .then((data) => {
+        const items: RecentItem[] = [
+          ...(data.updates ?? []).map((u: { id: string; clientName: string; propertyAddress: string; createdAt: string }) => ({
+            id: "u-" + u.id, label: u.clientName, sub: u.propertyAddress, href: "/history", icon: FileText, createdAt: u.createdAt,
+          })),
+          ...(data.analyses ?? []).map((a: { id: string; propertyAddress: string | null; createdAt: string }) => ({
+            id: "a-" + a.id, label: a.propertyAddress ?? "Title Analysis", sub: "Title Commitment Analyzer", href: "/history", icon: FileSearch, createdAt: a.createdAt,
+          })),
+          ...(data.cdReviews ?? []).map((r: { id: string; propertyAddress: string | null; createdAt: string }) => ({
+            id: "cd-" + r.id, label: r.propertyAddress ?? "CD Review", sub: "Closing Disclosure Reviewer", href: "/history", icon: FileSearch, createdAt: r.createdAt,
+          })),
+          ...(data.feeEstimates ?? []).map((r: { id: string; clientName: string; createdAt: string }) => ({
+            id: "fee-" + r.id, label: r.clientName, sub: "Fee Estimate", href: "/history", icon: FileText, createdAt: r.createdAt,
+          })),
+        ]
+        items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        setRecent(items.slice(0, 4))
+      })
+      .catch(() => {})
   }, [])
+
+  const showNameBanner = plan !== null && !plan.name
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
@@ -136,6 +172,56 @@ export default function DashboardPage() {
           AI-powered closing platform for real estate attorneys.
         </p>
       </motion.div>
+
+      {showNameBanner && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-6 flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3"
+        >
+          <AlertCircle className="h-4 w-4 text-amber-600 shrink-0" />
+          <p className="text-sm text-amber-800 flex-1">
+            Add your name and firm to personalize generated letters and emails.
+          </p>
+          <Link href="/settings" className="text-xs font-semibold text-amber-700 hover:text-amber-900 transition-colors shrink-0">
+            Complete Profile →
+          </Link>
+        </motion.div>
+      )}
+
+      {recent.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05, duration: 0.35 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Recent Activity</p>
+            <Link href="/history" className="text-xs text-primary hover:underline">View all</Link>
+          </div>
+          <div className="grid gap-2">
+            {recent.map((item) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className="group bg-card rounded-lg border border-border px-4 py-2.5 flex items-center gap-3 hover:border-primary/30 hover:shadow-sm transition-all duration-200"
+              >
+                <item.icon className="h-3.5 w-3.5 text-primary shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-medium text-foreground truncate">{item.label}</p>
+                  <p className="text-[10px] text-muted-foreground truncate">{item.sub}</p>
+                </div>
+                <span className="text-[10px] text-muted-foreground/60 flex items-center gap-1 shrink-0">
+                  <Clock className="h-3 w-3" />
+                  {new Date(item.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Core Tools */}
       <div className="mb-3">

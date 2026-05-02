@@ -25,10 +25,10 @@ const coreNav = [
 ]
 
 const premiumNav = [
-  { href: "/checklist", label: "Closing Agent", icon: Bot, requiredPlans: ["pro", "enterprise"], badge: "Pro" },
-  { href: "/checklist", label: "Client Portal", icon: Users, requiredPlans: ["small_firm", "pro", "enterprise"], badge: "SF+" },
-  { href: "/cd-reviewer", label: "TRID Engine", icon: Scale, requiredPlans: ["pro", "enterprise"], badge: "Pro" },
-  { href: "/wire-verification", label: "Wire Memory", icon: Brain, requiredPlans: ["small_firm", "pro", "enterprise"], badge: "SF+" },
+  { href: "/pricing?feature=agent", label: "Closing Agent", icon: Bot, requiredPlans: ["pro", "enterprise"], badge: "Pro" },
+  { href: "/pricing?feature=portal", label: "Client Portal", icon: Users, requiredPlans: ["small_firm", "pro", "enterprise"], badge: "SF+" },
+  { href: "/pricing?feature=trid", label: "TRID Engine", icon: Scale, requiredPlans: ["pro", "enterprise"], badge: "Pro" },
+  { href: "/pricing?feature=wire-memory", label: "Wire Memory", icon: Brain, requiredPlans: ["small_firm", "pro", "enterprise"], badge: "SF+" },
 ]
 
 const bottomNav = [
@@ -53,7 +53,7 @@ function SidebarContent({ pathname, tier, onNavigate }: { pathname: string; tier
               "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors",
               pathname === href
                 ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             <Icon className="h-4 w-4 shrink-0" />
@@ -91,7 +91,7 @@ function SidebarContent({ pathname, tier, onNavigate }: { pathname: string; tier
           return (
             <Link
               key={label}
-              href="/pricing"
+              href={href}
               onClick={onNavigate}
               className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground/40 hover:text-muted-foreground/60 transition-colors"
             >
