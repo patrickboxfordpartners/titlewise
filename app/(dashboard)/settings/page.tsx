@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Loader2, ExternalLink, Check, Mail, AlertCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { SubscriptionPanel } from "@/components/subscription-panel"
+import { ApiKeysSection } from "@/components/api-keys-section"
+import { WebhooksSection } from "@/components/webhooks-section"
 
 type Settings = {
   name: string | null
@@ -288,6 +290,12 @@ function SettingsContent() {
         onManageBilling={handlePortal}
         portalLoading={portalLoading}
       />
+
+      {/* API Keys */}
+      {settings.subscriptionTier === "enterprise" && <ApiKeysSection />}
+
+      {/* Webhooks */}
+      {settings.subscriptionTier === "enterprise" && <WebhooksSection />}
 
       {/* Team */}
       {(settings.subscriptionTier === "small_firm" || settings.subscriptionTier === "pro" || settings.subscriptionTier === "enterprise") && (

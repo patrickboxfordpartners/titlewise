@@ -8,6 +8,13 @@
       "when": 1776221296382,
       "tag": "0000_lovely_roland_deschain",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1777683800321,
+      "tag": "0001_violet_blade",
+      "breakpoints": true
     }
   ]
 }

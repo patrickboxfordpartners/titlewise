@@ -143,6 +143,59 @@ export const contactSubmissions = pgTable("contact_submissions", {
   index("idx_contact_submissions_email").on(table.email),
 ])
 
+// API Keys table (Enterprise tier)
+export const apiKeys = pgTable("api_keys", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(), // e.g., "Production", "Staging"
+  keyPrefix: text("key_prefix").notNull().unique(), // First 16 chars: tw_live_abc123...
+  keyHash: text("key_hash").notNull(), // bcrypt hash of full key
+  rateLimitPerMonth: integer("rate_limit_per_month").notNull().default(1000),
+  isActive: text("is_active").default("true"), // "true" | "false" (text for compatibility)
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+}, (table) => [
+  index("idx_api_keys_user_id").on(table.userId),
+  index("idx_api_keys_prefix").on(table.keyPrefix), // Fast lookup during auth
+])
+
+// API Usage Logs (for billing and monitoring)
+export const apiUsageLogs = pgTable("api_usage_logs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  apiKeyId: uuid("api_key_id").notNull().references(() => apiKeys.id, { onDelete: "cascade" }),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  endpoint: text("endpoint").notNull(), // e.g., "/analyze-commitment"
+  method: text("method").notNull(), // POST, GET
+  statusCode: integer("status_code").notNull(),
+  requestSizeBytes: integer("request_size_bytes"),
+  responseSizeBytes: integer("response_size_bytes"),
+  durationMs: integer("duration_ms"),
+  tokensUsed: integer("tokens_used"), // Claude API tokens
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_usage_logs_key_created").on(table.apiKeyId, table.createdAt),
+  index("idx_usage_logs_user_created").on(table.userId, table.createdAt),
+])
+
+// Webhooks (for async result delivery)
+export const webhooks = pgTable("webhooks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  url: text("url").notNull(),
+  events: jsonb("events").notNull(), // ["analysis.completed", "analysis.failed"]
+  secret: text("secret").notNull(), // For HMAC signature verification
+  isActive: text("is_active").default("true"), // "true" | "false"
+  lastTriggeredAt: timestamp("last_triggered_at"),
+  failureCount: integer("failure_count").notNull().default(0), // Auto-disable after 10 failures
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+}, (table) => [
+  index("idx_webhooks_user_id").on(table.userId),
+])
+
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 export type StatusUpdate = typeof statusUpdates.$inferSelect
@@ -155,3 +208,9 @@ export type ChecklistItem = typeof checklistItems.$inferSelect
 export type NewChecklistItem = typeof checklistItems.$inferInsert
 export type ContactSubmission = typeof contactSubmissions.$inferSelect
 export type NewContactSubmission = typeof contactSubmissions.$inferInsert
+export type ApiKey = typeof apiKeys.$inferSelect
+export type NewApiKey = typeof apiKeys.$inferInsert
+export type ApiUsageLog = typeof apiUsageLogs.$inferSelect
+export type NewApiUsageLog = typeof apiUsageLogs.$inferInsert
+export type Webhook = typeof webhooks.$inferSelect
+export type NewWebhook = typeof webhooks.$inferInsert

@@ -1,0 +1,632 @@
+openapi: 3.0.0
+info:
+  title: TitleWise API
+  version: 1.0.0
+  description: |
+    AI-powered document analysis for real estate closing attorneys.
+
+    ## Authentication
+    All API endpoints require authentication using an API key. Include your key in the `Authorization` header:
+    ```
+    Authorization: Bearer tw_live_YOUR_API_KEY
+    ```
+
+    ## Rate Limiting
+    Enterprise plan includes 1,000 API calls per month. Rate limit resets on the first day of each month at 00:00 UTC.
+
+    **Rate limit headers:**
+    - `X-RateLimit-Limit` - Total calls allowed per month
+    - `X-RateLimit-Remaining` - Calls remaining this month
+    - `X-RateLimit-Reset` - Unix timestamp when limit resets
+
+    ## Errors
+    The API uses standard HTTP status codes:
+    - `200` - Success
+    - `400` - Bad Request (invalid input)
+    - `401` - Unauthorized (invalid/missing API key)
+    - `403` - Forbidden (Enterprise plan required)
+    - `429` - Rate Limit Exceeded
+    - `500` - Internal Server Error
+
+  contact:
+    name: TitleWise API Support
+    email: hello@titlewise.app
+    url: https://titlewise.app/support
+  termsOfService: https://titlewise.app/terms
+  license:
+    name: Proprietary
+    url: https://titlewise.app/api-license
+
+servers:
+  - url: https://titlewise.app
+    description: Production server
+  - url: http://localhost:3000
+    description: Development server (local testing)
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Title Analysis
+    description: Analyze title commitments and related documents
+  - name: Closing Documents
+    description: Review closing disclosures and final documents
+  - name: HOA Documents
+    description: Analyze homeowners association documents
+  - name: Wire Verification
+    description: Verify wire transfer instructions and detect fraud
+
+paths:
+  /api/v1/analyze-commitment:
+    post:
+      tags:
+        - Title Analysis
+      summary: Analyze title commitment
+      description: |
+        Analyze a title commitment for requirements, exceptions, and red flags.
+
+        **Use cases:**
+        - Title insurance underwriting
+        - Buyer due diligence
+        - Lender title review
+        - Attorney pre-closing review
+
+        **Response time:** ~2-3 seconds
+      operationId: analyzeCommitment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - document_text
+              properties:
+                document_text:
+                  type: string
+                  minLength: 100
+                  maxLength: 500000
+                  description: Full text of the title commitment document
+                  example: "COMMITMENT FOR TITLE INSURANCE\n\nSchedule A\n\n1. Policy Amount: $500,000.00..."
+                property_address:
+                  type: string
+                  description: Property address (optional, extracted from document if not provided)
+                  example: "123 Main Street, Portsmouth, NH 03801"
+      responses:
+        '200':
+          description: Analysis completed successfully
+          headers:
+            X-API-Version:
+              schema:
+                type: string
+              description: API version
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Total API calls allowed per month
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Remaining API calls this month
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+              description: Unix timestamp when rate limit resets
+            X-Response-Time-Ms:
+              schema:
+                type: integer
+              description: Response time in milliseconds
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommitmentAnalysisResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/analyze-cd:
+    post:
+      tags:
+        - Closing Documents
+      summary: Analyze Closing Disclosure
+      description: |
+        Review a Closing Disclosure for accuracy, discrepancies, and compliance.
+
+        **Use cases:**
+        - Lender CD validation
+        - Borrower cost verification
+        - Comparison to Loan Estimate
+        - TRID compliance review
+
+        **Response time:** ~2-3 seconds
+      operationId: analyzeCD
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - document_text
+              properties:
+                document_text:
+                  type: string
+                  minLength: 100
+                  maxLength: 500000
+                  description: Full text of the Closing Disclosure
+                  example: "CLOSING DISCLOSURE\n\nLoan Amount: $400,000\nInterest Rate: 6.5%..."
+                property_address:
+                  type: string
+                  description: Property address (optional)
+                  example: "456 Oak Avenue, Dover, NH"
+      responses:
+        '200':
+          description: Analysis completed successfully
+          headers:
+            X-API-Version:
+              schema:
+                type: string
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+            X-Response-Time-Ms:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CDAnalysisResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/review-hoa:
+    post:
+      tags:
+        - HOA Documents
+      summary: Review HOA documents
+      description: |
+        Analyze HOA documents for rules, fees, restrictions, and financial health.
+
+        **Use cases:**
+        - FHA/VA loan approval checks
+        - Buyer decision support
+        - Lender HOA review
+        - Real estate agent pre-listing analysis
+
+        **Response time:** ~2-3 seconds
+      operationId: reviewHOA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - document_text
+              properties:
+                document_text:
+                  type: string
+                  minLength: 100
+                  maxLength: 500000
+                  description: Full text of HOA documents (bylaws, rules, financial statements)
+                  example: "HOMEOWNERS ASSOCIATION DOCUMENTS\n\nMonthly Assessment: $285..."
+                property_address:
+                  type: string
+                  description: Property address (optional)
+                  example: "789 Maple Ridge Drive #12"
+      responses:
+        '200':
+          description: Review completed successfully
+          headers:
+            X-API-Version:
+              schema:
+                type: string
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+            X-Response-Time-Ms:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HOAReviewResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/verify-wire:
+    post:
+      tags:
+        - Wire Verification
+      summary: Verify wire instructions
+      description: |
+        Verify wire transfer instructions and flag potential fraud indicators.
+
+        **⚠️ IMPORTANT:** This endpoint provides analysis only. Always call the title company directly using a known phone number before wiring funds.
+
+        **Use cases:**
+        - Wire fraud detection
+        - Routing number validation
+        - Beneficiary verification
+        - Pre-wire risk assessment
+
+        **Response time:** ~1.5-2 seconds
+      operationId: verifyWire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - document_text
+              properties:
+                document_text:
+                  type: string
+                  minLength: 50
+                  maxLength: 100000
+                  description: Full text of wire transfer instructions
+                  example: "WIRE TRANSFER INSTRUCTIONS\n\nBeneficiary: Seacoast Title & Escrow LLC..."
+                expected_amount:
+                  type: number
+                  description: Expected wire amount in dollars (optional, for verification)
+                  example: 112847
+                expected_beneficiary:
+                  type: string
+                  description: Expected beneficiary name (optional, for verification)
+                  example: "Seacoast Title & Escrow LLC"
+      responses:
+        '200':
+          description: Verification completed successfully
+          headers:
+            X-API-Version:
+              schema:
+                type: string
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+            X-RateLimit-Reset:
+              schema:
+                type: integer
+            X-Response-Time-Ms:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WireVerificationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: tw_live_<key>
+      description: |
+        API key authentication. Generate keys in your TitleWise dashboard under Settings → API Keys.
+
+        **Format:** `tw_live_` followed by 32 random characters
+
+        **Example:** `Authorization: Bearer tw_live_abc123def456...`
+
+  schemas:
+    CommitmentAnalysisResponse:
+      type: object
+      properties:
+        analysis:
+          type: object
+          properties:
+            property:
+              type: object
+              properties:
+                address:
+                  type: string
+                  nullable: true
+                type:
+                  type: string
+                  nullable: true
+                owners:
+                  type: string
+                  nullable: true
+                amount:
+                  type: string
+                  nullable: true
+            scheduleA:
+              type: object
+              properties:
+                summary:
+                  type: string
+            requirements:
+              type: array
+              items:
+                type: object
+                properties:
+                  item:
+                    type: string
+                  description:
+                    type: string
+                  flagged:
+                    type: boolean
+            exceptions:
+              type: array
+              items:
+                type: object
+                properties:
+                  item:
+                    type: string
+                  description:
+                    type: string
+                  flagged:
+                    type: boolean
+            redFlags:
+              type: array
+              items:
+                type: object
+                properties:
+                  severity:
+                    type: string
+                    enum: [high, medium]
+                  issue:
+                    type: string
+                  explanation:
+                    type: string
+            summary:
+              type: string
+        usage:
+          type: object
+          properties:
+            tokens:
+              type: integer
+              description: Total Claude API tokens used
+
+    CDAnalysisResponse:
+      type: object
+      properties:
+        analysis:
+          type: object
+          properties:
+            loanInformation:
+              type: object
+            closingCosts:
+              type: object
+            loanCosts:
+              type: array
+              items:
+                type: object
+            otherCosts:
+              type: array
+              items:
+                type: object
+            comparisonToLE:
+              type: object
+            redFlags:
+              type: array
+              items:
+                type: object
+            summary:
+              type: string
+        usage:
+          type: object
+          properties:
+            tokens:
+              type: integer
+
+    HOAReviewResponse:
+      type: object
+      properties:
+        analysis:
+          type: object
+          properties:
+            association:
+              type: object
+            fees:
+              type: object
+            restrictions:
+              type: array
+              items:
+                type: object
+            financialHealth:
+              type: object
+            lenderRequirements:
+              type: object
+            redFlags:
+              type: array
+              items:
+                type: object
+            summary:
+              type: string
+        usage:
+          type: object
+          properties:
+            tokens:
+              type: integer
+
+    WireVerificationResponse:
+      type: object
+      properties:
+        analysis:
+          type: object
+          properties:
+            bankInformation:
+              type: object
+            beneficiary:
+              type: object
+            amount:
+              type: object
+            verification:
+              type: object
+            fraudIndicators:
+              type: array
+              items:
+                type: object
+            recommendations:
+              type: array
+              items:
+                type: object
+            redFlags:
+              type: array
+              items:
+                type: object
+            summary:
+              type: string
+        usage:
+          type: object
+          properties:
+            tokens:
+              type: integer
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          items:
+            type: object
+          description: Additional error details (validation errors)
+
+    RateLimitError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Rate limit exceeded"
+        limit:
+          type: integer
+          example: 1000
+        resetAt:
+          type: integer
+          description: Unix timestamp when limit resets
+          example: 1746331200
+
+  responses:
+    BadRequest:
+      description: Invalid request body or parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Invalid request body"
+            details:
+              - code: "too_small"
+                minimum: 100
+                path: ["document_text"]
+                message: "Document text must be at least 100 characters"
+
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            missingKey:
+              summary: Missing Authorization header
+              value:
+                error: "Missing Authorization header. Include: Authorization: Bearer tw_live_..."
+            invalidKey:
+              summary: Invalid API key
+              value:
+                error: "Invalid or revoked API key"
+
+    Forbidden:
+      description: Enterprise plan required for API access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Enterprise plan required for API access"
+
+    RateLimitExceeded:
+      description: Monthly rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Total calls allowed per month
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Always 0 when limit exceeded
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: Unix timestamp when limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RateLimitError'
+          example:
+            error: "Rate limit exceeded"
+            limit: 1000
+            resetAt: 1746331200
+
+    InternalError:
+      description: Internal server error (Claude API failure, database error, etc.)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Analysis failed"
+            message: "Claude API timeout"
+
+x-tagGroups:
+  - name: Endpoints
+    tags:
+      - Title Analysis
+      - Closing Documents
+      - HOA Documents
+      - Wire Verification
