@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import Script from "next/script"
 import { ClerkProvider } from "@clerk/nextjs"
 import { PHProvider } from "@/components/posthog-provider"
 import "./globals.css"
@@ -56,6 +57,11 @@ export default function RootLayout({
       <html lang="en" className={`${inter.className} h-full antialiased`}>
         <body className="min-h-full flex flex-col">
           <PHProvider>{children}</PHProvider>
+          <Script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "30b945f51e3f499aa453d9af989b62a6"}'
+          />
         </body>
       </html>
     </ClerkProvider>
