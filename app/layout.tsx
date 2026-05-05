@@ -29,6 +29,9 @@ export const metadata: Metadata = {
     "wire fraud prevention",
   ],
   metadataBase: new URL("https://titlewise.app"),
+  alternates: {
+    canonical: "https://titlewise.app",
+  },
   openGraph: {
     type: "website",
     title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
