@@ -49,7 +49,7 @@ const MagneticButton = ({ children, href, variant, ...props }: any) => {
 
 export default function HeroSectionPersonality() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-20">
+    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-24 lg:pt-32">
       <HeroBackground />
 
       {/* Animated grain texture */}
@@ -208,12 +208,17 @@ export default function HeroSectionPersonality() {
                 }}
               >
                 <div className="flex flex-col gap-3">
-                  <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-green-600 to-green-400 bg-clip-text text-transparent">
-                    24/7
+                  <div className="shrink-0 rounded-xl bg-green-500/10 p-2.5 w-fit border-2 border-green-500/20 opacity-0">
+                    <FileCheck className="h-5 w-5 text-green-600" strokeWidth={2.5} />
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground font-bold">
-                    Autonomous Agent
-                  </p>
+                  <div>
+                    <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-green-600 to-green-400 bg-clip-text text-transparent">
+                      24/7
+                    </div>
+                    <p className="mt-1 text-xs text-muted-foreground font-bold">
+                      Autonomous Agent
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             </div>
