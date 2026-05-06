@@ -49,7 +49,7 @@ const MagneticButton = ({ children, href, variant, ...props }: any) => {
 
 export default function HeroSectionPersonality() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center overflow-hidden pt-24 lg:pt-32">
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-32 md:pt-40">
       <HeroBackground />
 
       {/* Animated grain texture */}
