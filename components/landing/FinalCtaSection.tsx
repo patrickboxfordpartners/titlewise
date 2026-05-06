@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 
 export default function FinalCtaSection() {
   return (
-    <section className="bg-section-alt py-20 md:py-28">
+    <section className="bg-section-alt py-16 md:py-20">
       <div className="container mx-auto px-6">
         <motion.div
           className="mx-auto max-w-2xl text-center"

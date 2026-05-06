@@ -61,10 +61,10 @@ export default function ContactSectionUpgraded() {
   }
 
   return (
-    <section id="contact" className="bg-section-alt py-20 md:py-28">
+    <section id="contact" className="bg-section-alt py-16 md:py-20">
       <div className="container mx-auto px-6">
-        {/* Asymmetric layout: 40/60 split instead of 50/50 */}
-        <div className="mx-auto grid max-w-[1400px] gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        {/* Symmetric 50/50 layout */}
+        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-start">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}

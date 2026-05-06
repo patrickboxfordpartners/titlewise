@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 export default function TestimonialSection() {
   return (
-    <section className="bg-section-accent py-16 border-y border-border">
+    <section className="bg-section-accent py-12 md:py-16 border-y border-border">
       <div className="container mx-auto px-6">
         <motion.div
           className="mx-auto max-w-3xl text-center"

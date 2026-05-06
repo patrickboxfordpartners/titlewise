@@ -48,10 +48,10 @@ const faqs = [
 
 export default function FAQSectionUpgraded() {
   return (
-    <section className="bg-section-accent py-20 md:py-28">
+    <section className="bg-section-accent py-16 md:py-20">
       <div className="container mx-auto px-6">
-        {/* Asymmetric layout: narrow left column for title, wider right for FAQs */}
-        <div className="mx-auto grid max-w-[1400px] lg:grid-cols-[0.8fr_1.2fr] gap-12 lg:gap-20 items-start">
+        {/* Symmetric 50/50 layout */}
+        <div className="mx-auto grid max-w-6xl lg:grid-cols-2 gap-12 items-start">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
