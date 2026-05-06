@@ -1,30 +1,15 @@
 "use client"
 
 import { Star } from "lucide-react"
-import { motion } from "framer-motion"
 
 export default function TestimonialSection() {
   return (
-    <section className="bg-section-accent py-12 md:py-16 border-y border-border">
+    <section className="bg-section-accent py-20 md:py-24 border-y border-border">
       <div className="container mx-auto px-6">
-        <motion.div
-          className="mx-auto max-w-3xl text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.01 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="mx-auto max-w-3xl text-center">
           <div className="flex justify-center gap-1 mb-6">
             {[...Array(5)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.01 }}
-                transition={{ delay: i * 0.08 + 0.2 }}
-              >
-                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-              </motion.div>
+              <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
             ))}
           </div>
           <blockquote className="text-xl font-medium text-foreground leading-relaxed md:text-2xl">
@@ -34,7 +19,7 @@ export default function TestimonialSection() {
             <p className="font-semibold text-foreground text-sm">Sarah Mitchell</p>
             <p className="text-xs text-muted-foreground">Managing Partner, Mitchell & Associates</p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -12,38 +12,21 @@ const steps = [
 
 export default function HowItWorksSectionUpgraded() {
   return (
-    <section className="bg-section-alt py-16 md:py-20">
+    <section className="bg-section-alt py-20 md:py-24">
       <div className="container mx-auto px-6">
-        <motion.div
-          className="mx-auto mb-12 max-w-[65ch] text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.01 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <div className="mx-auto mb-16 max-w-[65ch] text-center">
           <h2 className="text-4xl font-black text-foreground md:text-5xl tracking-tighter">
             How it works
           </h2>
           <p className="mt-4 text-base text-muted-foreground leading-relaxed font-medium">
             Four steps to a faster closing workflow
           </p>
-        </motion.div>
+        </div>
 
         <div className="mx-auto max-w-[1200px]">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((item, i) => (
-              <motion.div
-                key={item.step}
-                className="relative text-center"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.01 }}
-                transition={{
-                  delay: i * 0.12,
-                  duration: 0.6,
-                  ease: [0.16, 1, 0.3, 1]
-                }}
-              >
+              <div key={item.step} className="relative text-center">
                 <motion.div
                   className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10 border-2 border-primary/20 mx-auto"
                   whileHover={{
@@ -65,7 +48,7 @@ export default function HowItWorksSectionUpgraded() {
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-medium mx-auto">
                   {item.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

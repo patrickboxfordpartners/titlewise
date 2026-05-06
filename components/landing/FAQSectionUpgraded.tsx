@@ -1,7 +1,6 @@
 "use client"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { motion } from "framer-motion"
 
 const faqs = [
   {
@@ -48,52 +47,32 @@ const faqs = [
 
 export default function FAQSectionUpgraded() {
   return (
-    <section className="bg-section-accent py-16 md:py-20">
+    <section className="bg-section-accent py-20 md:py-24">
       <div className="container mx-auto px-6">
-        {/* Symmetric 50/50 layout */}
-        <div className="mx-auto grid max-w-6xl lg:grid-cols-2 gap-12 items-start">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.01 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:sticky lg:top-32"
-          >
-            <h2 className="text-4xl font-bold text-foreground tracking-tighter md:text-5xl">
+        <div className="mx-auto grid max-w-6xl lg:grid-cols-2 gap-16 items-start">
+          <div className="lg:sticky lg:top-32">
+            <h2 className="text-4xl font-black text-foreground tracking-tighter md:text-5xl">
               Frequently Asked Questions
             </h2>
             <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-[40ch]">
               Everything you need to know about TitleWise.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.01 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <div>
             <Accordion type="single" collapsible className="w-full">
-              {faqs.map((faq, i) => (
-                <motion.div
-                  key={faq.value}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.01 }}
-                  transition={{ delay: i * 0.05 + 0.2, duration: 0.4 }}
-                >
-                  <AccordionItem value={faq.value} className="border-b border-border/50">
-                    <AccordionTrigger className="text-sm font-semibold text-foreground text-left py-5 hover:text-primary transition-colors">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
+              {faqs.map((faq) => (
+                <AccordionItem key={faq.value} value={faq.value} className="border-b border-border/50">
+                  <AccordionTrigger className="text-sm font-semibold text-foreground text-left py-5 hover:text-primary transition-colors">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
               ))}
             </Accordion>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

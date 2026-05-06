@@ -148,14 +148,14 @@ function PremiumCard({ feature, index }: { feature: typeof premiumFeatures[0]; i
 }
 
 const MagneticButton = ({ children, href, ...props }: any) => {
-  const ref = useRef<HTMLAnchorElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const springConfig = { damping: 15, stiffness: 150 }
   const springX = useSpring(x, springConfig)
   const springY = useSpring(y, springConfig)
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return
     const rect = ref.current.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
@@ -189,10 +189,10 @@ const MagneticButton = ({ children, href, ...props }: any) => {
 
 export default function FeaturesSectionPersonality() {
   return (
-    <section className="py-16 md:py-20 bg-background">
+    <section className="py-20 md:py-24 bg-background">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mx-auto mb-12 max-w-[60ch] text-center"
+          className="mx-auto mb-16 max-w-[60ch] text-center"
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.01 }}
@@ -243,8 +243,8 @@ export default function FeaturesSectionPersonality() {
           viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <MagneticButton href="/sign-up">
-            Get Started <ArrowRight className="ml-1.5 h-4 w-4" strokeWidth={3} />
+          <MagneticButton href="/pricing">
+            View Pricing <ArrowRight className="ml-1.5 h-4 w-4" strokeWidth={3} />
           </MagneticButton>
         </motion.div>
       </div>

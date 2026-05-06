@@ -8,14 +8,14 @@ import HeroBackground from "./HeroBackground"
 import { useRef } from "react"
 
 const MagneticButton = ({ children, href, variant, ...props }: any) => {
-  const ref = useRef<HTMLAnchorElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const springConfig = { damping: 15, stiffness: 150 }
   const springX = useSpring(x, springConfig)
   const springY = useSpring(y, springConfig)
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return
     const rect = ref.current.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
@@ -49,7 +49,7 @@ const MagneticButton = ({ children, href, variant, ...props }: any) => {
 
 export default function HeroSectionPersonality() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden py-24">
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-32 pb-24">
       <HeroBackground />
 
       {/* Animated grain texture */}
