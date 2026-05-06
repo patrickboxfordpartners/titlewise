@@ -1,9 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { Clock, ArrowRight, Shield, FileCheck } from "lucide-react"
+import { Clock, ArrowRight, Shield, FileCheck, Bot } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { motion, useMotionValue, useSpring } from "framer-motion"
 import HeroBackground from "./HeroBackground"
 import { useRef } from "react"
 
@@ -49,7 +49,7 @@ const MagneticButton = ({ children, href, variant, ...props }: any) => {
 
 export default function HeroSectionPersonality() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-32 md:pt-40">
+    <section className="relative min-h-screen flex items-center overflow-hidden py-24">
       <HeroBackground />
 
       {/* Animated grain texture */}
@@ -71,7 +71,7 @@ export default function HeroSectionPersonality() {
       />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-[1200px] mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 1, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
@@ -133,7 +133,7 @@ export default function HeroSectionPersonality() {
             </motion.p>
           </motion.div>
 
-          {/* Right: Trust indicators with symmetrical grid */}
+          {/* Right: Symmetric stat cards */}
           <motion.div
             className="hidden lg:grid gap-6"
             initial={{ opacity: 1, x: 0 }}
@@ -142,7 +142,7 @@ export default function HeroSectionPersonality() {
           >
             <div className="grid grid-cols-2 gap-6">
               <motion.div
-                className="col-span-2 rounded-2xl border-2 border-red-500/30 bg-card p-6 relative"
+                className="col-span-2 rounded-2xl border-2 border-red-500/30 bg-card p-6"
                 style={{ boxShadow: "6px 6px 0px rgba(239, 68, 68, 0.3)" }}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ export default function HeroSectionPersonality() {
               </motion.div>
 
               <motion.div
-                className="rounded-2xl border-2 border-purple-500/30 bg-card p-6 relative"
+                className="rounded-2xl border-2 border-purple-500/30 bg-card p-6"
                 style={{ boxShadow: "6px 6px 0px rgba(168, 85, 247, 0.3)" }}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -180,23 +180,21 @@ export default function HeroSectionPersonality() {
                   transition: { type: "spring", stiffness: 300, damping: 20 }
                 }}
               >
-                <div className="flex flex-col gap-3">
-                  <div className="shrink-0 rounded-xl bg-purple-500/10 p-2.5 w-fit border-2 border-purple-500/20">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="shrink-0 rounded-xl bg-purple-500/10 p-2.5 border-2 border-purple-500/20">
                     <FileCheck className="h-5 w-5 text-purple-600" strokeWidth={2.5} />
                   </div>
-                  <div>
-                    <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-purple-600 to-purple-400 bg-clip-text text-transparent">
-                      12
-                    </div>
-                    <p className="mt-1 text-xs text-muted-foreground font-bold">
-                      AI Tools
-                    </p>
+                  <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-purple-600 to-purple-400 bg-clip-text text-transparent">
+                    12
                   </div>
                 </div>
+                <p className="text-xs text-muted-foreground font-bold">
+                  AI Tools
+                </p>
               </motion.div>
 
               <motion.div
-                className="rounded-2xl border-2 border-green-500/30 bg-card p-6 relative"
+                className="rounded-2xl border-2 border-green-500/30 bg-card p-6"
                 style={{ boxShadow: "6px 6px 0px rgba(34, 197, 94, 0.3)" }}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -207,19 +205,17 @@ export default function HeroSectionPersonality() {
                   transition: { type: "spring", stiffness: 300, damping: 20 }
                 }}
               >
-                <div className="flex flex-col gap-3">
-                  <div className="shrink-0 rounded-xl bg-green-500/10 p-2.5 w-fit border-2 border-green-500/20 opacity-0">
-                    <FileCheck className="h-5 w-5 text-green-600" strokeWidth={2.5} />
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="shrink-0 rounded-xl bg-green-500/10 p-2.5 border-2 border-green-500/20">
+                    <Bot className="h-5 w-5 text-green-600" strokeWidth={2.5} />
                   </div>
-                  <div>
-                    <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-green-600 to-green-400 bg-clip-text text-transparent">
-                      24/7
-                    </div>
-                    <p className="mt-1 text-xs text-muted-foreground font-bold">
-                      Autonomous Agent
-                    </p>
+                  <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-green-600 to-green-400 bg-clip-text text-transparent">
+                    24/7
                   </div>
                 </div>
+                <p className="text-xs text-muted-foreground font-bold">
+                  Autonomous Agent
+                </p>
               </motion.div>
             </div>
           </motion.div>
