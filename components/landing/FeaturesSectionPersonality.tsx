@@ -192,7 +192,7 @@ export default function FeaturesSectionPersonality() {
     <section className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mx-auto mb-16 max-w-[60ch]"
+          className="mx-auto mb-12 max-w-[60ch] text-center"
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.01 }}
@@ -201,13 +201,13 @@ export default function FeaturesSectionPersonality() {
           <h2 className="text-4xl font-black text-foreground md:text-5xl tracking-tighter leading-[0.95]">
             Close faster. Work less.
           </h2>
-          <p className="mt-5 text-base text-muted-foreground leading-relaxed font-medium">
+          <p className="mt-4 text-base text-muted-foreground leading-relaxed font-medium">
             12 tools + autonomous agent. Built for the closing workflow.
           </p>
         </motion.div>
 
         <motion.div
-          className="mx-auto mb-6 max-w-[1400px]"
+          className="mx-auto mb-4 max-w-[1200px] text-center"
           initial={{ opacity: 1 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.01 }}
@@ -215,14 +215,14 @@ export default function FeaturesSectionPersonality() {
           <p className="text-[11px] font-black uppercase tracking-widest text-blue-600">Core Tools — All Plans</p>
         </motion.div>
 
-        <div className="mx-auto grid max-w-[1400px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-[1200px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {coreTools.map((tool, i) => (
             <ToolCard key={tool.title} tool={tool} index={i} />
           ))}
         </div>
 
         <motion.div
-          className="mx-auto mt-20 mb-6 max-w-[1400px]"
+          className="mx-auto mt-16 mb-4 max-w-[1200px] text-center"
           initial={{ opacity: 1 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.01 }}
@@ -230,14 +230,14 @@ export default function FeaturesSectionPersonality() {
           <p className="text-[11px] font-black uppercase tracking-widest text-purple-600">Advanced — Higher Plans</p>
         </motion.div>
 
-        <div className="mx-auto grid max-w-[1400px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-[1200px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {premiumFeatures.map((feature, i) => (
             <PremiumCard key={feature.title} feature={feature} index={i} />
           ))}
         </div>
 
         <motion.div
-          className="mx-auto mt-16 max-w-xl text-center"
+          className="mx-auto mt-12 text-center"
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.01 }}

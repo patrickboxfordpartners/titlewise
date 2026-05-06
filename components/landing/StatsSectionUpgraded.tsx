@@ -48,12 +48,11 @@ export default function StatsSectionUpgraded() {
   return (
     <section className="bg-section-dark py-16 md:py-20">
       <div className="container mx-auto px-6">
-        {/* Asymmetric grid instead of perfect 4-column */}
-        <div className="mx-auto grid max-w-[1400px] grid-cols-2 lg:grid-cols-[1.2fr_0.9fr_0.9fr_1fr] gap-8 lg:gap-12">
+        <div className="mx-auto grid max-w-[1200px] grid-cols-2 lg:grid-cols-4 gap-12">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              className={i === 0 ? "text-left" : "text-left lg:text-center"}
+              className="text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.01 }}
@@ -63,10 +62,10 @@ export default function StatsSectionUpgraded() {
                 ease: [0.16, 1, 0.3, 1]
               }}
             >
-              <p className="text-4xl font-bold text-white md:text-5xl tracking-tighter">
+              <p className="text-4xl font-black text-white md:text-5xl tracking-tighter">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} prefix={stat.prefix} />
               </p>
-              <p className="mt-2 text-sm text-white/60 leading-relaxed">{stat.label}</p>
+              <p className="mt-2 text-sm text-white/70 leading-relaxed font-medium">{stat.label}</p>
             </motion.div>
           ))}
         </div>

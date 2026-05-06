@@ -12,30 +12,29 @@ const steps = [
 
 export default function HowItWorksSectionUpgraded() {
   return (
-    <section className="bg-section-alt py-20 md:py-28">
+    <section className="bg-section-alt py-16 md:py-20">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mx-auto mb-16 max-w-[65ch]"
+          className="mx-auto mb-12 max-w-[65ch] text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
-          <h2 className="text-4xl font-bold text-foreground md:text-5xl tracking-tighter">
+          <h2 className="text-4xl font-black text-foreground md:text-5xl tracking-tighter">
             How it works
           </h2>
-          <p className="mt-5 text-base text-muted-foreground leading-relaxed">
+          <p className="mt-4 text-base text-muted-foreground leading-relaxed font-medium">
             Four steps to a faster closing workflow
           </p>
         </motion.div>
 
-        {/* Changed from grid to asymmetric layout */}
-        <div className="mx-auto max-w-[1400px]">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {steps.map((item, i) => (
               <motion.div
                 key={item.step}
-                className="relative"
+                className="relative text-center"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.01 }}
@@ -45,30 +44,25 @@ export default function HowItWorksSectionUpgraded() {
                   ease: [0.16, 1, 0.3, 1]
                 }}
               >
-                {/* Connection line - asymmetric positioning */}
-                {i < 3 && (
-                  <div className="absolute top-12 left-[calc(100%+1rem)] hidden w-[calc(100%-2rem)] border-t-2 border-dashed border-border/40 lg:block" />
-                )}
-
                 <motion.div
-                  className="mb-6 flex h-24 w-24 items-center justify-center rounded-[2rem] bg-primary/10 border border-primary/20"
+                  className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10 border-2 border-primary/20 mx-auto"
                   whileHover={{
                     scale: 1.05,
                     rotate: 3,
                     transition: { type: "spring", stiffness: 400, damping: 20 }
                   }}
                 >
-                  <item.icon className="h-10 w-10 text-primary" strokeWidth={1.5} />
+                  <item.icon className="h-8 w-8 text-primary" strokeWidth={2} />
                 </motion.div>
 
                 <div className="inline-block mb-3 rounded-full bg-primary/10 px-3 py-1">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-primary">
                     Step {item.step}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-foreground tracking-tight">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground max-w-[32ch]">
+                <h3 className="text-lg font-black text-foreground tracking-tight">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground font-medium mx-auto">
                   {item.description}
                 </p>
               </motion.div>
