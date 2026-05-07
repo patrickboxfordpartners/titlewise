@@ -13,7 +13,7 @@ export default function FinalCtaSection() {
           <h2 className="text-3xl font-black text-white md:text-4xl tracking-tight">
             Ready to close smarter?
           </h2>
-          <p className="mt-4 text-lg text-slate-300 font-medium">
+          <p className="mt-4 text-lg text-slate-300 font-medium max-w-xl mx-auto">
             Join real estate attorneys who are closing faster and smarter with TitleWise.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
