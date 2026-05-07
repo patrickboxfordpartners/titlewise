@@ -8,12 +8,12 @@ export default function FinalCtaSection() {
   return (
     <section className="bg-[#0f172a] py-20 md:py-24">
       <div className="container mx-auto px-6">
-        <div className="mx-auto max-w-3xl text-center">
-          <Zap className="mx-auto h-10 w-10 text-blue-400 mb-6" />
-          <h2 className="text-3xl font-black text-white md:text-4xl tracking-tight whitespace-nowrap">
+        <div className="mx-auto max-w-4xl text-center flex flex-col items-center">
+          <Zap className="h-10 w-10 text-blue-400 mb-6" />
+          <h2 className="text-3xl font-black text-white md:text-4xl tracking-tight">
             Ready to close smarter?
           </h2>
-          <p className="mt-4 text-lg text-slate-300 font-medium">
+          <p className="mt-4 text-lg text-slate-300 font-medium max-w-2xl">
             Join real estate attorneys who are closing faster and smarter with TitleWise.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
