@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Logo } from "@/components/logo"
+import LandingFooter from "@/components/landing/LandingFooter"
 
 const planDetails = {
   solo: {
@@ -317,6 +318,8 @@ export default function PricingPage() {
           </Accordion>
         </motion.div>
       </div>
+
+      <LandingFooter />
     </div>
   )
 }
