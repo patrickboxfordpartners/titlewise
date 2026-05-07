@@ -142,7 +142,7 @@ export default function HeroSectionPersonality() {
           >
             <div className="grid grid-cols-2 gap-6">
               <motion.div
-                className="col-span-2 rounded-2xl border-2 border-red-500/30 bg-card p-6"
+                className="col-span-2 rounded-2xl border-2 border-red-500/30 bg-white p-6 shadow-sm"
                 style={{ boxShadow: "6px 6px 0px rgba(239, 68, 68, 0.3)" }}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ export default function HeroSectionPersonality() {
               </motion.div>
 
               <motion.div
-                className="rounded-2xl border-2 border-purple-500/30 bg-card p-6"
+                className="rounded-2xl border-2 border-purple-500/30 bg-white p-6 shadow-sm"
                 style={{ boxShadow: "6px 6px 0px rgba(168, 85, 247, 0.3)" }}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -194,7 +194,7 @@ export default function HeroSectionPersonality() {
               </motion.div>
 
               <motion.div
-                className="rounded-2xl border-2 border-green-500/30 bg-card p-6"
+                className="rounded-2xl border-2 border-green-500/30 bg-white p-6 shadow-sm"
                 style={{ boxShadow: "6px 6px 0px rgba(34, 197, 94, 0.3)" }}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}

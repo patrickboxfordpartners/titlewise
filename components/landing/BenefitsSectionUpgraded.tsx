@@ -17,7 +17,7 @@ const benefits = [
 
 export default function BenefitsSectionUpgraded() {
   return (
-    <section className="bg-section-dark py-20 md:py-24">
+    <section className="bg-[#0f172a] py-20 md:py-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-[1200px]">
           <div className="text-center mb-16">

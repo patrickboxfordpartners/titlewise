@@ -37,7 +37,7 @@ function AnimatedCounter({ value, suffix, prefix }: { value: number; suffix: str
 
 export default function StatsSectionUpgraded() {
   return (
-    <section className="bg-section-dark py-20 md:py-24">
+    <section className="bg-[#0f172a] py-20 md:py-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto grid max-w-[1200px] grid-cols-2 lg:grid-cols-4 gap-12">
           {stats.map((stat) => (
