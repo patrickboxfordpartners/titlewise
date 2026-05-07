@@ -23,7 +23,7 @@ export default function FinalCtaSection() {
               </Button>
             </Link>
             <Link href="#contact">
-              <Button variant="outline" size="lg" className="text-base px-8 border-slate-500 text-white hover:bg-slate-800 hover:text-white">
+              <Button variant="outline" size="lg" className="text-base px-8 !border-slate-500 !text-white hover:!bg-slate-800">
                 Request Demo
               </Button>
             </Link>
