@@ -1,45 +1,105 @@
 @import "tailwindcss";
 
 :root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222 47% 11%);
+  /* Dark mode (default) - DESIGN.md Industrial/Utilitarian */
+  --background: #0f172a; /* slate-950 */
+  --foreground: #f1f5f9; /* slate-50 */
 
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222 47% 11%);
+  --surface: #1e293b; /* slate-800 */
+  --surface-elevated: #334155; /* slate-700 */
 
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222 47% 11%);
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
 
-  --primary: hsl(225 73% 57%);
-  --primary-foreground: hsl(0 0% 100%);
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
 
-  --secondary: hsl(220 14% 96%);
-  --secondary-foreground: hsl(222 47% 11%);
+  --primary: #3b82f6; /* electric blue - accent */
+  --primary-foreground: #ffffff;
 
-  --muted: hsl(220 14% 96%);
-  --muted-foreground: hsl(220 9% 46%);
+  --secondary: #334155; /* surface-elevated */
+  --secondary-foreground: #f1f5f9;
 
-  --accent: hsl(225 73% 57%);
-  --accent-foreground: hsl(0 0% 100%);
+  --muted: #334155;
+  --muted-foreground: #cbd5e1; /* slate-300 */
 
-  --destructive: hsl(0 72% 51%);
-  --destructive-foreground: hsl(0 0% 100%);
+  --accent: #3b82f6; /* electric blue */
+  --accent-foreground: #ffffff;
 
-  --border: hsl(220 13% 91%);
-  --input: hsl(220 13% 91%);
-  --ring: hsl(225 73% 57%);
+  --destructive: #ef4444; /* red-500 */
+  --destructive-foreground: #ffffff;
 
-  --radius: 0.625rem;
+  --success: #10b981; /* emerald-500 */
+  --warning: #f59e0b; /* amber-500 */
+  --error: #ef4444; /* red-500 */
+
+  --border: #475569; /* slate-600 */
+  --input: #0f172a; /* darker than surface for contrast */
+  --ring: #3b82f6;
+
+  --radius: 0.25rem; /* 4px - compact, minimal */
 
   /* Section backgrounds */
-  --section-dark: hsl(222 47% 11%);
-  --section-alt: hsl(220 20% 97%);
-  --section-accent: hsl(225 30% 95%);
+  --section-dark: #1e293b;
+  --section-alt: #0f172a;
+  --section-accent: #334155;
+
+  /* Text hierarchy */
+  --text-primary: #f1f5f9;
+  --text-muted: #cbd5e1;
+  --text-dim: #94a3b8;
+
+  /* Spacing scale (4px base) */
+  --spacing-2xs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+}
+
+/* Light mode override */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f8fafc; /* slate-50 */
+    --foreground: #0f172a; /* slate-950 */
+
+    --surface: #ffffff;
+    --surface-elevated: #f1f5f9; /* slate-100 */
+
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+
+    --muted: #f1f5f9;
+    --muted-foreground: #475569; /* slate-600 */
+
+    --border: #e2e8f0; /* slate-200 */
+    --input: #f8fafc;
+
+    --section-dark: #1e293b; /* stays dark for contrast */
+    --section-alt: #f8fafc;
+    --section-accent: #f1f5f9;
+
+    --text-primary: #0f172a;
+    --text-muted: #475569;
+    --text-dim: #64748b;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -54,15 +114,37 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset: var(--background);
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-dim: var(--text-dim);
+
+  /* Typography - DESIGN.md: Cabinet Grotesk display, DM Sans body, JetBrains Mono code */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Cabinet Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Spacing scale */
+  --spacing-2xs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Border radius - minimal 4px */
+  --radius-lg: 4px;
+  --radius-md: 4px;
+  --radius-sm: 4px;
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -86,9 +168,32 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px; /* DESIGN.md base */
+  font-variant-numeric: tabular-nums; /* data alignment */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography hierarchy - DESIGN.md */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cabinet Grotesk', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.71rem; /* 24px */
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 1.14rem; /* 16px */
+  font-weight: 700;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 /* Section background utilities */

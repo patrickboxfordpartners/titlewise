@@ -89,7 +89,7 @@ export default function HeroSectionPersonality() {
             </motion.span>
 
             <motion.h1
-              className="mt-6 text-5xl font-black leading-[0.95] text-foreground md:text-6xl lg:text-7xl tracking-tighter"
+              className="mt-6 text-5xl font-display font-black leading-[0.95] text-foreground md:text-6xl lg:text-7xl tracking-tighter"
               initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}

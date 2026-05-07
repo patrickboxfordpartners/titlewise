@@ -1,15 +1,8 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import Script from "next/script"
 import { ClerkProvider } from "@clerk/nextjs"
 import { PHProvider } from "@/components/posthog-provider"
 import "./globals.css"
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-})
 
 export const metadata: Metadata = {
   title: {
@@ -57,7 +50,13 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${inter.className} h-full antialiased`}>
+      <html lang="en" className="h-full antialiased">
+        <head>
+          <link
+            href="https://fonts.bunny.net/css?family=cabinet-grotesk:400,500,600,700,800|dm-sans:400,500,600,700|jetbrains-mono:400,500,600"
+            rel="stylesheet"
+          />
+        </head>
         <body className="min-h-full flex flex-col">
           <PHProvider>{children}</PHProvider>
           <Script
