@@ -6,11 +6,11 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: {
-    default: "TitleWise — AI Tools for Real Estate Closing Attorneys",
+    default: "TitleWise, AI Tools for Real Estate Closing Attorneys",
     template: "%s | TitleWise",
   },
   description:
-    "TitleWise gives closing attorneys AI-powered tools that handle the repetitive work — status updates, title analysis, CD review, wire verification, and more. Save 30+ minutes per file.",
+    "TitleWise gives closing attorneys AI-powered tools that handle the repetitive work, status updates, title analysis, CD review, wire verification, and more. Save 30+ minutes per file.",
   keywords: [
     "real estate closing attorney",
     "title commitment analyzer",
@@ -27,14 +27,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
+    title: "TitleWise, AI Tools for Real Estate Closing Attorneys",
     description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
     siteName: "TitleWise",
     url: "https://titlewise.app",
   },
   twitter: {
     card: "summary",
-    title: "TitleWise — AI Tools for Real Estate Closing Attorneys",
+    title: "TitleWise, AI Tools for Real Estate Closing Attorneys",
     description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
   },
   robots: {
@@ -63,6 +63,11 @@ export default function RootLayout({
             defer
             src="https://static.cloudflareinsights.com/beacon.min.js"
             data-cf-beacon='{"token": "30b945f51e3f499aa453d9af989b62a6"}'
+          />
+          <Script
+            defer
+            src="https://analytics.boxfordpartners.com/script.js"
+            data-website-id="e9d66539-0dbe-44af-926b-f8e0667373b6"
           />
         </body>
       </html>
