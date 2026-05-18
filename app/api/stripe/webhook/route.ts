@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
   }
 
-  // Idempotency check — skip if already processed
+  // Idempotency check, skip if already processed
   const existing = await db.select().from(processedEvents).where(eq(processedEvents.id, event.id)).limit(1)
   if (existing.length > 0) {
     return NextResponse.json({ received: true, duplicate: true })
@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
   try {
     await db.insert(processedEvents).values({ id: event.id })
   } catch {
-    // Non-critical — if this fails, worst case is re-processing on retry
+    // Non-critical, if this fails, worst case is re-processing on retry
   }
 
   return NextResponse.json({ received: true })

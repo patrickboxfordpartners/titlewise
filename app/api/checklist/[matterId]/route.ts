@@ -6,7 +6,7 @@ import { matters, checklistItems } from "@/lib/db/schema"
 import { eq, and, asc, desc } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
-// GET — get matter with all checklist items
+// GET, get matter with all checklist items
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -50,7 +50,7 @@ const closeMatterSchema = z.object({
   action: z.literal("close"),
 })
 
-// PATCH — update an item, add an item, delete an item, or close the matter
+// PATCH, update an item, add an item, delete an item, or close the matter
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

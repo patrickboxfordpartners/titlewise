@@ -48,7 +48,7 @@ Requirements:
 - Close with next steps for engagement
 - Sign off with attorney name and firm
 - Use realistic fee ranges appropriate for the jurisdiction
-- Do NOT fabricate specific dollar amounts that you cannot reasonably estimate — use ranges instead
+- Do NOT fabricate specific dollar amounts that you cannot reasonably estimate, use ranges instead
 - Keep it to one page length`
 }
 

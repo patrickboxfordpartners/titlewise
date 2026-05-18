@@ -128,7 +128,7 @@ export default function ChecklistPage() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-muted-foreground block mb-1">State <span className="text-muted-foreground/60">(optional — adds state-specific items)</span></label>
+                  <label className="text-xs font-medium text-muted-foreground block mb-1">State <span className="text-muted-foreground/60">(optional, adds state-specific items)</span></label>
                   <select value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} className={inputClass}>
                     <option value="">Select state...</option>
                     {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}

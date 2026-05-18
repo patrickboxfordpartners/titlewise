@@ -156,7 +156,7 @@ function WireVerificationContent() {
                 )}
               >
                 <Shield className="h-3.5 w-3.5" />
-                {showPrevious ? "Hide" : "Compare with previous"} — detect routing number changes
+                {showPrevious ? "Hide" : "Compare with previous"}, detect routing number changes
               </button>
 
               <AnimatePresence>

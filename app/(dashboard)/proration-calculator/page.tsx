@@ -97,7 +97,7 @@ export default function ProrationCalculatorPage() {
   async function handleCopy() {
     if (!result) return
     const text = [
-      `Property Tax Proration — ${result.closingDate}`,
+      `Property Tax Proration, ${result.closingDate}`,
       ``,
       `Tax Period: ${result.periodStart} – ${result.periodEnd}`,
       `Annual Tax: ${fmt(result.annualTax)}`,

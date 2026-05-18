@@ -171,7 +171,7 @@ function TitleAnalysisDetail({ a, copiedId, onCopy }: {
                 f.severity === "high" ? "bg-red-500/8 border-red-500/20" : "bg-amber-500/8 border-amber-500/20"
               )}>
                 <p className={cn("font-semibold mb-0.5", f.severity === "high" ? "text-red-700" : "text-amber-700")}>
-                  {f.severity.toUpperCase()} — {f.issue}
+                  {f.severity.toUpperCase()}, {f.issue}
                 </p>
                 <p className="text-foreground/70">{f.detail}</p>
               </div>
@@ -187,7 +187,7 @@ function TitleAnalysisDetail({ a, copiedId, onCopy }: {
             {analysis.requirements!.filter(r => r.flagged).map((r, i) => (
               <div key={i} className="text-xs text-foreground/80 bg-muted/40 rounded px-3 py-2 border border-border">
                 <span className="font-medium">{r.item}</span>
-                {r.description && <span className="text-muted-foreground ml-2">— {r.description}</span>}
+                {r.description && <span className="text-muted-foreground ml-2">,  {r.description}</span>}
               </div>
             ))}
           </div>
@@ -201,7 +201,7 @@ function TitleAnalysisDetail({ a, copiedId, onCopy }: {
             {analysis.exceptions!.filter(e => e.flagged).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 bg-muted/40 rounded px-3 py-2 border border-border">
                 <span className="font-medium">{e.item}</span>
-                {e.description && <span className="text-muted-foreground ml-2">— {e.description}</span>}
+                {e.description && <span className="text-muted-foreground ml-2">,  {e.description}</span>}
               </div>
             ))}
           </div>
@@ -369,7 +369,7 @@ function HoaReviewDetail({ r, copiedId, onCopy }: {
             {result.restrictions!.filter(r => r.flagged).map((r, i) => (
               <div key={i} className="text-xs bg-muted/40 rounded px-3 py-2 border border-border">
                 <span className="font-medium text-amber-700">{r.category}</span>
-                <span className="text-muted-foreground ml-2">— {r.detail}</span>
+                <span className="text-muted-foreground ml-2">,  {r.detail}</span>
               </div>
             ))}
           </div>

@@ -61,7 +61,7 @@ Rules:
 - Flag if instructions were received by email only (common fraud vector)
 - Flag if any details changed from previous instructions
 - Flag unusual account types (personal accounts for business transactions)
-- The verification email should be ready to send — professional and firm
+- The verification email should be ready to send, professional and firm
 - If no previous instructions provided, skip the changes array
 - Partially mask account numbers in output (show last 4 digits only)
 

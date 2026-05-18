@@ -171,9 +171,9 @@ function TitleAnalysisContent() {
             {showHint && (
               <div className="rounded-lg bg-primary/5 border border-primary/10 px-4 py-3 text-xs text-muted-foreground space-y-1">
                 <p className="font-medium text-foreground mb-1.5">Paste the full commitment, including:</p>
-                <p>• <strong>Schedule A</strong> — property description, vesting, loan amount</p>
-                <p>• <strong>Schedule B-I</strong> — requirements (liens, payoffs, conditions)</p>
-                <p>• <strong>Schedule B-II</strong> — exceptions (easements, covenants, restrictions)</p>
+                <p>• <strong>Schedule A</strong>, property description, vesting, loan amount</p>
+                <p>• <strong>Schedule B-I</strong>, requirements (liens, payoffs, conditions)</p>
+                <p>• <strong>Schedule B-II</strong>, exceptions (easements, covenants, restrictions)</p>
                 <p className="mt-1.5 text-muted-foreground/70">Partial pastes work but may miss red flags in excluded sections.</p>
               </div>
             )}
@@ -323,7 +323,7 @@ function TitleAnalysisContent() {
               transition={{ delay: 0.41, duration: 0.35 }}
             >
               <Section
-                title="Schedule B-I — Requirements"
+                title="Schedule B-I, Requirements"
                 count={analysis.requirements.length}
                 open={openSections.requirements}
                 onToggle={() => toggleSection("requirements")}
@@ -354,7 +354,7 @@ function TitleAnalysisContent() {
               transition={{ delay: 0.49, duration: 0.35 }}
             >
               <Section
-                title="Schedule B-II — Exceptions"
+                title="Schedule B-II, Exceptions"
                 count={analysis.exceptions.length}
                 open={openSections.exceptions}
                 onToggle={() => toggleSection("exceptions")}

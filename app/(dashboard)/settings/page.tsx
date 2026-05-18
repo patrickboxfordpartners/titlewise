@@ -110,7 +110,7 @@ function SettingsContent() {
     outlook: "Outlook connected successfully.",
     oauth_denied: "Connection cancelled.",
     oauth_invalid: "Invalid OAuth response.",
-    oauth_invalid_state: "Session mismatch — please try again.",
+    oauth_invalid_state: "Session mismatch, please try again.",
     oauth_token_failed: "Could not exchange authorization code. Please try again.",
   }
 
@@ -210,7 +210,7 @@ function SettingsContent() {
               <div>
                 <p className="text-sm font-medium text-foreground">Gmail</p>
                 <p className="text-xs text-muted-foreground">
-                  {emailStatus.google ? "Connected — sends from your Gmail account" : "Not connected"}
+                  {emailStatus.google ? "Connected, sends from your Gmail account" : "Not connected"}
                 </p>
               </div>
             </div>
@@ -246,7 +246,7 @@ function SettingsContent() {
               <div>
                 <p className="text-sm font-medium text-foreground">Outlook / Microsoft 365</p>
                 <p className="text-xs text-muted-foreground">
-                  {emailStatus.outlook ? "Connected — sends from your Outlook account" : "Not connected"}
+                  {emailStatus.outlook ? "Connected, sends from your Outlook account" : "Not connected"}
                 </p>
               </div>
             </div>

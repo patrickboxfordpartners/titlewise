@@ -6,8 +6,8 @@ import { eq, and } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 import { randomBytes } from "crypto"
 
-// GET /api/checklist/portal?token=xxx — public, no auth required
-// POST /api/checklist/portal?matterId=xxx — generate portal token (auth required)
+// GET /api/checklist/portal?token=xxx, public, no auth required
+// POST /api/checklist/portal?matterId=xxx, generate portal token (auth required)
 
 export async function POST(req: NextRequest) {
   const { userId } = await auth()

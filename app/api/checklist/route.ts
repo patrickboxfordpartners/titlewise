@@ -15,7 +15,7 @@ const createSchema = z.object({
   state: z.string().max(2).optional(),
 })
 
-// GET — list all matters with item counts
+// GET, list all matters with item counts
 export async function GET() {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -39,7 +39,7 @@ export async function GET() {
   return NextResponse.json({ matters: mattersWithCounts })
 }
 
-// POST — create a new matter with auto-generated checklist
+// POST, create a new matter with auto-generated checklist
 export async function POST(req: NextRequest) {
   const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

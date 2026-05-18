@@ -56,7 +56,7 @@ const buildTitlePrompt = (commitment: string) => `Analyze this title commitment 
 }
 
 Rules:
-- Explain everything in plain English — no legalese
+- Explain everything in plain English, no legalese
 - Flag any requirement or exception that is non-standard, unusual, or requires careful attention
 - Red flags should capture anything that could delay or complicate closing, cloud title, or expose the client to risk
 - If a section is not present in the commitment, return an empty array

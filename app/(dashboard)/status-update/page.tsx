@@ -164,7 +164,7 @@ function StatusUpdateContent() {
     setSendMode("sending")
     setSendError("")
     const subjectMatch = output.match(/^Subject:\s*(.+)/m)
-    const subject = subjectMatch ? subjectMatch[1].trim() : `Closing Update — ${form.propertyAddress}`
+    const subject = subjectMatch ? subjectMatch[1].trim() : `Closing Update, ${form.propertyAddress}`
     const body = output.replace(/^Subject:.*\n?/m, "").trim()
     try {
       const res = await fetch("/api/email/send", {
@@ -184,7 +184,7 @@ function StatusUpdateContent() {
 
   function handleMailto() {
     const subjectMatch = output.match(/^Subject:\s*(.+)/m)
-    const subject = subjectMatch ? subjectMatch[1].trim() : `Closing Update — ${form.propertyAddress}`
+    const subject = subjectMatch ? subjectMatch[1].trim() : `Closing Update, ${form.propertyAddress}`
     const body = output.replace(/^Subject:.*\n?/m, "").trim()
     const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     window.location.href = mailto
