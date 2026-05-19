@@ -4,9 +4,10 @@ import { useState, useEffect, use } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck, Share2, Check, Bot, AlertTriangle, ChevronDown, Building, DollarSign, Shield } from "lucide-react"
+import { Loader2, Plus, Trash2, ArrowLeft, CheckCircle, Circle, Clock, FileText, FileSearch, FileCheck, Share2, Check, Bot, AlertTriangle, ChevronDown, Building, DollarSign, Shield, GanttChart, List } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { PrintButton } from "@/components/print-button"
+import { ClosingGantt } from "@/components/closing-gantt"
 
 type Item = {
   id: string
@@ -45,6 +46,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   const [agentReport, setAgentReport] = useState<any | null>(null)
   const [showAgentReport, setShowAgentReport] = useState(false)
   const [activity, setActivity] = useState<ActivityItem[]>([])
+  const [view, setView] = useState<"checklist" | "timeline">("checklist")
 
   type ActivityItem = { id: string; type: string; label: string; sub: string; createdAt: string }
 
@@ -175,6 +177,50 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   const total = items.length
   const complete = items.filter((i) => i.status === "complete").length
   const pct = total > 0 ? Math.round((complete / total) * 100) : 0
+
+  // Build Gantt tasks from checklist items
+  const ganttTasks = (() => {
+    const today = new Date()
+    const closing = matter.closingDate ? new Date(matter.closingDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    const totalDays = Math.max(1, (closing.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+
+    return items
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((item, idx) => {
+        // Use dueDate if set, otherwise spread evenly toward closing
+        const endDate = item.dueDate
+          ? new Date(item.dueDate)
+          : new Date(today.getTime() + ((idx + 1) / items.length) * totalDays * 24 * 60 * 60 * 1000)
+        const startDate = new Date(endDate.getTime() - 2 * 24 * 60 * 60 * 1000) // 2-day default duration
+
+        const customClass =
+          item.status === "complete" ? "bar-complete" :
+          item.status === "in_progress" ? "" :
+          "bar-pending"
+
+        const fmt = (d: Date) => d.toISOString().split("T")[0]
+
+        return {
+          id: item.id,
+          name: item.title.length > 40 ? item.title.slice(0, 38) + "…" : item.title,
+          start: fmt(startDate),
+          end: fmt(endDate),
+          progress: item.status === "complete" ? 100 : item.status === "in_progress" ? 50 : 0,
+          custom_class: customClass,
+        }
+      })
+  })()
+
+  async function handleGanttDateChange(taskId: string, start: Date, end: Date) {
+    if (!matter) return
+    const dueDate = end.toISOString().split("T")[0]
+    setItems((prev) => prev.map((i) => i.id === taskId ? { ...i, dueDate } : i))
+    await fetch(`/api/checklist/${matter.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemId: taskId, dueDate }),
+    })
+  }
 
   const grouped = items.reduce<Record<string, Item[]>>((acc, item) => {
     const key = item.assignedTo || "unassigned"
@@ -325,8 +371,57 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
         </motion.div>
       )}
 
+      {/* View toggle */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.3 }}
+        className="flex items-center gap-1 mb-4 bg-muted/30 rounded-lg p-1 w-fit"
+      >
+        <button
+          onClick={() => setView("checklist")}
+          className={cn(
+            "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors",
+            view === "checklist" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <List className="h-3.5 w-3.5" />
+          Checklist
+        </button>
+        <button
+          onClick={() => setView("timeline")}
+          className={cn(
+            "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors",
+            view === "timeline" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <GanttChart className="h-3.5 w-3.5" />
+          Timeline
+        </button>
+      </motion.div>
+
+      {/* Timeline view */}
+      {view === "timeline" && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="mb-4"
+        >
+          <ClosingGantt
+            tasks={ganttTasks}
+            readonly={matter.status !== "active"}
+            onDateChange={handleGanttDateChange}
+          />
+          <p className="text-[10px] text-muted-foreground/50 mt-2">
+            {matter.status === "active" ? "Drag bars to update due dates. " : ""}
+            Items without due dates are spread evenly toward the closing date.
+          </p>
+        </motion.div>
+      )}
+
       {/* Items grouped by party */}
-      <div className="space-y-4">
+      <div className={cn("space-y-4", view === "timeline" && "hidden")}>
         {Object.entries(grouped)
           .sort(([a], [b]) => {
             const order = ["attorney", "buyer", "seller", "lender", "title_company", "agent", "unassigned"]
