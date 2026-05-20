@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
+    "flags": "^4.0.6",
     "framer-motion": "^12.38.0",
     "frappe-gantt": "^1.2.2",
     "lucide-react": "^1.8.0",
