@@ -28,6 +28,9 @@ export default function LandingNav() {
           <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
             Pricing
           </Link>
+          <Link href="/demo" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+            Demo
+          </Link>
           <Link href="/sign-in" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Sign in
           </Link>

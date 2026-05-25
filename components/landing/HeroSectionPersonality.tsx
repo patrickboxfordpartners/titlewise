@@ -118,8 +118,8 @@ export default function HeroSectionPersonality() {
               <MagneticButton href="/pricing" variant="hero">
                 Get Started <ArrowRight className="ml-1.5 h-4 w-4" strokeWidth={3} />
               </MagneticButton>
-              <MagneticButton href="#contact" variant="hero-outline">
-                Request a Demo
+              <MagneticButton href="/demo" variant="hero-outline">
+                Try demo
               </MagneticButton>
             </motion.div>
 
