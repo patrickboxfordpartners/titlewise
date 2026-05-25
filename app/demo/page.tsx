@@ -130,7 +130,7 @@ export default function DemoPage() {
             href="/sign-up"
             className="text-sm font-bold bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
           >
-            Start free trial
+            Get started
           </Link>
         </div>
       </header>
@@ -319,7 +319,7 @@ export default function DemoPage() {
               href="/sign-up"
               className="inline-flex items-center gap-2 bg-primary text-white font-black px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors text-sm"
             >
-              Start free trial
+              Get started
               <ChevronRight className="h-4 w-4" />
             </Link>
             <Link
