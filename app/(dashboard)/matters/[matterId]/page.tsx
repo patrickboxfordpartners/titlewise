@@ -10,6 +10,8 @@ import {
   Calculator, ClipboardList, ChevronDown, Share2, Check,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import PartiesPanel from "@/components/parties-panel"
+import DocumentSlotsPanel from "@/components/document-slots-panel"
 
 type Matter = {
   id: string
@@ -232,6 +234,16 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* Parties */}
+      <div className="mb-6">
+        <PartiesPanel matterId={matterId} />
+      </div>
+
+      {/* Document Slots */}
+      <div className="mb-6">
+        <DocumentSlotsPanel matterId={matterId} />
       </div>
 
       {/* Checklist */}
