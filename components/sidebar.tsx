@@ -25,6 +25,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
 
   const isMatterSection = pathname === "/matters" || pathname.startsWith("/matters/")
+  const isDashboard = pathname === "/dashboard"
   const isHistory = pathname === "/history"
   const isSettings = pathname === "/settings"
 
@@ -119,6 +120,20 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             )}
           </div>
         )}
+
+        {/* Dashboard */}
+        <Link
+          href="/dashboard"
+          onClick={onClose}
+          className={`sidebar-nav-item${isDashboard ? " active" : ""}`}
+        >
+          <span style={{ opacity: isDashboard ? 1 : 0.5 }}>
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+              <path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z" stroke="currentColor" strokeWidth="1.25" strokeLinejoin="round" />
+            </svg>
+          </span>
+          Dashboard
+        </Link>
 
         {/* History */}
         <Link
