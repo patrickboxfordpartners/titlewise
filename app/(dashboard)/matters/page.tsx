@@ -31,6 +31,17 @@ function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" })
 }
 
+function formatRelative(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  if (hours < 1) return "just now"
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  if (days === 1) return "yesterday"
+  if (days < 7) return `${days}d ago`
+  return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+}
+
 function MattersContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -242,6 +253,9 @@ function MattersContent() {
                       {m.completedItems}/{m.totalItems}
                     </div>
                   </div>
+                  <p className="text-[10px] text-muted-foreground/60 mt-1.5">
+                    Updated {formatRelative(m.updatedAt)}
+                  </p>
                 </motion.div>
               </Link>
             )

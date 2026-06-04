@@ -14,6 +14,7 @@ type Matter = {
   status: string
   totalItems: number
   completedItems: number
+  updatedAt: string
 }
 
 function daysUntil(dateStr: string | null) {
@@ -23,6 +24,17 @@ function daysUntil(dateStr: string | null) {
 
 function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+}
+
+function formatRelative(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  if (hours < 1) return "just now"
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  if (days === 1) return "yesterday"
+  if (days < 7) return `${days}d ago`
+  return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" })
 }
 
 export default function DashboardPage() {
@@ -79,6 +91,9 @@ export default function DashboardPage() {
             </div>
             <span className="text-[10px] text-muted-foreground shrink-0">{m.completedItems}/{m.totalItems}</span>
           </div>
+          <p className="text-[10px] text-muted-foreground/60 mt-1">
+            {formatRelative(m.updatedAt)}
+          </p>
         </motion.div>
       </Link>
     )
