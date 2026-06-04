@@ -75,15 +75,11 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
 
   useEffect(() => {
     async function load() {
-      const [mRes, iRes] = await Promise.all([
-        fetch(`/api/checklist/${matterId}`),
-        fetch(`/api/checklist/${matterId}/items`),
-      ])
-      if (!mRes.ok) { router.push("/matters"); return }
-      const mData = await mRes.json()
-      const iData = await iRes.json()
-      setMatter(mData.matter)
-      setItems(iData.items ?? [])
+      const res = await fetch(`/api/checklist/${matterId}`)
+      if (!res.ok) { router.push("/matters"); return }
+      const data = await res.json()
+      setMatter(data.matter)
+      setItems(data.items ?? [])
       setLoading(false)
     }
     load().catch(() => setLoading(false))
@@ -93,20 +89,20 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
     const idx = STATUS_CYCLE.indexOf(item.status as typeof STATUS_CYCLE[number])
     const next = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length]
     setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, status: next } : i))
-    await fetch(`/api/checklist/${matterId}/items/${item.id}`, {
+    await fetch(`/api/checklist/${matterId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: next }),
+      body: JSON.stringify({ itemId: item.id, status: next }),
     })
   }
 
   async function addItem() {
     if (!newTitle.trim()) return
     setAddingItem(true)
-    const res = await fetch(`/api/checklist/${matterId}/items`, {
-      method: "POST",
+    const res = await fetch(`/api/checklist/${matterId}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTitle.trim(), assignedTo: newAssigned || null }),
+      body: JSON.stringify({ action: "add", title: newTitle.trim(), assignedTo: newAssigned || undefined }),
     })
     const data = await res.json()
     if (data.item) {
@@ -119,7 +115,11 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
 
   async function deleteItem(itemId: string) {
     setItems((prev) => prev.filter((i) => i.id !== itemId))
-    await fetch(`/api/checklist/${matterId}/items/${itemId}`, { method: "DELETE" })
+    await fetch(`/api/checklist/${matterId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete", itemId }),
+    })
   }
 
   async function closeMatter() {
@@ -128,7 +128,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
     await fetch(`/api/checklist/${matterId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "closed" }),
+      body: JSON.stringify({ action: "close" }),
     })
     router.push("/matters")
   }
