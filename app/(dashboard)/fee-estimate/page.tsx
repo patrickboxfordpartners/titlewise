@@ -41,7 +41,13 @@ const initialForm: FormData = {
 function FeeEstimateContent() {
   const searchParams = useSearchParams()
   const matterId = searchParams.get("matterId") ?? undefined
-  const [form, setForm] = useState<FormData>(initialForm)
+  const prefillClient = searchParams.get("clientName") ?? ""
+  const prefillTransaction = searchParams.get("transactionType") ?? ""
+  const [form, setForm] = useState<FormData>({
+    ...initialForm,
+    ...(prefillClient ? { clientName: prefillClient } : {}),
+    ...(prefillTransaction ? { transactionType: prefillTransaction } : {}),
+  })
   const [output, setOutput] = useState("")
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -107,7 +113,7 @@ function FeeEstimateContent() {
       >
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold text-foreground">Fee Estimate Generator</h1>
-          {matterId && <Link href={`/checklist/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
+          {matterId && <Link href={`/matters/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
         </div>
         <p className="text-sm text-muted-foreground mt-1">
           Generate a professional fee estimate letter for new client intake.

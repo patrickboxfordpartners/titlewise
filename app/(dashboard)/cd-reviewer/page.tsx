@@ -76,7 +76,7 @@ function CDReviewerContent() {
       >
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold text-foreground">Closing Disclosure Reviewer</h1>
-          {matterId && <Link href={`/checklist/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
+          {matterId && <Link href={`/matters/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
         </div>
         <p className="text-sm text-muted-foreground mt-1">
           Compare a Closing Disclosure against contract terms to find discrepancies before closing.

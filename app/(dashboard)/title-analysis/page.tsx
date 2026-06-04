@@ -109,7 +109,7 @@ function TitleAnalysisContent() {
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-semibold text-foreground">Title Commitment Analyzer</h1>
           {matterId && (
-            <Link href={`/checklist/${matterId}`} className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">
+            <Link href={`/matters/${matterId}`} className="flex items-center gap-1 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">
               ← Back to matter
             </Link>
           )}
