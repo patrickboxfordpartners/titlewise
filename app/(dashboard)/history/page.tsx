@@ -97,7 +97,7 @@ function CopyButton({ text, id, copiedId, onCopy }: { text: string; id: string; 
 function MatterLink({ matterId }: { matterId: string | null }) {
   if (!matterId) return null
   return (
-    <Link href={`/checklist/${matterId}`} className="flex items-center gap-1 text-xs text-primary hover:underline shrink-0">
+    <Link href={`/matters/${matterId}`} className="flex items-center gap-1 text-xs text-primary hover:underline shrink-0">
       <FolderOpen className="h-3 w-3" /> View matter
     </Link>
   )
