@@ -242,6 +242,38 @@ export const webhooks = pgTable("webhooks", {
   index("idx_webhooks_user_id").on(table.userId),
 ])
 
+export const matterParties = pgTable("matter_parties", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  matterId: uuid("matter_id").notNull().references(() => matters.id, { onDelete: "cascade" }),
+  role: text("role").notNull(), // buyer | seller | buyers_agent | listing_agent | lender | other
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  company: text("company"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_matter_parties_matter_id").on(table.matterId),
+])
+
+export const documentSlots = pgTable("document_slots", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  matterId: uuid("matter_id").notNull().references(() => matters.id, { onDelete: "cascade" }),
+  label: text("label").notNull(),
+  category: text("category").notNull(), // contract | title | lender | hoa | misc
+  status: text("status").default("pending").notNull(), // pending | received | waived
+  notes: text("notes"),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_document_slots_matter_id").on(table.matterId),
+])
+
+export type MatterParty = typeof matterParties.$inferSelect
+export type NewMatterParty = typeof matterParties.$inferInsert
+export type DocumentSlot = typeof documentSlots.$inferSelect
+export type NewDocumentSlot = typeof documentSlots.$inferInsert
+
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 export type StatusUpdate = typeof statusUpdates.$inferSelect
