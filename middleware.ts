@@ -13,8 +13,12 @@ const isPublicRoute = createRouteMatcher([
   "/join(.*)",
 ])
 
+// API routes handle their own auth and return 401 JSON — don't let Clerk
+// rewrite them to the sign-in page, which breaks JSON clients.
+const isApiRoute = createRouteMatcher(["/api/(.*)"])
+
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
+  if (!isPublicRoute(req) && !isApiRoute(req)) {
     await auth.protect()
   }
 })
