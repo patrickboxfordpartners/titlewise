@@ -1,10 +1,14 @@
 import { flag } from "flags/next";
+import { auth } from "@clerk/nextjs/server";
+import { getOrCreateUser } from "@/lib/db/get-user";
 import { PLANS, type PlanKey } from "@/lib/plans";
 
 async function getUserPlan(): Promise<PlanKey | null> {
-  // This will be called server-side. In a real implementation,
-  // read from the auth session / DB. For now, return null (free tier).
-  // TODO: Wire to Clerk session + Stripe subscription lookup
+  const { userId } = await auth();
+  if (!userId) return null;
+  const user = await getOrCreateUser(userId);
+  const tier = user.subscriptionTier;
+  if (tier && tier in PLANS) return tier as PlanKey;
   return null;
 }
 
