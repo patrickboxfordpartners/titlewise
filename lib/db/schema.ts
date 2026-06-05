@@ -269,6 +269,27 @@ export const documentSlots = pgTable("document_slots", {
   index("idx_document_slots_matter_id").on(table.matterId),
 ])
 
+export const emailThreads = pgTable("email_threads", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  matterId: uuid("matter_id").notNull().references(() => matters.id, { onDelete: "cascade" }),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  direction: text("direction").notNull(), // "inbound" | "outbound"
+  fromAddress: text("from_address").notNull(),
+  toAddress: text("to_address").notNull(),
+  subject: text("subject").notNull(),
+  bodyText: text("body_text"),
+  bodyHtml: text("body_html"),
+  messageId: text("message_id").unique(), // Postmark message ID for dedup
+  inReplyTo: text("in_reply_to"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_email_threads_matter_id").on(table.matterId),
+  index("idx_email_threads_created").on(table.createdAt),
+])
+
+export type EmailThread = typeof emailThreads.$inferSelect
+export type NewEmailThread = typeof emailThreads.$inferInsert
+
 export type MatterParty = typeof matterParties.$inferSelect
 export type NewMatterParty = typeof matterParties.$inferInsert
 export type DocumentSlot = typeof documentSlots.$inferSelect
