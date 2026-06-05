@@ -8,6 +8,7 @@ import { getOrCreateUser } from "@/lib/db/get-user"
 import { PLANS } from "@/lib/plans"
 import { randomBytes } from "crypto"
 import { logger } from "@/lib/logger"
+import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 
 const inviteSchema = z.object({ email: z.email() })
 
@@ -98,8 +99,17 @@ export async function POST(req: NextRequest) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://titlewise.app"
   const inviteUrl = `${appUrl}/join?token=${token}`
 
-  // TODO: Send invite email via SES (for now log the URL)
-  logger.info("team/invite", `Invite sent to ${email}`, { inviteUrl, owner: user.email })
+  const inviterName = user.name || user.email
+  const firmName = user.firmName ? ` at ${user.firmName}` : ""
+
+  await postmark.sendEmail({
+    From: POSTMARK_FROM_EMAIL,
+    To: email,
+    Subject: "You've been invited to TitleWise",
+    TextBody: `${inviterName}${firmName} has invited you to join their TitleWise workspace.\n\nAccept your invitation:\n${inviteUrl}\n\nThis link expires if the invitation is revoked.\n\n— TitleWise`,
+    HtmlBody: `<p>${inviterName}${firmName} has invited you to join their TitleWise workspace.</p><p><a href="${inviteUrl}" style="background:#3b82f6;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600">Accept Invitation</a></p><p style="color:#888;font-size:12px">This link expires if the invitation is revoked.</p>`,
+    MessageStream: "outbound",
+  })
 
   return NextResponse.json({ success: true, inviteUrl })
 }
