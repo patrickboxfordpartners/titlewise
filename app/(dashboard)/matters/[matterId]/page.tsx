@@ -75,6 +75,8 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   const [checklistOpen, setChecklistOpen] = useState(true)
   const [portalCopied, setPortalCopied] = useState(false)
   const [closingMatter, setClosingMatter] = useState(false)
+  const [generatingPortal, setGeneratingPortal] = useState(false)
+  const [reopeningMatter, setReopeningMatter] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -136,12 +138,36 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
     router.push("/matters")
   }
 
+  async function reopenMatter() {
+    setReopeningMatter(true)
+    await fetch(`/api/checklist/${matterId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "reopen" }),
+    })
+    if (matter) setMatter({ ...matter, status: "active" })
+    setReopeningMatter(false)
+  }
+
   function copyPortalUrl() {
     if (!matter?.portalToken) return
     const url = `${window.location.origin}/matter-portal/${matter.portalToken}`
     navigator.clipboard.writeText(url)
     setPortalCopied(true)
     setTimeout(() => setPortalCopied(false), 2000)
+  }
+
+  async function generatePortal() {
+    setGeneratingPortal(true)
+    const res = await fetch(`/api/checklist/portal?matterId=${matterId}`, { method: "POST" })
+    const data = await res.json()
+    if (data.url) {
+      if (matter) setMatter({ ...matter, portalToken: data.token })
+      navigator.clipboard.writeText(data.url)
+      setPortalCopied(true)
+      setTimeout(() => setPortalCopied(false), 2000)
+    }
+    setGeneratingPortal(false)
   }
 
   if (loading) {
@@ -188,7 +214,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            {matter.portalToken && (
+            {matter.portalToken ? (
               <button
                 onClick={copyPortalUrl}
                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors text-muted-foreground"
@@ -196,14 +222,31 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
                 {portalCopied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Share2 className="h-3.5 w-3.5" />}
                 {portalCopied ? "Copied" : "Portal"}
               </button>
+            ) : (
+              <button
+                onClick={generatePortal}
+                disabled={generatingPortal}
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors text-muted-foreground disabled:opacity-60"
+              >
+                {generatingPortal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Share2 className="h-3.5 w-3.5" />}
+                {generatingPortal ? "Generating..." : "Share portal"}
+              </button>
             )}
-            {matter.status === "active" && (
+            {matter.status === "active" ? (
               <button
                 onClick={closeMatter}
                 disabled={closingMatter}
                 className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors text-muted-foreground"
               >
                 {closingMatter ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Close matter"}
+              </button>
+            ) : (
+              <button
+                onClick={reopenMatter}
+                disabled={reopeningMatter}
+                className="text-xs px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors text-muted-foreground"
+              >
+                {reopeningMatter ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Reopen"}
               </button>
             )}
           </div>
