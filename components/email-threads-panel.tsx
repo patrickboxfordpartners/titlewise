@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Mail, Send, Loader2, ChevronDown, ChevronUp, Copy, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
+import DOMPurify from "dompurify"
 
 type EmailItem = {
   id: string
@@ -65,7 +66,7 @@ function EmailRow({ email }: { email: EmailItem }) {
             {email.bodyHtml ? (
               <div
                 className="text-xs text-foreground leading-relaxed prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: email.bodyHtml }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(email.bodyHtml) }}
               />
             ) : (
               <pre className="text-xs text-foreground leading-relaxed whitespace-pre-wrap font-sans">{email.bodyText}</pre>
@@ -111,7 +112,7 @@ export default function EmailThreadsPanel({ matterId }: { matterId: string }) {
       setEmails(prev => [...prev, {
         id: crypto.randomUUID(),
         direction: "outbound",
-        fromAddress: "hello@titlewise.app",
+        fromAddress: data.fromAddress ?? "hello@titlewise.app",
         toAddress: form.to.trim(),
         subject: form.subject.trim(),
         bodyText: form.body.trim(),

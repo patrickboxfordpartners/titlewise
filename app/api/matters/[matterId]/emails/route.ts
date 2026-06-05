@@ -80,5 +80,5 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ mat
     inReplyTo: null,
   })
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, fromAddress: POSTMARK_FROM_EMAIL })
 }
