@@ -47,7 +47,7 @@ const TOOLS = [
   { href: "/proration-calculator", icon: Calculator, title: "Tax Proration", description: "Calculate prorations" },
 ]
 
-function matterQueryParams(matter: Matter): string {
+function matterQueryParams(matter: Matter, checklistItems?: Item[]): string {
   const params = new URLSearchParams({
     matterId: matter.id,
     clientName: matter.clientName,
@@ -55,6 +55,18 @@ function matterQueryParams(matter: Matter): string {
     transactionType: matter.transactionType,
   })
   if (matter.closingDate) params.set("closingDate", matter.closingDate.split("T")[0])
+  if (checklistItems) {
+    const completed = checklistItems
+      .filter(i => i.status === "complete")
+      .map(i => i.title)
+      .join("\n")
+    const outstanding = checklistItems
+      .filter(i => i.status !== "complete")
+      .map(i => i.title)
+      .join("\n")
+    if (completed) params.set("completedItems", completed)
+    if (outstanding) params.set("outstandingItems", outstanding)
+  }
   return params.toString()
 }
 
@@ -269,7 +281,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
           {TOOLS.map(({ href, icon: Icon, title, description }) => (
             <Link
               key={href}
-              href={`${href}?${matterQueryParams(matter)}`}
+              href={`${href}?${matterQueryParams(matter, href === "/status-update" ? items : undefined)}`}
               className="group bg-card border border-border rounded-xl p-4 hover:border-primary/40 hover:shadow-sm transition-all duration-150"
             >
               <Icon className="h-5 w-5 text-primary mb-2" />
