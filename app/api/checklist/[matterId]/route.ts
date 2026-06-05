@@ -50,6 +50,10 @@ const closeMatterSchema = z.object({
   action: z.literal("close"),
 })
 
+const reopenMatterSchema = z.object({
+  action: z.literal("reopen"),
+})
+
 // PATCH, update an item, add an item, delete an item, or close the matter
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
   const { userId } = await auth()
@@ -97,6 +101,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ ma
   const closeParsed = closeMatterSchema.safeParse(body)
   if (closeParsed.success) {
     await db.update(matters).set({ status: "closed", updatedAt: new Date() }).where(eq(matters.id, matterId))
+    return NextResponse.json({ ok: true })
+  }
+
+  // Reopen matter
+  const reopenParsed = reopenMatterSchema.safeParse(body)
+  if (reopenParsed.success) {
+    await db.update(matters).set({ status: "active", updatedAt: new Date() }).where(eq(matters.id, matterId))
     return NextResponse.json({ ok: true })
   }
 
