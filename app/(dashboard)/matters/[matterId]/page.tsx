@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 import PartiesPanel from "@/components/parties-panel"
 import DocumentSlotsPanel from "@/components/document-slots-panel"
 import EmailThreadsPanel from "@/components/email-threads-panel"
+import ClosingAgentPanel from "@/components/closing-agent-panel"
 
 type Matter = {
   id: string
@@ -290,6 +291,11 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* Closing Agent */}
+      <div className="mb-6">
+        <ClosingAgentPanel matterId={matterId} />
       </div>
 
       {/* Parties */}
