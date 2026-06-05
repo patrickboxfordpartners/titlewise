@@ -3,6 +3,7 @@ import { users } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getGmailAccessToken, sendViaGmail } from "./gmail"
 import { getOutlookAccessToken, sendViaOutlook } from "./outlook"
+import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 
 export async function sendEmail({
   userId,
@@ -30,5 +31,14 @@ export async function sendEmail({
     return
   }
 
-  throw new Error("No email account connected")
+  // Fallback: send via Postmark from hello@titlewise.app
+  // Reply-To is set to user's email so replies come back to them
+  await postmark.sendEmail({
+    From: POSTMARK_FROM_EMAIL,
+    To: to,
+    ReplyTo: user.email,
+    Subject: subject,
+    TextBody: body,
+    MessageStream: "outbound",
+  })
 }
