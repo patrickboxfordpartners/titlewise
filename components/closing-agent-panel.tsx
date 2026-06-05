@@ -5,8 +5,9 @@ import { Bot, Loader2, ChevronDown, ChevronUp, Zap, AlertTriangle, CheckCircle, 
 import { cn } from "@/lib/utils"
 
 type AgentReport = {
-  summary: string
-  priorities: Array<{ item: string; impact: string; resolution: string }>
+  overall_status: "on_track" | "needs_attention" | "at_risk" | "critical"
+  status_summary: string
+  immediate_actions: Array<{ action: string; assigned_to: string; urgency: string; reason: string }>
   blockers: Array<{ item: string; impact: string; resolution: string }>
   checklist_updates: Array<{ item_title: string; suggested_status: string; reason: string }>
   draft_status_email: { subject: string; body: string }
@@ -119,7 +120,7 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
         <div className="border-t border-border divide-y divide-border/50">
           {/* Summary */}
           <div className="px-5 py-4">
-            <p className="text-xs text-foreground leading-relaxed">{report.summary}</p>
+            <p className="text-xs text-foreground leading-relaxed">{report.status_summary}</p>
           </div>
 
           {/* Risk flags */}
@@ -152,15 +153,15 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
             </div>
           )}
 
-          {/* Priorities */}
-          {report.priorities?.length > 0 && (
+          {/* Immediate actions */}
+          {report.immediate_actions?.length > 0 && (
             <div className="px-5 py-3">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">Next Steps</p>
               <ul className="space-y-2">
-                {report.priorities.map((p, i) => (
+                {report.immediate_actions.map((p, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="text-[10px] font-bold text-muted-foreground/60 mt-0.5 shrink-0">{i + 1}.</span>
-                    <span className="text-xs text-foreground">{p.item}</span>
+                    <span className="text-xs text-foreground">{p.action}</span>
                   </li>
                 ))}
               </ul>
