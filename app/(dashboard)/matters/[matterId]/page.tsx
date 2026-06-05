@@ -12,6 +12,7 @@ import {
 import { cn } from "@/lib/utils"
 import PartiesPanel from "@/components/parties-panel"
 import DocumentSlotsPanel from "@/components/document-slots-panel"
+import EmailThreadsPanel from "@/components/email-threads-panel"
 
 type Matter = {
   id: string
@@ -244,6 +245,11 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
       {/* Document Slots */}
       <div className="mb-6">
         <DocumentSlotsPanel matterId={matterId} />
+      </div>
+
+      {/* Email Thread */}
+      <div className="mb-6">
+        <EmailThreadsPanel matterId={matterId} />
       </div>
 
       {/* Checklist */}
