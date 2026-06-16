@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Script from "next/script"
 import { ClerkProvider } from "@clerk/nextjs"
 import { PHProvider } from "@/components/posthog-provider"
+import { CookieBanner } from "@/components/CookieBanner"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -59,6 +60,7 @@ export default function RootLayout({
         </head>
         <body className="min-h-full flex flex-col">
           <PHProvider>{children}</PHProvider>
+          <CookieBanner />
           <Script
             defer
             src="https://static.cloudflareinsights.com/beacon.min.js"
