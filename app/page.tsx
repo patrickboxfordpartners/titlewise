@@ -1,4 +1,5 @@
 import Link from "next/link"
+import EmailDemo from "@/components/landing/EmailDemo"
 
 const BG = "#0f1219"
 const TEXT = "#EDEEF0"
@@ -239,6 +240,9 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* Email demo */}
+      <EmailDemo />
 
       {/* Features list */}
       <section style={{ borderTop: `1px solid ${RULE}`, backgroundColor: ALT, padding: "80px 32px" }}>
