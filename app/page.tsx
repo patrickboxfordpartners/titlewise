@@ -56,13 +56,12 @@ export default function HomePage() {
         position: "sticky", top: 0, zIndex: 100,
         backgroundColor: `${BG}f0`, backdropFilter: "blur(12px)",
         borderBottom: `1px solid ${RULE}`,
-        padding: "0 32px", height: 56,
+        padding: "0 32px", height: 60,
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <Link href="/" style={{ textDecoration: "none" }}>
-          <span style={{ fontSize: "1rem", fontWeight: 700, color: TEXT, letterSpacing: "-0.02em" }}>
-            TitleWise
-          </span>
+        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-white.svg" alt="TitleWise" style={{ height: 28, width: "auto", }} />
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <Link href="/pricing" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Pricing</Link>
@@ -358,27 +357,64 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${RULE}`, padding: "40px 32px" }}>
-        <div style={{
-          maxWidth: 1060, margin: "0 auto",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexWrap: "wrap" as const, gap: 16,
-        }}>
-          <span style={{ fontSize: "0.875rem", fontWeight: 700, color: TEXT }}>TitleWise</span>
-          <div style={{ display: "flex", gap: 24 }}>
-            {[
-              ["Pricing", "/pricing"],
-              ["Demo", "/demo"],
-              ["Privacy", "/privacy"],
-              ["Terms", "/(marketing)/terms"],
-              ["Sign in", "/sign-in"],
-            ].map(([label, href]) => (
-              <Link key={label} href={href} style={{ fontSize: "0.8125rem", color: DIM, textDecoration: "none" }}>
-                {label}
-              </Link>
-            ))}
+      <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "rgba(10,11,16,0.6)", backdropFilter: "blur(12px)" }}>
+        <div style={{ maxWidth: 1060, margin: "0 auto", padding: "56px 32px 0" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "0 48px" }}>
+
+            {/* Brand */}
+            <div style={{ paddingBottom: 40 }}>
+              <img src="/logo-white.svg" alt="TitleWise" style={{ height: 24, width: "auto", }} />
+              <p style={{ marginTop: 16, fontSize: "0.875rem", color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
+                AI-powered closing platform for real estate attorneys. From intake to clear-to-close.
+              </p>
+              <a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: 7, marginTop: 20,
+                padding: "5px 10px 5px 8px",
+                border: `1px solid rgba(237,238,240,0.10)`,
+                borderRadius: 6, textDecoration: "none",
+                backgroundColor: "rgba(237,238,240,0.03)",
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: BLUE, flexShrink: 0 }} />
+                <span style={{ fontSize: "0.75rem", color: DIM }}>A Boxford Partners Company</span>
+              </a>
+            </div>
+
+            {/* Product */}
+            <div style={{ paddingBottom: 40 }}>
+              <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Product</p>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                {[["Pricing", "/pricing"], ["Demo", "/demo"], ["Sign in", "/sign-in"], ["Sign up", "/sign-up"]].map(([label, href]) => (
+                  <li key={label}><Link href={href} style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>{label}</Link></li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div style={{ paddingBottom: 40 }}>
+              <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Company</p>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                <li><a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Boxford Partners</a></li>
+                <li><a href="mailto:hello@titlewise.app" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Contact</a></li>
+                <li><a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>LinkedIn</a></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div style={{ paddingBottom: 40 }}>
+              <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Legal</p>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+                <li><Link href="/privacy" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Privacy</Link></li>
+                <li><Link href="/terms" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Terms</Link></li>
+              </ul>
+            </div>
           </div>
-          <span style={{ fontSize: "0.75rem", color: DIM }}>© 2026 TitleWise / Boxford Partners LLC</span>
+
+          {/* Bottom bar */}
+          <div style={{ borderTop: `1px solid ${RULE}`, paddingTop: 20, paddingBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" as const, gap: 16 }}>
+            <p style={{ fontSize: "0.75rem", color: DIM, margin: 0 }}>
+              &copy; {new Date().getFullYear()} Boxford Partners LLC. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
