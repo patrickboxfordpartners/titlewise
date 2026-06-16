@@ -172,11 +172,8 @@ export default function HomePage() {
             borderRadius: 12, overflow: "hidden",
             border: `1px solid ${RULE}`,
             boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
-            backgroundColor: "rgba(255,255,255,0.03)",
-            aspectRatio: "16/9",
-            display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <p style={{ color: DIM, fontSize: "0.875rem" }}>Matter dashboard screenshot</p>
+            <img src="/screenshots/matter-detail.png" alt="TitleWise matter workspace" style={{ width: "100%", display: "block" }} />
           </div>
           <p style={{ fontSize: "0.8125rem", color: DIM, marginTop: 12, textAlign: "center" }}>
             Matter workspace — checklist, parties, documents, and AI tools in one view
@@ -234,14 +231,11 @@ export default function HomePage() {
             borderRadius: 12, overflow: "hidden",
             border: `1px solid ${RULE}`,
             boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
-            backgroundColor: "rgba(255,255,255,0.03)",
-            aspectRatio: "16/9",
-            display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <p style={{ color: DIM, fontSize: "0.875rem" }}>Title analysis screenshot</p>
+            <img src="/screenshots/status-update.png" alt="TitleWise status update generator" style={{ width: "100%", display: "block" }} />
           </div>
           <p style={{ fontSize: "0.8125rem", color: DIM, marginTop: 12, textAlign: "center" }}>
-            AI title analysis — exceptions, requirements, and red flags surfaced in seconds
+            Status Update Generator — AI drafts the client email from checklist state in seconds
           </p>
         </div>
       </section>
