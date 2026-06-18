@@ -1,5 +1,8 @@
 import Link from "next/link"
 import EmailDemo from "@/components/landing/EmailDemo"
+import TitleAnalysisDemo from "@/components/landing/TitleAnalysisDemo"
+import WireVerificationDemo from "@/components/landing/WireVerificationDemo"
+import ClosingAgentDemo from "@/components/landing/ClosingAgentDemo"
 
 const BG = "#0f1219"
 const TEXT = "#EDEEF0"
@@ -165,22 +168,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* App screenshot */}
-      <section style={{ padding: "0 32px 80px" }}>
-        <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-          <div style={{
-            borderRadius: 12, overflow: "hidden",
-            border: `1px solid ${RULE}`,
-            boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
-          }}>
-            <img src="/screenshots/matter-detail.png" alt="TitleWise matter workspace" style={{ width: "100%", display: "block" }} />
-          </div>
-          <p style={{ fontSize: "0.8125rem", color: DIM, marginTop: 12, textAlign: "center" }}>
-            Matter workspace — checklist, parties, documents, and AI tools in one view
-          </p>
-        </div>
-      </section>
-
       {/* How it works */}
       <section style={{ borderTop: `1px solid ${RULE}`, backgroundColor: ALT, padding: "80px 32px" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
@@ -224,24 +211,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Second screenshot */}
-      <section style={{ padding: "80px 32px" }}>
-        <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-          <div style={{
-            borderRadius: 12, overflow: "hidden",
-            border: `1px solid ${RULE}`,
-            boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
-          }}>
-            <img src="/screenshots/status-update.png" alt="TitleWise status update generator" style={{ width: "100%", display: "block" }} />
-          </div>
-          <p style={{ fontSize: "0.8125rem", color: DIM, marginTop: 12, textAlign: "center" }}>
-            Status Update Generator — AI drafts the client email from checklist state in seconds
-          </p>
-        </div>
-      </section>
-
-      {/* Email demo */}
+      {/* Demos */}
+      <TitleAnalysisDemo />
+      <WireVerificationDemo />
       <EmailDemo />
+      <ClosingAgentDemo />
 
       {/* Features list */}
       <section style={{ borderTop: `1px solid ${RULE}`, backgroundColor: ALT, padding: "80px 32px" }}>
