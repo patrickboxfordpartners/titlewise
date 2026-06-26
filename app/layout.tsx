@@ -32,9 +32,18 @@ export const metadata: Metadata = {
     description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
     siteName: "TitleWise",
     url: "https://titlewise.app",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "TitleWise - AI Closing Platform for Real Estate Attorneys",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "TitleWise, AI Tools for Real Estate Closing Attorneys",
     description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
   },

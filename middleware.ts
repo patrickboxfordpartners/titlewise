@@ -11,6 +11,9 @@ const isPublicRoute = createRouteMatcher([
   "/matter-portal(.*)",
   "/api/checklist/portal",
   "/join(.*)",
+  "/robots.txt",
+  "/sitemap.xml",
+  "/opengraph-image",
 ])
 
 // API routes handle their own auth and return 401 JSON — don't let Clerk

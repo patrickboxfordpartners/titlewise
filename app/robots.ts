@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/dashboard/", "/sign-in/", "/sign-up/", "/matter-portal/"],
+        disallow: ["/api/", "/matters/", "/settings/", "/sign-in/", "/sign-up/"],
       },
     ],
     sitemap: "https://titlewise.app/sitemap.xml",
