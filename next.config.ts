@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "www.titlewise.app" }],
-        destination: "https://titlewise.app/:path*",
+        has: [{ type: "host", value: "titlewise.app" }],
+        destination: "https://www.titlewise.app/:path*",
         permanent: true,
       },
     ]
