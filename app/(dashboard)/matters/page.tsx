@@ -86,7 +86,7 @@ function MattersContent() {
   const overdueItems = active.filter((m) => { const d = daysUntil(m.closingDate); return d !== null && d < 0 }).length
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-10">
+    <div className="max-w-3xl mx-auto px-6 py-6 sm:py-10">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -114,7 +114,7 @@ function MattersContent() {
           className="bg-card border border-border rounded-xl p-5 mb-6 shadow-sm"
         >
           <h2 className="text-sm font-semibold text-foreground mb-4">New matter</h2>
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
             <div>
               <label className="text-xs font-medium text-muted-foreground block mb-1">Client Name *</label>
               <input
@@ -136,7 +136,7 @@ function MattersContent() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground block mb-1">Type</label>
               <select

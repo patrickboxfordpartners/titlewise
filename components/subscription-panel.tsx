@@ -109,7 +109,7 @@ export function SubscriptionPanel({
           {/* Current Plan Features */}
           <div className="mt-4 pt-4 border-t border-border">
             <p className="text-xs font-medium text-muted-foreground mb-2">Your plan includes:</p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div className="flex items-center gap-1.5 text-xs text-foreground">
                 <Check className="h-3.5 w-3.5 text-green-600" />
                 <span>{currentPlan.seats} {currentPlan.seats === 1 ? "seat" : "seats"}</span>

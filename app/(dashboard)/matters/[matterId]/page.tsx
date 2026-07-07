@@ -210,7 +210,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
 
       {/* Matter header */}
       <div className="bg-card border border-border rounded-xl p-5 mb-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold text-foreground">{matter.clientName}</h1>
             <p className="text-sm text-muted-foreground mt-0.5">{matter.propertyAddress}</p>
@@ -226,7 +226,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center flex-wrap gap-2 shrink-0">
             {matter.portalToken ? (
               <button
                 onClick={copyPortalUrl}

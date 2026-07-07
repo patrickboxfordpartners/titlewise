@@ -249,7 +249,7 @@ function StatusUpdateContent() {
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.27, duration: 0.3 }}
-            className="grid grid-cols-2 gap-3"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3"
           >
             <Field label="Transaction Type">
               <select
@@ -408,7 +408,7 @@ function StatusUpdateContent() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  className="flex gap-2"
+                  className="flex flex-wrap gap-2"
                 >
                   <button
                     onClick={() => { setOutput(""); setSendMode("idle") }}

@@ -136,7 +136,7 @@ function FeeEstimateContent() {
             </Field>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.21, duration: 0.3 }} className="grid grid-cols-2 gap-3">
+          <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.21, duration: 0.3 }} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Transaction Type">
               <select value={form.transactionType} onChange={(e) => set("transactionType", e.target.value)} className={inputClass}>
                 {TRANSACTION_TYPES.map((t) => <option key={t}>{t}</option>)}
@@ -155,7 +155,7 @@ function FeeEstimateContent() {
             </Field>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.33, duration: 0.3 }} className="grid grid-cols-2 gap-3">
+          <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.33, duration: 0.3 }} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Purchase/Sale Price">
               <input type="text" value={form.purchasePrice} onChange={(e) => set("purchasePrice", e.target.value)} placeholder="e.g. $425,000" className={inputClass} />
             </Field>
@@ -172,7 +172,7 @@ function FeeEstimateContent() {
             </Field>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.45, duration: 0.3 }} className="grid grid-cols-2 gap-3">
+          <motion.div initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.45, duration: 0.3 }} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Attorney Name *">
               <input type="text" value={form.attorneyName} onChange={(e) => set("attorneyName", e.target.value)} placeholder="e.g. Sarah J. Collins, Esq." className={inputClass} />
             </Field>

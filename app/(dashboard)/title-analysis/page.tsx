@@ -243,7 +243,7 @@ function TitleAnalysisContent() {
             </motion.div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
                 { label: "Red Flags", value: analysis.redFlags.length, highlight: highFlags > 0, color: "red" as const },
                 { label: "Flagged Requirements", value: flaggedReqs, highlight: flaggedReqs > 0, color: "amber" as const },

@@ -111,7 +111,7 @@ export default function DocumentSlotsPanel({ matterId }: { matterId: string }) {
 
       {showForm && (
         <div className="border-t border-border px-5 py-4 bg-muted/20">
-          <div className="grid grid-cols-2 gap-2 mb-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
             <div>
               <label className="text-[10px] font-medium text-muted-foreground block mb-1">Document Name *</label>
               <input

@@ -151,7 +151,7 @@ function CDReviewerContent() {
             </motion.div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
                 { value: review.discrepancies.length, label: "Discrepancies", highlight: highCount > 0, color: "red" as const },
                 { value: review.warnings.length, label: "Warnings", highlight: review.warnings.length > 0, color: "amber" as const },
@@ -220,7 +220,7 @@ function CDReviewerContent() {
                           {d.severity}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-xs mt-2 mb-2 pl-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs mt-2 mb-2 pl-6">
                         <div><span className="text-muted-foreground">CD:</span> <span className="font-medium text-foreground">{d.cdValue}</span></div>
                         <div><span className="text-muted-foreground">Contract:</span> <span className="font-medium text-foreground">{d.contractValue}</span></div>
                       </div>

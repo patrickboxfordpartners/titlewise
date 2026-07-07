@@ -175,7 +175,7 @@ function WireVerificationContent() {
                 )}
               </AnimatePresence>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-medium text-muted-foreground block mb-1">Expected Recipient</label>
                   <input type="text" value={expected} onChange={(e) => setExpected(e.target.value)} placeholder="e.g. ABC Title Company" className={inputClass} />
@@ -253,7 +253,7 @@ function WireVerificationContent() {
             {/* Extracted details */}
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl border border-border p-5">
               <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Extracted Details</h2>
-              <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 {Object.entries(result.extracted).map(([k, v]) => v && (
                   <div key={k}>
                     <span className="text-muted-foreground capitalize">{k.replace(/([A-Z])/g, " $1")}:</span>{" "}
@@ -322,7 +322,7 @@ function WireVerificationContent() {
                       className="rounded-lg bg-red-500/8 border border-red-500/20 p-3"
                     >
                       <div className="text-sm font-medium text-foreground mb-1">{c.field}</div>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         <div><span className="text-muted-foreground">Previous:</span> <span className="font-medium">{c.previous}</span></div>
                         <div><span className="text-muted-foreground">Current:</span> <span className="font-medium text-red-600">{c.current}</span></div>
                       </div>

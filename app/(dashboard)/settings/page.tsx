@@ -202,7 +202,7 @@ function SettingsContent() {
         </p>
         <div className="space-y-3">
           {/* Gmail */}
-          <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
+          <div className="flex items-center justify-between flex-wrap gap-2 p-3 rounded-lg border border-border bg-muted/20">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
                 <Mail className="h-4 w-4 text-muted-foreground" />
@@ -238,7 +238,7 @@ function SettingsContent() {
           </div>
 
           {/* Outlook */}
-          <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
+          <div className="flex items-center justify-between flex-wrap gap-2 p-3 rounded-lg border border-border bg-muted/20">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
                 <Mail className="h-4 w-4 text-muted-foreground" />

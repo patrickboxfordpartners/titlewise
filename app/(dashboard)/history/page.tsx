@@ -317,7 +317,7 @@ function HoaReviewDetail({ r, copiedId, onCopy }: {
       {result.financial && (
         <div>
           <SectionHeading>Financial</SectionHeading>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {[
               ["Monthly Dues", result.financial.monthlyDues],
               ["Special Assessments", result.financial.specialAssessments],
@@ -534,7 +534,7 @@ export default function HistoryPage() {
           className="w-full pl-9 pr-3 py-2 text-sm bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50 text-foreground" />
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.35 }} className="flex gap-2 mb-4">
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.35 }} className="flex flex-wrap gap-2 mb-4">
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <span>From</span>
           <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)}
