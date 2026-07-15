@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
 import { matters, checklistItems } from "@/lib/db/schema"
-import { eq, desc } from "drizzle-orm"
-import { getOrCreateUser } from "@/lib/db/get-user"
+import { eq, desc, and, ne, count } from "drizzle-orm"
+import { getOrCreateUser, getTrialStatus } from "@/lib/db/get-user"
 import { getTemplateItems } from "@/lib/checklist-templates"
 
 const createSchema = z.object({
@@ -51,6 +51,20 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: parsed.error.issues[0]?.message }, { status: 400 })
 
   const user = await getOrCreateUser(userId)
+
+  const { isTrial } = getTrialStatus(user)
+  if (isTrial) {
+    const [{ value: activeCount }] = await db
+      .select({ value: count() })
+      .from(matters)
+      .where(and(eq(matters.userId, user.id), ne(matters.status, "closed")))
+    if (activeCount >= 3) {
+      return NextResponse.json(
+        { error: "trial_limit_reached", limit: 3 },
+        { status: 403 }
+      )
+    }
+  }
 
   const [matter] = await db.insert(matters).values({
     userId: user.id,
