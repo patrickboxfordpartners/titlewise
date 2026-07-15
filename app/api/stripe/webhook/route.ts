@@ -70,15 +70,44 @@ export async function POST(req: NextRequest) {
         const clerkId = subscription.metadata?.clerkId
         if (!clerkId) break
 
+        const planFromMetadata = subscription.metadata?.plan ?? null
+        const trialEnd = subscription.trial_end
+          ? new Date(subscription.trial_end * 1000)
+          : null
+
         await db.update(users)
           .set({
             subscriptionStatus: subscription.status,
             stripePriceId: subscription.items.data[0]?.price.id ?? null,
+            ...(planFromMetadata ? { subscriptionTier: planFromMetadata } : {}),
+            ...(trialEnd ? { trialEndsAt: trialEnd } : {}),
             updatedAt: new Date(),
           })
           .where(eq(users.clerkId, clerkId))
 
         logger.info("stripe/webhook", "Subscription updated", { clerkId, status: subscription.status })
+        break
+      }
+
+      case "customer.subscription.trial_will_end": {
+        const subscription = event.data.object as Stripe.Subscription
+        const clerkId = subscription.metadata?.clerkId
+        if (!clerkId) break
+
+        // Non-fatal: send reminder email via existing drip system
+        try {
+          const clerk = await clerkClient()
+          const clerkUser = await clerk.users.getUser(clerkId)
+          const email = clerkUser.emailAddresses[0]?.emailAddress
+          const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ")
+          if (email) {
+            await sendDripEmail({ to: email, name, plan: "solo", sequence: "trial_ending" })
+          }
+        } catch (dripErr) {
+          logger.error("stripe/webhook", "Trial ending drip failed (non-fatal)", { error: String(dripErr) })
+        }
+
+        logger.info("stripe/webhook", "Trial will end in 3 days", { clerkId })
         break
       }
 

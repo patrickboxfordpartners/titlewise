@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 const FROM = "TITLEwise <hello@boxfordpartners.com>"
 
-type DripSequence = "welcome" | "day3" | "day7"
+type DripSequence = "welcome" | "day3" | "day7" | "trial_ending"
 
 function getEmailContent(sequence: DripSequence, name: string, plan: string) {
   const firstName = name?.split(" ")[0] || "there"
@@ -65,6 +65,21 @@ function getEmailContent(sequence: DripSequence, name: string, plan: string) {
           </table>
           <a href="https://titlewise.app/dashboard" style="display: inline-block; background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Try a new tool →</a>
           <p style="color: #999; font-size: 12px; margin-top: 40px; line-height: 1.6;">You're receiving this because you subscribed to TITLEwise. <a href="https://titlewise.app" style="color: #999;">titlewise.app</a></p>
+        </div>
+      `,
+    }
+  }
+
+  if (sequence === "trial_ending") {
+    return {
+      subject: "Your TITLEwise trial ends in 3 days",
+      html: `
+        <div style="font-family: Inter, system-ui, sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px; color: #111;">
+          <div style="margin-bottom: 32px; font-size: 20px; font-weight: 700; letter-spacing: -0.5px;">TITLE<span style="font-weight: 400; color: #555;">wise</span></div>
+          <h1 style="font-size: 24px; font-weight: 700; margin: 0 0 12px;">Your trial ends in 3 days, ${firstName}</h1>
+          <p style="color: #555; line-height: 1.6; margin: 0 0 24px;">To keep saving time on every closing, upgrade before your trial ends and your access continues without interruption.</p>
+          <a href="https://titlewise.app/settings/billing" style="display: inline-block; background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">Upgrade Now →</a>
+          <p style="color: #999; font-size: 12px; margin-top: 40px; line-height: 1.6;">You're receiving this because you're on a TITLEwise trial. <a href="https://titlewise.app" style="color: #999;">titlewise.app</a></p>
         </div>
       `,
     }
