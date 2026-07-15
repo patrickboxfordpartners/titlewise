@@ -25,6 +25,12 @@ export default function LandingNav() {
       <div className="container mx-auto flex h-16 items-center justify-between px-6">
         <Logo href="/" />
         <div className="flex items-center gap-4">
+          <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+            Blog
+          </Link>
+          <Link href="/faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
+            FAQ
+          </Link>
           <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:inline">
             Pricing
           </Link>
