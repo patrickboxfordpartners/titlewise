@@ -75,6 +75,7 @@ export function getTrialStatus(user: User): { isTrial: boolean; daysRemaining: n
   const isTrialing = user.subscriptionStatus === "trialing"
   if (!isTrialing || !user.trialEndsAt) return { isTrial: false, daysRemaining: 0 }
   const msLeft = new Date(user.trialEndsAt).getTime() - Date.now()
+  if (msLeft <= 0) return { isTrial: false, daysRemaining: 0 }
   const daysRemaining = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)))
   return { isTrial: true, daysRemaining }
 }

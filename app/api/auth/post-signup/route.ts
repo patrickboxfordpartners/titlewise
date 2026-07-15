@@ -41,6 +41,11 @@ export async function GET(req: NextRequest) {
     }
 
     if (plan === "solo") {
+      // Check for existing active trial to prevent duplicate subscriptions
+      if (user.stripeSubscriptionId && user.subscriptionStatus === "trialing") {
+        return NextResponse.redirect(new URL("/dashboard", APP_URL))
+      }
+
       // Create trial subscription — no payment method required
       const priceId = PLANS.solo.monthlyPriceId
       if (!priceId) {
