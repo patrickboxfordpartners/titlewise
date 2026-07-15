@@ -23,6 +23,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const [mattersOpen, setMattersOpen] = useState(true)
   const [matters, setMatters] = useState<MatterItem[]>([])
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [trialStatus, setTrialStatus] = useState<{ isTrial: boolean; daysRemaining: number } | null>(null)
 
   const isMatterSection = pathname === "/matters" || pathname.startsWith("/matters/")
   const isHistory = pathname === "/history"
@@ -46,6 +47,13 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       .catch(() => {})
   }, [pathname])
 
+  useEffect(() => {
+    fetch("/api/user/trial-status")
+      .then((r) => r.json())
+      .then((d) => setTrialStatus(d))
+      .catch(() => {})
+  }, [])
+
   return (
     <div className="sidebar">
       {/* Wordmark */}
@@ -56,6 +64,42 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
           </span>
         </Link>
       </div>
+
+      {/* Trial banner */}
+      {trialStatus?.isTrial && (
+        <div style={{
+          margin: "0.75rem",
+          padding: "0.75rem",
+          borderRadius: 8,
+          backgroundColor: "rgba(232,168,74,0.12)",
+          border: "1px solid rgba(232,168,74,0.25)",
+        }}>
+          <p style={{ fontSize: "0.6875rem", fontWeight: 700, color: "#e8a84a", marginBottom: 4 }}>
+            FREE TRIAL
+          </p>
+          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.7)", marginBottom: 8 }}>
+            {trialStatus.daysRemaining > 0
+              ? `${trialStatus.daysRemaining} day${trialStatus.daysRemaining === 1 ? "" : "s"} remaining`
+              : "Trial ends today"}
+          </p>
+          <Link
+            href="/pricing"
+            style={{
+              display: "block",
+              textAlign: "center",
+              padding: "5px 0",
+              borderRadius: 6,
+              backgroundColor: "#e8a84a",
+              color: "#0a0700",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            Upgrade
+          </Link>
+        </div>
+      )}
 
       {/* Nav */}
       <nav style={{ flex: 1, padding: "0.75rem", display: "flex", flexDirection: "column", gap: "2px", overflowY: "auto" }}>
