@@ -70,7 +70,7 @@ export const isTrialFlag = flag<boolean>({
     const { userId } = await auth();
     if (!userId) return false;
     const user = await getOrCreateUser(userId);
-    return user.subscriptionStatus === "trialing";
+    return getTrialStatus(user).isTrial;
   },
 });
 
