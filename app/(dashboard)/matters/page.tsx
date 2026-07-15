@@ -66,16 +66,26 @@ function MattersContent() {
     }
     setCreating(true)
     setFormError("")
-    const res = await fetch("/api/checklist", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    })
-    const data = await res.json()
-    if (data.matter) {
+    try {
+      const res = await fetch("/api/checklist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        if (data.error === "trial_limit_reached") {
+          setFormError("trial_limit_reached")
+        } else {
+          setFormError(data.error ?? "Failed to create matter.")
+        }
+        return
+      }
+      const data = await res.json()
       router.push(`/matters/${data.matter.id}`)
-    } else {
-      setFormError(data.error ?? "Failed to create matter.")
+    } catch {
+      setFormError("Something went wrong. Please try again.")
+    } finally {
       setCreating(false)
     }
   }
@@ -168,7 +178,40 @@ function MattersContent() {
               />
             </div>
           </div>
-          {formError && <p className="text-xs text-red-500 mb-3">{formError}</p>}
+          {formError === "trial_limit_reached" ? (
+            <div style={{
+              padding: "12px 16px",
+              borderRadius: 8,
+              backgroundColor: "rgba(232,168,74,0.08)",
+              border: "1px solid rgba(232,168,74,0.2)",
+              marginBottom: 12,
+            }}>
+              <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#b8860b", marginBottom: 4 }}>
+                Trial limit reached
+              </p>
+              <p style={{ fontSize: "0.8125rem", color: "var(--color-text-muted)", marginBottom: 10 }}>
+                Your 7-day trial includes up to 3 active matters. Upgrade to unlock unlimited matters.
+              </p>
+              <Link
+                href="/pricing"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  padding: "7px 16px",
+                  borderRadius: 6,
+                  backgroundColor: "var(--primary)",
+                  color: "var(--primary-foreground)",
+                  fontSize: "0.8125rem",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                View plans &rarr;
+              </Link>
+            </div>
+          ) : formError ? (
+            <p className="text-xs text-red-500 mb-3">{formError}</p>
+          ) : null}
           <div className="flex gap-2">
             <button
               onClick={handleCreate}
