@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useAuth } from "@clerk/nextjs"
-import { Check, X, ArrowRight } from "lucide-react"
+import { Check, X } from "lucide-react"
 import { PLANS } from "@/lib/plans"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -84,35 +83,7 @@ const planDetails = {
 }
 
 export default function PricingPage() {
-  const { isSignedIn } = useAuth()
-  const [loading, setLoading] = useState<string | null>(null)
   const [annual, setAnnual] = useState(false)
-
-  async function handleSubscribe(planKey: string) {
-    if (!isSignedIn) {
-      window.location.href = "/sign-up"
-      return
-    }
-
-    setLoading(planKey)
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey, annual }),
-      })
-      const data = await res.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        alert(data.error || "Something went wrong")
-      }
-    } catch {
-      alert("Failed to start checkout")
-    } finally {
-      setLoading(null)
-    }
-  }
 
   const entries = Object.entries(PLANS) as [keyof typeof PLANS, (typeof PLANS)[keyof typeof PLANS]][]
 
@@ -232,20 +203,18 @@ export default function PricingPage() {
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => handleSubscribe(key)}
-                  disabled={loading === key}
-                  className="mt-8 w-full"
+                <Link
+                  href={`/sign-up?plan=${key}`}
+                  className="mt-8 block"
                 >
                   <Button
                     variant={isPopular ? "hero" : "outline"}
                     className="w-full pointer-events-none"
                     size="lg"
-                    disabled={loading === key}
                   >
-                    {loading === key ? "Redirecting..." : <>Get Started {isPopular && <ArrowRight className="ml-1 h-4 w-4" />}</>}
+                    {key === "solo" ? "Start 7-Day Free Trial" : "Get Started"}
                   </Button>
-                </button>
+                </Link>
               </motion.div>
             )
           })}
