@@ -70,3 +70,11 @@ export async function incrementUsage(userId: string): Promise<void> {
     })
     .where(eq(users.id, userId))
 }
+
+export function getTrialStatus(user: User): { isTrial: boolean; daysRemaining: number } {
+  const isTrialing = user.subscriptionStatus === "trialing"
+  if (!isTrialing || !user.trialEndsAt) return { isTrial: false, daysRemaining: 0 }
+  const msLeft = new Date(user.trialEndsAt).getTime() - Date.now()
+  const daysRemaining = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)))
+  return { isTrial: true, daysRemaining }
+}
