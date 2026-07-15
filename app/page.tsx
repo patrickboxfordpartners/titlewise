@@ -3,6 +3,7 @@ import EmailDemo from "@/components/landing/EmailDemo"
 import TitleAnalysisDemo from "@/components/landing/TitleAnalysisDemo"
 import WireVerificationDemo from "@/components/landing/WireVerificationDemo"
 import ClosingAgentDemo from "@/components/landing/ClosingAgentDemo"
+import FAQSection, { featuredFaqs } from "@/components/landing/FAQSection"
 
 const BG = "#0f1219"
 const TEXT = "#EDEEF0"
@@ -11,6 +12,19 @@ const DIM = "rgba(237,238,240,0.22)"
 const RULE = "rgba(237,238,240,0.07)"
 const BLUE = "#3b82f6"
 const ALT = "rgba(237,238,240,0.025)"
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": featuredFaqs.map((faq) => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer,
+    },
+  })),
+}
 
 export const metadata = {
   title: "TitleWise — AI Closing Platform for Real Estate Attorneys",
@@ -68,6 +82,7 @@ export default function HomePage() {
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <Link href="/pricing" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Pricing</Link>
+          <Link href="/blog" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Blog</Link>
           <Link href="/demo" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Demo</Link>
           <Link href="/sign-in" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Sign in</Link>
           <Link href="/pricing" style={{
@@ -329,6 +344,13 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <FAQSection />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
 
       {/* Footer */}
       <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "rgba(10,11,16,0.6)", backdropFilter: "blur(12px)" }}>

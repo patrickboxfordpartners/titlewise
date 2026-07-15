@@ -14,7 +14,7 @@
   --popover: #ffffff;
   --popover-foreground: #0f172a;
 
-  --primary: #3b82f6; /* electric blue - accent */
+  --primary: #533afd; /* indigo - brand primary */
   --primary-foreground: #ffffff;
 
   --secondary: #f1f5f9; /* slate-100 */
@@ -23,7 +23,7 @@
   --muted: #f1f5f9;
   --muted-foreground: #64748b; /* slate-500 */
 
-  --accent: #3b82f6; /* electric blue */
+  --accent: #3b82f6; /* electric blue - secondary/tertiary */
   --accent-foreground: #ffffff;
 
   --destructive: #ef4444; /* red-500 */
@@ -35,7 +35,8 @@
 
   --border: #e2e8f0; /* slate-200 */
   --input: #ffffff;
-  --ring: #3b82f6;
+  --ring: #533afd;
+  --canvas-cream: #f5e9d4;
 
   --radius: 0.5rem; /* 8px - slightly more friendly */
 
