@@ -71,7 +71,7 @@ export default function HomePage() {
       <style>{`
         @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
         @media (max-width: 768px) { .tw-footer-grid { grid-template-columns: 1fr 1fr !important; row-gap: 32px !important; } }
-        @media (max-width: 480px) { .tw-footer-grid { grid-template-columns: 1fr !important; text-align: center; } .tw-footer-grid ul { list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; } .tw-footer-brand { justify-content: center; } }
+        @media (max-width: 480px) { .tw-footer-grid { grid-template-columns: 1fr !important; text-align: center; } .tw-footer-grid ul { list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; } .tw-footer-brand { justify-content: center; } .tw-footer-desc { max-width: 100% !important; text-align: center; } }
       `}</style>
 
       {/* Nav */}
@@ -381,7 +381,7 @@ export default function HomePage() {
                   <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
                 </span>
               </div>
-              <p style={{ marginTop: 16, fontSize: "0.875rem", color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
+              <p className="tw-footer-desc" style={{ marginTop: 16, fontSize: "0.875rem", color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
                 AI-powered closing platform for real estate attorneys. From intake to clear-to-close.
               </p>
               <a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{
@@ -400,7 +400,7 @@ export default function HomePage() {
             <div style={{ paddingBottom: 40 }}>
               <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Product</p>
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-                {[["Pricing", "/pricing"], ["Demo", "/demo"], ["Sign in", "/sign-in"], ["Sign up", "/sign-up"]].map(([label, href]) => (
+                {[["Pricing", "/pricing"], ["Demo", "/demo"], ["Blog", "/blog"], ["Sign in", "/sign-in"], ["Sign up", "/sign-up"]].map(([label, href]) => (
                   <li key={label}><Link href={href} style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>{label}</Link></li>
                 ))}
               </ul>
