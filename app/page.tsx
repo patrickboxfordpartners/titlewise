@@ -3,7 +3,8 @@ import EmailDemo from "@/components/landing/EmailDemo"
 import TitleAnalysisDemo from "@/components/landing/TitleAnalysisDemo"
 import WireVerificationDemo from "@/components/landing/WireVerificationDemo"
 import ClosingAgentDemo from "@/components/landing/ClosingAgentDemo"
-import FAQSection, { featuredFaqs } from "@/components/landing/FAQSection"
+import FAQSection from "@/components/landing/FAQSection"
+import { featuredFaqs } from "@/components/landing/faq-data"
 
 const BG = "#0f1219"
 const TEXT = "#EDEEF0"
@@ -76,9 +77,15 @@ export default function HomePage() {
         padding: "0 32px", height: 60,
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
-        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-white.svg" alt="TitleWise" style={{ height: 28, width: "auto", }} />
+        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
+          <svg height="28" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "auto" }}>
+            <rect x="10" y="0" width="24" height="32" rx="4" fill="rgba(255,255,255,0.35)" />
+            <rect x="2" y="8" width="24" height="32" rx="4" fill="#2563EB" />
+          </svg>
+          <span style={{ fontFamily: "inherit", fontSize: "1.125rem", lineHeight: 1 }}>
+            <span style={{ fontWeight: 700, color: "#EDEEF0", letterSpacing: "-0.01em" }}>TITLE</span>
+            <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
+          </span>
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <Link href="/pricing" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Pricing</Link>
