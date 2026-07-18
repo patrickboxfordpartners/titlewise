@@ -68,6 +68,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <style>{`@media (max-width: 640px) { .tw-nav-link { display: none !important; } }`}</style>
 
       {/* Nav */}
       <nav style={{
@@ -87,15 +88,15 @@ export default function HomePage() {
             <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
           </span>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <Link href="/pricing" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Pricing</Link>
-          <Link href="/blog" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Blog</Link>
-          <Link href="/demo" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Demo</Link>
-          <Link href="/sign-in" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Sign in</Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <Link href="/pricing" className="tw-nav-link" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Pricing</Link>
+          <Link href="/blog" className="tw-nav-link" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Blog</Link>
+          <Link href="/demo" className="tw-nav-link" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Demo</Link>
+          <Link href="/sign-in" className="tw-nav-link" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Sign in</Link>
           <Link href="/pricing" style={{
             fontSize: "0.875rem", fontWeight: 600, color: "#fff",
             backgroundColor: BLUE, borderRadius: 8,
-            padding: "7px 16px", textDecoration: "none",
+            padding: "7px 14px", textDecoration: "none", whiteSpace: "nowrap",
           }}>
             Get started
           </Link>
