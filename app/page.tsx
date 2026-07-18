@@ -68,7 +68,11 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <style>{`@media (max-width: 640px) { .tw-nav-link { display: none !important; } }`}</style>
+      <style>{`
+        @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
+        @media (max-width: 768px) { .tw-footer-grid { grid-template-columns: 1fr 1fr !important; row-gap: 32px !important; } }
+        @media (max-width: 480px) { .tw-footer-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
 
       {/* Nav */}
       <nav style={{
@@ -363,11 +367,20 @@ export default function HomePage() {
       {/* Footer */}
       <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "rgba(10,11,16,0.6)", backdropFilter: "blur(12px)" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "56px 32px 0" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "0 48px" }}>
+          <div className="tw-footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "0 48px" }}>
 
             {/* Brand */}
             <div style={{ paddingBottom: 40 }}>
-              <img src="/logo-white.svg" alt="TitleWise" style={{ height: 24, width: "auto", }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <svg height="22" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "auto" }}>
+                  <rect x="10" y="0" width="24" height="32" rx="4" fill="rgba(255,255,255,0.35)" />
+                  <rect x="2" y="8" width="24" height="32" rx="4" fill="#2563EB" />
+                </svg>
+                <span style={{ fontFamily: "inherit", fontSize: "1rem", lineHeight: 1 }}>
+                  <span style={{ fontWeight: 700, color: "#EDEEF0", letterSpacing: "-0.01em" }}>TITLE</span>
+                  <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
+                </span>
+              </div>
               <p style={{ marginTop: 16, fontSize: "0.875rem", color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
                 AI-powered closing platform for real estate attorneys. From intake to clear-to-close.
               </p>
