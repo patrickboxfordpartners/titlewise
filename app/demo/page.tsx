@@ -8,7 +8,7 @@ import {
   Shield, Building, DollarSign, Calculator, ClipboardList,
   X, ChevronRight, Play, Loader2,
 } from "lucide-react"
-import { Logo } from "@/components/logo"
+import LandingFooter from "@/components/landing/LandingFooter"
 
 const MOCK_MATTER = {
   clientName: "Robert and Susan Hartley",
@@ -118,18 +118,24 @@ export default function DemoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-secondary">
+    <div className="min-h-screen" style={{ backgroundColor: "#f8fafc" }}>
       {/* Top nav */}
-      <header className="sticky top-0 z-50 h-14 bg-card border-b border-border flex items-center justify-between px-6">
-        <Logo href="/" />
-        <div className="flex items-center gap-3">
-          <Link href="/sign-in" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium">
+      <header style={{ position: "sticky", top: 0, zIndex: 50, height: 60, backgroundColor: "#111827", borderBottom: "1px solid rgba(237,238,240,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
+        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
+          <svg height="22" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "auto" }}>
+            <rect x="10" y="0" width="24" height="32" rx="4" fill="rgba(255,255,255,0.35)" />
+            <rect x="2" y="8" width="24" height="32" rx="4" fill="#2563EB" />
+          </svg>
+          <span style={{ fontFamily: "inherit", fontSize: "1rem", lineHeight: 1 }}>
+            <span style={{ fontWeight: 700, color: "#EDEEF0", letterSpacing: "-0.01em" }}>TITLE</span>
+            <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
+          </span>
+        </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Link href="/sign-in" style={{ fontSize: "0.875rem", color: "rgba(237,238,240,0.5)", textDecoration: "none" }}>
             Sign in
           </Link>
-          <Link
-            href="/sign-up"
-            className="text-sm font-bold bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-          >
+          <Link href="/sign-up" style={{ fontSize: "0.875rem", fontWeight: 600, color: "#fff", backgroundColor: "#2563EB", borderRadius: 8, padding: "7px 14px", textDecoration: "none" }}>
             Get started
           </Link>
         </div>
@@ -165,7 +171,7 @@ export default function DemoPage() {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Left: Form (read-only prefilled) */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-            <div className="bg-card rounded-2xl border-2 border-blue-500/30 p-6" style={{ boxShadow: "6px 6px 0px rgba(59, 130, 246, 0.2)" }}>
+            <div className="bg-card rounded-2xl border border-blue-500/30 p-6">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-sm font-black uppercase tracking-wide text-foreground">Matter Details</h2>
                 <span className="text-[10px] font-bold text-blue-600 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 uppercase tracking-wide">
@@ -236,13 +242,13 @@ export default function DemoPage() {
 
           {/* Right: Output */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <div className="bg-card rounded-2xl border-2 border-purple-500/30 p-6 min-h-[400px] flex flex-col" style={{ boxShadow: "6px 6px 0px rgba(168, 85, 247, 0.2)" }}>
+            <div className="bg-card rounded-2xl border border-blue-500/30 p-6 min-h-[400px] flex flex-col">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-sm font-black uppercase tracking-wide text-foreground">Generated Email</h2>
                 {output && (
                   <button
                     onClick={handleCopy}
-                    className="flex items-center gap-1.5 text-xs font-bold text-purple-600 hover:text-purple-700 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
                   >
                     {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                     {copied ? "Copied!" : "Copy"}
@@ -287,7 +293,7 @@ export default function DemoPage() {
                 <div
                   key={label}
                   className={`bg-card rounded-2xl border-2 ${borderCls} p-4`}
-                  style={{ boxShadow: `4px 4px 0px rgba(0,0,0,0.06)` }}
+                  style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
                 >
                   <div className={`w-9 h-9 rounded-xl ${bgCls} border ${borderCls} flex items-center justify-center mb-3`}>
                     <Icon className={`h-4.5 w-4.5 ${iconCls}`} strokeWidth={2.5} />
@@ -305,8 +311,7 @@ export default function DemoPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-card rounded-2xl border-2 border-blue-500/30 p-8 text-center"
-          style={{ boxShadow: "6px 6px 0px rgba(59, 130, 246, 0.2)" }}
+          className="bg-card rounded-2xl border border-blue-500/20 p-8 text-center"
         >
           <h3 className="text-2xl font-black text-foreground tracking-tight mb-2">
             30 minutes back. Every file.
@@ -331,6 +336,7 @@ export default function DemoPage() {
           </div>
         </motion.div>
       </div>
+      <LandingFooter />
     </div>
   )
 }
