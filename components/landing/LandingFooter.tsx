@@ -7,7 +7,7 @@ const BLUE = "#2563EB"
 
 export default function LandingFooter() {
   return (
-    <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "rgba(10,11,16,0.6)", backdropFilter: "blur(12px)" }}>
+    <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "#111827" }}>
       <style>{`
         @media (max-width: 768px) { .tw-lf-grid { grid-template-columns: 1fr 1fr !important; row-gap: 32px !important; } }
         @media (max-width: 480px) { .tw-lf-grid { grid-template-columns: 1fr !important; text-align: center; } .tw-lf-grid ul { list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; } .tw-lf-brand { justify-content: center !important; } }

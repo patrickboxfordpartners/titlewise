@@ -6,7 +6,7 @@ import ClosingAgentDemo from "@/components/landing/ClosingAgentDemo"
 import FAQSection from "@/components/landing/FAQSection"
 import { featuredFaqs } from "@/components/landing/faq-data"
 
-const BG = "#0f1219"
+const BG = "#111827"
 const TEXT = "#EDEEF0"
 const MUTED = "rgba(237,238,240,0.5)"
 const DIM = "rgba(237,238,240,0.22)"
@@ -365,7 +365,7 @@ export default function HomePage() {
       />
 
       {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "rgba(10,11,16,0.6)", backdropFilter: "blur(12px)" }}>
+      <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "#111827" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto", padding: "56px 32px 0" }}>
           <div className="tw-footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "0 48px" }}>
 
