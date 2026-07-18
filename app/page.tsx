@@ -71,7 +71,7 @@ export default function HomePage() {
       <style>{`
         @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
         @media (max-width: 768px) { .tw-footer-grid { grid-template-columns: 1fr 1fr !important; row-gap: 32px !important; } }
-        @media (max-width: 480px) { .tw-footer-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 480px) { .tw-footer-grid { grid-template-columns: 1fr !important; text-align: center; } .tw-footer-grid ul { list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; } .tw-footer-brand { justify-content: center; } }
       `}</style>
 
       {/* Nav */}
@@ -371,7 +371,7 @@ export default function HomePage() {
 
             {/* Brand */}
             <div style={{ paddingBottom: 40 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div className="tw-footer-brand" style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <svg height="22" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "auto" }}>
                   <rect x="10" y="0" width="24" height="32" rx="4" fill="rgba(255,255,255,0.35)" />
                   <rect x="2" y="8" width="24" height="32" rx="4" fill="#2563EB" />
@@ -392,7 +392,7 @@ export default function HomePage() {
                 backgroundColor: "rgba(237,238,240,0.03)",
               }}>
                 <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: BLUE, flexShrink: 0 }} />
-                <span style={{ fontSize: "0.75rem", color: DIM }}>A Boxford Partners Company</span>
+                <span style={{ fontSize: "0.65rem", color: DIM, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 }}>A Boxford Partners Company</span>
               </a>
             </div>
 
