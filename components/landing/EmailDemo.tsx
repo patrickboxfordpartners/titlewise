@@ -111,6 +111,12 @@ export default function EmailDemo() {
   }
 
   useEffect(() => {
+    if (window.innerWidth < 640) {
+      setFields({ matter: "18 Harbor View Drive", address: "18 Harbor View Dr, Portland ME 04101", stage: "Clear to Close", completed: "Title, Wire, CD" })
+      setEmailText(EMAIL)
+      setEmailStarted(true)
+      return
+    }
     run()
     return clearAll
   }, [])

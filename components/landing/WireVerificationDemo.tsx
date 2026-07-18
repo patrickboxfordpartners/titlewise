@@ -49,7 +49,15 @@ export default function WireVerificationDemo() {
     timeouts.current.push(loopT)
   }
 
-  useEffect(() => { run(); return clear }, [])
+  useEffect(() => {
+    if (window.innerWidth < 640) {
+      setVisibleChecks(CHECKS.map(c => c.id))
+      setVerdict("done")
+      return
+    }
+    run()
+    return clear
+  }, [])
 
   const BG = "#0f1219"
   const PANEL = "#141820"

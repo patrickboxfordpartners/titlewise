@@ -91,7 +91,16 @@ export default function TitleAnalysisDemo() {
     timeouts.current.push(loopT)
   }
 
-  useEffect(() => { run(); return clear }, [])
+  useEffect(() => {
+    // On mobile, skip straight to results — left panel is hidden so animation is invisible
+    if (window.innerWidth < 640) {
+      setPhase("results")
+      setVisibleItems(TITLE_EXCEPTIONS.map(i => i.id))
+      return
+    }
+    run()
+    return clear
+  }, [])
 
   const BG = "#0f1219"
   const PANEL = "#141820"

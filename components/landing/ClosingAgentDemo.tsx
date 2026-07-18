@@ -85,6 +85,13 @@ Next step: we are still awaiting wire instructions from the lender. I will follo
   }
 
   useEffect(() => {
+    if (window.innerWidth < 640) {
+      setLog(AGENT_STEPS.map(s => s.text))
+      setCompleted([1, 2, 3])
+      setBlocker(true)
+      setEmailDraft(EMAIL_DRAFT)
+      return
+    }
     run()
     return clear
   }, [])
