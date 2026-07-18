@@ -151,6 +151,10 @@ export default function EmailDemo() {
     <section style={{ borderTop: `1px solid rgba(237,238,240,0.07)`, padding: "80px 32px", background: BG }}>
       <style>{`
         @keyframes tw-blink { 0%, 100% { opacity: 1 } 50% { opacity: 0 } }
+        @media (max-width: 640px) {
+          .tw-demo-grid { grid-template-columns: 1fr !important; }
+          .tw-demo-left { display: none !important; }
+        }
       `}</style>
       <div style={{ maxWidth: 1060, margin: "0 auto" }}>
         <div style={{ marginBottom: 48 }}>
@@ -165,10 +169,10 @@ export default function EmailDemo() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${BORDER}`, boxShadow: "0 24px 64px rgba(0,0,0,0.4)" }}>
+        <div className="tw-demo-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${BORDER}`, boxShadow: "0 24px 64px rgba(0,0,0,0.4)" }}>
 
           {/* Left — form */}
-          <div style={{ background: PANEL, padding: "28px 28px 24px" }}>
+          <div className="tw-demo-left" style={{ background: PANEL, padding: "28px 28px 24px" }}>
             <p style={{ fontSize: "0.6875rem", fontWeight: 700, color: DIM, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
               File Details
             </p>

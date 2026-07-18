@@ -76,10 +76,10 @@ export default function WireVerificationDemo() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${BORDER}`, boxShadow: "0 24px 64px rgba(0,0,0,0.4)" }}>
+        <div className="tw-demo-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${BORDER}`, boxShadow: "0 24px 64px rgba(0,0,0,0.4)" }}>
 
           {/* Left — wire details */}
-          <div style={{ background: PANEL, padding: "28px" }}>
+          <div className="tw-demo-left" style={{ background: PANEL, padding: "28px" }}>
             <p style={{ fontSize: "0.6875rem", fontWeight: 700, color: DIM, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
               Wire Instructions
             </p>
@@ -146,7 +146,11 @@ export default function WireVerificationDemo() {
           </div>
         </div>
       </div>
-      <style>{`@keyframes tw-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }`}</style>
+      <style>{`@keyframes tw-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@media (max-width: 640px) {
+  .tw-demo-grid { grid-template-columns: 1fr !important; }
+  .tw-demo-left { display: none !important; }
+}`}</style>
     </section>
   )
 }

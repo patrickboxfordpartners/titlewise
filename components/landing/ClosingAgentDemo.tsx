@@ -118,10 +118,10 @@ Next step: we are still awaiting wire instructions from the lender. I will follo
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${BORDER}`, boxShadow: "0 24px 64px rgba(0,0,0,0.4)" }}>
+        <div className="tw-demo-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${BORDER}`, boxShadow: "0 24px 64px rgba(0,0,0,0.4)" }}>
 
           {/* Left — checklist + agent log */}
-          <div style={{ background: PANEL, padding: "28px", display: "flex", flexDirection: "column", gap: 20 }}>
+          <div className="tw-demo-left" style={{ background: PANEL, padding: "28px", display: "flex", flexDirection: "column", gap: 20 }}>
 
             {/* Checklist */}
             <div>
@@ -213,6 +213,10 @@ Next step: we are still awaiting wire instructions from the lender. I will follo
       <style>{`
         @keyframes tw-blink { 0%,100%{opacity:1} 50%{opacity:0} }
         @keyframes tw-fade-in { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+        @media (max-width: 640px) {
+          .tw-demo-grid { grid-template-columns: 1fr !important; }
+          .tw-demo-left { display: none !important; }
+        }
       `}</style>
     </section>
   )
