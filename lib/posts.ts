@@ -16,7 +16,7 @@ export const posts: Post[] = [
     slug: "what-can-ai-automate-title-review",
     title: "What Parts of Title Review Can AI Actually Automate, and What Still Requires a Closing Attorney?",
     description: "The distinction between pattern work and judgment work in title examination, and why that line determines exactly where AI helps and where the attorney remains essential.",
-    date: "July 22, 2026",
+    date: "July 17, 2026",
     author: "Patrick Mitchell",
     authorUrl: "https://linkedin.com/in/patricktmitchell",
     category: "Real Estate / Legal",
