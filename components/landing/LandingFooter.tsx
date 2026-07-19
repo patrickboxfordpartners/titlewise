@@ -79,10 +79,7 @@ export default function LandingFooter() {
 
         <div style={{ borderTop: `1px solid ${RULE}`, paddingTop: 20, paddingBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" as const, gap: 16 }}>
           <p style={{ fontSize: "0.75rem", color: DIM, margin: 0 }}>
-            &copy; {new Date().getFullYear()} Boxford Partners LLC. All rights reserved.
-          </p>
-          <p style={{ fontSize: "0.75rem", color: DIM, margin: 0 }}>
-            345 California St., Suite 600, San Francisco CA 94104
+            &copy; {new Date().getFullYear()} Boxford Partners LLC. All rights reserved. &nbsp;·&nbsp; 345 California St., Suite 600, San Francisco CA 94104
           </p>
           <a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" aria-label="Boxford Partners on LinkedIn" style={{ color: DIM }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
