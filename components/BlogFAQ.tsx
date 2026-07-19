@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { faqs } from "@/components/landing/FAQSection"
+import { faqs } from "@/components/landing/faq-data"
 
 const BLUE = "#3b82f6"
 const BODY_TEXT = "#1a1a2e"
