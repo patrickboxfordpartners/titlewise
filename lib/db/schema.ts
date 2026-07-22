@@ -313,3 +313,29 @@ export type ApiUsageLog = typeof apiUsageLogs.$inferSelect
 export type NewApiUsageLog = typeof apiUsageLogs.$inferInsert
 export type Webhook = typeof webhooks.$inferSelect
 export type NewWebhook = typeof webhooks.$inferInsert
+
+export const blogPosts = pgTable("blog_posts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  excerpt: text("excerpt").notNull(),
+  body: text("body").notNull(),
+  author: text("author").notNull().default("Patrick Mitchell"),
+  authorUrl: text("author_url").notNull().default("https://linkedin.com/in/patricktmitchell"),
+  category: text("category").notNull(),
+  readTime: text("read_time").notNull(),
+  brand: text("brand").notNull().default("titlewise"),
+  tags: text("tags").array().default([]),
+  status: text("status").notNull().default("draft"),
+  canonical: text("canonical"),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_blog_posts_slug").on(table.slug),
+  index("idx_blog_posts_status").on(table.status),
+  index("idx_blog_posts_published").on(table.publishedAt),
+])
+
+export type BlogPost = typeof blogPosts.$inferSelect
+export type NewBlogPost = typeof blogPosts.$inferInsert
