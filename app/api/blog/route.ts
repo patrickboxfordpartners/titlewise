@@ -20,6 +20,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   const body = await req.json()
-  const [post] = await db.insert(blogPosts).values(body).returning()
+  const [post] = await db.insert(blogPosts).values({
+    slug: body.slug,
+    title: body.title,
+    excerpt: body.excerpt,
+    body: body.body,
+    category: body.category ?? "Insights",
+    readTime: body.readTime ?? body.read_time ?? "5 min read",
+    brand: body.brand ?? "titlewise",
+    status: body.status ?? "published",
+    canonical: body.canonical ?? null,
+    publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
+  }).returning()
   return NextResponse.json(post, { status: 201 })
 }
