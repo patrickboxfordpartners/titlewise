@@ -1,0 +1,50 @@
+# TitleWise
+> AI-powered tools for real estate closing attorneys. Automate document review, wire verification, closing checklists, and client communication.
+
+## What is TitleWise?
+TitleWise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently. It handles title analysis, closing disclosure review, wire verification, HOA document review, fee estimation, tax proration, and automated status updates to all transaction parties.
+
+## Who is it for?
+- Solo real estate closing attorneys
+- Small title company firms (2-10 attorneys)
+- Any attorney handling residential real estate closings
+
+## What problems does it solve?
+- Manual document review is slow and error-prone
+- Wire fraud verification requires cross-referencing multiple sources
+- Status updates to buyers, sellers, agents, and lenders are repetitive
+- Closing checklists are tracked in spreadsheets or memory
+- Fee estimates require looking up multiple county-specific rates
+
+## Key Features
+- **Status Updates** — AI generates plain-language updates from checklist progress, emails them to all parties
+- **Title Analysis** — Parses title commitments, flags exceptions, identifies potential issues
+- **CD Reviewer** — TRID-compliant closing disclosure review engine
+- **Wire Verification** — Cross-matter memory detects anomalies in wire instructions
+- **HOA Reviewer** — Extracts key terms, fees, and restrictions from HOA documents
+- **Fee Estimate** — County-specific recording fees, transfer taxes, title insurance premiums
+- **Tax Proration** — Calculates buyer/seller tax responsibilities with per-diem precision
+- **Closing Agent** — AI assistant that auto-updates checklists, drafts communications, surfaces blockers
+- **Client Portal** — Shareable read-only checklist view for buyers and sellers
+
+## Pricing
+- Solo: $149/month (1 attorney, all AI tools)
+- Small Firm: $349/month (up to 5 users)
+- Pro: $599/month (up to 15 users, Closing Agent)
+- Enterprise: $999/month (unlimited users, API access, custom integrations)
+
+## Company
+TitleWise is built by Boxford Partners, an embedded operations consulting firm based in San Francisco. The product was built from problems observed inside real estate closing operations during consulting engagements.
+
+## Contact
+- Website: https://titlewise.app
+- Email: hello@titlewise.app
+- Parent company: https://boxfordpartners.com
+
+## Sitemap
+- / — Homepage with product overview and feature demos
+- /pricing — Subscription tiers and feature comparison
+- /faq — Frequently asked questions about the platform
+- /blog — Articles about AI for real estate closing attorneys
+- /api-docs — Developer API documentation
+- /demo — Interactive product demonstration
