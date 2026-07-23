@@ -19,18 +19,24 @@ export async function POST(req: NextRequest) {
   if (apiKey !== process.env.CONTENT_API_KEY) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
-  const body = await req.json()
-  const [post] = await db.insert(blogPosts).values({
-    slug: body.slug,
-    title: body.title,
-    excerpt: body.excerpt,
-    body: body.body,
-    category: body.category ?? "Insights",
-    readTime: body.readTime ?? body.read_time ?? "5 min read",
-    brand: body.brand ?? "titlewise",
-    status: body.status ?? "published",
-    canonical: body.canonical ?? null,
-    publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
-  }).returning()
-  return NextResponse.json(post, { status: 201 })
+  try {
+    const body = await req.json()
+    const [post] = await db.insert(blogPosts).values({
+      slug: body.slug,
+      title: body.title,
+      excerpt: body.excerpt,
+      body: body.body,
+      category: body.category ?? "Insights",
+      readTime: body.readTime ?? body.read_time ?? "5 min read",
+      brand: body.brand ?? "titlewise",
+      status: body.status ?? "published",
+      canonical: body.canonical ?? null,
+      publishedAt: body.publishedAt ? new Date(body.publishedAt) : new Date(),
+    }).returning()
+    return NextResponse.json(post, { status: 201 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error("[blog] POST error:", message)
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
 }
