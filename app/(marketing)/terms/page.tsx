@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
 import LandingFooter from "@/components/landing/LandingFooter"
+import Breadcrumbs from "@/components/landing/Breadcrumbs"
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -21,7 +22,8 @@ export default function TermsPage() {
       </nav>
 
       <div className="mx-auto max-w-3xl px-6 py-20 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Legal</p>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Terms of Service" }]} />
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-6">Legal</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground">Terms of Service</h1>
         <p className="mt-4 text-sm text-muted-foreground">Last updated: May 7, 2026</p>
 

@@ -5,6 +5,7 @@ import { getPost, getAllPosts } from "@/lib/posts"
 import BlogFAQ from "@/components/BlogFAQ"
 import LandingNav from "@/components/landing/LandingNav"
 import LandingFooter from "@/components/landing/LandingFooter"
+import Breadcrumbs from "@/components/landing/Breadcrumbs"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -135,14 +136,8 @@ export default async function BlogPostPage({ params }: Props) {
       }}>
         <div style={{ maxWidth: 760, margin: "0 auto" }}>
           {/* Breadcrumb */}
-          <div style={{ marginBottom: 32 }}>
-            <Link href="/blog" style={{
-              fontSize: "0.8125rem",
-              color: "rgba(237,238,240,0.4)",
-              textDecoration: "none",
-            }}>
-              &larr; Blog
-            </Link>
+          <div style={{ marginBottom: 32, display: "flex", justifyContent: "center" }}>
+            <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Blog", href: "/blog" }, { label: post.title }]} />
           </div>
 
           {/* Category + date pill */}

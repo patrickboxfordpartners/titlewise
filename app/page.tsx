@@ -4,6 +4,7 @@ import TitleAnalysisDemo from "@/components/landing/TitleAnalysisDemo"
 import WireVerificationDemo from "@/components/landing/WireVerificationDemo"
 import ClosingAgentDemo from "@/components/landing/ClosingAgentDemo"
 import FAQSection from "@/components/landing/FAQSection"
+import StickyMobileCTA from "@/components/landing/StickyMobileCTA"
 import { featuredFaqs } from "@/components/landing/faq-data"
 
 const BG = "#111827"
@@ -46,6 +47,7 @@ const jsonLd = {
   applicationCategory: "BusinessApplication",
   description: "AI-powered closing platform for real estate attorneys.",
   url: "https://titlewise.app",
+  operatingSystem: "Web",
   offers: {
     "@type": "AggregateOffer",
     lowPrice: "149",
@@ -53,6 +55,32 @@ const jsonLd = {
     priceCurrency: "USD",
     offerCount: "4",
   },
+}
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "TitleWise",
+  legalName: "Boxford Partners LLC",
+  url: "https://titlewise.app",
+  logo: "https://titlewise.app/logo.svg",
+  description: "AI-powered closing platform for real estate attorneys. From intake to clear-to-close.",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "345 California St., Suite 600",
+    addressLocality: "San Francisco",
+    addressRegion: "CA",
+    postalCode: "94104",
+    addressCountry: "US",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "hello@titlewise.app",
+    contactType: "customer service",
+  },
+  sameAs: [
+    "https://www.linkedin.com/company/boxfordpartners",
+  ],
 }
 
 export default function HomePage() {
@@ -67,6 +95,10 @@ export default function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       <style>{`
         @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
@@ -363,6 +395,8 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      <StickyMobileCTA />
 
       {/* Footer */}
       <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "#111827" }}>

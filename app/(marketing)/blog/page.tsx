@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getAllPosts } from "@/lib/posts"
 import LandingNav from "@/components/landing/LandingNav"
 import LandingFooter from "@/components/landing/LandingFooter"
+import Breadcrumbs from "@/components/landing/Breadcrumbs"
 
 export const metadata: Metadata = {
   title: "Blog | TitleWise",
@@ -16,7 +17,8 @@ export default function BlogIndexPage() {
     <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "var(--font-sans)" }}>
       <LandingNav />
 
-      <div className="max-w-[1060px] mx-auto px-8 pt-32 pb-20">
+      <div className="max-w-[1060px] mx-auto px-8 pt-24 pb-20">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Blog" }]} />
         {/* Header */}
         <div className="mb-16">
           <p style={{

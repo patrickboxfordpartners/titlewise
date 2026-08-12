@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import LandingNav from "@/components/landing/LandingNav"
 import LandingFooter from "@/components/landing/LandingFooter"
+import Breadcrumbs from "@/components/landing/Breadcrumbs"
 import FAQCategoryNav from "@/components/landing/FAQCategoryNav"
 import { faqs } from "@/components/landing/faq-data"
 
@@ -45,6 +46,10 @@ export default function FAQPage() {
       />
 
       <LandingNav />
+
+      <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 32px" }}>
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
+      </div>
 
       {/* Hero */}
       <section style={{ backgroundColor: "var(--section-dark)", padding: "96px 32px 80px", textAlign: "center" }}>

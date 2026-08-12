@@ -1,0 +1,18 @@
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Demo",
+  description: "Try the TitleWise AI status update generator live. See how closing attorneys save 30+ minutes per file with AI-powered document analysis.",
+  alternates: { canonical: "https://titlewise.app/demo" },
+  openGraph: {
+    type: "website",
+    title: "Demo | TitleWise",
+    description: "Try the AI status update generator live. See TitleWise in action.",
+    url: "https://titlewise.app/demo",
+    siteName: "TitleWise",
+  },
+}
+
+export default function DemoLayout({ children }: { children: React.ReactNode }) {
+  return children
+}
