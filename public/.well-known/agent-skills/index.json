@@ -1,0 +1,29 @@
+{
+  "$schema": "https://agentskills.io/schema/v0.2.0/index.json",
+  "skills": [
+    {
+      "name": "analyze-closing-disclosure",
+      "type": "api",
+      "description": "Analyze a Closing Disclosure for TRID compliance, flag discrepancies in loan terms, closing costs, and cash-to-close figures",
+      "url": "https://titlewise.app/.well-known/agent-skills/analyze-cd/SKILL.md"
+    },
+    {
+      "name": "analyze-title-commitment",
+      "type": "api",
+      "description": "Parse title commitments, identify Schedule B exceptions, flag potential issues with easements, liens, and encumbrances",
+      "url": "https://titlewise.app/.well-known/agent-skills/analyze-commitment/SKILL.md"
+    },
+    {
+      "name": "verify-wire-instructions",
+      "type": "api",
+      "description": "Cross-reference wire instructions against known patterns, detect anomalies and potential wire fraud indicators",
+      "url": "https://titlewise.app/.well-known/agent-skills/verify-wire/SKILL.md"
+    },
+    {
+      "name": "review-hoa-documents",
+      "type": "api",
+      "description": "Extract key terms, fees, special assessments, and transfer restrictions from HOA/condo documents",
+      "url": "https://titlewise.app/.well-known/agent-skills/review-hoa/SKILL.md"
+    }
+  ]
+}

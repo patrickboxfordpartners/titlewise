@@ -62,6 +62,7 @@ export default function LandingFooter() {
             <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Company</p>
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
               <li><a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Boxford Partners</a></li>
+              <li><a href="https://cal.com/boxfordpartners/titlewise-demo" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Book a Demo</a></li>
               <li><a href="mailto:hello@titlewise.app" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Contact</a></li>
               <li><a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>LinkedIn</a></li>
             </ul>

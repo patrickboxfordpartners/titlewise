@@ -31,6 +31,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/",
+        headers: [
+          {
+            key: "Link",
+            value: '</.well-known/api-catalog>; rel="api-catalog", </auth.md>; rel="service-doc", </.well-known/mcp/server-card.json>; rel="mcp-server-card", </.well-known/agent-skills/index.json>; rel="agent-skills", </llms.txt>; rel="llms-txt"',
+          },
+        ],
+      },
     ]
   },
 }

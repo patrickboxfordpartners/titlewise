@@ -1,0 +1,20 @@
+{
+  "$schema": "https://spec.modelcontextprotocol.io/2025-03-26/server-card.json",
+  "serverInfo": {
+    "name": "titlewise",
+    "version": "1.0.0",
+    "description": "AI-powered tools for real estate closing attorneys: title analysis, CD review, wire verification, HOA review"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://titlewise.app/api/mcp"
+  },
+  "capabilities": {
+    "tools": true
+  },
+  "authentication": {
+    "type": "bearer",
+    "description": "API key with tw_live_ prefix. Generate at https://titlewise.app/settings under API Keys.",
+    "tokenUrl": "https://titlewise.app/auth.md"
+  }
+}
