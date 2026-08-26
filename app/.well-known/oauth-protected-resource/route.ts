@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
 export function GET() {
   const metadata = {
@@ -12,6 +12,9 @@ export function GET() {
   }
 
   return NextResponse.json(metadata, {
-    headers: { "Cache-Control": "public, max-age=86400" },
+    headers: {
+      "Cache-Control": "public, max-age=86400",
+      "Access-Control-Allow-Origin": "*",
+    },
   })
 }

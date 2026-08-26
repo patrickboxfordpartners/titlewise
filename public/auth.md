@@ -1,62 +1,67 @@
-# TitleWise Agent Authentication
+# Auth.md
 
-## Overview
+## Service
 
-TitleWise provides a REST API for AI agents to perform real estate closing document analysis. Authentication uses Bearer tokens (API keys).
-
-## Getting an API Key
-
-1. Sign up at https://titlewise.app/sign-up
-2. Subscribe to the Enterprise plan ($999/mo) which includes API access
-3. Navigate to Settings > API Keys
-4. Click "Generate New Key"
-5. Store the key securely — it is shown only once
-
-API keys use the prefix `tw_live_` followed by 48 random characters.
+- **Name:** TitleWise
+- **URL:** https://titlewise.app
+- **Description:** AI-powered tools for real estate closing attorneys
 
 ## Authentication
 
-Include the API key as a Bearer token in the Authorization header:
+### For AI Agents
 
+Agents authenticate using Bearer tokens (API keys) issued per-user.
+
+**Token format:** `tw_live_` followed by 48 random characters
+
+**Header:**
 ```
 Authorization: Bearer tw_live_your_key_here
 ```
 
-## Available Endpoints
+### Registration
 
-All endpoints are at `https://titlewise.app/api/v1/`:
+1. Create an account at https://titlewise.app/sign-up
+2. Subscribe to the Enterprise plan ($999/mo)
+3. Navigate to Settings > API Keys
+4. Generate a new key
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/analyze-cd` | POST | Analyze a Closing Disclosure |
-| `/api/v1/analyze-commitment` | POST | Analyze a title commitment |
-| `/api/v1/verify-wire` | POST | Verify wire instructions |
-| `/api/v1/review-hoa` | POST | Review HOA documents |
-| `/api/health` | GET | Health check (no auth required) |
+### OAuth Discovery
+
+- **Authorization Server:** https://clerk.titlewise.app
+- **OIDC Configuration:** https://clerk.titlewise.app/.well-known/openid-configuration
+- **Protected Resource Metadata:** https://titlewise.app/.well-known/oauth-protected-resource
+
+## Endpoints
+
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/api/v1/analyze-cd` | POST | Bearer | Analyze a Closing Disclosure |
+| `/api/v1/analyze-commitment` | POST | Bearer | Analyze a title commitment |
+| `/api/v1/verify-wire` | POST | Bearer | Verify wire instructions |
+| `/api/v1/review-hoa` | POST | Bearer | Review HOA documents |
+| `/api/health` | GET | None | Health check |
 
 ## Rate Limits
 
-- 100 requests per minute per API key
+- 100 requests per minute per key
 - 10,000 requests per month (Enterprise plan)
-
-Usage is logged and viewable in Settings > API Keys > Usage.
 
 ## Webhooks
 
-Enterprise users can register webhook URLs to receive event notifications:
+Enterprise users can register webhook URLs for event notifications:
 
 - `matter.created`
 - `matter.updated`
 - `checklist.completed`
 - `document.analyzed`
 
-Register webhooks at Settings > Webhooks or via `POST /api/webhooks`.
-
 ## MCP Transport
 
-An MCP-compatible endpoint is available at `https://titlewise.app/api/mcp` for agents that support the Model Context Protocol. Use the same Bearer token for authentication.
+MCP-compatible endpoint: `https://titlewise.app/api/mcp`
+Authentication: Same Bearer token
 
-## Support
+## Contact
 
 - Email: hello@titlewise.app
-- API Documentation: https://titlewise.app/api-docs
+- Documentation: https://titlewise.app/api-docs

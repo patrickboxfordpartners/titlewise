@@ -3,6 +3,7 @@ import Script from "next/script"
 import { ClerkProvider } from "@clerk/nextjs"
 import { PHProvider } from "@/components/posthog-provider"
 import { CookieBanner } from "@/components/CookieBanner"
+import { WebMCP } from "@/components/WebMCP"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -80,6 +81,7 @@ export default function RootLayout({
             src="https://analytics.boxfordpartners.com/script.js"
             data-website-id="e9d66539-0dbe-44af-926b-f8e0667373b6"
           />
+          <WebMCP />
         </body>
       </html>
     </ClerkProvider>
