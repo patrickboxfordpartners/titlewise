@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -27,7 +28,17 @@ const isPublicRoute = createRouteMatcher([
 // rewrite them to the sign-in page, which breaks JSON clients.
 const isApiRoute = createRouteMatcher(["/api/(.*)"])
 
+const MARKDOWN_PATHS = new Set(["/", "/pricing", "/faq"])
+
 export default clerkMiddleware(async (auth, req) => {
+  const accept = req.headers.get("accept") || ""
+  if (accept.includes("text/markdown") && MARKDOWN_PATHS.has(req.nextUrl.pathname)) {
+    const url = req.nextUrl.clone()
+    url.pathname = "/api/markdown"
+    url.searchParams.set("path", req.nextUrl.pathname)
+    return NextResponse.rewrite(url)
+  }
+
   if (!isPublicRoute(req) && !isApiRoute(req)) {
     await auth.protect()
   }
