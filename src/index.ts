@@ -2,6 +2,7 @@ import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { verifyICToken } from "./auth";
+import { getCotalManifest } from "./cotal";
 import { executeAnalyzeCommitment } from "./tools/analyze-commitment";
 import { executeVerifyWire } from "./tools/verify-wire";
 import { executeAnalyzeCD } from "./tools/analyze-cd";
@@ -9,7 +10,7 @@ import { executeReviewHOA } from "./tools/review-hoa";
 
 export interface Env {
   TITLEWISE_API_URL: string;
-  TITLEWISE_SERVICE_KEY: string;
+  ANTHROPIC_API_KEY: string;
 }
 
 const LLMS_TXT = `# TitleWise Agent Gateway
@@ -65,7 +66,7 @@ export class TitleWiseAgent extends McpAgent<Env, {}, {}> {
         property_address: z.string().optional().describe("Property address for cross-reference"),
       },
       async (args) => {
-        const result = await executeAnalyzeCommitment(args, this.env.TITLEWISE_API_URL, this.env.TITLEWISE_SERVICE_KEY);
+        const result = await executeAnalyzeCommitment(args, this.env.TITLEWISE_API_URL, this.env.ANTHROPIC_API_KEY);
         return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
       }
     );
@@ -79,7 +80,7 @@ export class TitleWiseAgent extends McpAgent<Env, {}, {}> {
         expected_beneficiary: z.string().optional().describe("Expected beneficiary name"),
       },
       async (args) => {
-        const result = await executeVerifyWire(args, this.env.TITLEWISE_API_URL, this.env.TITLEWISE_SERVICE_KEY);
+        const result = await executeVerifyWire(args, this.env.TITLEWISE_API_URL, this.env.ANTHROPIC_API_KEY);
         return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
       }
     );
@@ -92,7 +93,7 @@ export class TitleWiseAgent extends McpAgent<Env, {}, {}> {
         property_address: z.string().optional().describe("Property address for context"),
       },
       async (args) => {
-        const result = await executeAnalyzeCD(args, this.env.TITLEWISE_API_URL, this.env.TITLEWISE_SERVICE_KEY);
+        const result = await executeAnalyzeCD(args, this.env.TITLEWISE_API_URL, this.env.ANTHROPIC_API_KEY);
         return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
       }
     );
@@ -104,7 +105,7 @@ export class TitleWiseAgent extends McpAgent<Env, {}, {}> {
         document_text: z.string().min(100).describe("Full text of HOA documents"),
       },
       async (args) => {
-        const result = await executeReviewHOA(args, this.env.TITLEWISE_API_URL, this.env.TITLEWISE_SERVICE_KEY);
+        const result = await executeReviewHOA(args, this.env.TITLEWISE_API_URL, this.env.ANTHROPIC_API_KEY);
         return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
       }
     );
@@ -138,6 +139,13 @@ export default {
 
     if (url.pathname === "/health") {
       return new Response(JSON.stringify({ status: "ok", timestamp: new Date().toISOString() }), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (url.pathname === "/cotal" || url.pathname === "/.well-known/agent.json") {
+      const baseUrl = `${url.protocol}//${url.host}`;
+      return new Response(JSON.stringify(getCotalManifest(baseUrl), null, 2), {
         headers: { "Content-Type": "application/json" },
       });
     }

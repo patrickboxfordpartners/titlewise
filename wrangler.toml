@@ -5,3 +5,14 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 TITLEWISE_API_URL = "https://titlewise.app"
+
+# ANTHROPIC_API_KEY is set via `wrangler secret put ANTHROPIC_API_KEY`
+
+[durable_objects]
+bindings = [
+  { name = "TITLEWISE_AGENT", class_name = "TitleWiseAgent" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["TitleWiseAgent"]
