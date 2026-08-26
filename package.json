@@ -8,6 +8,7 @@
     "types": "wrangler types"
   },
   "dependencies": {
+    "@mitosislabs/sdk": "^0.26.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "agents": "^0.0.86",
     "zod": "^3.25.76"
