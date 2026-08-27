@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import {
   matters, checklistItems, matterParties, documentSlots,
-  emailThreads, statusUpdates,
+  emailThreads,
 } from "@/lib/db/schema"
 import { eq, and, desc } from "drizzle-orm"
 import type { AisaTool } from "./aisa"

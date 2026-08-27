@@ -11,6 +11,20 @@ import { NEIL_TOOLS, executeTool, type ToolContext } from "@/lib/neil/tools"
 export const dynamic = "force-dynamic"
 export const maxDuration = 120
 
+const rateLimitMap = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW = 60_000
+const RATE_LIMIT_MAX = 10
+
+function checkRateLimit(userId: string): boolean {
+  const now = Date.now()
+  const timestamps = rateLimitMap.get(userId) || []
+  const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
+  if (recent.length >= RATE_LIMIT_MAX) return false
+  recent.push(now)
+  rateLimitMap.set(userId, recent)
+  return true
+}
+
 export async function POST(req: NextRequest) {
   const { userId: clerkId } = await auth()
   if (!clerkId) {
@@ -25,6 +39,13 @@ export async function POST(req: NextRequest) {
   if (!access.allowed) {
     return new Response(JSON.stringify({ error: access.message }), {
       status: 403,
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  if (!checkRateLimit(user.id)) {
+    return new Response(JSON.stringify({ error: "Too many requests. Try again in a minute." }), {
+      status: 429,
       headers: { "Content-Type": "application/json" },
     })
   }
@@ -86,8 +107,13 @@ export async function POST(req: NextRequest) {
         let fullContent = ""
         let toolCallsAccumulator: Array<{ id: string; name: string; arguments: string }> = []
         let currentToolArgs: Record<string, string> = {}
+        let depth = 0
 
         async function runStream(msgs: AisaMessage[]): Promise<void> {
+          if (++depth > 10) {
+            send("error", { message: "Too many tool iterations. Try a simpler request." })
+            return
+          }
           const chunks = streamChat(msgs, NEIL_TOOLS)
 
           for await (const chunk of chunks) {
