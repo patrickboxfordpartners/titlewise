@@ -9,6 +9,7 @@ function requireEnv(name: string): string {
 // Lazy getters — only throw when actually accessed, not at import time
 export const env = {
   get ANTHROPIC_API_KEY() { return requireEnv("ANTHROPIC_API_KEY") },
+  get AISA_API_KEY() { return requireEnv("AISA_API_KEY") },
   get STRIPE_SECRET_KEY() { return requireEnv("STRIPE_SECRET_KEY") },
   get STRIPE_WEBHOOK_SECRET() { return requireEnv("STRIPE_WEBHOOK_SECRET") },
   get DATABASE_URL() { return requireEnv("DATABASE_URL") },
