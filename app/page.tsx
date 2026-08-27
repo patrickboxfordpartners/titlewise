@@ -155,7 +155,21 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section style={{ padding: "96px 32px 80px", maxWidth: 1060, margin: "0 auto" }}>
+      <section style={{ padding: "96px 32px 80px", maxWidth: 1060, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* Background video */}
+        <div style={{ position: "fixed", inset: 0, zIndex: -1, overflow: "hidden" }}>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.25 }}
+          >
+            <source src="https://cdn.coverr.co/videos/coverr-law-office-establishing-shot/1080p.mp4" type="video/mp4" />
+            <source src="https://cdn.coverr.co/videos/coverr-modern-office-space/1080p.mp4" type="video/mp4" />
+          </video>
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, ${BG}60, ${BG}b0, ${BG})` }} />
+        </div>
         <p style={{
           fontSize: "0.75rem", fontWeight: 700, color: BLUE,
           letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 24,
