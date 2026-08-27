@@ -290,6 +290,21 @@ export const emailThreads = pgTable("email_threads", {
 export type EmailThread = typeof emailThreads.$inferSelect
 export type NewEmailThread = typeof emailThreads.$inferInsert
 
+export const chatMessages = pgTable("chat_messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  matterId: uuid("matter_id").notNull().references(() => matters.id, { onDelete: "cascade" }),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  role: text("role").notNull(),
+  content: text("content"),
+  toolCalls: jsonb("tool_calls"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (table) => [
+  index("idx_chat_messages_matter").on(table.matterId, table.createdAt),
+])
+
+export type ChatMessage = typeof chatMessages.$inferSelect
+export type NewChatMessage = typeof chatMessages.$inferInsert
+
 export type MatterParty = typeof matterParties.$inferSelect
 export type NewMatterParty = typeof matterParties.$inferInsert
 export type DocumentSlot = typeof documentSlots.$inferSelect
