@@ -2,16 +2,6 @@ import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "titlewise.app" }],
-        destination: "https://www.titlewise.app/:path*",
-        permanent: true,
-      },
-    ]
-  },
   async headers() {
     return [
       {
