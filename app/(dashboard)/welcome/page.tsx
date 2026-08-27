@@ -127,17 +127,26 @@ export default function WelcomePage() {
 
         {/* CTA */}
         <div className="text-center">
-          <button
-            onClick={handleComplete}
-            disabled={completing}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-base font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
-          >
-            {completing ? "Loading..." : "Create Your First Matter"}
-            <ArrowRight className="h-5 w-5" />
-          </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-3">
+            <button
+              onClick={handleComplete}
+              disabled={completing}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-base font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
+            >
+              {completing ? "Loading..." : "Create Your First Matter"}
+              <ArrowRight className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => router.push("/demo")}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-secondary border border-border text-foreground text-base font-semibold rounded-lg hover:bg-muted/50 transition-colors"
+            >
+              <Sparkles className="h-5 w-5" />
+              See it in action
+            </button>
+          </div>
           <button
             onClick={() => router.push("/matters")}
-            className="block mx-auto mt-3 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="block mx-auto text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             Skip tour
           </button>
