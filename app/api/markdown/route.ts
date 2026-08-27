@@ -103,8 +103,8 @@ The system cross-references wire instructions against historical data from your 
 ## Is my data secure?
 Yes. All data is encrypted in transit and at rest. We do not train AI models on your documents.
 
-## Can I try it free?
-Yes. All plans include a 14-day free trial with full access to all features.
+## What payment methods do you accept?
+We accept all major credit cards via Stripe. All subscriptions are billed monthly.
 `,
 }
 

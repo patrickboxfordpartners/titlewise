@@ -52,20 +52,6 @@ export async function POST(req: NextRequest) {
 
   const user = await getOrCreateUser(userId)
 
-  const { isTrial } = getTrialStatus(user)
-  if (isTrial) {
-    const [{ value: activeCount }] = await db
-      .select({ value: count() })
-      .from(matters)
-      .where(and(eq(matters.userId, user.id), ne(matters.status, "closed")))
-    if (activeCount >= 3) {
-      return NextResponse.json(
-        { error: "trial_limit_reached", limit: 3 },
-        { status: 403 }
-      )
-    }
-  }
-
   const [matter] = await db.insert(matters).values({
     userId: user.id,
     clientName: parsed.data.clientName,
