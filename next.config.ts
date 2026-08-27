@@ -18,11 +18,11 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/pricing.md",
-        destination: "/api/serve-orank?path=/pricing.md",
+        destination: "/api/md/pricing",
       },
       {
         source: "/about.md",
-        destination: "/api/serve-orank?path=/about.md",
+        destination: "/api/md/about",
       },
       {
         source: "/contact.md",
