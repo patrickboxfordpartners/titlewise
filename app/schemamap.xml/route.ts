@@ -2,7 +2,8 @@ import { NextResponse } from "next/server"
 import { readFile } from "fs/promises"
 import { join } from "path"
 
-export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
+export const runtime = "nodejs"
 
 export async function GET() {
   const filePath = join(process.cwd(), "public/schemamap.xml")

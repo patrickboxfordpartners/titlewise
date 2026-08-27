@@ -40,49 +40,7 @@ export async function GET(req: NextRequest) {
         .where(eq(users.id, user.id))
     }
 
-    if (plan === "solo") {
-      // Check for existing active trial to prevent duplicate subscriptions
-      if (user.stripeSubscriptionId && user.subscriptionStatus === "trialing") {
-        return NextResponse.redirect(new URL("/dashboard", APP_URL))
-      }
-
-      // Create trial subscription — no payment method required
-      const priceId = PLANS.solo.monthlyPriceId
-      if (!priceId) {
-        logger.error("post-signup", "Solo price ID not configured", {})
-        return NextResponse.redirect(new URL("/pricing", APP_URL))
-      }
-
-      const subscription = await stripe.subscriptions.create({
-        customer: customerId,
-        items: [{ price: priceId }],
-        trial_period_days: 7,
-        payment_behavior: "default_incomplete",
-        payment_settings: { save_default_payment_method: "on_subscription" },
-        metadata: { clerkId: userId, plan: "solo" },
-        expand: ["latest_invoice"],
-      })
-
-      const trialEnd = subscription.trial_end
-        ? new Date(subscription.trial_end * 1000)
-        : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-
-      await db.update(users)
-        .set({
-          stripeSubscriptionId: subscription.id,
-          stripePriceId: priceId,
-          subscriptionTier: "solo",
-          subscriptionStatus: "trialing",
-          trialEndsAt: trialEnd,
-          updatedAt: new Date(),
-        })
-        .where(eq(users.id, user.id))
-
-      logger.info("post-signup", "Trial activated", { userId, plan: "solo", trialEnd: trialEnd.toISOString() })
-      return NextResponse.redirect(new URL("/dashboard", APP_URL))
-    }
-
-    // Paid plan — Stripe Checkout
+    // All plans — Stripe Checkout
     const planConfig = PLANS[plan]
     const priceId = planConfig.monthlyPriceId
     if (!priceId) {
