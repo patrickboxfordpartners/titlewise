@@ -2,6 +2,50 @@ import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/.well-known/ard.json",
+        destination: "/api/serve-orank?path=/.well-known/ard.json",
+      },
+      {
+        source: "/.well-known/agent-card.json",
+        destination: "/api/serve-orank?path=/.well-known/agent-card.json",
+      },
+      {
+        source: "/.well-known/oauth-authorization-server",
+        destination: "/api/serve-orank?path=/.well-known/oauth-authorization-server",
+      },
+      {
+        source: "/pricing.md",
+        destination: "/api/serve-orank?path=/pricing.md",
+      },
+      {
+        source: "/about.md",
+        destination: "/api/serve-orank?path=/about.md",
+      },
+      {
+        source: "/contact.md",
+        destination: "/api/serve-orank?path=/contact.md",
+      },
+      {
+        source: "/privacy.md",
+        destination: "/api/serve-orank?path=/privacy.md",
+      },
+      {
+        source: "/index.md",
+        destination: "/api/serve-orank?path=/index.md",
+      },
+      {
+        source: "/auth.md",
+        destination: "/api/serve-orank?path=/auth.md",
+      },
+      {
+        source: "/schemamap.xml",
+        destination: "/api/serve-orank?path=/schemamap.xml",
+      },
+    ]
+  },
   async headers() {
     return [
       {
