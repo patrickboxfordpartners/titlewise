@@ -38,11 +38,26 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Background video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-[0.08]"
+        >
+          <source src="https://cdn.coverr.co/videos/coverr-law-office-establishing-shot/1080p.mp4" type="video/mp4" />
+          <source src="https://cdn.coverr.co/videos/coverr-modern-office-space/1080p.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background" />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-3xl w-full"
+        className="max-w-3xl w-full relative z-10"
       >
         {/* Header */}
         <div className="text-center mb-12">
