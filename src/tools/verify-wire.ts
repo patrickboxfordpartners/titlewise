@@ -80,9 +80,8 @@ export async function executeVerifyWire(
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      temperature: 0,
+      model: "claude-sonnet-5",
+      max_tokens: 16384,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: buildPrompt(args.document_text, args.expected_amount, args.expected_beneficiary) }],
     }),
@@ -94,8 +93,9 @@ export async function executeVerifyWire(
   }
 
   const data: any = await response.json();
-  const text = data.content?.[0]?.text;
-  if (!text) return { error: "No response from verification model" };
+  const textBlock = data.content?.find((b: any) => b.type === "text");
+  const text = textBlock?.text;
+  if (!text) return { error: "No response from verification model", debug: { content_types: data.content?.map((b: any) => b.type), stop_reason: data.stop_reason } };
 
   try {
     const jsonMatch = text.match(/\{[\s\S]*\}/);

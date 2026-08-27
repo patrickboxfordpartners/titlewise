@@ -80,9 +80,8 @@ export async function executeReviewHOA(
       "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      temperature: 0,
+      model: "claude-sonnet-5",
+      max_tokens: 16384,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: buildPrompt(args.document_text) }],
     }),
@@ -94,17 +93,19 @@ export async function executeReviewHOA(
   }
 
   const data: any = await response.json();
-  const text = data.content?.[0]?.text;
+  const textBlock = data.content?.find((b: any) => b.type === "text");
+  const text = textBlock?.text;
   if (!text) return { error: "No response from HOA review model" };
 
   try {
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return { error: "No valid JSON in model response" };
-    return {
-      analysis: JSON.parse(jsonMatch[0]),
-      usage: { input_tokens: data.usage?.input_tokens, output_tokens: data.usage?.output_tokens },
-    };
-  } catch {
-    return { error: "Failed to parse HOA review response", raw: text.substring(0, 500) };
-  }
+    const jsonMatch = text.match(/```json\s*([\s\S]*?)```/) || text.match(/(\{[\s\S]*\})/);
+    if (jsonMatch) {
+      const jsonStr = jsonMatch[1] || jsonMatch[0];
+      return {
+        analysis: JSON.parse(jsonStr),
+        usage: { input_tokens: data.usage?.input_tokens, output_tokens: data.usage?.output_tokens },
+      };
+    }
+  } catch {}
+  return { analysis: text, usage: { input_tokens: data.usage?.input_tokens, output_tokens: data.usage?.output_tokens } };
 }

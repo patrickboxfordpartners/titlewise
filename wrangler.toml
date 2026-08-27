@@ -2,11 +2,26 @@ name = "titlewise-agent"
 main = "src/index.ts"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+routes = [
+  { pattern = "titlewise.app", custom_domain = true },
+]
 
 [vars]
 TITLEWISE_API_URL = "https://titlewise.app"
+HACKATHON_MODE = "true"
+
+# Secrets (set via `npx wrangler secret put <NAME>`):
+# ANTHROPIC_API_KEY, MITOSIS_API_KEY, MITOSIS_OFFICE_ID, TAVILY_API_KEY
+# TELNYX_API_KEY, TELNYX_PHONE_NUMBER, TELNYX_MESSAGING_PROFILE_ID, DEMO_NOTIFY_PHONE
+# STRIPE_SECRET_KEY
 
 # ANTHROPIC_API_KEY is set via `wrangler secret put ANTHROPIC_API_KEY`
+
+[[r2_buckets]]
+binding = "DOCS_BUCKET"
+bucket_name = "titlewise"
 
 [durable_objects]
 bindings = [
