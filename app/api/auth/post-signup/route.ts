@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
       customer: customerId,
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${APP_URL}/dashboard?subscribed=true`,
+      success_url: `${APP_URL}/welcome`,
       cancel_url: `${APP_URL}/pricing`,
       allow_promotion_codes: true,
       subscription_data: {

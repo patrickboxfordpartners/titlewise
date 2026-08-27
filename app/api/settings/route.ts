@@ -19,14 +19,17 @@ export async function GET() {
 
   const user = await getOrCreateUser(userId)
   return NextResponse.json({
-    name: user.name,
-    email: user.email,
-    firmName: user.firmName,
-    subscriptionStatus: user.subscriptionStatus,
-    subscriptionTier: user.subscriptionTier,
-    trialEndsAt: user.trialEndsAt,
-    monthlyUsageCount: user.monthlyUsageCount,
-    hasStripeCustomer: !!user.stripeCustomerId,
+    user: {
+      name: user.name,
+      email: user.email,
+      firmName: user.firmName,
+      subscriptionStatus: user.subscriptionStatus,
+      subscriptionTier: user.subscriptionTier,
+      trialEndsAt: user.trialEndsAt,
+      monthlyUsageCount: user.monthlyUsageCount,
+      hasStripeCustomer: !!user.stripeCustomerId,
+      onboardingCompletedAt: user.onboardingCompletedAt,
+    },
   })
 }
 

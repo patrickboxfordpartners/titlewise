@@ -21,6 +21,7 @@ export const users = pgTable("users", {
   dripDay7SentAt: timestamp("drip_day7_sent_at"),
   rateLimitCount: integer("rate_limit_count").default(0),
   rateLimitWindowStart: timestamp("rate_limit_window_start"),
+  onboardingCompletedAt: timestamp("onboarding_completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })

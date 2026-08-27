@@ -240,18 +240,45 @@ function MattersContent() {
 
       {/* Empty state */}
       {!loading && active.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-            <FolderOpen className="h-6 w-6 text-primary" />
+        <div className="max-w-md mx-auto text-center py-12">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
+            <FolderOpen className="h-8 w-8 text-primary" />
           </div>
-          <p className="text-sm font-semibold text-foreground">No open matters</p>
-          <p className="text-xs text-muted-foreground mt-1 mb-4">Create a matter to start tracking a closing</p>
+          <h2 className="text-xl font-bold text-foreground mb-2">Create your first matter</h2>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+            Matters are the foundation of TitleWise. Each matter represents a real estate closing with its own checklist, documents, and AI tools.
+          </p>
+
+          <div className="bg-card border border-border rounded-xl p-6 mb-6 text-left">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              What you'll track
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <p className="text-sm text-foreground">Auto-generated closing checklist</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <p className="text-sm text-foreground">Document uploads and analysis</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <p className="text-sm text-foreground">Client communication and status updates</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                <p className="text-sm text-foreground">Wire verification and fee calculations</p>
+              </div>
+            </div>
+          </div>
+
           <button
             onClick={() => setShowCreate(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary text-white text-base font-semibold rounded-lg hover:bg-primary/90 transition-colors mx-auto"
           >
-            <Plus className="h-4 w-4" />
-            New matter
+            <Plus className="h-5 w-5" />
+            Create your first matter
           </button>
         </div>
       )}

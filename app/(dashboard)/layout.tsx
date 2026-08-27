@@ -1,10 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import Sidebar from "@/components/sidebar"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (pathname === "/welcome") return
+
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d.user?.onboardingCompletedAt) {
+          router.push("/welcome")
+        }
+      })
+      .catch(() => {})
+  }, [pathname, router])
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F7F7F5" }}>
