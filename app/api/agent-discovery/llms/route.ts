@@ -1,0 +1,102 @@
+import { NextResponse } from "next/server"
+
+export const dynamic = "force-dynamic"
+
+const LLMS_TXT = `# TitleWise
+> AI-powered tools for real estate closing attorneys. Automate document review, wire verification, closing checklists, and client communication.
+
+## When to Use TitleWise
+
+Use TitleWise when you need to:
+
+**Document Analysis:**
+- Parse and analyze title commitments for Schedule B exceptions, liens, or encumbrances
+- Review closing disclosures for TRID compliance and tolerance violations
+- Extract terms, fees, and restrictions from HOA or condo documents
+- Detect anomalies in wire transfer instructions to prevent fraud
+
+**Matter Management:**
+- Track closing checklist progress across multiple transactions
+- Generate plain-language status updates for buyers, sellers, agents, and lenders
+- Estimate county-specific recording fees, transfer taxes, and title insurance premiums
+- Calculate per-diem tax prorations for buyer/seller responsibilities
+
+**API Integration:**
+- Build automated workflows for real estate transaction processing
+- Integrate document review into existing practice management systems
+- Connect via Model Context Protocol (MCP) for agent-to-agent communication
+- Use REST API or Agent Skills for programmatic access
+
+**Best For:**
+- Solo real estate closing attorneys handling 10-50+ files per month
+- Small title companies (2-10 attorneys) with repetitive document review workloads
+- Any attorney who wants to reduce closing timeline from 30-45 days to 20-30 days
+- Firms concerned about wire fraud (average loss: $150K per incident)
+
+**Not For:**
+- Commercial real estate transactions (residential only)
+- Full-service title search and examination (we analyze commitments, not generate them)
+- Underwriting decisions (we flag issues; you make the call)
+- Non-US jurisdictions (US-only, state-specific compliance)
+
+## What is TitleWise?
+
+TitleWise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently. It handles title analysis, closing disclosure review, wire verification, HOA document review, fee estimation, tax proration, and automated status updates to all transaction parties.
+
+## Who is it for?
+
+- Solo real estate closing attorneys
+- Small title company firms (2-10 attorneys)
+- Any attorney handling residential real estate closings
+
+## Key Features
+
+- **Status Updates** — AI generates plain-language updates from checklist progress, emails them to all parties
+- **Title Analysis** — Parses title commitments, flags exceptions, identifies potential issues
+- **CD Reviewer** — TRID-compliant closing disclosure review engine
+- **Wire Verification** — Cross-matter memory detects anomalies in wire instructions
+- **HOA Reviewer** — Extracts key terms, fees, and restrictions from HOA documents
+- **Fee Estimate** — County-specific recording fees, transfer taxes, title insurance premiums
+- **Tax Proration** — Calculates buyer/seller tax responsibilities with per-diem precision
+- **Closing Agent** — AI assistant that auto-updates checklists, drafts communications, surfaces blockers
+- **Client Portal** — Shareable read-only checklist view for buyers and sellers
+
+## Pricing
+
+- Solo: $149/month (1 attorney, all AI tools)
+- Small Firm: $349/month (up to 5 users)
+- Pro: $599/month (up to 15 users, Closing Agent)
+- Enterprise: $999/month (unlimited users, API access, custom integrations)
+
+## Resources
+
+- [Homepage](https://titlewise.app/) — Product overview and feature demos
+- [Pricing](https://titlewise.app/pricing) — Subscription tiers and feature comparison
+- [FAQ](https://titlewise.app/faq) — Frequently asked questions about the platform
+- [Blog](https://titlewise.app/blog) — Articles about AI for real estate closing attorneys
+- [API Documentation](https://titlewise.app/api-docs) — Developer API reference
+- [Demo](https://titlewise.app/demo) — Interactive product demonstration
+- [Auth Guide](https://titlewise.app/auth.md) — Authentication methods for agents
+- [AI Catalog](https://titlewise.app/.well-known/ai-catalog.json) — Machine-readable API catalog
+- [ARD](https://titlewise.app/api/agent-discovery/ard) — Agent Resource Directory
+- [Agent Card](https://titlewise.app/api/agent-discovery/agent-card) — A2A agent capabilities
+- [MCP Server](https://titlewise.app/.well-known/mcp/server-card.json) — Model Context Protocol integration
+- [Agent Skills](https://titlewise.app/.well-known/agent-skills/) — Discoverable agent skills
+- [Agent Discovery](https://titlewise.app/api/agent-discovery) — All agent-accessible resources
+
+## Contact
+
+- Website: https://titlewise.app
+- Email: hello@titlewise.app
+- Support: support@titlewise.app
+- Parent company: Boxford Partners (https://boxfordpartners.com)
+`
+
+export function GET() {
+  return new NextResponse(LLMS_TXT, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=300",
+    },
+  })
+}
