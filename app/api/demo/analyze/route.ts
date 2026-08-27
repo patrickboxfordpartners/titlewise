@@ -1,7 +1,11 @@
 import { auth } from "@clerk/nextjs/server"
 import { NextRequest, NextResponse } from "next/server"
-import { extractTextFromPDF } from "@/lib/pdf"
 import Anthropic from "@anthropic-ai/sdk"
+
+// Stub for PDF extraction - lib/pdf doesn't exist yet
+async function extractTextFromPDF(buffer: Buffer): Promise<string> {
+  return `[PDF text extraction not implemented]\n\n${buffer.slice(0, 1000).toString('utf-8')}`
+}
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
