@@ -1,29 +1,33 @@
 {
-  "$schema": "https://agentskills.io/schema/v0.2.0/index.json",
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
   "skills": [
     {
       "name": "analyze-closing-disclosure",
-      "type": "api",
+      "type": "skill-md",
       "description": "Analyze a Closing Disclosure for TRID compliance, flag discrepancies in loan terms, closing costs, and cash-to-close figures",
-      "url": "https://titlewise.app/.well-known/agent-skills/analyze-cd/SKILL.md"
+      "url": "https://titlewise.app/.well-known/agent-skills/analyze-cd/SKILL.md",
+      "digest": "sha256:71c2cb2930b35215a45cb953d018bc509c3e4a17c0f791600efede62de3c0c3f"
     },
     {
       "name": "analyze-title-commitment",
-      "type": "api",
+      "type": "skill-md",
       "description": "Parse title commitments, identify Schedule B exceptions, flag potential issues with easements, liens, and encumbrances",
-      "url": "https://titlewise.app/.well-known/agent-skills/analyze-commitment/SKILL.md"
+      "url": "https://titlewise.app/.well-known/agent-skills/analyze-commitment/SKILL.md",
+      "digest": "sha256:1ef2ad07d7005ac03944cef3edcdfadf43368f81d62c3ad9e09d4f56a68dafaf"
     },
     {
       "name": "verify-wire-instructions",
-      "type": "api",
+      "type": "skill-md",
       "description": "Cross-reference wire instructions against known patterns, detect anomalies and potential wire fraud indicators",
-      "url": "https://titlewise.app/.well-known/agent-skills/verify-wire/SKILL.md"
+      "url": "https://titlewise.app/.well-known/agent-skills/verify-wire/SKILL.md",
+      "digest": "sha256:176f3fe3545d77fa14c57d33c49631a86b4558e37c2df585d86687e8adb23a62"
     },
     {
       "name": "review-hoa-documents",
-      "type": "api",
+      "type": "skill-md",
       "description": "Extract key terms, fees, special assessments, and transfer restrictions from HOA/condo documents",
-      "url": "https://titlewise.app/.well-known/agent-skills/review-hoa/SKILL.md"
+      "url": "https://titlewise.app/.well-known/agent-skills/review-hoa/SKILL.md",
+      "digest": "sha256:cecd32ceb6828ca28ce41672f1540638130655beb06da7a246dccedaf08ee469"
     }
   ]
 }

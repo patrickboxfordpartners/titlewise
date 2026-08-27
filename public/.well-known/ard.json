@@ -1,5 +1,5 @@
 {
-  "specVersion": "1.0",
+  "specVersion": "0.91",
   "host": {
     "name": "TitleWise",
     "displayName": "TitleWise",
@@ -8,9 +8,9 @@
   },
   "entries": [
     {
-      "id": "urn:air:titlewise.app:api:analyze-cd",
+      "identifier": "urn:air:titlewise.app:api:analyze-cd",
       "displayName": "Closing Disclosure Analyzer",
-      "type": "application/openapi+json",
+      "mediaType": "application/openapi+json",
       "url": "https://titlewise.app/api/v1/analyze-cd",
       "description": "Analyze Closing Disclosures for TRID compliance, flag discrepancies in loan terms and closing costs",
       "representativeQueries": [
@@ -21,9 +21,9 @@
       ]
     },
     {
-      "id": "urn:air:titlewise.app:api:analyze-commitment",
+      "identifier": "urn:air:titlewise.app:api:analyze-commitment",
       "displayName": "Title Commitment Analyzer",
-      "type": "application/openapi+json",
+      "mediaType": "application/openapi+json",
       "url": "https://titlewise.app/api/v1/analyze-commitment",
       "description": "Parse title commitments, identify Schedule B exceptions, flag easements, liens, and encumbrances",
       "representativeQueries": [
@@ -34,9 +34,9 @@
       ]
     },
     {
-      "id": "urn:air:titlewise.app:api:verify-wire",
+      "identifier": "urn:air:titlewise.app:api:verify-wire",
       "displayName": "Wire Instruction Verifier",
-      "type": "application/openapi+json",
+      "mediaType": "application/openapi+json",
       "url": "https://titlewise.app/api/v1/verify-wire",
       "description": "Cross-reference wire instructions against known patterns to detect anomalies and potential wire fraud",
       "representativeQueries": [
@@ -47,9 +47,9 @@
       ]
     },
     {
-      "id": "urn:air:titlewise.app:api:review-hoa",
+      "identifier": "urn:air:titlewise.app:api:review-hoa",
       "displayName": "HOA Document Reviewer",
-      "type": "application/openapi+json",
+      "mediaType": "application/openapi+json",
       "url": "https://titlewise.app/api/v1/review-hoa",
       "description": "Extract key terms, fees, special assessments, and transfer restrictions from HOA documents",
       "representativeQueries": [
@@ -60,9 +60,9 @@
       ]
     },
     {
-      "id": "urn:air:titlewise.app:mcp:server",
+      "identifier": "urn:air:titlewise.app:mcp:server",
       "displayName": "TitleWise MCP Server",
-      "type": "application/mcp+json",
+      "mediaType": "application/mcp+json",
       "url": "https://titlewise.app/.well-known/mcp/server-card.json",
       "description": "Model Context Protocol server for AI agent integration with all TitleWise tools",
       "representativeQueries": [

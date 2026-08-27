@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://titlewise.app"),
   alternates: {
     canonical: "https://titlewise.app",
+    types: {
+      "text/markdown": "https://titlewise.app/index.md",
+    },
   },
   openGraph: {
     type: "website",

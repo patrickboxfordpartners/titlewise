@@ -1,10 +1,9 @@
 {
   "$schema": "https://spec.modelcontextprotocol.io/2025-03-26/server-card.json",
-  "serverInfo": {
-    "name": "titlewise",
-    "version": "1.0.0",
-    "description": "AI-powered tools for real estate closing attorneys: title analysis, CD review, wire verification, HOA review"
-  },
+  "name": "titlewise",
+  "version": "1.0.0",
+  "description": "AI-powered tools for real estate closing attorneys: title analysis, CD review, wire verification, HOA review",
+  "serverUrl": "https://titlewise.app/api/mcp",
   "transport": {
     "type": "streamable-http",
     "endpoint": "https://titlewise.app/api/mcp"
@@ -12,9 +11,32 @@
   "capabilities": {
     "tools": true
   },
+  "tools": [
+    {
+      "name": "analyze_cd",
+      "description": "Analyze a Closing Disclosure for TRID compliance and cost discrepancies"
+    },
+    {
+      "name": "analyze_commitment",
+      "description": "Parse title commitments and identify Schedule B exceptions"
+    },
+    {
+      "name": "verify_wire",
+      "description": "Cross-reference wire instructions to detect fraud patterns"
+    },
+    {
+      "name": "review_hoa",
+      "description": "Extract key terms, fees, and restrictions from HOA documents"
+    }
+  ],
   "authentication": {
     "type": "bearer",
     "description": "API key with tw_live_ prefix. Generate at https://titlewise.app/settings under API Keys.",
     "tokenUrl": "https://titlewise.app/auth.md"
+  },
+  "serverInfo": {
+    "name": "titlewise",
+    "version": "1.0.0",
+    "description": "AI-powered tools for real estate closing attorneys: title analysis, CD review, wire verification, HOA review"
   }
 }

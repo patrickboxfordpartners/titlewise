@@ -73,13 +73,28 @@ const organizationSchema = {
     postalCode: "94104",
     addressCountry: "US",
   },
-  contactPoint: {
-    "@type": "ContactPoint",
-    email: "hello@titlewise.app",
-    contactType: "customer service",
-  },
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      email: "hello@titlewise.app",
+      contactType: "customer service",
+    },
+    {
+      "@type": "ContactPoint",
+      email: "support@titlewise.app",
+      contactType: "technical support",
+    },
+    {
+      "@type": "ContactPoint",
+      email: "sales@titlewise.app",
+      contactType: "sales",
+    },
+  ],
   sameAs: [
     "https://www.linkedin.com/company/boxfordpartners",
+    "https://twitter.com/titlewise_app",
+    "https://github.com/boxfordpartners",
+    "https://boxfordpartners.com",
   ],
 }
 

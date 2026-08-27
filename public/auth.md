@@ -1,3 +1,10 @@
+---
+title: Authentication Guide - TitleWise
+description: Authentication methods for AI agents and developers. Bearer token authentication with OAuth2 support.
+canonical: https://titlewise.app/auth.md
+last-updated: 2026-08-27
+---
+
 # Auth.md
 
 ## Service

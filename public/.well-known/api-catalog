@@ -1,0 +1,29 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://titlewise.app/api",
+      "item": [
+        {
+          "href": "https://titlewise.app/api/v1/openapi.json",
+          "type": "application/openapi+json;version=3.1",
+          "profile": "https://www.rfc-editor.org/info/rfc9727"
+        },
+        {
+          "href": "https://titlewise.app/api/v1/openapi.yaml",
+          "type": "application/openapi+yaml;version=3.1",
+          "profile": "https://www.rfc-editor.org/info/rfc9727"
+        }
+      ]
+    },
+    {
+      "anchor": "https://titlewise.app/api/mcp",
+      "item": [
+        {
+          "href": "https://titlewise.app/.well-known/mcp/server-card.json",
+          "type": "application/json",
+          "rel": "service-desc"
+        }
+      ]
+    }
+  ]
+}

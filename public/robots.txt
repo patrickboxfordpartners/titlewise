@@ -45,6 +45,7 @@ User-agent: *
 Allow: /
 
 Sitemap: https://titlewise.app/sitemap.xml
+Schemamap: https://titlewise.app/schemamap.xml
 
 # Content Signals (contentsignals.org)
 Content-Signal: ai-train=no
