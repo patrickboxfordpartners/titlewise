@@ -14,6 +14,7 @@ import PartiesPanel from "@/components/parties-panel"
 import DocumentSlotsPanel from "@/components/document-slots-panel"
 import EmailThreadsPanel from "@/components/email-threads-panel"
 import ClosingAgentPanel from "@/components/closing-agent-panel"
+import NeilChat from "@/components/neil-chat"
 
 type Matter = {
   id: string
@@ -401,6 +402,9 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
           )}
         </AnimatePresence>
       </div>
+
+      {/* Neil Chat */}
+      <NeilChat matterId={matterId} />
     </div>
   )
 }
