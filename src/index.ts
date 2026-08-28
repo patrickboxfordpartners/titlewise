@@ -252,18 +252,27 @@ function landingPageHTML(baseUrl: string): string {
 [data-theme="light"]{--bg:#f8fafc;--text:#0f172a;--muted:#64748b;--dim:#94a3b8;--rule:rgba(15,23,42,0.08);--blue:#2563eb;--alt:rgba(15,23,42,0.025);--nav-bg:rgba(248,250,252,0.92);--logo-back:rgba(15,23,42,0.12);--logo-front:#2563EB}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;transition:background 0.2s,color 0.2s}
 
-nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between}
-nav a.logo{text-decoration:none;display:flex;align-items:center;gap:8px}
-nav .nav-right{display:flex;align-items:center;gap:16px}
-nav .nav-right a{font-size:0.875rem;color:var(--muted);text-decoration:none}
+nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between}
+nav a.logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+nav .nav-right{display:flex;align-items:center;gap:24px}
+nav .nav-right a{font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.15s}
 nav .nav-right a:hover{color:var(--text)}
-.nav-cta{font-size:0.875rem;font-weight:600;color:#fff !important;background:var(--blue);border-radius:8px;padding:7px 14px;white-space:nowrap}
+.nav-cta{font-size:0.875rem;font-weight:600;color:#fff !important;background:var(--blue);border-radius:8px;padding:8px 18px;white-space:nowrap;transition:all 0.2s}
+.nav-cta:hover{background:#1d4ed8;transform:translateY(-1px)}
 .theme-toggle{display:flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden}
-.theme-toggle button{background:transparent;border:none;padding:5px 10px;font-size:0.75rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.theme-toggle button{background:transparent;border:none;padding:7px 10px;color:var(--muted);cursor:pointer;transition:all 0.15s;display:flex;align-items:center}
 .theme-toggle button.active{background:var(--blue);color:#fff}
+.theme-toggle button svg{width:14px;height:14px;fill:currentColor}
 @media(max-width:640px){nav .tw-nav-link{display:none !important}}
 
-.hero{padding:96px 32px 80px;max-width:1060px;margin:0 auto}
+.hero-wrap{position:relative;overflow:hidden}
+.hero-video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.15;pointer-events:none;z-index:0}
+[data-theme="light"] .hero-video{opacity:0.1}
+.hero-bg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(59,130,246,0.08) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 20% 80%,rgba(139,92,246,0.06) 0%,transparent 50%);animation:heroBgShift 20s ease-in-out infinite alternate}
+[data-theme="light"] .hero-bg{background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(59,130,246,0.05) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 20% 80%,rgba(139,92,246,0.04) 0%,transparent 50%)}
+@keyframes heroBgShift{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.05) translate(-2%,3%)}}
+.hero-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,var(--bg) 0%,transparent 25%,transparent 75%,var(--bg) 100%);z-index:1;pointer-events:none}
+.hero{position:relative;z-index:2;padding:96px 32px 80px;max-width:1060px;margin:0 auto}
 .hero .eyebrow{font-size:0.75rem;font-weight:700;color:var(--blue);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:24px}
 .hero h1{font-size:clamp(2.75rem,6vw,4.5rem);font-weight:800;letter-spacing:-0.04em;line-height:1.0;color:var(--text);max-width:700px;margin-bottom:28px}
 .hero h1 span{color:var(--blue)}
@@ -275,6 +284,51 @@ nav .nav-right a:hover{color:var(--text)}
 .btn-secondary:hover{border-color:var(--blue);color:var(--text)}
 .hero .note{font-size:0.8125rem;color:var(--dim);margin-top:16px}
 
+.live-demo-section{border-top:1px solid var(--rule);padding:80px 32px;background:var(--bg)}
+.live-demo-inner{max-width:800px;margin:0 auto}
+.live-demo-inner h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-0.03em;color:var(--text);margin-bottom:8px}
+.live-demo-inner .sub{font-size:0.9rem;color:var(--muted);margin-bottom:32px}
+.demo-card{border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#0a0a0f}
+[data-theme="light"] .demo-card{background:#fff;border-color:#e2e8f0}
+.demo-card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--rule);background:#111827}
+[data-theme="light"] .demo-card-header{background:#f8fafc}
+.demo-card-header .demo-title{font-size:0.8rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em}
+.demo-card-btns{display:flex;gap:8px}
+.demo-run-btn{padding:8px 20px;border-radius:6px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.demo-run-btn.primary{background:#8b5cf6;color:#fff}
+.demo-run-btn.primary:hover{background:#7c3aed;transform:translateY(-1px)}
+.demo-run-btn.secondary{background:transparent;border:1px solid var(--rule);color:var(--muted)}
+.demo-run-btn.secondary:hover{border-color:var(--blue);color:var(--text)}
+.demo-run-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.demo-log{height:320px;overflow-y:auto;padding:16px 20px;font-family:'SF Mono',Monaco,'Cascadia Code',monospace;font-size:0.75rem;line-height:2}
+.demo-log .dl-line{opacity:0;animation:dlFadeIn 0.3s forwards}
+@keyframes dlFadeIn{to{opacity:1}}
+.dl-line .dl-tag{display:inline-block;padding:2px 6px;border-radius:3px;font-size:0.65rem;font-weight:600;margin-right:8px;min-width:56px;text-align:center}
+.dl-tag.t-extract{background:#164e63;color:#67e8f9}
+.dl-tag.t-memory{background:#052e16;color:#86efac}
+.dl-tag.t-analysis{background:#3b0764;color:#d8b4fe}
+.dl-tag.t-tavily{background:#422006;color:#fbbf24}
+.dl-tag.t-adversarial{background:#7f1d1d;color:#fca5a5}
+.dl-tag.t-synthesis{background:#1e1b4b;color:#a5b4fc}
+.dl-tag.t-alert{background:#7f1d1d;color:#fca5a5}
+.dl-tag.t-pipeline{background:#1e293b;color:#94a3b8}
+.dl-tag.t-audit{background:#312e81;color:#a5b4fc}
+.dl-tag.t-records{background:#1c1917;color:#d6d3d1}
+.dl-msg{color:var(--text)}
+.dl-msg.dim{color:var(--muted)}
+.dl-msg.success{color:#4ade80}
+.dl-msg.danger{color:#f87171}
+.demo-verdict{padding:16px 20px;border-top:1px solid var(--rule);display:none;align-items:center;gap:12px}
+.demo-verdict.visible{display:flex}
+.demo-verdict.safe{background:#052e1620;border-top-color:#16a34a40}
+.demo-verdict.danger{background:#7f1d1d20;border-top-color:#991b1b80}
+.demo-verdict .dv-label{font-size:0.9rem;font-weight:700}
+.demo-verdict.safe .dv-label{color:#4ade80}
+.demo-verdict.danger .dv-label{color:#f87171}
+.demo-verdict .dv-sub{font-size:0.8rem;color:var(--muted)}
+.demo-fulllink{text-align:center;padding:16px;border-top:1px solid var(--rule)}
+.demo-fulllink a{font-size:0.8rem;color:var(--blue);text-decoration:none}
+.demo-fulllink a:hover{text-decoration:underline}
 .stats{border-top:1px solid var(--rule);padding:64px 32px}
 [data-theme="light"] .stats{background:#e2e8f0 !important}
 .stats-inner{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:48px 64px}
@@ -375,8 +429,11 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
 @media(max-width:480px){
   nav{padding:0 16px;gap:8px}
   nav .nav-right{gap:10px}
-  .theme-toggle button{padding:5px 8px;font-size:0.7rem}
+  .theme-toggle button{padding:5px 8px}
   .nav-cta{padding:6px 12px;font-size:0.8rem}
+  .live-demo-section{padding:48px 16px}
+  .demo-card-header{flex-direction:column;gap:12px;align-items:flex-start}
+  .demo-log{height:260px;font-size:0.7rem}
   .hero{padding:56px 16px 48px}
   .hero h1{font-size:2rem;letter-spacing:-0.03em}
   .hero .sub{font-size:0.9375rem}
@@ -410,23 +467,52 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
   <div class="nav-right">
     <a href="/#pricing" class="tw-nav-link">Pricing</a>
     <a href="/demo" class="tw-nav-link">Demo</a>
+    <a href="/login" class="tw-nav-link">Log in</a>
     <div class="theme-toggle">
-      <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
-      <button id="btn-light" onclick="setTheme('light')">Light</button>
+      <button id="btn-dark" class="active" onclick="setTheme('dark')" aria-label="Dark mode"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <button id="btn-light" onclick="setTheme('light')" aria-label="Light mode"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>
     </div>
-    <a href="/#pricing" class="nav-cta">Get started</a>
+    <a href="/demo" class="nav-cta">Try the demo</a>
   </div>
 </nav>
 
-<div class="hero">
-  <p class="eyebrow">AI Closing Platform</p>
-  <h1>30 minutes back.<br><span>Every file.</span></h1>
-  <p class="sub">The analysis layer for real estate closings. Title commitments parsed in seconds. Wire fraud caught before funds move. TRID checks automated. Sits on top of your existing workflow — Qualia, SoftPro, ResWare, whatever you run.</p>
-  <div class="ctas">
-    <a href="/demo" class="btn-primary">See the demo</a>
-    <a href="#problem" class="btn-secondary">Why this matters</a>
+<div class="hero-wrap">
+  <div class="hero-bg"></div>
+  <video class="hero-video" autoplay muted loop playsinline id="heroVideo">
+    <source src="https://cdn.pixabay.com/video/2020/08/03/46284-446732347_large.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero">
+    <p class="eyebrow">AI Closing Platform</p>
+    <h1>30 minutes back.<br><span>Every file.</span></h1>
+    <p class="sub">The analysis layer for real estate closings. Title commitments parsed in seconds. Wire fraud caught before funds move. TRID checks automated. Sits on top of your existing workflow — Qualia, SoftPro, ResWare, whatever you run.</p>
+    <div class="ctas">
+      <a href="#live-demo" class="btn-primary">See it work</a>
+      <a href="#problem" class="btn-secondary">Why this matters</a>
+    </div>
+    <p class="note">Plans from $149/mo &middot; No setup fees &middot; Cancel anytime</p>
   </div>
-  <p class="note">Plans from $149/mo &middot; No setup fees &middot; Cancel anytime</p>
+</div>
+
+<div class="live-demo-section" id="live-demo">
+  <div class="live-demo-inner">
+    <h2>Watch it catch wire fraud in real-time.</h2>
+    <p class="sub">14 AI agents analyze a fraudulent wire instruction in seconds. No API keys needed — this is a recorded run.</p>
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <span class="demo-title">Agent Activity</span>
+        <div class="demo-card-btns">
+          <button class="demo-run-btn primary" id="inlineDemoBtn">Run fraud demo</button>
+          <button class="demo-run-btn secondary" id="inlineSafeBtn">Run safe wire</button>
+        </div>
+      </div>
+      <div class="demo-log" id="inlineDemoLog">
+        <div class="dl-line"><span class="dl-msg dim">Click "Run fraud demo" to see 14 agents catch a BEC attack in real-time.</span></div>
+      </div>
+      <div class="demo-verdict" id="inlineDemoVerdict"></div>
+      <div class="demo-fulllink"><a href="/demo">Open full analysis workspace &rarr;</a></div>
+    </div>
+  </div>
 </div>
 
 <div class="stats" style="background:#1f2937">
@@ -572,7 +658,7 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)"><h3>Which tools are included?</h3><span class="arrow">+</span></div>
-      <div class="faq-a"><p>Wire Fraud Verification, Title Commitment Analysis, Closing Disclosure Review, HOA Document Review, Fee Estimate Generator, Tax Proration Calculator, Status Update Generator, Deal Memory, and the Autonomous Closing Agent. All available per-analysis with no subscription.</p></div>
+      <div class="faq-a"><p>Wire Fraud Verification, Title Commitment Analysis, Closing Disclosure Review, HOA Document Review, Fee Estimate Generator, Tax Proration Calculator, Status Update Generator, Deal Memory, and the Autonomous Closing Agent. All tools are included with every subscription plan.</p></div>
     </div>
     <div class="faq-item">
       <div class="faq-q" onclick="toggleFaq(this)"><h3>Will AI replace title attorneys?</h3><span class="arrow">+</span></div>
@@ -583,9 +669,10 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
 
 <div class="cta-section">
   <h2>Start closing smarter.</h2>
-  <p>See exactly what TitleWise surfaces — wire fraud indicators, title exceptions, compliance issues — in a live demo with real sample documents.</p>
+  <p>See exactly what TitleWise surfaces — wire fraud indicators, title exceptions, compliance issues — in the live analysis workspace.</p>
   <div class="ctas">
-    <a href="/demo" class="btn-primary">See the demo</a>
+    <a href="#live-demo" class="btn-primary">Watch the demo</a>
+    <a href="/demo" class="btn-secondary">Open full workspace</a>
   </div>
 </div>
 
@@ -647,6 +734,59 @@ function toggleFaq(el){
   item.classList.toggle('open');
 }
 (function(){var t;try{t=localStorage.getItem('tw-theme')}catch(e){}if(t)setTheme(t);})();
+(function(){var v=document.getElementById('heroVideo');if(v){var s=v.querySelector('source');if(s&&s.src&&s.src!==window.location.href){v.style.display='block';v.load();}}})();
+
+(function(){
+  var tagClass = {extract:'t-extract',memory:'t-memory',analysis:'t-analysis',tavily:'t-tavily',adversarial:'t-adversarial',synthesis:'t-synthesis',alert:'t-alert',pipeline:'t-pipeline',audit:'t-audit',records:'t-records'};
+  async function runInlineDemo(tool){
+    var log = document.getElementById('inlineDemoLog');
+    var verdict = document.getElementById('inlineDemoVerdict');
+    var fraudBtn = document.getElementById('inlineDemoBtn');
+    var safeBtn = document.getElementById('inlineSafeBtn');
+    fraudBtn.disabled = true; safeBtn.disabled = true;
+    log.innerHTML = '';
+    verdict.className = 'demo-verdict';
+    verdict.style.display = 'none';
+    verdict.innerHTML = '';
+    var res = await fetch('/api/demo-stream',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool:tool,document_text:'demo'})});
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var buffer = '';
+    var finalData = null;
+    while(true){
+      var r = await reader.read();
+      if(r.done) break;
+      buffer += decoder.decode(r.value,{stream:true});
+      var lines = buffer.split('\\n');
+      buffer = lines.pop() || '';
+      for(var i=0;i<lines.length;i++){
+        var line = lines[i];
+        if(!line.startsWith('data: ')) continue;
+        try{
+          var evt = JSON.parse(line.slice(6));
+          if(evt.stage==='final'){finalData=evt.data;continue;}
+          var tc = tagClass[evt.stage]||'t-pipeline';
+          var cls = evt.status==='complete'?'success':(evt.status==='error'?'danger':'');
+          var el = document.createElement('div');
+          el.className = 'dl-line';
+          el.innerHTML = '<span class="dl-tag '+tc+'">'+(evt.agent||evt.stage)+'</span><span class="dl-msg '+cls+'">'+(evt.message||'')+'</span>';
+          log.appendChild(el);
+          log.scrollTop = log.scrollHeight;
+        }catch(e){}
+      }
+    }
+    if(finalData&&finalData.risk_synthesis){
+      var rs = finalData.risk_synthesis;
+      var isDanger = rs.composite_risk_score > 50;
+      verdict.className = 'demo-verdict visible '+(isDanger?'danger':'safe');
+      verdict.innerHTML = '<span class="dv-label">'+(isDanger?'CRITICAL':'LOW')+' RISK</span><span class="dv-sub">Score: '+rs.composite_risk_score+'/100 &mdash; '+(rs.signals||[]).slice(0,2).join(', ')+'</span>';
+    }
+    fraudBtn.disabled = false; safeBtn.disabled = false;
+  }
+  document.getElementById('inlineDemoBtn').addEventListener('click',function(){runInlineDemo('verify_wire_fraud');});
+  document.getElementById('inlineSafeBtn').addEventListener('click',function(){runInlineDemo('verify_wire');});
+})();
+
 if(navigator.modelContext&&navigator.modelContext.provideContext){
   navigator.modelContext.provideContext({tools:[
     {name:"analyze_commitment",description:"Analyze a title commitment document for red flags, requirements, and exceptions",inputSchema:{type:"object",properties:{document_text:{type:"string",description:"Full text of the title commitment"}},required:["document_text"]},execute:async function(i){var r=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tool:"analyze_commitment",document_text:i.document_text})});return r.json();}},
@@ -670,17 +810,18 @@ function tryPageHTML(baseUrl: string): string {
 <title>TitleWise — Live Analysis</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1.5rem;border-bottom:1px solid #1e293b;background:#0f172a;z-index:10;position:relative}
 .top-bar h1{font-size:1rem;color:#fff}
 .top-bar a{color:#60a5fa;font-size:0.8rem;text-decoration:none}
 .layout{display:grid;grid-template-columns:1fr 1fr 1.5fr;grid-template-rows:1fr;height:calc(100vh - 41px)}
 @media(max-width:1200px){.layout{grid-template-columns:1fr 1fr 1fr}}
-@media(max-width:800px){.layout{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;height:auto;min-height:calc(100vh - 41px)}}
+@media(max-width:1024px){.layout{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;height:auto;min-height:calc(100vh - 41px);overflow:auto}.right-panel{grid-column:1/-1}}
+@media(max-width:800px){.layout{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;height:auto;min-height:calc(100vh - 41px);overflow:auto}}
 .col-header{padding:0.5rem 0.75rem;background:#0f172a;border-bottom:1px solid #1e293b;display:flex;align-items:center;justify-content:space-between}
 .col-header h3{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:#64748b}
 .col-header .col-badge{font-size:0.6rem;padding:0.15rem 0.4rem;border-radius:3px;background:#1e293b;color:#94a3b8}
-.left-panel{display:flex;flex-direction:column;border-right:1px solid #1e293b;overflow:hidden}
+.left-panel{display:flex;flex-direction:column;border-right:1px solid #1e293b;overflow:visible}
 @media(max-width:800px){.left-panel{min-height:420px;overflow:visible;border-right:none;border-bottom:1px solid #1e293b}.center-panel{min-height:300px;border-right:none;border-bottom:1px solid #1e293b}.right-panel{min-height:350px}}
 .toolbar{display:flex;gap:0.4rem;padding:0.5rem 0.75rem;border-bottom:1px solid #1e293b;flex-wrap:wrap}
 .tool-btn{padding:0.25rem 0.5rem;border-radius:4px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:0.65rem;cursor:pointer;transition:all 0.15s}
@@ -691,8 +832,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .sample-btn:hover{border-color:#3b82f6;color:#93c5fd}
 textarea{flex:1;background:#09090b;border:none;padding:0.75rem;font-family:'SF Mono',Monaco,monospace;font-size:0.68rem;line-height:1.4;color:#e2e8f0;resize:none;outline:none}
 textarea::placeholder{color:#475569}
-.run-bar{padding:0.5rem 0.75rem;border-top:1px solid #1e293b;background:#111827;display:flex;align-items:center;gap:0.5rem}
-.run-btn{padding:0.4rem 1.2rem;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.run-bar{padding:0.75rem;border-top:1px solid #1e293b;background:#111827;display:flex;align-items:center;gap:0.5rem}
+.run-btn{padding:0.6rem 1.5rem;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:0.875rem;font-weight:600;cursor:pointer;transition:all 0.2s;min-height:44px}
 .run-btn:hover{background:#1d4ed8;transform:scale(1.02)}
 .run-btn:disabled{background:#334155;color:#64748b;cursor:not-allowed;transform:none}
 .run-status{font-size:0.65rem;color:#64748b}
@@ -810,10 +951,10 @@ textarea::placeholder{color:#475569}
       </div>
       <input type="file" id="fileInput" accept=".txt,.pdf,.doc,.docx" style="display:none">
     </div>
-    <textarea id="input" placeholder="Paste document text here, drop a file above, or click a sample..."></textarea>
+    <textarea id="input" placeholder="Paste wire instructions, title commitment, closing disclosure, or HOA document here..."></textarea>
     <div class="run-bar">
-      <button class="run-btn" id="runBtn">Analyze</button>
-      <button class="run-btn" id="autoDemoBtn" style="background:#8b5cf6;margin-left:0.4rem">One-Click Demo</button>
+      <button class="run-btn" id="autoDemoBtn" style="background:#8b5cf6">One-Click Demo</button>
+      <button class="run-btn" id="runBtn" style="background:#1e293b;border:1px solid #334155;color:#e2e8f0">Analyze</button>
       <span class="run-status" id="runStatus"></span>
     </div>
   </div>
@@ -862,7 +1003,7 @@ textarea::placeholder{color:#475569}
           <div class="activity-title">Agent Conversation</div>
         </div>
         <div class="activity-log" id="activityLog">
-          <div class="log-line"><span class="log-msg dim">Standing by. Submit a document to begin analysis.</span></div>
+          <div class="log-line"><span class="log-msg dim">Click "One-Click Demo" to see a live fraud detection walkthrough, or paste your own document and click "Analyze".</span></div>
         </div>
         <div class="verdict-bar" id="verdictBar">
           <span class="verdict-icon" id="verdictIcon"></span>
@@ -1178,23 +1319,76 @@ async function handleFileUpload(file) {
   }
 }
 
-// One-Click Demo — runs all 5 samples sequentially
+// One-Click Demo — replays pre-baked SSE events (no API calls)
 document.getElementById('autoDemoBtn').addEventListener('click', async () => {
-  const demoOrder = ['wire_safe', 'commitment', 'closing_disclosure', 'hoa', 'wire_fraud'];
-  const toolMap = { wire_safe: 'verify_wire', commitment: 'analyze_commitment', closing_disclosure: 'analyze_closing_disclosure', hoa: 'review_hoa', wire_fraud: 'verify_wire' };
+  const demoOrder = ['verify_wire', 'verify_wire_fraud'];
+  const demoLabels = { verify_wire: 'Wire (Safe)', verify_wire_fraud: 'Wire (Fraud)' };
   const btn = document.getElementById('autoDemoBtn');
   btn.disabled = true;
   btn.textContent = 'Running...';
+
   for (let i = 0; i < demoOrder.length; i++) {
-    const sample = demoOrder[i];
-    document.getElementById('input').value = SAMPLES[sample];
-    activeTool = toolMap[sample];
-    document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-    document.querySelector('[data-tool="' + activeTool + '"]').classList.add('active');
-    btn.textContent = (i + 1) + '/' + demoOrder.length;
-    document.getElementById('runBtn').click();
-    await new Promise(r => { const check = setInterval(() => { if (!document.getElementById('runBtn').disabled) { clearInterval(check); r(); } }, 500); });
-    if (i < demoOrder.length - 1) await delay(1500);
+    const tool = demoOrder[i];
+    btn.textContent = (i + 1) + '/' + demoOrder.length + ' ' + demoLabels[tool];
+
+    const logEl = document.getElementById('activityLog');
+    logEl.innerHTML = '';
+    document.getElementById('liveDot').classList.add('live');
+    document.getElementById('verdictBar').classList.remove('visible','safe','danger');
+    document.getElementById('activityPane').classList.add('visible');
+    document.getElementById('resultPane').classList.remove('visible');
+    document.getElementById('toggleActivity').classList.add('active');
+    document.getElementById('toggleResult').classList.remove('active');
+    document.getElementById('runStatus').textContent = 'Demo: ' + demoLabels[tool];
+    startTime = Date.now();
+    log('mcp', 'Demo: <b>' + tool + '</b>', '');
+
+    const res = await fetch('${baseUrl}/api/demo-stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tool: tool, document_text: 'demo' })
+    });
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let finalData = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const event = JSON.parse(line.slice(6));
+          if (event.stage === 'final') { finalData = event.data; continue; }
+          const label = event.agent || event.stage;
+          const cls = event.status === 'complete' ? 'success' : (event.status === 'error' ? 'danger' : '');
+          log(event.stage, '<b>' + label + '</b> ' + (event.message || ''), cls);
+        } catch {}
+      }
+    }
+
+    document.getElementById('liveDot').classList.remove('live');
+    if (finalData && finalData.risk_synthesis) {
+      const risk = finalData.risk_synthesis;
+      const bar = document.getElementById('verdictBar');
+      bar.classList.add('visible');
+      bar.classList.add(risk.composite_risk_score > 50 ? 'danger' : 'safe');
+      bar.innerHTML = '<b>' + risk.risk_level + ' RISK</b> — Score: ' + risk.composite_risk_score + '/100 — ' + (risk.signals || []).join(', ');
+      document.getElementById('resultContent').innerHTML = '<pre>' + JSON.stringify(finalData, null, 2) + '</pre>';
+      document.getElementById('resultPane').classList.add('visible');
+      document.getElementById('toggleResult').classList.add('active');
+      document.getElementById('toggleActivity').classList.remove('active');
+      document.getElementById('activityPane').classList.remove('visible');
+    }
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    document.getElementById('runStatus').textContent = 'Demo complete (' + elapsed + 's)';
+
+    if (i < demoOrder.length - 1) await delay(2000);
   }
   btn.disabled = false;
   btn.textContent = 'One-Click Demo';
@@ -1600,7 +1794,7 @@ function updateDealStatus() {
     labelEl.textContent = 'READY TO CLOSE';
     subEl.textContent = checkedCount + '/' + totalChecks + ' milestones complete. All documents verified. No discrepancies.';
     actionsEl.style.display = 'flex';
-    actionsEl.innerHTML = '<button class="deal-action-btn" onclick="sendNotification(\\'notify_buyer_agent\\', \\'sms\\')">Notify Buyer\\'s Agent</button><button class="deal-action-btn" onclick="sendNotification(\\'notify_seller_agent\\', \\'sms\\')">Notify Seller\\'s Agent</button><button class="deal-action-btn" onclick="sendNotification(\\'send_to_lender\\', \\'voice\\')">Call Lender</button><button class="deal-action-btn" style="border-color:#8b5cf6;background:#8b5cf620;color:#c4b5fd" onclick="archiveDeal()">Archive for Compliance</button>';
+    actionsEl.innerHTML = '<button class="deal-action-btn" onclick="sendNotification(\\'notify_buyer_agent\\', \\'sms\\')">Notify Buyer\\'s Agent</button><button class="deal-action-btn" onclick="sendNotification(\\'notify_seller_agent\\', \\'sms\\')">Notify Seller\\'s Agent</button><button class="deal-action-btn" onclick="sendNotification(\\'send_to_lender\\', \\'sms\\')">Text Lender</button><button class="deal-action-btn" style="border-color:#8b5cf6;background:#8b5cf620;color:#c4b5fd" onclick="archiveDeal()">Archive for Compliance</button>';
   } else if (docCount > 0) {
     statusEl.className = 'deal-status in-progress';
     labelEl.textContent = 'IN PROGRESS — ' + checkedCount + '/' + totalChecks + ' COMPLETE';
@@ -1715,10 +1909,10 @@ async function archiveDeal() {
   summary.style.cssText = 'margin-top:1rem;padding-top:0.75rem;border-top:1px solid #334155';
 
   if (missingDocs.length > 0) {
-    summary.innerHTML = '<div style="color:#fbbf24;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem">\\u26A0 ' + missingDocs.length + ' document(s) missing from file</div><div style="color:#94a3b8;font-size:0.7rem;margin-bottom:0.75rem">Archiving with gaps noted. Auditor will see deficiency flags.</div><div style="display:flex;gap:0.5rem"><button onclick="completeArchive(' + missingDocs.length + ')" style="padding:0.4rem 1rem;background:#8b5cf6;color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer">Archive Anyway (flag gaps)</button><button onclick="this.closest(\\'div\\').closest(\\'div\\').closest(\\'div\\').remove();document.querySelector(\\'[style*=z-index:9998]\\').remove()" style="padding:0.4rem 1rem;background:transparent;border:1px solid #475569;color:#94a3b8;border-radius:6px;font-size:0.75rem;cursor:pointer">Cancel</button></div>';
+    summary.innerHTML = '<div style="color:#fbbf24;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem">\\u26A0 ' + missingDocs.length + ' document(s) missing from file</div><div style="color:#94a3b8;font-size:0.7rem;margin-bottom:0.75rem">Archiving with gaps noted. Auditor will see deficiency flags.</div><div style="display:flex;gap:0.5rem"><button onclick="completeArchive(' + missingDocs.length + ')" style="padding:0.4rem 1rem;background:#8b5cf6;color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer">Archive Anyway (flag gaps)</button><button onclick="closeArchiveModal()" style="padding:0.4rem 1rem;background:transparent;border:1px solid #475569;color:#94a3b8;border-radius:6px;font-size:0.75rem;cursor:pointer">Cancel</button></div>';
     log('mcp', '<span style="opacity:0.5">[Compliance Archiver]</span> ' + presentDocs.length + '/' + REQUIRED_CLOSING_DOCS.length + ' documents present. ' + missingDocs.length + ' gaps flagged.', 'warn');
   } else {
-    summary.innerHTML = '<div style="color:#4ade80;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem">\\u2713 All required documents present</div><div style="color:#94a3b8;font-size:0.7rem;margin-bottom:0.75rem">File is complete. Ready for compression and deep storage.</div><button onclick="completeArchive(0)" style="padding:0.4rem 1rem;background:#8b5cf6;color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer">Compress & Archive to R2</button>';
+    summary.innerHTML = '<div style="color:#4ade80;font-size:0.8rem;font-weight:600;margin-bottom:0.5rem">\\u2713 All required documents present</div><div style="color:#94a3b8;font-size:0.7rem;margin-bottom:0.75rem">File is complete. Ready for compression and deep storage.</div><div style="display:flex;gap:0.5rem"><button onclick="completeArchive(0)" style="padding:0.4rem 1rem;background:#8b5cf6;color:#fff;border:none;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer">Compress & Archive to R2</button><button onclick="closeArchiveModal()" style="padding:0.4rem 1rem;background:transparent;border:1px solid #475569;color:#94a3b8;border-radius:6px;font-size:0.75rem;cursor:pointer">Close</button></div>';
     log('mcp', '<span style="opacity:0.5">[Compliance Archiver]</span> All ' + REQUIRED_CLOSING_DOCS.length + ' required documents present. File complete.', 'success');
   }
   checklist.appendChild(summary);
@@ -1742,6 +1936,10 @@ async function completeArchive(gaps) {
   updateDealStatus();
 
   // Remove overlay
+  closeArchiveModal();
+}
+
+function closeArchiveModal() {
   document.querySelectorAll('[style*="z-index:9998"]').forEach(el => el.remove());
   document.querySelectorAll('[style*="z-index:9999"]').forEach(el => el.remove());
 }
@@ -2201,6 +2399,70 @@ ${BLOG_FAQ_JS}
 </html>`;
 }
 
+function getDemoEvents(tool: string): Array<{delay: number; event: any}> {
+  const wireEvents = [
+    {delay:100,event:{stage:"pipeline",agent:"Closing Coordinator",status:"start",message:"New document received. Initiating wire verification pipeline."}},
+    {delay:200,event:{stage:"extract",agent:"Entity Extractor",status:"start",message:"Scanning document for entities..."}},
+    {delay:600,event:{stage:"extract",agent:"Entity Extractor",status:"complete",message:"Extracted 4 entities: 1 bank, 1 routing number, 1 beneficiary, 1 amount",data:{beneficiaries:["Pacific Coast Settlements LLC"],routingNumbers:["021000089"],banks:["JPMorgan Chase"],amounts:["$847,291.00"],addresses:["742 Evergreen Terrace, San Mateo, CA 94401"]}}},
+    {delay:150,event:{stage:"memory",agent:"Mitosis Memory",status:"start",message:"Querying fraud-patterns DB for known bad actors..."}},
+    {delay:400,event:{stage:"memory",agent:"Mitosis Memory",status:"complete",message:"No prior fraud flags for these entities. Querying deal-ledger for consistency check..."}},
+    {delay:300,event:{stage:"memory",agent:"Mitosis Memory",status:"progress",message:"Deal-ledger match found: routing 021000089 seen in 2 prior closings for this title company. Consistent."}},
+    {delay:150,event:{stage:"analysis",agent:"Primary Analyst",status:"start",message:"Running Claude Sonnet 5 analysis on wire transfer instructions..."}},
+    {delay:1800,event:{stage:"analysis",agent:"Primary Analyst",status:"complete",message:"Analysis complete. 2 fraud indicators found, 3 verification recommendations generated."}},
+    {delay:100,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"start",message:"Verifying routing number 021000089 against bank records..."}},
+    {delay:700,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"progress",message:"Routing 021000089 confirmed: JPMorgan Chase, New York, NY",data:{entity:"021000089 (JPMorgan Chase)",verified:true}}},
+    {delay:200,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"progress",message:"Verifying beneficiary: Pacific Coast Settlements LLC...",data:{entity:"Pacific Coast Settlements LLC",verified:true}}},
+    {delay:500,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"complete",message:"Web verification complete. 2/2 entities verified."}},
+    {delay:100,event:{stage:"records",agent:"County Records Searcher",status:"start",message:"Searching San Mateo County assessor records..."}},
+    {delay:600,event:{stage:"records",agent:"County Records Searcher",status:"complete",message:"Property found: 742 Evergreen Terrace. Owner matches seller name. No liens."}},
+    {delay:100,event:{stage:"adversarial",agent:"Skeptic",status:"start",message:"Reviewing findings for false positives..."}},
+    {delay:100,event:{stage:"adversarial",agent:"Compliance Officer",status:"start",message:"Evaluating against BSA/AML standards..."}},
+    {delay:100,event:{stage:"adversarial",agent:"Forensic Investigator",status:"start",message:"Checking for BEC/wire fraud patterns..."}},
+    {delay:1200,event:{stage:"adversarial",agent:"Skeptic",status:"complete",message:"No false positives identified. Fraud indicators are legitimate concerns."}},
+    {delay:200,event:{stage:"adversarial",agent:"Compliance Officer",status:"complete",message:"Routing number format valid. Transaction structure normal for residential closing."}},
+    {delay:300,event:{stage:"adversarial",agent:"Forensic Investigator",status:"complete",message:"No BEC indicators. No urgency language. Beneficiary naming follows standard LLC convention."}},
+    {delay:100,event:{stage:"audit",agent:"Deal Auditor",status:"start",message:"Cross-referencing deal facts across all documents..."}},
+    {delay:400,event:{stage:"audit",agent:"Deal Auditor",status:"complete",message:"All facts consistent. No discrepancies across deal file."}},
+    {delay:100,event:{stage:"synthesis",agent:"Risk Synthesizer",status:"start",message:"Computing composite risk score..."}},
+    {delay:300,event:{stage:"synthesis",agent:"Risk Synthesizer",status:"complete",message:"Risk synthesis complete. Score: 18/100 (LOW)"}},
+    {delay:100,event:{stage:"pipeline",agent:"Closing Coordinator",status:"complete",message:"Pipeline complete. 12 agents invoked. Verdict: LOW RISK — safe to proceed."}},
+    {delay:50,event:{stage:"final",data:{risk_synthesis:{risk_level:"LOW",composite_risk_score:18,signals:["Minor: no callback number provided","Minor: no verification instructions"]},pipeline:{agents_invoked:["Entity Extractor","Primary Analyst","Tavily Web Verifier","County Records Searcher","Mitosis Memory","Pattern Matcher","Skeptic","Compliance Officer","Forensic Investigator","Deal Auditor","Risk Synthesizer","Audit Trail"],total_agents:12,duration_ms:6200}}}},
+  ];
+
+  const fraudEvents = [
+    {delay:100,event:{stage:"pipeline",agent:"Closing Coordinator",status:"start",message:"New document received. Initiating wire verification pipeline."}},
+    {delay:200,event:{stage:"extract",agent:"Entity Extractor",status:"start",message:"Scanning document for entities..."}},
+    {delay:600,event:{stage:"extract",agent:"Entity Extractor",status:"complete",message:"Extracted 5 entities: 1 bank, 1 routing number, 1 beneficiary, 2 amounts",data:{beneficiaries:["Pacfic Coast Setlements LLC"],routingNumbers:["021000021"],banks:["Bank of the West"],amounts:["$847,291.00","$847,921.00"],addresses:["742 Evergreen Terrace, San Mateo, CA 94401"]}}},
+    {delay:150,event:{stage:"memory",agent:"Mitosis Memory",status:"start",message:"Querying fraud-patterns DB for known bad actors..."}},
+    {delay:500,event:{stage:"memory",agent:"Mitosis Memory",status:"progress",message:"ALERT: Routing 021000021 flagged in fraud-patterns DB. Previously associated with BEC attack (File #2024-SF-38291)."}},
+    {delay:200,event:{stage:"memory",agent:"Mitosis Memory",status:"complete",message:"Deal-ledger MISMATCH: Prior closings used routing 021000089 (JPMorgan Chase). This document shows 021000021 (Bank of the West). ROUTING NUMBER CHANGED."}},
+    {delay:150,event:{stage:"analysis",agent:"Primary Analyst",status:"start",message:"Running Claude Sonnet 5 analysis on wire transfer instructions..."}},
+    {delay:2000,event:{stage:"analysis",agent:"Primary Analyst",status:"complete",message:"Analysis complete. 5 HIGH-severity fraud indicators detected."}},
+    {delay:100,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"start",message:"Verifying routing number 021000021 against bank records..."}},
+    {delay:800,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"progress",message:"MISMATCH: Routing 021000021 belongs to Bank of America, NOT 'Bank of the West' as claimed",data:{entity:"021000021 (Bank of the West)",verified:false}}},
+    {delay:300,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"progress",message:"Beneficiary search: No business registration found for 'Pacfic Coast Setlements LLC' — possible typosquat of legitimate entity",data:{entity:"Pacfic Coast Setlements LLC",verified:false}}},
+    {delay:400,event:{stage:"tavily",agent:"Tavily Web Verifier",status:"complete",message:"Web verification complete. 0/2 entities verified. CRITICAL FAILURES."}},
+    {delay:100,event:{stage:"adversarial",agent:"Skeptic",status:"start",message:"Reviewing findings for false positives..."}},
+    {delay:100,event:{stage:"adversarial",agent:"Compliance Officer",status:"start",message:"Evaluating against BSA/AML standards..."}},
+    {delay:100,event:{stage:"adversarial",agent:"Forensic Investigator",status:"start",message:"Checking for BEC/wire fraud patterns..."}},
+    {delay:1400,event:{stage:"adversarial",agent:"Skeptic",status:"complete",message:"CONFIRMED: Cannot explain innocently. Beneficiary name is a deliberate misspelling. Routing number change is unexplained."}},
+    {delay:200,event:{stage:"adversarial",agent:"Compliance Officer",status:"complete",message:"CRITICAL: Routing number bank mismatch is a primary BEC indicator per FinCEN Advisory FIN-2016-A003. Immediate SAR consideration."}},
+    {delay:300,event:{stage:"adversarial",agent:"Forensic Investigator",status:"complete",message:"CONFIRMED BEC PATTERN: Name typosquat + routing swap + amount discrepancy ($847,291 vs $847,921 = $630 delta). Classic wire redirect attack."}},
+    {delay:100,event:{stage:"audit",agent:"Deal Auditor",status:"start",message:"Cross-referencing deal facts across all documents..."}},
+    {delay:200,event:{stage:"audit",agent:"Deal Auditor",status:"progress",message:"DISCREPANCY: Beneficiary name mismatch vs. prior documents",data:{field:"beneficiary_name",current_value:"Pacfic Coast Setlements LLC",prior_value:"Pacific Coast Settlements LLC",prior_document:"Title Commitment",severity:"critical"}}},
+    {delay:300,event:{stage:"audit",agent:"Deal Auditor",status:"complete",message:"2 critical discrepancies flagged. Deal integrity compromised."}},
+    {delay:100,event:{stage:"synthesis",agent:"Risk Synthesizer",status:"start",message:"Computing composite risk score..."}},
+    {delay:300,event:{stage:"synthesis",agent:"Risk Synthesizer",status:"complete",message:"Risk synthesis complete. Score: 94/100 (CRITICAL)"}},
+    {delay:100,event:{stage:"alert",agent:"Cotal Alert Broadcaster",status:"start",message:"Risk level CRITICAL — broadcasting fraud alert to agent network..."}},
+    {delay:400,event:{stage:"alert",agent:"Cotal Alert Broadcaster",status:"complete",message:"Fraud alert broadcast to Cotal network. 3 recipients notified."}},
+    {delay:100,event:{stage:"pipeline",agent:"Closing Coordinator",status:"complete",message:"DO NOT proceed with this transaction. 14 agents reviewed this document and the consensus is clear — too many red flags. Verify everything through independent channels before moving forward."}},
+    {delay:50,event:{stage:"final",data:{risk_synthesis:{risk_level:"CRITICAL",composite_risk_score:94,signals:["Routing number changed from prior closings","Routing number bank mismatch (claims Bank of the West, actually Bank of America)","Beneficiary name typosquat (Pacfic Coast Setlements vs Pacific Coast Settlements)","Amount discrepancy ($630 delta between two references)","Routing flagged in fraud-patterns DB from prior BEC attack"]},pipeline:{agents_invoked:["Entity Extractor","Primary Analyst","Tavily Web Verifier","County Records Searcher","Mitosis Memory","Pattern Matcher","Skeptic","Compliance Officer","Forensic Investigator","Deal Auditor","Risk Synthesizer","Fraud DB Writer","Cotal Alert Broadcaster","Audit Trail"],total_agents:14,duration_ms:8400}}}},
+  ];
+
+  if (tool === "verify_wire") return wireEvents;
+  return fraudEvents;
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -2521,6 +2783,70 @@ Tools require payment via the x402 protocol. After authentication:
 </div></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
+    if (url.pathname === "/privacy") {
+      return new Response(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Privacy Policy — TitleWise</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;padding:2rem}.wrap{max-width:680px;margin:0 auto}.logo{display:flex;align-items:center;gap:8px;margin-bottom:2.5rem;text-decoration:none}.logo b{font-size:1rem;color:#fff}.logo span{font-size:1rem;font-weight:300;color:#94a3b8}h1{font-size:1.75rem;font-weight:700;margin-bottom:0.5rem}p.updated{font-size:0.8rem;color:#64748b;margin-bottom:2rem}h2{font-size:1.1rem;font-weight:600;margin-top:2rem;margin-bottom:0.75rem;color:#e2e8f0}p,li{font-size:0.9rem;color:#94a3b8;line-height:1.7;margin-bottom:0.75rem}ul{padding-left:1.5rem;margin-bottom:1rem}a{color:#60a5fa}</style></head><body><div class="wrap">
+<a class="logo" href="/"><b>TITLE</b><span>wise</span></a>
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: August 25, 2026</p>
+<p>Boxford Partners LLC ("Boxford Partners," "we," "us," or "our") operates titlewise.app and the TitleWise platform. This Privacy Policy explains what information we collect, how we use it, and your rights with respect to it.</p>
+<h2>Information We Collect</h2>
+<p>We collect information you provide directly to us:</p>
+<ul><li><strong>Account data</strong> — name, email address, firm size, and billing information processed through Stripe.</li><li><strong>Documents</strong> — title commitments, wire instructions, closing disclosures, and HOA documents you submit for analysis. Documents are processed in real-time and not retained beyond the analysis session unless you explicitly save them to a deal file.</li><li><strong>Usage data</strong> — which tools you use, analysis counts, and interactions within the platform.</li></ul>
+<h2>How We Use Your Information</h2>
+<ul><li>To analyze documents and deliver results to you only</li><li>To operate, maintain, and improve TitleWise</li><li>To process payments and manage subscriptions</li><li>To send transactional communications (alerts, receipts)</li><li>To comply with legal obligations</li></ul>
+<p>We do not use your documents to train AI models. We do not sell personal information.</p>
+<h2>Third-Party Service Providers</h2>
+<p>We use trusted third-party providers to operate our services. These providers process data only as directed by us:</p>
+<ul><li><strong>Cloudflare</strong> — hosting, CDN, and encrypted object storage (R2)</li><li><strong>Anthropic</strong> — AI-powered document analysis (receives document text during analysis only)</li><li><strong>Stripe</strong> — payment processing (we do not store full card numbers)</li><li><strong>Telnyx</strong> — SMS alert delivery for fraud notifications</li><li><strong>Tavily</strong> — web verification of entities during analysis</li></ul>
+<h2>Data Storage and Security</h2>
+<p>All data is encrypted in transit (TLS 1.3) and at rest. Saved documents are stored in Cloudflare R2 (US regions). Account data is stored in Cloudflare D1. No third party receives your full documents outside of the analysis session.</p>
+<h2>Data Retention</h2>
+<p>We retain your data for as long as your account is active or as needed to provide services. Unsaved documents are discarded immediately after analysis. You may request deletion of all your data at any time from Account settings.</p>
+<h2>Your Rights</h2>
+<p>Depending on your location, you may have the right to access, correct, delete, or restrict processing of your personal data. California residents have additional rights under the CCPA, including the right to know what data we have collected and the right to opt out of any sale of personal information. We do not sell personal information.</p>
+<h2>Children's Privacy</h2>
+<p>Our services are not directed to individuals under 18. We do not knowingly collect personal information from minors.</p>
+<h2>Changes to This Policy</h2>
+<p>We may update this policy from time to time. Material changes will be noted with a new "Last updated" date. Continued use of our services after changes constitutes acceptance.</p>
+<h2>Contact</h2>
+<p>Boxford Partners LLC<br><a href="mailto:hello@boxfordpartners.com">hello@boxfordpartners.com</a></p>
+</div></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+
+    if (url.pathname === "/terms") {
+      return new Response(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Terms of Service — TitleWise</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;padding:2rem}.wrap{max-width:680px;margin:0 auto}.logo{display:flex;align-items:center;gap:8px;margin-bottom:2.5rem;text-decoration:none}.logo b{font-size:1rem;color:#fff}.logo span{font-size:1rem;font-weight:300;color:#94a3b8}h1{font-size:1.75rem;font-weight:700;margin-bottom:0.5rem}p.updated{font-size:0.8rem;color:#64748b;margin-bottom:2rem}h2{font-size:1.1rem;font-weight:600;margin-top:2rem;margin-bottom:0.75rem;color:#e2e8f0}p,li{font-size:0.9rem;color:#94a3b8;line-height:1.7;margin-bottom:0.75rem}ul{padding-left:1.5rem;margin-bottom:1rem}a{color:#60a5fa}</style></head><body><div class="wrap">
+<a class="logo" href="/"><b>TITLE</b><span>wise</span></a>
+<h1>Terms of Service</h1>
+<p class="updated">Last updated: August 25, 2026</p>
+<p>These Terms of Service ("Terms") govern your access to and use of TitleWise, operated by Boxford Partners LLC ("Boxford Partners," "we," "us," or "our"). By accessing or using our services, you agree to these Terms.</p>
+<h2>Services</h2>
+<p>TitleWise provides AI-powered document analysis tools for real estate closing professionals. The service analyzes title commitments, wire instructions, closing disclosures, and HOA documents to surface potential issues for attorney review. We reserve the right to modify, suspend, or discontinue any service at any time with reasonable notice.</p>
+<h2>Not Legal Advice</h2>
+<p>TitleWise is an analysis tool, not a legal advisor. All output is informational and requires professional judgment before acting. TitleWise does not certify title, guarantee accuracy, or substitute for legal counsel. The attorney of record remains fully responsible for all closing decisions.</p>
+<h2>Accounts</h2>
+<p>You are responsible for maintaining the security of your account credentials and for all activity that occurs under your account. You must notify us immediately of any unauthorized use. We may suspend or terminate accounts that violate these Terms.</p>
+<h2>Acceptable Use</h2>
+<p>You agree to use our services only for lawful purposes. You may not:</p>
+<ul><li>Submit documents you lack authorization to analyze</li><li>Attempt to reverse-engineer or extract the underlying models</li><li>Use automated tools to scrape results at scale</li><li>Resell access without a written agreement</li><li>Engage in any activity that interferes with the operation of our infrastructure</li></ul>
+<h2>Payments and Subscriptions</h2>
+<p>Paid services are billed in advance on a monthly basis. All fees are non-refundable except as required by law. We use Stripe to process payments — your payment information is subject to Stripe's terms and privacy policy. We reserve the right to change pricing with 30 days' notice to existing subscribers. You may cancel at any time; access continues through the end of the billing period.</p>
+<h2>Intellectual Property</h2>
+<p>All content, software, and materials within TitleWise are owned by or licensed to Boxford Partners. You retain ownership of any documents or data you submit to our services.</p>
+<h2>Disclaimer of Warranties</h2>
+<p>Our services are provided "as is" and "as available" without warranties of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement.</p>
+<h2>Limitation of Liability</h2>
+<p>To the fullest extent permitted by law, Boxford Partners shall not be liable for any indirect, incidental, special, consequential, or punitive damages. Our total liability for any claim arising from these Terms shall not exceed the amount you paid us in the twelve months preceding the claim. We are not liable for losses arising from reliance on analysis output without independent verification.</p>
+<h2>Governing Law</h2>
+<p>These Terms are governed by the laws of the Commonwealth of Massachusetts, without regard to its conflict of law provisions.</p>
+<h2>Changes to These Terms</h2>
+<p>We may revise these Terms at any time with 30 days' notice via email. Continued use of our services after changes take effect constitutes acceptance.</p>
+<h2>Contact</h2>
+<p>Boxford Partners LLC<br><a href="mailto:hello@boxfordpartners.com">hello@boxfordpartners.com</a></p>
+</div></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+
     if (url.pathname === "/blog") {
       return new Response(blogIndexHTML(baseUrl), {
         headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -2587,6 +2913,30 @@ Tools require payment via the x402 protocol. After authentication:
     }
 
     if (url.pathname === "/api/analyze" && request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST", "Access-Control-Allow-Headers": "Content-Type" },
+      });
+    }
+
+    if (url.pathname === "/api/demo-stream" && request.method === "POST") {
+      const body = await request.json() as { tool: string; document_text: string };
+      const events = getDemoEvents(body.tool);
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({
+        async start(controller) {
+          for (const evt of events) {
+            await new Promise(r => setTimeout(r, evt.delay || 150));
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(evt.event)}\n\n`));
+          }
+          controller.close();
+        }
+      });
+      return new Response(stream, {
+        headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+
+    if (url.pathname === "/api/demo-stream" && request.method === "OPTIONS") {
       return new Response(null, {
         headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST", "Access-Control-Allow-Headers": "Content-Type" },
       });
