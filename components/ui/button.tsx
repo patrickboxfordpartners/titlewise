@@ -6,23 +6,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-base font-normal transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-accent text-white hover:bg-accent/90 rounded-lg shadow-sm hover:shadow-md",
-        destructive: "bg-destructive text-white hover:bg-destructive/90 rounded-lg shadow-sm",
-        outline: "border-2 border-border bg-background text-foreground hover:bg-surface rounded-lg",
-        secondary: "bg-surface text-foreground hover:bg-surface-elevated rounded-lg",
-        ghost: "hover:bg-surface text-foreground rounded-lg",
+        default: "bg-accent text-white hover:bg-accent/90 rounded-full shadow-sm hover:shadow-md",
+        destructive: "bg-destructive text-white hover:bg-destructive/90 rounded-full shadow-sm",
+        outline: "border-2 border-border bg-background text-foreground hover:bg-surface rounded-full",
+        secondary: "bg-surface text-foreground hover:bg-surface-elevated rounded-full",
+        ghost: "hover:bg-surface text-foreground rounded-full",
         link: "text-accent underline-offset-4 hover:underline",
-        hero: "bg-accent text-white hover:bg-accent/90 font-semibold shadow-lg hover:shadow-xl rounded-lg",
-        "hero-outline": "border-2 border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background font-semibold rounded-lg",
+        hero: "bg-accent text-white hover:bg-accent/90 font-normal shadow-lg hover:shadow-xl rounded-full",
+        "hero-outline": "border-2 border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background font-normal rounded-full",
       },
       size: {
-        default: "h-11 px-6 py-2",
-        sm: "h-9 px-4",
-        lg: "h-14 px-8 text-base",
+        default: "h-auto px-6 py-2",
+        sm: "h-auto px-4 py-2",
+        lg: "h-auto px-8 py-2",
         icon: "h-11 w-11",
       },
     },

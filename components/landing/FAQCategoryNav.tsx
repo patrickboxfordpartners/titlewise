@@ -22,7 +22,7 @@ export default function FAQCategoryNav({ categories }: Props) {
               display: "inline-block",
               padding: "14px 16px",
               fontSize: "0.8125rem",
-              fontWeight: 600,
+              fontWeight: 300,
               color: "var(--muted-foreground)",
               textDecoration: "none",
               whiteSpace: "nowrap",

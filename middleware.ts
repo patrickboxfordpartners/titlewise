@@ -30,7 +30,14 @@ const isApiRoute = createRouteMatcher(["/api/(.*)"])
 
 const MARKDOWN_PATHS = new Set(["/", "/pricing", "/faq"])
 
+// DEV BYPASS - Remove in production
+const DEV_BYPASS_PATHS = new Set(["/welcome", "/matters"])
+
 export default clerkMiddleware(async (auth, req) => {
+  // Allow access to welcome page in dev without auth
+  if (process.env.NODE_ENV === "development" && DEV_BYPASS_PATHS.has(req.nextUrl.pathname)) {
+    return NextResponse.next()
+  }
   const accept = req.headers.get("accept") || ""
   if (accept.includes("text/markdown") && MARKDOWN_PATHS.has(req.nextUrl.pathname)) {
     const url = req.nextUrl.clone()

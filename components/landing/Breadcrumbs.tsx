@@ -31,7 +31,8 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         aria-label="Breadcrumb"
         style={{
           fontSize: "0.8125rem",
-          color: "rgba(237,238,240,0.4)",
+          fontWeight: 300,
+          color: "#64748d",
           padding: "16px 0 0",
         }}
       >
@@ -49,13 +50,13 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
           {items.map((item, i) => (
             <li key={item.label} style={{ display: "flex", alignItems: "center", gap: 6 }}>
               {i > 0 && (
-                <span aria-hidden="true" style={{ color: "rgba(237,238,240,0.2)" }}>/</span>
+                <span aria-hidden="true" style={{ color: "#e3e8ee" }}>/</span>
               )}
               {item.href && i < items.length - 1 ? (
                 <Link
                   href={item.href}
                   style={{
-                    color: "rgba(237,238,240,0.4)",
+                    color: "#64748d",
                     textDecoration: "none",
                   }}
                 >
@@ -64,7 +65,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
               ) : (
                 <span
                   aria-current={i === items.length - 1 ? "page" : undefined}
-                  style={{ color: "rgba(237,238,240,0.6)" }}
+                  style={{ color: "#0d253d" }}
                 >
                   {item.label}
                 </span>

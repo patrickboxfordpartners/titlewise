@@ -49,13 +49,26 @@ function MattersContent() {
   const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(searchParams.get("new") === "1")
   const [creating, setCreating] = useState(false)
-  const [form, setForm] = useState({ clientName: "", propertyAddress: "", transactionType: "Purchase", closingDate: "", state: "" })
+  const [form, setForm] = useState({
+    clientName: "",
+    propertyAddress: "",
+    propertyCity: "",
+    propertyState: "",
+    propertyZip: "",
+    transactionType: "Purchase",
+    closingDate: "",
+    state: ""
+  })
   const [formError, setFormError] = useState("")
 
   useEffect(() => {
     fetch("/api/checklist")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to fetch")
+        return r.json()
+      })
       .then((d) => setMatters(d.matters ?? []))
+      .catch(() => setMatters([]))
       .finally(() => setLoading(false))
   }, [])
 
@@ -66,6 +79,17 @@ function MattersContent() {
     }
     setCreating(true)
     setFormError("")
+
+    // Dev mode: just show success message since we can't create without auth
+    if (process.env.NODE_ENV === "development") {
+      setTimeout(() => {
+        alert("Matter creation requires authentication. In production, this would create a new matter.")
+        setCreating(false)
+        setShowCreate(false)
+      }, 500)
+      return
+    }
+
     try {
       const res = await fetch("/api/checklist", {
         method: "POST",
@@ -100,16 +124,16 @@ function MattersContent() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">Matters</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="text-2xl font-light text-foreground tracking-[-0.48px]">Matters</h1>
+          <p className="text-sm font-light text-muted-foreground mt-0.5">
             {active.length} open
-            {closingThisWeek > 0 && <span className="ml-2 text-amber-600 font-medium">· {closingThisWeek} closing this week</span>}
-            {overdueItems > 0 && <span className="ml-2 text-red-600 font-medium">· {overdueItems} past closing date</span>}
+            {closingThisWeek > 0 && <span className="ml-2 text-amber-600 font-normal">· {closingThisWeek} closing this week</span>}
+            {overdueItems > 0 && <span className="ml-2 text-red-600 font-normal">· {overdueItems} past closing date</span>}
           </p>
         </div>
         <button
           onClick={() => setShowCreate((v) => !v)}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+          className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-normal rounded-full hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md"
         >
           <Plus className="h-4 w-4" />
           New matter
@@ -123,58 +147,78 @@ function MattersContent() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-card border border-border rounded-xl p-5 mb-6 shadow-sm"
         >
-          <h2 className="text-sm font-semibold text-foreground mb-4">New matter</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-            <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-1">Client Name *</label>
-              <input
-                type="text"
-                value={form.clientName}
-                onChange={(e) => setForm((p) => ({ ...p, clientName: e.target.value }))}
-                placeholder="e.g. John and Jane Smith"
-                className="w-full text-sm bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-1">Property Address *</label>
-              <input
-                type="text"
-                value={form.propertyAddress}
-                onChange={(e) => setForm((p) => ({ ...p, propertyAddress: e.target.value }))}
-                placeholder="e.g. 42 Maple Street, Portsmouth, NH"
-                className="w-full text-sm bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
-              />
-            </div>
+          <h2 className="text-sm font-light text-foreground mb-4">New matter</h2>
+          <div className="mb-3">
+            <label className="text-xs font-light text-muted-foreground block mb-1">Client Name *</label>
+            <input
+              type="text"
+              value={form.clientName}
+              onChange={(e) => setForm((p) => ({ ...p, clientName: e.target.value }))}
+              placeholder="e.g. John and Jane Smith"
+              className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
+            />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div className="mb-3">
+            <label className="text-xs font-light text-muted-foreground block mb-1">Street Address *</label>
+            <input
+              type="text"
+              value={form.propertyAddress}
+              onChange={(e) => setForm((p) => ({ ...p, propertyAddress: e.target.value }))}
+              placeholder="e.g. 42 Maple Street"
+              className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
             <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-1">Type</label>
-              <select
-                value={form.transactionType}
-                onChange={(e) => setForm((p) => ({ ...p, transactionType: e.target.value }))}
-                className="w-full text-sm bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {TRANSACTION_TYPES.map((t) => <option key={t}>{t}</option>)}
-              </select>
+              <label className="text-xs font-light text-muted-foreground block mb-1">City *</label>
+              <input
+                type="text"
+                value={form.propertyCity}
+                onChange={(e) => setForm((p) => ({ ...p, propertyCity: e.target.value }))}
+                placeholder="e.g. Portsmouth"
+                className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
+              />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-1">State</label>
+              <label className="text-xs font-light text-muted-foreground block mb-1">State *</label>
               <select
-                value={form.state}
-                onChange={(e) => setForm((p) => ({ ...p, state: e.target.value }))}
-                className="w-full text-sm bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                value={form.propertyState}
+                onChange={(e) => setForm((p) => ({ ...p, propertyState: e.target.value, state: e.target.value }))}
+                className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="">Select state</option>
                 {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground block mb-1">Closing Date</label>
+              <label className="text-xs font-light text-muted-foreground block mb-1">ZIP Code *</label>
+              <input
+                type="text"
+                value={form.propertyZip}
+                onChange={(e) => setForm((p) => ({ ...p, propertyZip: e.target.value }))}
+                placeholder="e.g. 03801"
+                className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground/50"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <div>
+              <label className="text-xs font-light text-muted-foreground block mb-1">Transaction Type</label>
+              <select
+                value={form.transactionType}
+                onChange={(e) => setForm((p) => ({ ...p, transactionType: e.target.value }))}
+                className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {TRANSACTION_TYPES.map((t) => <option key={t}>{t}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-light text-muted-foreground block mb-1">Closing Date</label>
               <input
                 type="date"
                 value={form.closingDate}
                 onChange={(e) => setForm((p) => ({ ...p, closingDate: e.target.value }))}
-                className="w-full text-sm bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full text-sm font-light bg-muted/40 border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
           </div>
@@ -186,10 +230,10 @@ function MattersContent() {
               border: "1px solid rgba(232,168,74,0.2)",
               marginBottom: 12,
             }}>
-              <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#b8860b", marginBottom: 4 }}>
+              <p style={{ fontSize: "0.875rem", fontWeight: 400, color: "#b8860b", marginBottom: 4 }}>
                 Trial limit reached
               </p>
-              <p style={{ fontSize: "0.8125rem", color: "var(--color-text-muted)", marginBottom: 10 }}>
+              <p style={{ fontSize: "0.8125rem", fontWeight: 300, color: "var(--color-text-muted)", marginBottom: 10 }}>
                 Your 7-day trial includes up to 3 active matters. Upgrade to unlock unlimited matters.
               </p>
               <Link
@@ -197,12 +241,12 @@ function MattersContent() {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  padding: "7px 16px",
-                  borderRadius: 6,
+                  padding: "8px 16px",
+                  borderRadius: 9999,
                   backgroundColor: "var(--primary)",
                   color: "var(--primary-foreground)",
                   fontSize: "0.8125rem",
-                  fontWeight: 600,
+                  fontWeight: 400,
                   textDecoration: "none",
                 }}
               >
@@ -210,20 +254,20 @@ function MattersContent() {
               </Link>
             </div>
           ) : formError ? (
-            <p className="text-xs text-red-500 mb-3">{formError}</p>
+            <p className="text-xs font-light text-red-500 mb-3">{formError}</p>
           ) : null}
           <div className="flex gap-2">
             <button
               onClick={handleCreate}
               disabled={creating}
-              className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 disabled:opacity-60 transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-normal rounded-full hover:bg-primary/90 disabled:opacity-60 transition-colors shadow-sm"
             >
               {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               {creating ? "Creating..." : "Create matter"}
             </button>
             <button
               onClick={() => { setShowCreate(false); setFormError("") }}
-              className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="px-4 py-2 text-sm font-light text-muted-foreground hover:text-foreground transition-colors"
             >
               Cancel
             </button>
@@ -244,38 +288,38 @@ function MattersContent() {
           <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
             <FolderOpen className="h-8 w-8 text-primary" />
           </div>
-          <h2 className="text-xl font-bold text-foreground mb-2">Create your first matter</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+          <h2 className="text-xl font-light text-foreground mb-2 tracking-[-0.2px]">Create your first matter</h2>
+          <p className="text-sm font-light text-muted-foreground mb-6 max-w-sm mx-auto">
             Matters are the foundation of TitleWise. Each matter represents a real estate closing with its own checklist, documents, and AI tools.
           </p>
 
           <div className="bg-card border border-border rounded-xl p-6 mb-6 text-left">
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+            <p className="text-xs font-normal uppercase tracking-widest text-muted-foreground mb-3">
               What you'll track
             </p>
             <div className="space-y-3">
               <div className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground">Auto-generated closing checklist</p>
+                <p className="text-sm font-light text-foreground">Auto-generated closing checklist</p>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground">Document uploads and analysis</p>
+                <p className="text-sm font-light text-foreground">Document uploads and analysis</p>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground">Client communication and status updates</p>
+                <p className="text-sm font-light text-foreground">Client communication and status updates</p>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                <p className="text-sm text-foreground">Wire verification and fee calculations</p>
+                <p className="text-sm font-light text-foreground">Wire verification and fee calculations</p>
               </div>
             </div>
           </div>
 
           <button
             onClick={() => setShowCreate(true)}
-            className="flex items-center gap-1.5 px-5 py-2.5 bg-primary text-white text-base font-semibold rounded-lg hover:bg-primary/90 transition-colors mx-auto"
+            className="flex items-center gap-1.5 px-6 py-2 bg-primary text-white text-base font-normal rounded-full hover:bg-primary/90 transition-colors mx-auto shadow-lg hover:shadow-xl"
           >
             <Plus className="h-5 w-5" />
             Create your first matter
@@ -302,12 +346,12 @@ function MattersContent() {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">{m.clientName}</p>
-                      <p className="text-xs text-muted-foreground truncate">{m.propertyAddress} · {m.transactionType}</p>
+                      <p className="text-sm font-light text-foreground truncate">{m.clientName}</p>
+                      <p className="text-xs font-light text-muted-foreground truncate">{m.propertyAddress} · {m.transactionType}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0 ml-3">
                       {m.closingDate && (
-                        <span className={`text-xs font-medium ${isOverdue ? "text-red-600" : isUrgent ? "text-amber-600" : "text-muted-foreground"}`}>
+                        <span className={`text-xs font-light ${isOverdue ? "text-red-600" : isUrgent ? "text-amber-600" : "text-muted-foreground"}`}>
                           {isOverdue ? "Closed " : ""}{formatDate(m.closingDate)}
                         </span>
                       )}
@@ -323,7 +367,7 @@ function MattersContent() {
                       {m.completedItems}/{m.totalItems}
                     </div>
                   </div>
-                  <p className="text-[10px] text-muted-foreground/60 mt-1.5">
+                  <p className="text-[10px] font-light text-muted-foreground/60 mt-1.5">
                     Updated {formatRelative(m.updatedAt)}
                   </p>
                 </motion.div>

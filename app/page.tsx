@@ -156,19 +156,29 @@ export default function HomePage() {
 
       {/* Hero */}
       <section style={{ padding: "96px 32px 80px", maxWidth: 1060, margin: "0 auto", position: "relative", zIndex: 1 }}>
-        {/* Background video */}
+        {/* Gradient mesh backdrop - DESIGN.md signature */}
         <div style={{ position: "fixed", inset: 0, zIndex: -1, overflow: "hidden" }}>
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "40vh",
+            background: "linear-gradient(90deg, #f5e9d4 0%, #ffb347 15%, #e6d5ff 35%, #533afd 60%, #ea2261 85%, #f96bee 100%)",
+            filter: "blur(80px)",
+            opacity: 0.4,
+          }} />
           <video
             autoPlay
             loop
             muted
             playsInline
-            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.25 }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.08 }}
           >
             <source src="https://cdn.coverr.co/videos/coverr-law-office-establishing-shot/1080p.mp4" type="video/mp4" />
             <source src="https://cdn.coverr.co/videos/coverr-modern-office-space/1080p.mp4" type="video/mp4" />
           </video>
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, ${BG}60, ${BG}b0, ${BG})` }} />
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, ${BG}00, ${BG}60, ${BG})` }} />
         </div>
         <p style={{
           fontSize: "0.75rem", fontWeight: 700, color: BLUE,

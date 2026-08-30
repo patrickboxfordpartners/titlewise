@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-background" style={{ fontFamily: "var(--font-sans)", WebkitFontSmoothing: "antialiased" }}>
+    <div className="min-h-screen bg-white" style={{ fontFamily: "var(--font-sans)", WebkitFontSmoothing: "antialiased" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -73,29 +73,28 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Prose styles for article body HTML */}
       <style>{`
         .tw-prose h2 {
-          font-family: var(--font-display);
           font-size: 1.125rem;
-          font-weight: 800;
+          font-weight: 300;
           letter-spacing: 0.04em;
           text-transform: uppercase;
-          color: var(--foreground);
+          color: #0d253d;
           margin-top: 2.5rem;
           margin-bottom: 1rem;
           line-height: 1.3;
         }
         .tw-prose h3 {
-          font-family: var(--font-display);
           font-size: 1rem;
-          font-weight: 700;
-          color: var(--foreground);
+          font-weight: 300;
+          color: #0d253d;
           margin-top: 1.75rem;
           margin-bottom: 0.75rem;
           line-height: 1.4;
         }
         .tw-prose p {
           font-size: 1rem;
+          font-weight: 300;
           line-height: 1.85;
-          color: var(--text-primary);
+          color: #0d253d;
           margin-bottom: 1.25rem;
           margin-top: 0;
         }
@@ -105,23 +104,25 @@ export default async function BlogPostPage({ params }: Props) {
         }
         .tw-prose li {
           font-size: 1rem;
+          font-weight: 300;
           line-height: 1.8;
-          color: var(--text-primary);
+          color: #0d253d;
           margin-bottom: 0.35rem;
         }
         .tw-prose a {
-          color: var(--primary);
+          color: #533afd;
           text-decoration: underline;
         }
         .tw-prose strong {
-          font-weight: 700;
-          color: var(--foreground);
+          font-weight: 400;
+          color: #0d253d;
         }
         .tw-prose blockquote {
-          border-left: 3px solid var(--primary);
+          border-left: 3px solid #533afd;
           padding-left: 1.25rem;
           margin: 1.5rem 0;
-          color: var(--muted-foreground);
+          color: #64748d;
+          font-weight: 300;
           font-style: italic;
         }
       `}</style>
@@ -131,7 +132,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Hero — dark navy, full-width */}
       <section style={{
         backgroundColor: "var(--section-dark)",
-        padding: "96px 32px 80px",
+        padding: "128px 32px 80px",
         textAlign: "center",
       }}>
         <div style={{ maxWidth: 760, margin: "0 auto" }}>
@@ -151,14 +152,14 @@ export default async function BlogPostPage({ params }: Props) {
               borderRadius: 999,
               padding: "5px 14px",
               fontSize: "0.6875rem",
-              fontWeight: 700,
+              fontWeight: 400,
               letterSpacing: "0.07em",
               textTransform: "uppercase",
-              color: "var(--primary)",
+              color: "#533afd",
             }}>
               {post.category}
-              <span style={{ color: "rgba(237,238,240,0.3)", fontWeight: 400 }}>·</span>
-              <span style={{ color: "rgba(237,238,240,0.5)", textTransform: "none", fontWeight: 500, letterSpacing: 0 }}>
+              <span style={{ color: "rgba(237,238,240,0.3)", fontWeight: 300 }}>·</span>
+              <span style={{ color: "rgba(237,238,240,0.5)", textTransform: "none", fontWeight: 300, letterSpacing: 0 }}>
                 {post.date}
               </span>
             </span>
@@ -166,13 +167,12 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Title */}
           <h1 style={{
-            fontFamily: "var(--font-display)",
             fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-            fontWeight: 800,
-            letterSpacing: "0.02em",
+            fontWeight: 300,
+            letterSpacing: "-1.4px",
             lineHeight: 1.1,
             textTransform: "uppercase",
-            color: "#EDEEF0",
+            color: "#ffffff",
             marginBottom: 28,
           }}>
             {post.title}
@@ -186,35 +186,35 @@ export default async function BlogPostPage({ params }: Props) {
             gap: 10,
             flexWrap: "wrap" as const,
           }}>
-            <span style={{ fontSize: "0.8125rem", color: "rgba(237,238,240,0.4)" }}>By</span>
+            <span style={{ fontSize: "0.8125rem", fontWeight: 300, color: "rgba(237,238,240,0.4)" }}>By</span>
             <a
               href={post.authorUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ fontSize: "0.8125rem", color: "#EDEEF0", textDecoration: "none", fontWeight: 600 }}
+              style={{ fontSize: "0.8125rem", color: "#ffffff", textDecoration: "none", fontWeight: 300 }}
             >
               {post.author}
             </a>
-            <span style={{ fontSize: "0.8125rem", color: "rgba(237,238,240,0.4)" }}>·</span>
-            <span style={{ fontSize: "0.8125rem", color: "rgba(237,238,240,0.4)" }}>{post.date}</span>
-            <span style={{ fontSize: "0.8125rem", color: "rgba(237,238,240,0.4)" }}>·</span>
-            <span style={{ fontSize: "0.8125rem", color: "rgba(237,238,240,0.4)" }}>{post.readTime}</span>
+            <span style={{ fontSize: "0.8125rem", fontWeight: 300, color: "rgba(237,238,240,0.4)" }}>·</span>
+            <span style={{ fontSize: "0.8125rem", fontWeight: 300, color: "rgba(237,238,240,0.4)" }}>{post.date}</span>
+            <span style={{ fontSize: "0.8125rem", fontWeight: 300, color: "rgba(237,238,240,0.4)" }}>·</span>
+            <span style={{ fontSize: "0.8125rem", fontWeight: 300, color: "rgba(237,238,240,0.4)" }}>{post.readTime}</span>
           </div>
         </div>
       </section>
 
       {/* Direct Answer box */}
       <section style={{
-        backgroundColor: "var(--canvas-cream, #f5e9d4)",
+        backgroundColor: "#f5e9d4",
         borderTop: "1px solid rgba(83,58,253,0.12)",
         borderBottom: "1px solid rgba(83,58,253,0.12)",
         padding: "40px 32px",
       }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
-          <div style={{ borderLeft: "4px solid var(--primary)", paddingLeft: 20 }}>
+          <div style={{ borderLeft: "4px solid #533afd", paddingLeft: 20 }}>
             <p style={{
               fontSize: "0.6875rem",
-              fontWeight: 800,
+              fontWeight: 300,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               color: "var(--primary)",
@@ -255,7 +255,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div style={{ maxWidth: 560, margin: "0 auto" }}>
           <p style={{
             fontSize: "0.6875rem",
-            fontWeight: 800,
+            fontWeight: 300,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             color: "var(--primary)",
@@ -266,7 +266,7 @@ export default async function BlogPostPage({ params }: Props) {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
-            fontWeight: 800,
+            fontWeight: 300,
             letterSpacing: "0.02em",
             textTransform: "uppercase",
             lineHeight: 1.1,
@@ -289,7 +289,7 @@ export default async function BlogPostPage({ params }: Props) {
             backgroundColor: "var(--primary)",
             color: "var(--primary-foreground)",
             fontSize: "0.9375rem",
-            fontWeight: 700,
+            fontWeight: 300,
             letterSpacing: "0.03em",
             textTransform: "uppercase",
             padding: "14px 36px",

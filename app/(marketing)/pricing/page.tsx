@@ -7,7 +7,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Logo } from "@/components/logo"
+import LandingNav from "@/components/landing/LandingNav"
 import LandingFooter from "@/components/landing/LandingFooter"
 
 const planDetails = {
@@ -88,26 +88,18 @@ export default function PricingPage() {
   const entries = Object.entries(PLANS) as [keyof typeof PLANS, (typeof PLANS)[keyof typeof PLANS]][]
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Nav */}
-      <nav className="border-b border-border bg-background">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <Logo href="/" />
-          <Link href="/sign-up">
-            <Button size="sm">Get Started</Button>
-          </Link>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-white">
+      <LandingNav />
 
-      <div className="container mx-auto px-6 py-20">
+      <div className="container mx-auto px-6 pt-32 pb-20">
         <motion.div
           className="mx-auto mb-8 max-w-2xl text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-4xl font-bold text-foreground tracking-tight">Simple, predictable pricing</h1>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <h1 className="text-5xl font-light tracking-[-1.4px] text-[#0d253d]">Simple, predictable pricing</h1>
+          <p className="mt-4 text-base font-light text-[#64748d]">
             Choose the plan that fits your practice. Scale up as you grow.
           </p>
         </motion.div>
@@ -119,11 +111,11 @@ export default function PricingPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.4 }}
         >
-          <span className={`text-sm font-medium transition-colors ${!annual ? "text-foreground" : "text-muted-foreground"}`}>
+          <span className={`text-sm font-light transition-colors ${!annual ? "text-[#0d253d]" : "text-[#64748d]"}`}>
             Monthly
           </span>
           <button
-            className={`relative h-7 w-12 rounded-full transition-colors duration-200 ${annual ? "bg-primary" : "bg-muted"}`}
+            className={`relative h-7 w-12 rounded-full transition-colors duration-200 ${annual ? "bg-[#533afd]" : "bg-[#e3e8ee]"}`}
             onClick={() => setAnnual(!annual)}
             aria-label="Toggle annual billing"
           >
@@ -133,9 +125,9 @@ export default function PricingPage() {
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
           </button>
-          <span className={`text-sm font-medium transition-colors ${annual ? "text-foreground" : "text-muted-foreground"}`}>
+          <span className={`text-sm font-light transition-colors ${annual ? "text-[#0d253d]" : "text-[#64748d]"}`}>
             Annual
-            <span className="ml-1 text-xs text-primary font-semibold">-20%</span>
+            <span className="ml-1 text-xs text-[#533afd] font-normal">-20%</span>
           </span>
         </motion.div>
 
@@ -148,27 +140,28 @@ export default function PricingPage() {
             return (
               <motion.div
                 key={key}
-                className={`relative rounded-xl border bg-card p-8 ${
-                  isPopular ? "border-primary shadow-md" : "border-border"
+                className={`relative rounded-xl p-8 ${
+                  isPopular ? "bg-[#1c1e54] text-white shadow-md" : "bg-white text-[#0d253d] border border-[#e3e8ee]"
                 }`}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 + 0.3, duration: 0.4 }}
-                whileHover={{ y: -4, boxShadow: "0 8px 24px -8px hsl(222 47% 11% / 0.1)" }}
+                whileHover={{ y: -4, boxShadow: "0 8px 24px -8px rgba(0,55,112,0.08)" }}
               >
                 {isPopular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-semibold text-primary-foreground">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#533afd] px-4 py-1 text-xs font-normal text-white">
                     Most Popular
                   </span>
                 )}
-                <h2 className="text-2xl font-bold text-foreground">{plan.name}</h2>
-                <p className="mt-1 text-sm text-muted-foreground">{plan.description}</p>
+                <h2 className="text-[22px] font-light tracking-[-0.22px]">{plan.name}</h2>
+                <p className="mt-1 text-sm font-light">{plan.description}</p>
                 <div className="mt-6 flex items-baseline gap-1">
-                  <span className="text-sm text-muted-foreground">$</span>
+                  <span className="text-sm" style={{ fontFeatureSettings: '"tnum"' }}>$</span>
                   <AnimatePresence mode="wait">
                     <motion.span
                       key={displayPrice}
-                      className="text-4xl font-bold text-foreground"
+                      className="text-[32px] font-light tracking-[-0.64px]"
+                      style={{ fontFeatureSettings: '"tnum"' }}
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 8 }}
@@ -177,11 +170,12 @@ export default function PricingPage() {
                       {displayPrice}
                     </motion.span>
                   </AnimatePresence>
-                  <span className="text-sm text-muted-foreground">/month</span>
+                  <span className="text-sm" style={{ fontFeatureSettings: '"tnum"' }}>/month</span>
                 </div>
                 {annual && (
                   <motion.div
-                    className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#b9b9f9] px-3 py-1 text-xs font-normal text-[#4434d4]"
+                    style={{ fontFeatureSettings: '"tnum"' }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.25 }}
@@ -192,11 +186,11 @@ export default function PricingPage() {
 
                 <ul className="mt-8 space-y-3">
                   {details.features.map((f) => (
-                    <li key={f.text} className={`flex items-start gap-3 text-sm ${f.included ? "text-foreground" : "text-muted-foreground/50"}`}>
+                    <li key={f.text} className={`flex items-start gap-3 text-sm font-light ${f.included ? (isPopular ? "text-white" : "text-[#0d253d]") : "opacity-40"}`}>
                       {f.included ? (
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#533afd]" />
                       ) : (
-                        <X className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/30" />
+                        <X className="mt-0.5 h-4 w-4 shrink-0 opacity-30" />
                       )}
                       {f.text}
                     </li>
@@ -208,8 +202,8 @@ export default function PricingPage() {
                   className="mt-8 block"
                 >
                   <Button
-                    variant={isPopular ? "hero" : "outline"}
-                    className="w-full pointer-events-none"
+                    variant="hero"
+                    className={`w-full pointer-events-none ${isPopular ? "bg-[#533afd] hover:bg-[#4434d4] text-white" : "bg-[#533afd] hover:bg-[#4434d4] text-white"}`}
                     size="lg"
                   >
                     {key === "solo" ? "Start 7-Day Free Trial" : "Get Started"}
@@ -220,6 +214,9 @@ export default function PricingPage() {
           })}
         </div>
 
+        {/* Cream band spacer */}
+        <div className="w-full h-24" style={{ backgroundColor: "#f5e9d4" }} />
+
         {/* FAQ */}
         <motion.div
           className="mx-auto mt-24 max-w-3xl"
@@ -228,60 +225,60 @@ export default function PricingPage() {
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.5 }}
         >
-          <h2 className="text-center text-2xl font-bold text-foreground tracking-tight mb-2">
+          <h2 className="text-center text-[26px] font-light tracking-[-0.26px] text-[#0d253d] mb-2">
             Frequently Asked Questions
           </h2>
-          <p className="text-center text-sm text-muted-foreground mb-8">
-            Everything you need to know about TITLEwise pricing.
+          <p className="text-center text-sm font-light text-[#64748d] mb-8">
+            Everything you need to know about TitleWise pricing.
           </p>
 
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="trial">
-              <AccordionTrigger className="text-sm font-medium text-foreground">How do I get started?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">How do I get started?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
                 Select a plan below and you'll be set up in minutes. Billing starts immediately when you subscribe. Monthly plans renew each month; annual plans renew once per year at a 20% discount.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="billing">
-              <AccordionTrigger className="text-sm font-medium text-foreground">When am I billed?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">When am I billed?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
                 Billing starts when you select a plan. Monthly plans are billed on the same date each month. Annual plans are billed once per year upfront at a 20% discount.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="upgrade">
-              <AccordionTrigger className="text-sm font-medium text-foreground">Can I upgrade later?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
-                Absolutely. You can upgrade at any time and the change takes effect immediately with a prorated charge. Start with Solo and move to Pro when you need the AI agent and TRID compliance -- no data is lost.
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">Can I upgrade later?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
+                Absolutely. You can upgrade at any time and the change takes effect immediately with a prorated charge. Start with Solo and move to Pro when you need the AI agent and TRID compliance — no data is lost.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="agent">
-              <AccordionTrigger className="text-sm font-medium text-foreground">What does the autonomous closing agent do?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">What does the autonomous closing agent do?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
                 The AI closing agent analyzes your entire matter, automatically updates checklist items, drafts status update emails, and flags potential issues. It runs from the matter detail page with one click. Available on Pro and Enterprise plans.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="portal">
-              <AccordionTrigger className="text-sm font-medium text-foreground">How does the client portal work?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">How does the client portal work?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
                 Generate a shareable link for any matter. Your client can view checklist progress and closing status in real time without needing a TITLEwise account. Available on Small Firm, Pro, and Enterprise plans.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="cancel">
-              <AccordionTrigger className="text-sm font-medium text-foreground">What happens if I cancel?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">What happens if I cancel?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
                 You can cancel anytime with no penalties. You'll retain access through the end of your current billing period. Your data is kept for 30 days in case you decide to come back.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="seats">
-              <AccordionTrigger className="text-sm font-medium text-foreground">How do attorney seats work?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">How do attorney seats work?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
                 Each seat is a separate login for an attorney in your firm. Solo includes 1, Small Firm up to 5, Pro up to 10, and Enterprise up to 25. Team management with invitations is available on Small Firm and above. Need more seats? Contact us.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="security">
-              <AccordionTrigger className="text-sm font-medium text-foreground">Is my data secure?</AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
-                Yes. All data is encrypted in transit and at rest. We never share or sell your data. TITLEwise is built with the security standards real estate attorneys expect.
+              <AccordionTrigger className="text-sm font-light text-[#0d253d]">Is my data secure?</AccordionTrigger>
+              <AccordionContent className="text-sm font-light text-[#64748d]">
+                Yes. All data is encrypted in transit and at rest. We never share or sell your data. TitleWise is built with the security standards real estate attorneys expect.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

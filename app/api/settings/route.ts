@@ -9,6 +9,7 @@ import { getOrCreateUser } from "@/lib/db/get-user"
 const updateSchema = z.object({
   name: z.string().min(1).optional(),
   firmName: z.string().optional(),
+  customLogoUrl: z.string().url().or(z.literal("")).nullable().optional(),
 })
 
 export async function GET() {
@@ -29,6 +30,7 @@ export async function GET() {
       monthlyUsageCount: user.monthlyUsageCount,
       hasStripeCustomer: !!user.stripeCustomerId,
       onboardingCompletedAt: user.onboardingCompletedAt,
+      customLogoUrl: user.customLogoUrl,
     },
   })
 }

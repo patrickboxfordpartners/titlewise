@@ -42,6 +42,9 @@ function SettingsContent() {
   const [saved, setSaved] = useState(false)
   const [portalLoading, setPortalLoading] = useState(false)
   const [disconnecting, setDisconnecting] = useState<"google" | "outlook" | null>(null)
+  const [customLogoUrl, setCustomLogoUrl] = useState("")
+  const [logoSaving, setLogoSaving] = useState(false)
+  const [logoSaved, setLogoSaved] = useState(false)
 
   const connectedParam = searchParams.get("connected")
   const errorParam = searchParams.get("error")
@@ -49,10 +52,11 @@ function SettingsContent() {
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
-      .then((data: Settings) => {
+      .then((data: any) => {
         setSettings(data)
         setName(data.name ?? "")
         setFirmName(data.firmName ?? "")
+        setCustomLogoUrl(data.user?.customLogoUrl ?? "")
       })
     fetch("/api/email/status")
       .then((r) => r.json())
@@ -88,6 +92,19 @@ function SettingsContent() {
     await fetch(`/api/email/disconnect?provider=${provider}`, { method: "DELETE" })
     setEmailStatus((prev) => ({ ...prev, [provider]: false }))
     setDisconnecting(null)
+  }
+
+  async function handleLogoSave() {
+    setLogoSaving(true)
+    setLogoSaved(false)
+    await fetch("/api/settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customLogoUrl: customLogoUrl || null }),
+    })
+    setLogoSaving(false)
+    setLogoSaved(true)
+    setTimeout(() => setLogoSaved(false), 3000)
   }
 
   if (!settings) {
@@ -184,6 +201,54 @@ function SettingsContent() {
               <><Check className="h-3.5 w-3.5" /> Saved</>
             ) : (
               "Save Changes"
+            )}
+          </button>
+        </div>
+      </motion.section>
+
+      {/* Custom Logo */}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.14, duration: 0.4 }}
+        className="bg-card rounded-xl border border-border p-5 mb-4"
+      >
+        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">Company Logo</h2>
+        <div className="space-y-3">
+          <div>
+            <label className="text-xs font-medium text-muted-foreground block mb-1">Logo URL</label>
+            <input
+              type="text"
+              value={customLogoUrl}
+              onChange={(e) => setCustomLogoUrl(e.target.value)}
+              placeholder="https://example.com/logo.png"
+              className={inputClass}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Enter a URL to your company logo. Will display in the sidebar. Leave blank to use the default TitleWise logo.
+            </p>
+          </div>
+          {customLogoUrl && (
+            <div className="p-3 rounded-lg border border-border bg-muted/20">
+              <p className="text-xs font-medium text-muted-foreground mb-2">Preview</p>
+              <img src={customLogoUrl} alt="Custom logo preview" className="h-8 w-auto object-contain" onError={(e) => {
+                e.currentTarget.style.display = 'none'
+                e.currentTarget.nextElementSibling!.classList.remove('hidden')
+              }} />
+              <p className="text-xs text-red-600 hidden mt-2">Failed to load image</p>
+            </div>
+          )}
+          <button
+            onClick={handleLogoSave}
+            disabled={logoSaving}
+            className="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            {logoSaving ? (
+              <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Saving...</>
+            ) : logoSaved ? (
+              <><Check className="h-3.5 w-3.5" /> Saved</>
+            ) : (
+              "Save Logo"
             )}
           </button>
         </div>

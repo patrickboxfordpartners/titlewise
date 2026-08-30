@@ -1,54 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  /* Light mode (default) - Clean, professional with alternating sections */
+  /* DESIGN.md color tokens - Stripe-inspired design system */
   --background: #ffffff;
-  --foreground: #0f172a; /* slate-950 */
+  --foreground: #0d253d; /* ink - deep navy */
 
-  --surface: #f8fafc; /* slate-50 - subtle gray for alternating sections */
+  --surface: #f6f9fc; /* canvas-soft */
   --surface-elevated: #ffffff;
 
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #0d253d;
 
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
+  --popover-foreground: #0d253d;
 
   --primary: #533afd; /* indigo - brand primary */
   --primary-foreground: #ffffff;
 
-  --secondary: #f1f5f9; /* slate-100 */
-  --secondary-foreground: #0f172a;
+  --secondary: #f6f9fc; /* canvas-soft */
+  --secondary-foreground: #0d253d;
 
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b; /* slate-500 */
+  --muted: #f6f9fc;
+  --muted-foreground: #64748d; /* ink-mute */
 
-  --accent: #3b82f6; /* electric blue - secondary/tertiary */
+  --accent: #533afd; /* use primary, not separate blue */
   --accent-foreground: #ffffff;
 
-  --destructive: #ef4444; /* red-500 */
+  --destructive: #ea2261; /* ruby */
   --destructive-foreground: #ffffff;
 
   --success: #10b981; /* emerald-500 */
   --warning: #f59e0b; /* amber-500 */
-  --error: #ef4444; /* red-500 */
+  --error: #ea2261; /* ruby */
 
-  --border: #e2e8f0; /* slate-200 */
+  --border: #e3e8ee; /* hairline */
   --input: #ffffff;
   --ring: #533afd;
   --canvas-cream: #f5e9d4;
 
-  --radius: 0.5rem; /* 8px - slightly more friendly */
+  --radius: 0.75rem; /* 12px - DESIGN.md rounded-lg */
 
-  /* Section backgrounds - alternating light/gray pattern */
-  --section-dark: #0f172a; /* dark blue for dramatic sections */
-  --section-alt: #f8fafc; /* light gray for subtle contrast */
-  --section-accent: #f1f5f9; /* slightly darker gray */
+  /* Section backgrounds */
+  --section-dark: #0d253d; /* ink - deep navy */
+  --section-alt: #f6f9fc; /* canvas-soft */
+  --section-accent: #f5e9d4; /* canvas-cream */
 
   /* Text hierarchy */
-  --text-primary: #0f172a;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
+  --text-primary: #0d253d; /* ink */
+  --text-muted: #64748d; /* ink-mute */
+  --text-dim: #61718a; /* ink-mute-2 */
 
   /* Spacing scale (8px base - standard comfortable) */
   --spacing-2xs: 4px;
@@ -61,14 +61,14 @@
   --spacing-2xl: 64px;
   --spacing-3xl: 96px;
 
-  /* Sidebar — dark sidebar tokens */
-  --color-sidebar: #1C1C1E;
-  --color-sidebar-text: rgba(255, 255, 255, 0.85);
-  --color-sidebar-muted: rgba(255, 255, 255, 0.40);
-  --color-sidebar-border: rgba(255, 255, 255, 0.08);
-  --color-sidebar-active: rgba(255, 255, 255, 0.10);
-  --color-sidebar-hover: rgba(255, 255, 255, 0.05);
-  --color-canvas: #F7F7F5;
+  /* Sidebar — light sidebar tokens */
+  --color-sidebar: #ffffff;
+  --color-sidebar-text: #0d253d;
+  --color-sidebar-muted: #64748d;
+  --color-sidebar-border: #e3e8ee;
+  --color-sidebar-active: #f0f9ff;
+  --color-sidebar-hover: #f8fafc;
+  --color-canvas: #ffffff;
 }
 
 
@@ -149,20 +149,22 @@
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   font-size: 0.875rem;
+  font-weight: 300;
   color: var(--color-sidebar-muted);
   transition: background-color 0.15s, color 0.15s;
   text-decoration: none;
 }
 
 .sidebar-nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.85);
+  background-color: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text);
   cursor: pointer;
 }
 
 .sidebar-nav-item.active {
   background-color: var(--color-sidebar-active);
-  color: #FFFFFF;
+  color: #0066cc;
+  font-weight: 400;
 }
 
 .sidebar-matter-item {
@@ -170,8 +172,9 @@
   padding: 5px 10px 5px 36px;
   border-radius: 5px;
   font-size: 0.8rem;
+  font-weight: 300;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--color-sidebar-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -181,15 +184,16 @@
 }
 
 .sidebar-matter-item:hover {
-  background-color: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.75);
-  border-left-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text);
+  border-left-color: #e3e8ee;
 }
 
 .sidebar-matter-item.active {
-  background-color: rgba(255, 255, 255, 0.10);
-  color: #FFFFFF;
-  border-left-color: rgba(255, 255, 255, 0.30);
+  background-color: var(--color-sidebar-active);
+  color: #0066cc;
+  font-weight: 400;
+  border-left-color: #0066cc;
 }
 
 .sidebar-matter-all {
@@ -199,20 +203,22 @@
   padding: 5px 10px 5px 36px;
   border-radius: 5px;
   font-size: 0.8rem;
+  font-weight: 300;
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--color-sidebar-muted);
   transition: background-color 0.1s, color 0.1s;
   cursor: pointer;
 }
 
 .sidebar-matter-all:hover {
-  background-color: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.75);
+  background-color: var(--color-sidebar-hover);
+  color: var(--color-sidebar-text);
 }
 
 .sidebar-matter-all.active {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.90);
+  background-color: var(--color-sidebar-active);
+  color: #0066cc;
+  font-weight: 400;
 }
 
 .sidebar-new-matter {
@@ -222,17 +228,17 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.5rem;
-  border-radius: 6px;
-  background-color: var(--color-sidebar-active);
-  color: #FFFFFF;
+  border-radius: 9999px;
+  background-color: #0066cc;
+  color: #ffffff;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 400;
   text-decoration: none;
   transition: background-color 0.15s;
 }
 
 .sidebar-new-matter:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: #0052a3;
 }
 
 .sidebar-new-matter-section {
@@ -255,26 +261,11 @@ body {
   color: var(--foreground);
   font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 16px;
+  font-weight: 300;
   font-variant-numeric: tabular-nums; /* data alignment */
+  font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Typography hierarchy - DESIGN.md */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Cabinet Grotesk', system-ui, sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-h1 {
-  font-size: 2.5rem; /* 40px */
-  font-weight: 800;
-}
-
-h2 {
-  font-size: 1.75rem; /* 28px */
-  font-weight: 700;
 }
 
 code, pre, .font-mono {

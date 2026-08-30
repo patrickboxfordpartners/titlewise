@@ -14,17 +14,17 @@ export default function BlogIndexPage() {
   const posts = getAllPosts()
 
   return (
-    <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "var(--font-sans)" }}>
+    <div className="min-h-screen bg-white text-[#0d253d]" style={{ fontFamily: "var(--font-sans)" }}>
       <LandingNav />
 
-      <div className="max-w-[1060px] mx-auto px-8 pt-24 pb-20">
+      <div className="max-w-[1060px] mx-auto px-8 pt-32 pb-20">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Blog" }]} />
         {/* Header */}
-        <div className="mb-16">
+        <div className="mb-16 mt-8">
           <p style={{
             fontSize: "0.75rem",
-            fontWeight: 700,
-            color: "var(--primary)",
+            fontWeight: 400,
+            color: "#533afd",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             marginBottom: 16,
@@ -32,19 +32,19 @@ export default function BlogIndexPage() {
             Blog
           </p>
           <h1 style={{
-            fontFamily: "var(--font-display)",
             fontSize: "clamp(2rem, 4vw, 3rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.04em",
+            fontWeight: 300,
+            letterSpacing: "-1.4px",
             lineHeight: 1.1,
-            color: "var(--foreground)",
+            color: "#0d253d",
             marginBottom: 16,
           }}>
             Insights for closing attorneys
           </h1>
           <p style={{
             fontSize: "1rem",
-            color: "var(--muted-foreground)",
+            fontWeight: 300,
+            color: "#64748d",
             lineHeight: 1.7,
             maxWidth: 520,
           }}>
@@ -54,44 +54,44 @@ export default function BlogIndexPage() {
 
         {/* Post list or empty state */}
         {posts.length === 0 ? (
-          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 48, textAlign: "center" }}>
-            <p style={{ fontSize: "1rem", color: "var(--muted-foreground)" }}>Articles coming soon.</p>
+          <div style={{ borderTop: "1px solid #e3e8ee", paddingTop: 48, textAlign: "center" }}>
+            <p style={{ fontSize: "1rem", fontWeight: 300, color: "#64748d" }}>Articles coming soon.</p>
           </div>
         ) : (
-          <div style={{ borderTop: "1px solid var(--border)" }}>
+          <div style={{ borderTop: "1px solid #e3e8ee" }}>
             {posts.map((post) => (
-              <article key={post.slug} style={{ borderBottom: "1px solid var(--border)", padding: "40px 0" }}>
+              <article key={post.slug} style={{ borderBottom: "1px solid #e3e8ee", padding: "40px 0" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
                   <span style={{
                     fontSize: "0.6875rem",
-                    fontWeight: 700,
+                    fontWeight: 400,
                     letterSpacing: "0.07em",
                     textTransform: "uppercase",
-                    color: "var(--primary)",
+                    color: "#533afd",
                   }}>
                     {post.category}
                   </span>
-                  <span style={{ fontSize: "0.6875rem", color: "var(--muted-foreground)" }}>·</span>
-                  <span style={{ fontSize: "0.6875rem", color: "var(--muted-foreground)" }}>
+                  <span style={{ fontSize: "0.6875rem", fontWeight: 300, color: "#64748d" }}>·</span>
+                  <span style={{ fontSize: "0.6875rem", fontWeight: 300, color: "#64748d" }}>
                     {new Date(post.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                   </span>
-                  <span style={{ fontSize: "0.6875rem", color: "var(--muted-foreground)" }}>·</span>
-                  <span style={{ fontSize: "0.6875rem", color: "var(--muted-foreground)" }}>{post.readTime}</span>
+                  <span style={{ fontSize: "0.6875rem", fontWeight: 300, color: "#64748d" }}>·</span>
+                  <span style={{ fontSize: "0.6875rem", fontWeight: 300, color: "#64748d" }}>{post.readTime}</span>
                 </div>
                 <h2 style={{
-                  fontFamily: "var(--font-display)",
                   fontSize: "1.25rem",
-                  fontWeight: 700,
+                  fontWeight: 300,
                   letterSpacing: "-0.02em",
                   lineHeight: 1.3,
-                  color: "var(--foreground)",
+                  color: "#0d253d",
                   marginBottom: 10,
                 }}>
                   {post.title}
                 </h2>
                 <p style={{
                   fontSize: "0.9375rem",
-                  color: "var(--muted-foreground)",
+                  fontWeight: 300,
+                  color: "#64748d",
                   lineHeight: 1.65,
                   maxWidth: 680,
                   marginBottom: 20,
@@ -100,8 +100,8 @@ export default function BlogIndexPage() {
                 </p>
                 <Link href={`/blog/${post.slug}`} style={{
                   fontSize: "0.875rem",
-                  fontWeight: 600,
-                  color: "var(--primary)",
+                  fontWeight: 400,
+                  color: "#533afd",
                   textDecoration: "none",
                 }}>
                   Read more &rarr;

@@ -1,6 +1,5 @@
 import { Metadata } from "next"
-import Link from "next/link"
-import { Logo } from "@/components/logo"
+import LandingNav from "@/components/landing/LandingNav"
 import LandingFooter from "@/components/landing/LandingFooter"
 import Breadcrumbs from "@/components/landing/Breadcrumbs"
 
@@ -11,28 +10,21 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border bg-background">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <Logo href="/" />
-          <Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Pricing
-          </Link>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-white">
+      <LandingNav />
 
-      <div className="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+      <div className="mx-auto max-w-3xl px-6 pt-32 pb-20 lg:px-8">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]} />
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-6">Legal</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground">Privacy Policy</h1>
-        <p className="mt-4 text-sm text-muted-foreground">Last updated: May 7, 2026</p>
+        <p className="text-xs font-normal uppercase tracking-wider text-[#533afd] mt-8">Legal</p>
+        <h1 className="mt-3 text-5xl font-light tracking-[-1.4px] text-[#0d253d]">Privacy Policy</h1>
+        <p className="mt-4 text-sm font-light text-[#64748d]">Last updated: May 7, 2026</p>
 
-        <div className="mt-12 space-y-8 text-foreground/80 leading-relaxed">
+        <div className="mt-12 space-y-8 text-[#0d253d] font-light leading-relaxed">
 
           <p>Boxford Partners LLC DBA TitleWise ("TitleWise," "we," "us," or "our") operates titlewise.app and the associated AI-powered closing platform. This Privacy Policy explains what information we collect, how we use it, and your rights with respect to it.</p>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Information We Collect</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Information We Collect</h2>
             <p className="mb-3">We collect information you provide directly to us:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong>Account data</strong> - name, email address, firm name, and billing information processed through Stripe.</li>
@@ -43,7 +35,7 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">How We Use Your Information</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-1">
               <li>To provide AI-powered document analysis and closing tools</li>
               <li>To respond to inquiries and deliver services you've requested</li>
@@ -55,12 +47,12 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Document Privacy</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Document Privacy</h2>
             <p>We take the confidentiality of your legal documents seriously. Documents you upload are used solely to provide analysis results to you. We do not use your documents to train AI models, share them with other users, or sell them to third parties. Documents are encrypted in transit and at rest.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Third-Party Service Providers</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Third-Party Service Providers</h2>
             <p className="mb-3">We use trusted third-party providers to operate our services. These providers process data only as directed by us:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong>Clerk</strong> - authentication and user management</li>
@@ -73,36 +65,36 @@ export default function PrivacyPage() {
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Cookies and Tracking</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Cookies and Tracking</h2>
             <p>We use cookies and similar technologies to maintain sessions, remember preferences, and understand how visitors use our site. You can disable cookies in your browser settings, though some features may not function correctly.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Data Retention</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Data Retention</h2>
             <p>We retain your data for as long as your account is active or as needed to provide services. Document analysis results are retained for your reference in your account history. You may request deletion of your data at any time by contacting us at the address below.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Your Rights</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Your Rights</h2>
             <p>Depending on your location, you may have the right to access, correct, delete, or restrict processing of your personal data. California residents have additional rights under the CCPA, including the right to know what data we've collected and the right to opt out of any sale of personal information. We do not sell personal information.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Children's Privacy</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Children's Privacy</h2>
             <p>Our services are not directed to individuals under 18. We do not knowingly collect personal information from minors.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Changes to This Policy</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Changes to This Policy</h2>
             <p>We may update this policy from time to time. Material changes will be noted with a new "Last updated" date. Continued use of our services after changes constitutes acceptance.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-lg font-semibold text-foreground">Contact</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Contact</h2>
             <p>Questions about this policy or requests related to your data:</p>
             <p className="mt-2">
               Boxford Partners LLC DBA TitleWise<br />
-              <a href="mailto:hello@titlewise.app" className="text-primary hover:underline">hello@titlewise.app</a>
+              <a href="mailto:hello@titlewise.app" className="text-[#533afd] hover:underline">hello@titlewise.app</a>
             </p>
           </div>
         </div>

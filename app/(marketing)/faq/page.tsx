@@ -37,7 +37,7 @@ const faqSchema = {
 export default function FAQPage() {
   return (
     <div
-      className="min-h-screen bg-background text-foreground"
+      className="min-h-screen bg-white text-[#0d253d]"
       style={{ fontFamily: "var(--font-sans)", WebkitFontSmoothing: "antialiased" }}
     >
       <script
@@ -47,17 +47,17 @@ export default function FAQPage() {
 
       <LandingNav />
 
-      <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 32px" }}>
+      <div style={{ maxWidth: 1060, margin: "0 auto", padding: "96px 32px 0" }}>
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
       </div>
 
       {/* Hero */}
-      <section style={{ backgroundColor: "var(--section-dark)", padding: "96px 32px 80px", textAlign: "center" }}>
+      <section style={{ backgroundColor: "#0d253d", padding: "64px 32px 80px", textAlign: "center" }}>
         <div style={{ maxWidth: 720, margin: "0 auto" }}>
           <p style={{
             fontSize: "0.75rem",
-            fontWeight: 700,
-            color: "var(--primary)",
+            fontWeight: 400,
+            color: "#533afd",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             marginBottom: 16,
@@ -65,17 +65,16 @@ export default function FAQPage() {
             FAQ
           </p>
           <h1 style={{
-            fontFamily: "var(--font-display)",
             fontSize: "clamp(2rem, 4vw, 3rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
+            fontWeight: 300,
+            letterSpacing: "-1.4px",
             lineHeight: 1.1,
-            color: "#EDEEF0",
+            color: "#ffffff",
             marginBottom: 20,
           }}>
             Frequently Asked Questions
           </h1>
-          <p style={{ fontSize: "1rem", color: "rgba(237,238,240,0.55)", lineHeight: 1.7, maxWidth: 520, margin: "0 auto" }}>
+          <p style={{ fontSize: "1rem", fontWeight: 300, color: "#64748d", lineHeight: 1.7, maxWidth: 520, margin: "0 auto" }}>
             Everything you need to know about TitleWise — AI document review built for real estate closing attorneys.
           </p>
         </div>
@@ -96,14 +95,13 @@ export default function FAQPage() {
               style={{ marginBottom: 64, scrollMarginTop: 120 }}
             >
               <h2 style={{
-                fontFamily: "var(--font-display)",
                 fontSize: "1.375rem",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                color: "var(--foreground)",
+                fontWeight: 300,
+                letterSpacing: "-0.26px",
+                color: "#0d253d",
                 marginBottom: 32,
                 paddingBottom: 16,
-                borderBottom: "2px solid var(--primary)",
+                borderBottom: "2px solid #533afd",
                 display: "inline-block",
               }}>
                 {cat}
@@ -114,14 +112,14 @@ export default function FAQPage() {
                   <details
                     key={faq.value}
                     style={{
-                      borderBottom: i < items.length - 1 ? "1px solid var(--border)" : "none",
+                      borderBottom: i < items.length - 1 ? "1px solid #e3e8ee" : "none",
                     }}
                   >
                     <summary style={{
                       padding: "20px 0",
                       fontSize: "0.9375rem",
-                      fontWeight: 600,
-                      color: "var(--foreground)",
+                      fontWeight: 300,
+                      color: "#0d253d",
                       cursor: "pointer",
                       listStyle: "none",
                       display: "flex",
@@ -135,7 +133,7 @@ export default function FAQPage() {
                         height="16"
                         viewBox="0 0 16 16"
                         fill="none"
-                        style={{ flexShrink: 0, color: "var(--muted-foreground)" }}
+                        style={{ flexShrink: 0, color: "#64748d" }}
                       >
                         <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -143,8 +141,9 @@ export default function FAQPage() {
                     <p style={{
                       padding: "0 0 20px",
                       fontSize: "0.9375rem",
+                      fontWeight: 300,
                       lineHeight: 1.8,
-                      color: "var(--muted-foreground)",
+                      color: "#64748d",
                       margin: 0,
                       maxWidth: 680,
                     }}>
@@ -168,7 +167,7 @@ export default function FAQPage() {
           <h3 style={{
             fontFamily: "var(--font-display)",
             fontSize: "1.25rem",
-            fontWeight: 700,
+            fontWeight: 300,
             color: "var(--foreground)",
             marginBottom: 12,
           }}>
@@ -185,7 +184,7 @@ export default function FAQPage() {
               backgroundColor: "var(--primary)",
               color: "var(--primary-foreground)",
               fontSize: "0.875rem",
-              fontWeight: 700,
+              fontWeight: 300,
               padding: "12px 28px",
               borderRadius: 9999,
               textDecoration: "none",
@@ -206,7 +205,7 @@ export default function FAQPage() {
         <div style={{ maxWidth: 520, margin: "0 auto" }}>
           <p style={{
             fontSize: "0.6875rem",
-            fontWeight: 800,
+            fontWeight: 300,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             color: "var(--primary)",
@@ -217,7 +216,7 @@ export default function FAQPage() {
           <h2 style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
-            fontWeight: 800,
+            fontWeight: 300,
             letterSpacing: "0.02em",
             textTransform: "uppercase",
             lineHeight: 1.1,
@@ -240,7 +239,7 @@ export default function FAQPage() {
             backgroundColor: "var(--primary)",
             color: "var(--primary-foreground)",
             fontSize: "0.9375rem",
-            fontWeight: 700,
+            fontWeight: 300,
             letterSpacing: "0.03em",
             textTransform: "uppercase",
             padding: "14px 36px",

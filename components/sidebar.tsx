@@ -4,6 +4,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useUser, useClerk } from "@clerk/nextjs"
 import { useState, useEffect } from "react"
+import { Logo } from "@/components/logo"
+import Image from "next/image"
 
 type MatterItem = {
   id: string
@@ -24,6 +26,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const [matters, setMatters] = useState<MatterItem[]>([])
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [trialStatus, setTrialStatus] = useState<{ isTrial: boolean; daysRemaining: number } | null>(null)
+  const [customLogo, setCustomLogo] = useState<string | null>(null)
 
   const isMatterSection = pathname === "/matters" || pathname.startsWith("/matters/")
   const isHistory = pathname === "/history"
@@ -54,14 +57,29 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       .catch(() => {})
   }, [])
 
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((d) => setCustomLogo(d.user?.customLogoUrl || null))
+      .catch(() => {})
+  }, [])
+
   return (
-    <div className="sidebar">
-      {/* Wordmark */}
-      <div className="sidebar-wordmark">
+    <div className="h-full flex flex-col bg-white border-r" style={{ borderColor: "#e3e8ee" }}>
+      {/* Logo */}
+      <div className="p-4 border-b" style={{ borderColor: "#e3e8ee" }}>
         <Link href="/matters" className="block">
-          <span style={{ color: "rgba(237,237,235,0.9)", fontSize: "1rem", fontWeight: 700, letterSpacing: "-0.02em" }}>
-            titlewise
-          </span>
+          {customLogo ? (
+            <Image
+              src={customLogo}
+              alt="Company Logo"
+              width={140}
+              height={32}
+              className="h-8 w-auto object-contain"
+            />
+          ) : (
+            <Logo size="sm" />
+          )}
         </Link>
       </div>
 
@@ -71,13 +89,13 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
           margin: "0.75rem",
           padding: "0.75rem",
           borderRadius: 8,
-          backgroundColor: "rgba(232,168,74,0.12)",
-          border: "1px solid rgba(232,168,74,0.25)",
+          backgroundColor: "#fff8e6",
+          border: "1px solid #ffd666",
         }}>
-          <p style={{ fontSize: "0.6875rem", fontWeight: 700, color: "#e8a84a", marginBottom: 4 }}>
-            FREE TRIAL
+          <p style={{ fontSize: "0.6875rem", fontWeight: 400, color: "#d48806", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            Free Trial
           </p>
-          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.7)", marginBottom: 8 }}>
+          <p style={{ fontSize: "0.75rem", fontWeight: 300, color: "#64748d", marginBottom: 8 }}>
             {trialStatus.daysRemaining > 0
               ? `${trialStatus.daysRemaining} day${trialStatus.daysRemaining === 1 ? "" : "s"} remaining`
               : "Trial ends today"}
@@ -87,12 +105,12 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             style={{
               display: "block",
               textAlign: "center",
-              padding: "5px 0",
-              borderRadius: 6,
-              backgroundColor: "#e8a84a",
-              color: "#0a0700",
+              padding: "6px 12px",
+              borderRadius: 9999,
+              backgroundColor: "#0066cc",
+              color: "#ffffff",
               fontSize: "0.75rem",
-              fontWeight: 700,
+              fontWeight: 400,
               textDecoration: "none",
             }}
           >
@@ -102,7 +120,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       )}
 
       {/* Nav */}
-      <nav style={{ flex: 1, padding: "0.75rem", display: "flex", flexDirection: "column", gap: "2px", overflowY: "auto" }}>
+      <nav style={{ flex: 1, padding: "0.75rem", display: "flex", flexDirection: "column", gap: "4px", overflowY: "auto" }}>
 
         {/* Matters accordion */}
         <button
@@ -135,7 +153,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             >
               All matters
               {matters.length > 0 && (
-                <span style={{ fontSize: "0.65rem", backgroundColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.5)", borderRadius: 10, padding: "1px 6px", fontWeight: 600 }}>
+                <span style={{ fontSize: "0.65rem", backgroundColor: "#f0f9ff", color: "#0066cc", borderRadius: 10, padding: "1px 6px", fontWeight: 400 }}>
                   {matters.length}
                 </span>
               )}
@@ -157,7 +175,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             })}
 
             {matters.length === 0 && (
-              <p style={{ padding: "4px 10px 4px 36px", fontSize: "0.75rem", color: "rgba(255,255,255,0.25)" }}>
+              <p style={{ padding: "4px 10px 4px 36px", fontSize: "0.75rem", fontWeight: 300, color: "#cbd5e1" }}>
                 No active matters
               </p>
             )}
@@ -209,13 +227,13 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         <button
           onClick={() => setShowUserMenu((v) => !v)}
           style={{ display: "flex", alignItems: "center", gap: "0.75rem", width: "100%", background: "none", border: "none", cursor: "pointer", borderRadius: 8, padding: "0.5rem", transition: "background-color 0.15s" }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)"}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
         >
-          <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#3b82f6", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 600, color: "#fff", flexShrink: 0 }}>
+          <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#0066cc", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 400, color: "#fff", flexShrink: 0 }}>
             {initials}
           </div>
-          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.8rem", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textAlign: "left" }}>
+          <p style={{ color: "#64748d", fontSize: "0.8rem", fontWeight: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textAlign: "left" }}>
             {displayName}
           </p>
         </button>
@@ -223,11 +241,11 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         {showUserMenu && (
           <>
             <div style={{ position: "fixed", inset: 0, zIndex: 999 }} onClick={() => setShowUserMenu(false)} />
-            <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 8, right: 8, backgroundColor: "#2C2C2E", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 8px 24px rgba(0,0,0,0.4)", zIndex: 1000, padding: 4 }}>
+            <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 8, right: 8, backgroundColor: "#ffffff", borderRadius: 8, border: "1px solid #e3e8ee", boxShadow: "0 8px 24px rgba(0,0,0,0.1)", zIndex: 1000, padding: 4 }}>
               <button
                 onClick={() => signOut({ redirectUrl: "/" })}
-                style={{ width: "100%", padding: "8px 12px", background: "none", border: "none", color: "rgba(255,255,255,0.75)", fontSize: "0.875rem", textAlign: "left", cursor: "pointer", borderRadius: 6, transition: "background-color 0.15s" }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)"}
+                style={{ width: "100%", padding: "8px 12px", background: "none", border: "none", color: "#64748d", fontSize: "0.875rem", fontWeight: 300, textAlign: "left", cursor: "pointer", borderRadius: 6, transition: "background-color 0.15s" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
               >
                 Sign out

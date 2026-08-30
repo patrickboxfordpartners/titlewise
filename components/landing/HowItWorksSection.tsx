@@ -21,10 +21,10 @@ export default function HowItWorksSection() {
           viewport={{ once: true, amount: 0.01 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl font-bold text-foreground md:text-4xl tracking-tight">
+          <h2 className="text-3xl font-light text-foreground md:text-4xl tracking-[-1.4px]">
             How it works
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-4 text-lg font-light text-muted-foreground">
             Four steps to a faster closing workflow
           </p>
         </motion.div>
@@ -49,11 +49,11 @@ export default function HowItWorksSection() {
               >
                 <item.icon className="h-8 w-8 text-primary" />
               </motion.div>
-              <span className="mb-2 inline-block text-xs font-bold uppercase tracking-widest text-primary">
+              <span className="mb-2 inline-block text-xs font-normal uppercase tracking-widest text-primary">
                 Step {item.step}
               </span>
-              <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+              <h3 className="text-lg font-light text-foreground">{item.title}</h3>
+              <p className="mt-2 text-sm font-light leading-relaxed text-muted-foreground">{item.description}</p>
             </motion.div>
           ))}
         </div>

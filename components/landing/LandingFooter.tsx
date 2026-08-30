@@ -3,11 +3,11 @@ import Link from "next/link"
 const MUTED = "rgba(237,238,240,0.45)"
 const DIM = "rgba(237,238,240,0.2)"
 const RULE = "rgba(237,238,240,0.07)"
-const BLUE = "#2563EB"
+const BLUE = "#533afd"
 
 export default function LandingFooter() {
   return (
-    <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "#111827" }}>
+    <footer style={{ borderTop: `1px solid ${RULE}`, backgroundColor: "#0d253d" }}>
       <style>{`
         @media (max-width: 768px) { .tw-lf-grid { grid-template-columns: 1fr 1fr !important; row-gap: 32px !important; } }
         @media (max-width: 480px) { .tw-lf-grid { grid-template-columns: 1fr !important; text-align: center; } .tw-lf-grid ul { list-style: none; padding: 0; display: flex; flex-direction: column; align-items: center; } .tw-lf-brand { justify-content: center !important; } }
@@ -27,7 +27,7 @@ export default function LandingFooter() {
                 <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
               </span>
             </div>
-            <p style={{ marginTop: 16, fontSize: "0.875rem", color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
+            <p style={{ marginTop: 16, fontSize: "0.875rem", fontWeight: 300, color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
               AI-powered closing platform for real estate attorneys. From intake to clear-to-close.
             </p>
             <a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{
@@ -38,10 +38,10 @@ export default function LandingFooter() {
               backgroundColor: "rgba(237,238,240,0.03)",
             }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: BLUE, flexShrink: 0 }} />
-              <span style={{ fontSize: "0.65rem", color: DIM, textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 600 }}>A Boxford Partners Company</span>
+              <span style={{ fontSize: "0.65rem", fontWeight: 400, color: DIM, textTransform: "uppercase", letterSpacing: "0.06em" }}>A Boxford Partners Company</span>
             </a>
             <p style={{ marginTop: 16 }}>
-              <a href="mailto:hello@titlewise.app" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>
+              <a href="mailto:hello@titlewise.app" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>
                 hello@titlewise.app
               </a>
             </p>
@@ -49,37 +49,37 @@ export default function LandingFooter() {
 
           {/* Product */}
           <div style={{ paddingBottom: 40 }}>
-            <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Product</p>
+            <p style={{ fontSize: "0.6875rem", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Product</p>
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
               {[["Pricing", "/pricing"], ["Demo", "/demo"], ["Blog", "/blog"], ["FAQ", "/faq"], ["Sign in", "/sign-in"]].map(([label, href]) => (
-                <li key={label}><Link href={href} style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>{label}</Link></li>
+                <li key={label}><Link href={href} style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>{label}</Link></li>
               ))}
             </ul>
           </div>
 
           {/* Company */}
           <div style={{ paddingBottom: 40 }}>
-            <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Company</p>
+            <p style={{ fontSize: "0.6875rem", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Company</p>
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-              <li><a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Boxford Partners</a></li>
-              <li><a href="https://cal.com/boxfordpartners/titlewise-demo" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Book a Demo</a></li>
-              <li><a href="mailto:hello@titlewise.app" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Contact</a></li>
-              <li><a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>LinkedIn</a></li>
+              <li><a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>Boxford Partners</a></li>
+              <li><a href="https://cal.com/boxfordpartners/titlewise-demo" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>Book a Demo</a></li>
+              <li><a href="mailto:hello@titlewise.app" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>Contact</a></li>
+              <li><a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>LinkedIn</a></li>
             </ul>
           </div>
 
           {/* Legal */}
           <div style={{ paddingBottom: 40 }}>
-            <p style={{ fontSize: "0.6875rem", fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Legal</p>
+            <p style={{ fontSize: "0.6875rem", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Legal</p>
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-              <li><Link href="/privacy" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Privacy</Link></li>
-              <li><Link href="/terms" style={{ fontSize: "0.875rem", color: MUTED, textDecoration: "none" }}>Terms</Link></li>
+              <li><Link href="/privacy" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>Privacy</Link></li>
+              <li><Link href="/terms" style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>Terms</Link></li>
             </ul>
           </div>
         </div>
 
         <div style={{ borderTop: `1px solid ${RULE}`, paddingTop: 20, paddingBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" as const, gap: 16 }}>
-          <p style={{ fontSize: "0.75rem", color: DIM, margin: 0 }}>
+          <p style={{ fontSize: "0.75rem", fontWeight: 300, color: DIM, margin: 0 }}>
             &copy; {new Date().getFullYear()} Boxford Partners LLC. All rights reserved. &nbsp;·&nbsp; 345 California St., Suite 600, San Francisco CA 94104
           </p>
           <a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" aria-label="Boxford Partners on LinkedIn" style={{ color: DIM }}>

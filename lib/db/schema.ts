@@ -22,6 +22,7 @@ export const users = pgTable("users", {
   rateLimitCount: integer("rate_limit_count").default(0),
   rateLimitWindowStart: timestamp("rate_limit_window_start"),
   onboardingCompletedAt: timestamp("onboarding_completed_at"),
+  customLogoUrl: text("custom_logo_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
