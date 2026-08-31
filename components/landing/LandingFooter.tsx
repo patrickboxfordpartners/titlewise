@@ -3,7 +3,7 @@ import Link from "next/link"
 const MUTED = "rgba(237,238,240,0.45)"
 const DIM = "rgba(237,238,240,0.2)"
 const RULE = "rgba(237,238,240,0.07)"
-const BLUE = "#533afd"
+const BLUE = "#0066cc"
 
 export default function LandingFooter() {
   return (

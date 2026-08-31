@@ -53,7 +53,7 @@ export default function StickyMobileCTA() {
         style={{
           display: "inline-flex",
           alignItems: "center",
-          backgroundColor: "#533afd",
+          backgroundColor: "#0066cc",
           color: "#fff",
           fontSize: "0.8125rem",
           fontWeight: 400,

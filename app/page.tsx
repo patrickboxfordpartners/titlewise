@@ -2,12 +2,13 @@ import Link from "next/link"
 import { featuredFaqs } from "@/components/landing/faq-data"
 import FAQSection from "@/components/landing/FAQSection"
 import StickyMobileCTA from "@/components/landing/StickyMobileCTA"
+import InteractiveDemo from "@/components/landing/InteractiveDemo"
 
-const PRIMARY = "#533afd"
+const PRIMARY = "#0066cc"
+const PRIMARY_LIGHT = "#e3f2fd"
 const INK = "#0d253d"
 const MUTED = "#64748d"
 const HAIRLINE = "#e3e8ee"
-const CREAM = "#f5e9d4"
 const CANVAS_SOFT = "#f6f9fc"
 
 const faqSchema = {
@@ -138,7 +139,7 @@ export default function HomePage() {
             xmlns="http://www.w3.org/2000/svg"
             style={{ width: "auto" }}
           >
-            <rect x="10" y="0" width="24" height="32" rx="4" fill="#b9b9f9" />
+            <rect x="10" y="0" width="24" height="32" rx="4" fill="#93c5fd" />
             <rect x="2" y="8" width="24" height="32" rx="4" fill={PRIMARY} />
           </svg>
           <span style={{ fontSize: "1.125rem", lineHeight: 1 }}>
@@ -209,9 +210,43 @@ export default function HomePage() {
         }
       `}</style>
 
-      {/* Hero with gradient mesh */}
+      {/* Hero with video backdrop */}
       <section style={{ position: "relative", overflow: "hidden" }}>
-        {/* Gradient mesh backdrop */}
+        {/* Background video */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            overflow: "hidden",
+          }}
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: 0.06,
+            }}
+          >
+            <source
+              src="https://cdn.coverr.co/videos/coverr-law-office-establishing-shot/1080p.mp4"
+              type="video/mp4"
+            />
+            <source
+              src="https://cdn.coverr.co/videos/coverr-modern-office-space/1080p.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+        {/* Blue gradient mesh overlay */}
         <div
           style={{
             position: "absolute",
@@ -231,9 +266,9 @@ export default function HomePage() {
               right: "-5%",
               height: "70%",
               background:
-                "radial-gradient(ellipse 80% 50% at 20% 40%, #f5e9d4 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 40% 30%, #ffb347 0%, transparent 50%), radial-gradient(ellipse 50% 50% at 55% 35%, #e6d5ff 0%, transparent 50%), radial-gradient(ellipse 60% 50% at 70% 30%, #533afd 0%, transparent 50%), radial-gradient(ellipse 40% 40% at 85% 40%, #ea2261 0%, transparent 50%), radial-gradient(ellipse 30% 30% at 95% 35%, #f96bee 0%, transparent 50%)",
+                "radial-gradient(ellipse 80% 50% at 20% 40%, #bfdbfe 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 40% 30%, #60a5fa 0%, transparent 50%), radial-gradient(ellipse 50% 50% at 55% 35%, #93c5fd 0%, transparent 50%), radial-gradient(ellipse 60% 50% at 70% 30%, #0066cc 0%, transparent 50%), radial-gradient(ellipse 40% 40% at 85% 40%, #1e40af 0%, transparent 50%)",
               filter: "blur(60px)",
-              opacity: 0.35,
+              opacity: 0.25,
             }}
           />
           <div
@@ -373,7 +408,7 @@ export default function HomePage() {
             {
               stat: "93%",
               label: "Faster title commitment review",
-              body: "What takes 45 minutes by hand takes 30 seconds with TitleWise. Exceptions flagged, requirements listed, red flags surfaced -- structured and ready to act on.",
+              body: "What takes 45 minutes by hand takes 30 seconds with TitleWise. Exceptions flagged, requirements listed, red flags surfaced, structured and ready to act on.",
             },
             {
               stat: "$4,100",
@@ -463,7 +498,7 @@ export default function HomePage() {
               {
                 n: "02",
                 title: "Let AI handle the analysis",
-                body: "Upload title commitments, closing disclosures, HOA docs, or wire instructions. TitleWise reads them, flags issues, and drafts status updates -- ready to review.",
+                body: "Upload title commitments, closing disclosures, HOA docs, or wire instructions. TitleWise reads them, flags issues, and drafts status updates, ready to review.",
               },
               {
                 n: "03",
@@ -511,426 +546,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Product demo -- dashboard mockup */}
-      <section
-        style={{
-          padding: "96px 32px",
-          borderTop: `1px solid ${HAIRLINE}`,
-          backgroundColor: "#fff",
-        }}
-      >
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div
-            className="tw-demo-layout"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 64,
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 400,
-                  color: PRIMARY,
-                  letterSpacing: "0.1px",
-                  textTransform: "uppercase",
-                  marginBottom: 16,
-                }}
-              >
-                Title Commitment Analysis
-              </p>
-              <h2
-                style={{
-                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                  fontWeight: 300,
-                  letterSpacing: "-0.64px",
-                  color: INK,
-                  marginBottom: 20,
-                  lineHeight: 1.1,
-                }}
-              >
-                45 minutes of review.
-                <br />
-                Done in 30 seconds.
-              </h2>
-              <p
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 300,
-                  color: MUTED,
-                  lineHeight: 1.55,
-                  marginBottom: 32,
-                }}
-              >
-                Upload a title commitment and get a structured analysis
-                instantly. Schedule B exceptions flagged by severity.
-                Requirements categorized. Liens, easements, and conditions that
-                need attention before closing -- all surfaced automatically.
-              </p>
-              <Link
-                href="/demo"
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 400,
-                  color: PRIMARY,
-                  textDecoration: "none",
-                }}
-              >
-                Try it yourself &rarr;
-              </Link>
-            </div>
-
-            {/* Mockup card */}
-            <div
-              style={{
-                backgroundColor: "#fff",
-                border: `1px solid ${HAIRLINE}`,
-                borderRadius: 12,
-                padding: 24,
-                boxShadow: "rgba(0,55,112,0.08) 0 8px 24px, rgba(0,55,112,0.04) 0 2px 6px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginBottom: 20,
-                  paddingBottom: 16,
-                  borderBottom: `1px solid ${HAIRLINE}`,
-                }}
-              >
-                <div
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    backgroundColor: "#22c55e",
-                  }}
-                />
-                <span
-                  style={{ fontSize: "13px", fontWeight: 400, color: INK, letterSpacing: "-0.39px" }}
-                >
-                  Analysis Complete
-                </span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    fontSize: "11px",
-                    fontWeight: 300,
-                    color: MUTED,
-                  }}
-                >
-                  0.8s
-                </span>
-              </div>
-
-              {/* Exceptions */}
-              <p
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 400,
-                  color: MUTED,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1px",
-                  marginBottom: 12,
-                }}
-              >
-                Schedule B Exceptions
-              </p>
-              {[
-                { severity: "high", text: "Mortgage lien -- First National Bank, $342,000" },
-                { severity: "medium", text: "Easement -- Duke Energy utility access, 15ft" },
-                { severity: "low", text: "CC&Rs -- Oakwood HOA, recorded 2019" },
-                { severity: "low", text: "Property tax lien -- Mecklenburg Co., current" },
-              ].map((ex, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 10,
-                    padding: "10px 0",
-                    borderBottom: i < 3 ? `1px solid ${HAIRLINE}` : "none",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      marginTop: 6,
-                      flexShrink: 0,
-                      backgroundColor:
-                        ex.severity === "high"
-                          ? "#ea2261"
-                          : ex.severity === "medium"
-                            ? "#f59e0b"
-                            : "#22c55e",
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: 300,
-                      color: INK,
-                      lineHeight: 1.4,
-                      letterSpacing: "-0.42px",
-                      fontFeatureSettings: '"tnum", "ss01"',
-                    }}
-                  >
-                    {ex.text}
-                  </span>
-                </div>
-              ))}
-
-              <div style={{ marginTop: 20, display: "flex", gap: 8 }}>
-                <span
-                  style={{
-                    display: "inline-block",
-                    backgroundColor: "#b9b9f9",
-                    color: "#4434d4",
-                    fontSize: "10px",
-                    fontWeight: 400,
-                    padding: "4px 8px",
-                    borderRadius: 9999,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1px",
-                  }}
-                >
-                  4 Exceptions
-                </span>
-                <span
-                  style={{
-                    display: "inline-block",
-                    backgroundColor: "#b9b9f9",
-                    color: "#4434d4",
-                    fontSize: "10px",
-                    fontWeight: 400,
-                    padding: "4px 8px",
-                    borderRadius: 9999,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1px",
-                  }}
-                >
-                  2 Requirements
-                </span>
-                <span
-                  style={{
-                    display: "inline-block",
-                    backgroundColor: "#fde2ec",
-                    color: "#ea2261",
-                    fontSize: "10px",
-                    fontWeight: 400,
-                    padding: "4px 8px",
-                    borderRadius: 9999,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1px",
-                  }}
-                >
-                  1 Red Flag
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Wire fraud demo */}
-      <section
-        style={{
-          padding: "96px 32px",
-          borderTop: `1px solid ${HAIRLINE}`,
-          backgroundColor: CANVAS_SOFT,
-        }}
-      >
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div
-            className="tw-demo-layout"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 64,
-              alignItems: "center",
-            }}
-          >
-            {/* Mockup card -- left side this time */}
-            <div
-              style={{
-                backgroundColor: "#fff",
-                border: `1px solid ${HAIRLINE}`,
-                borderRadius: 12,
-                padding: 24,
-                boxShadow: "rgba(0,55,112,0.08) 0 8px 24px, rgba(0,55,112,0.04) 0 2px 6px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginBottom: 20,
-                  paddingBottom: 16,
-                  borderBottom: `1px solid ${HAIRLINE}`,
-                }}
-              >
-                <div
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    backgroundColor: "#ea2261",
-                  }}
-                />
-                <span
-                  style={{ fontSize: "13px", fontWeight: 400, color: "#ea2261", letterSpacing: "-0.39px" }}
-                >
-                  Wire Alert
-                </span>
-              </div>
-
-              <div
-                style={{
-                  backgroundColor: "#fef2f2",
-                  border: "1px solid #fecaca",
-                  borderRadius: 8,
-                  padding: 16,
-                  marginBottom: 16,
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 400,
-                    color: "#991b1b",
-                    marginBottom: 8,
-                    letterSpacing: "-0.42px",
-                  }}
-                >
-                  Routing number mismatch detected
-                </p>
-                <p
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: 300,
-                    color: "#b91c1c",
-                    lineHeight: 1.5,
-                    letterSpacing: "-0.39px",
-                  }}
-                >
-                  This routing number (021000089) does not match the verified
-                  routing number for First National Title across 23 prior
-                  closings.
-                </p>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0" }}>
-                <span style={{ fontSize: "13px", fontWeight: 300, color: MUTED, letterSpacing: "-0.39px" }}>
-                  Prior verified wires
-                </span>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 300,
-                    color: INK,
-                    fontFeatureSettings: '"tnum", "ss01"',
-                    letterSpacing: "-0.42px",
-                  }}
-                >
-                  23
-                </span>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "8px 0",
-                  borderTop: `1px solid ${HAIRLINE}`,
-                }}
-              >
-                <span style={{ fontSize: "13px", fontWeight: 300, color: MUTED, letterSpacing: "-0.39px" }}>
-                  Confidence score
-                </span>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 400,
-                    color: "#ea2261",
-                    fontFeatureSettings: '"tnum", "ss01"',
-                    letterSpacing: "-0.42px",
-                  }}
-                >
-                  12% match
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 400,
-                  color: PRIMARY,
-                  letterSpacing: "0.1px",
-                  textTransform: "uppercase",
-                  marginBottom: 16,
-                }}
-              >
-                Wire Fraud Prevention
-              </p>
-              <h2
-                style={{
-                  fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                  fontWeight: 300,
-                  letterSpacing: "-0.64px",
-                  color: INK,
-                  marginBottom: 20,
-                  lineHeight: 1.1,
-                }}
-              >
-                $1.2 billion in losses.
-                <br />
-                Caught in milliseconds.
-              </h2>
-              <p
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 300,
-                  color: MUTED,
-                  lineHeight: 1.55,
-                  marginBottom: 32,
-                }}
-              >
-                Every wire instruction is verified against your institutional
-                memory across all prior closings. Routing numbers, account
-                numbers, and beneficiary names are cross-referenced
-                automatically. Anomalies flagged before a single dollar moves.
-              </p>
-              <Link
-                href="/demo"
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 400,
-                  color: PRIMARY,
-                  textDecoration: "none",
-                }}
-              >
-                See how it works &rarr;
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Interactive product demo */}
+      <InteractiveDemo />
 
       {/* Features list */}
       <section
         style={{
           borderTop: `1px solid ${HAIRLINE}`,
-          backgroundColor: "#fff",
+          backgroundColor: CANVAS_SOFT,
           padding: "96px 32px",
         }}
       >
@@ -968,15 +591,15 @@ export default function HomePage() {
           >
             {[
               ["Title Commitment Analysis", "Exceptions, requirements, and red flags in 30 seconds"],
-              ["Closing Disclosure Reviewer", "TRID compliance against federal tolerances -- automatic"],
+              ["Closing Disclosure Reviewer", "TRID compliance against federal tolerances, automatic"],
               ["Wire Fraud Prevention", "Cross-matter verification catches fraudulent instructions"],
               ["HOA Document Review", "Fees, restrictions, and pending assessments surfaced instantly"],
-              ["Status Update Generator", "AI drafts client updates from checklist state -- one click to send"],
+              ["Status Update Generator", "AI drafts client updates from checklist state, one click to send"],
               ["Fee Estimate Tool", "County-specific closing cost breakdowns for any transaction type"],
               ["Tax Proration Calculator", "Per-diem buyer/seller calculations with settlement formatting"],
               ["Client Portal", "Shareable read-only checklist view for your clients"],
               ["Team Invites", "Role-based access for colleagues across matters"],
-              ["Email Integration", "Postmark, Gmail, or custom SMTP -- sends from your inbox"],
+              ["Email Integration", "Postmark, Gmail, or custom SMTP, sends from your inbox"],
               ["Closing Checklist", "State-specific checklists auto-generated per transaction"],
               ["Autonomous Closing Agent", "AI that monitors matters, updates checklists, surfaces blockers"],
             ].map(([title, sub]) => (
@@ -1009,10 +632,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Cream band -- social proof / positioning */}
+      {/* Social proof / positioning band */}
       <section
         style={{
-          backgroundColor: CREAM,
+          backgroundColor: INK,
           padding: "96px 32px",
         }}
       >
@@ -1028,7 +651,7 @@ export default function HomePage() {
               fontSize: "clamp(1.75rem, 3vw, 2.25rem)",
               fontWeight: 300,
               letterSpacing: "-0.96px",
-              color: INK,
+              color: "#fff",
               marginBottom: 20,
               lineHeight: 1.15,
             }}
@@ -1039,13 +662,13 @@ export default function HomePage() {
             style={{
               fontSize: "1.0625rem",
               fontWeight: 300,
-              color: "#273951",
+              color: "rgba(255,255,255,0.6)",
               lineHeight: 1.6,
               marginBottom: 40,
             }}
           >
             Not a general legal tool. Not a CRM. TitleWise is purpose-built for
-            real estate closing attorneys -- the only platform designed around
+            real estate closing attorneys. The only platform designed around
             the closing workflow from intake to clear-to-close.
           </p>
           <Link
@@ -1122,8 +745,8 @@ export default function HomePage() {
               <Link key={plan.name} href="/pricing" style={{ textDecoration: "none" }}>
                 <div
                   style={{
-                    backgroundColor: plan.featured ? "#1c1e54" : "#fff",
-                    border: `1px solid ${plan.featured ? "#1c1e54" : HAIRLINE}`,
+                    backgroundColor: plan.featured ? INK : "#fff",
+                    border: `1px solid ${plan.featured ? INK : HAIRLINE}`,
                     borderRadius: 12,
                     padding: "28px 24px",
                     cursor: "pointer",
@@ -1265,7 +888,7 @@ export default function HomePage() {
 
       <StickyMobileCTA />
 
-      {/* Footer -- light per DESIGN.md */}
+      {/* Footer */}
       <footer
         style={{
           borderTop: `1px solid ${HAIRLINE}`,
@@ -1291,7 +914,7 @@ export default function HomePage() {
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ width: "auto" }}
                 >
-                  <rect x="10" y="0" width="24" height="32" rx="4" fill="#b9b9f9" />
+                  <rect x="10" y="0" width="24" height="32" rx="4" fill="#93c5fd" />
                   <rect x="2" y="8" width="24" height="32" rx="4" fill={PRIMARY} />
                 </svg>
                 <span style={{ fontSize: "1rem", lineHeight: 1 }}>
