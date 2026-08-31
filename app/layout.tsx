@@ -63,7 +63,41 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: undefined,
+        variables: {
+          colorPrimary: '#0066cc',
+          colorBackground: '#ffffff',
+          colorText: '#0d253d',
+          colorTextSecondary: '#64748d',
+          colorInputBackground: '#ffffff',
+          colorInputText: '#0d253d',
+          borderRadius: '0.5rem',
+          fontFamily: 'DM Sans, system-ui, sans-serif',
+          fontWeight: { normal: 300, medium: 400, bold: 600 },
+        },
+        elements: {
+          formButtonPrimary:
+            'bg-[#0066cc] hover:bg-[#0052a3] text-white font-normal rounded-full shadow-sm hover:shadow-md transition-all',
+          card: 'shadow-lg border border-[#e3e8ee]',
+          headerTitle: 'font-light text-[#0d253d] tracking-tight',
+          headerSubtitle: 'font-light text-[#64748d]',
+          socialButtonsBlockButton:
+            'font-normal border-[#e3e8ee] hover:bg-[#f8fafc] transition-colors',
+          formFieldLabel: 'font-light text-[#64748d] text-sm',
+          formFieldInput:
+            'font-light border-[#e3e8ee] focus:border-[#0066cc] focus:ring-1 focus:ring-[#0066cc]',
+          footerActionLink: 'text-[#0066cc] hover:text-[#0052a3] font-normal',
+          identityPreviewText: 'font-light text-[#64748d]',
+          identityPreviewEditButton: 'text-[#0066cc] hover:text-[#0052a3]',
+          formFieldSuccessText: 'text-green-600 font-light',
+          formFieldErrorText: 'text-red-600 font-light',
+          dividerLine: 'bg-[#e3e8ee]',
+          dividerText: 'text-[#64748d] font-light',
+        }
+      }}
+    >
       <html lang="en" className="h-full antialiased">
         <head>
           <link
