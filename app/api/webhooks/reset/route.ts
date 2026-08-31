@@ -8,15 +8,12 @@ export const dynamic = "force-dynamic"
 
 // POST /api/webhooks/reset - Reset failure count and re-enable webhook
 export async function POST(request: NextRequest) {
-  const { userId: clerkId } = await auth()
-  if (!clerkId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
-
-  const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1)
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 })
-  }
+  try {
+    const userId = await requireAuth()
+    const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
 
   const body = await request.json()
   const { id } = body
@@ -35,4 +32,7 @@ export async function POST(request: NextRequest) {
     .where(and(eq(webhooks.id, id), eq(webhooks.userId, user.id)))
 
   return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
 }

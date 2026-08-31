@@ -12,7 +12,7 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const userRows = await db.select().from(users).where(eq(users.clerkId, userId)).limit(1)
+  const userRows = await db.select().from(users).where(eq(users.id, userId)).limit(1)
   if (userRows.length === 0 || !userRows[0].stripeCustomerId) {
     return NextResponse.json({ error: "No billing account found. Subscribe first." }, { status: 400 })
   }

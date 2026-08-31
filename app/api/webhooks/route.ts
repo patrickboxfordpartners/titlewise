@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1)
+  const [user] = await db.select().from(users).where(eq(users.id, clerkId)).limit(1)
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1)
+  const [user] = await db.select().from(users).where(eq(users.id, clerkId)).limit(1)
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
@@ -106,7 +106,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1)
+  const [user] = await db.select().from(users).where(eq(users.id, clerkId)).limit(1)
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }
@@ -138,7 +138,7 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const [user] = await db.select().from(users).where(eq(users.clerkId, clerkId)).limit(1)
+  const [user] = await db.select().from(users).where(eq(users.id, clerkId)).limit(1)
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 })
   }

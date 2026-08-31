@@ -55,7 +55,7 @@ export async function PATCH(req: NextRequest) {
 
   await db.update(users)
     .set({ ...parsed.data, updatedAt: new Date() })
-    .where(eq(users.clerkId, userId))
+    .where(eq(users.id, userId))
 
   return NextResponse.json({ ok: true })
 }
