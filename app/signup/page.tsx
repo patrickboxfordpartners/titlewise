@@ -81,7 +81,7 @@ export default function SignupPage() {
             Create your account
           </h1>
           <p className="text-sm font-light text-[#64748d] mb-6">
-            Start your 14-day free trial
+            Get started with TitleWise
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">

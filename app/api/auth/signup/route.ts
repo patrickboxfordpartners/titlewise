@@ -37,7 +37,6 @@ export async function POST(req: Request) {
       name: name || null,
       firmName: firmName || null,
       subscriptionStatus: "inactive",
-      trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14 day trial
     }).returning()
 
     return NextResponse.json({
