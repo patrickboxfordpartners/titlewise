@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useUser, useClerk } from "@clerk/nextjs"
+import { useSession, signOut } from "next-auth/react"
 import { useState, useEffect } from "react"
 import { Logo } from "@/components/logo"
 import Image from "next/image"
@@ -20,8 +20,7 @@ function shortAddress(addr: string) {
 
 export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname()
-  const { user } = useUser()
-  const { signOut } = useClerk()
+  const { data: session } = useSession()
   const [mattersOpen, setMattersOpen] = useState(true)
   const [matters, setMatters] = useState<MatterItem[]>([])
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -32,13 +31,11 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const isHistory = pathname === "/history"
   const isSettings = pathname === "/settings"
 
-  const displayName = user?.firstName
-    ? user.firstName + (user.lastName ? " " + user.lastName : "")
-    : user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] ?? "Account"
+  const displayName = session?.user?.name ?? session?.user?.email?.split("@")[0] ?? "Account"
 
-  const initials = user?.firstName && user?.lastName
-    ? `${user.firstName[0]}${user.lastName[0]}`
-    : (user?.emailAddresses?.[0]?.emailAddress?.[0]?.toUpperCase() ?? "?")
+  const initials = session?.user?.name
+    ? session.user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
+    : (session?.user?.email?.[0]?.toUpperCase() ?? "?")
 
   useEffect(() => {
     fetch("/api/checklist")

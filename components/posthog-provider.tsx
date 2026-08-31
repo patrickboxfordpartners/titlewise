@@ -3,21 +3,21 @@
 import posthog from "posthog-js"
 import { PostHogProvider } from "posthog-js/react"
 import { useEffect } from "react"
-import { useUser } from "@clerk/nextjs"
+import { useSession } from "next-auth/react"
 
 function PostHogIdentify() {
-  const { user } = useUser()
+  const { data: session } = useSession()
 
   useEffect(() => {
-    if (user) {
-      posthog.identify(user.id, {
-        email: user.primaryEmailAddress?.emailAddress,
-        name: user.fullName ?? undefined,
+    if (session?.user) {
+      posthog.identify(session.user.id!, {
+        email: session.user.email ?? undefined,
+        name: session.user.name ?? undefined,
       })
     } else {
       posthog.reset()
     }
-  }, [user?.id])
+  }, [session?.user?.id])
 
   return null
 }

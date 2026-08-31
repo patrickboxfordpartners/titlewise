@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useAuth } from "@clerk/nextjs"
+import { useSession } from "next-auth/react"
 import { MessageSquare, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -13,7 +13,7 @@ type Message = {
 }
 
 export default function NeilChat({ matterId }: { matterId: string }) {
-  const { getToken } = useAuth()
+  const { data: session } = useSession()
   const [open, setOpen] = useState(() => {
     if (typeof window === "undefined") return false
     return localStorage.getItem("neil-panel-open") === "true"
@@ -45,12 +45,10 @@ export default function NeilChat({ matterId }: { matterId: string }) {
     setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "", toolEvents: [] }])
 
     try {
-      const token = await getToken()
       const res = await fetch("/api/chat/stream", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ matterId, message: text }),
       })

@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm"
 import type Stripe from "stripe"
 import { logger } from "@/lib/logger"
 import { sendDripEmail } from "@/lib/email/drip"
-import { clerkClient } from "@clerk/nextjs/server"
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
@@ -34,9 +33,9 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session
-        const clerkId = session.metadata?.clerkId
+        const userId = session.metadata?.userId
         const plan = session.metadata?.plan
-        if (!clerkId || !session.subscription || !session.customer) break
+        if (!userId || !session.subscription || !session.customer) break
 
         await db.update(users)
           .set({
@@ -46,18 +45,22 @@ export async function POST(req: NextRequest) {
             subscriptionStatus: "active",
             updatedAt: new Date(),
           })
-          .where(eq(users.clerkId, clerkId))
+          .where(eq(users.id, userId))
 
-        logger.info("stripe/webhook", "Subscription activated", { clerkId, plan })
+        logger.info("stripe/webhook", "Subscription activated", { userId, plan })
 
         // Send welcome drip email (non-fatal)
         try {
-          const clerk = await clerkClient()
-          const clerkUser = await clerk.users.getUser(clerkId)
-          const email = clerkUser.emailAddresses[0]?.emailAddress
-          const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ")
-          if (email) {
-            await sendDripEmail({ to: email, name, plan: plan ?? "solo", sequence: "welcome" })
+          const user = await db.query.users.findFirst({
+            where: eq(users.id, userId)
+          })
+          if (user?.email) {
+            await sendDripEmail({
+              to: user.email,
+              name: user.name ?? "there",
+              plan: plan ?? "solo",
+              sequence: "welcome"
+            })
           }
         } catch (dripErr) {
           logger.error("stripe/webhook", "Welcome drip failed (non-fatal)", { error: String(dripErr) })
@@ -67,8 +70,8 @@ export async function POST(req: NextRequest) {
 
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription
-        const clerkId = subscription.metadata?.clerkId
-        if (!clerkId) break
+        const userId = subscription.metadata?.userId
+        if (!userId) break
 
         const planFromMetadata = subscription.metadata?.plan ?? null
         const trialEnd = subscription.trial_end
@@ -83,47 +86,51 @@ export async function POST(req: NextRequest) {
             ...(trialEnd ? { trialEndsAt: trialEnd } : {}),
             updatedAt: new Date(),
           })
-          .where(eq(users.clerkId, clerkId))
+          .where(eq(users.id, userId))
 
-        logger.info("stripe/webhook", "Subscription updated", { clerkId, status: subscription.status })
+        logger.info("stripe/webhook", "Subscription updated", { userId, status: subscription.status })
         break
       }
 
       case "customer.subscription.trial_will_end": {
         const subscription = event.data.object as Stripe.Subscription
-        const clerkId = subscription.metadata?.clerkId
-        if (!clerkId) break
+        const userId = subscription.metadata?.userId
+        if (!userId) break
 
         // Non-fatal: send reminder email via existing drip system
         try {
-          const clerk = await clerkClient()
-          const clerkUser = await clerk.users.getUser(clerkId)
-          const email = clerkUser.emailAddresses[0]?.emailAddress
-          const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ")
-          if (email) {
-            await sendDripEmail({ to: email, name, plan: "solo", sequence: "trial_ending" })
+          const user = await db.query.users.findFirst({
+            where: eq(users.id, userId)
+          })
+          if (user?.email) {
+            await sendDripEmail({
+              to: user.email,
+              name: user.name ?? "there",
+              plan: "solo",
+              sequence: "trial_ending"
+            })
           }
         } catch (dripErr) {
           logger.error("stripe/webhook", "Trial ending drip failed (non-fatal)", { error: String(dripErr) })
         }
 
-        logger.info("stripe/webhook", "Trial will end in 3 days", { clerkId })
+        logger.info("stripe/webhook", "Trial will end in 3 days", { userId })
         break
       }
 
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription
-        const clerkId = subscription.metadata?.clerkId
-        if (!clerkId) break
+        const userId = subscription.metadata?.userId
+        if (!userId) break
 
         await db.update(users)
           .set({
             subscriptionStatus: "canceled",
             updatedAt: new Date(),
           })
-          .where(eq(users.clerkId, clerkId))
+          .where(eq(users.id, userId))
 
-        logger.info("stripe/webhook", "Subscription canceled", { clerkId })
+        logger.info("stripe/webhook", "Subscription canceled", { userId })
         break
       }
 
