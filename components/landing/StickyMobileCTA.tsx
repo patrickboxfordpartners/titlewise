@@ -8,7 +8,6 @@ export default function StickyMobileCTA() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling past the hero section (roughly 400px)
       setVisible(window.scrollY > 400)
     }
     window.addEventListener("scroll", handleScroll, { passive: true })
@@ -27,9 +26,9 @@ export default function StickyMobileCTA() {
         right: 0,
         zIndex: 90,
         padding: "12px 16px",
-        backgroundColor: "rgba(17,24,39,0.97)",
+        backgroundColor: "rgba(255,255,255,0.97)",
         backdropFilter: "blur(8px)",
-        borderTop: "1px solid rgba(237,238,240,0.07)",
+        borderTop: "1px solid #e3e8ee",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -42,11 +41,11 @@ export default function StickyMobileCTA() {
         }
       `}</style>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontSize: "0.8125rem", fontWeight: 700, color: "#EDEEF0", margin: 0 }}>
-          Start free trial
+        <p style={{ fontSize: "0.8125rem", fontWeight: 400, color: "#0d253d", margin: 0 }}>
+          Plans from $149/mo
         </p>
-        <p style={{ fontSize: "0.6875rem", color: "rgba(237,238,240,0.45)", margin: 0 }}>
-          No credit card required
+        <p style={{ fontSize: "0.6875rem", fontWeight: 300, color: "#64748d", margin: 0 }}>
+          All 12 tools included
         </p>
       </div>
       <Link
@@ -54,18 +53,18 @@ export default function StickyMobileCTA() {
         style={{
           display: "inline-flex",
           alignItems: "center",
-          backgroundColor: "#3b82f6",
+          backgroundColor: "#533afd",
           color: "#fff",
           fontSize: "0.8125rem",
-          fontWeight: 600,
+          fontWeight: 400,
           padding: "10px 20px",
-          borderRadius: 8,
+          borderRadius: 9999,
           textDecoration: "none",
           whiteSpace: "nowrap",
           flexShrink: 0,
         }}
       >
-        Get Started
+        Get started
       </Link>
     </div>
   )

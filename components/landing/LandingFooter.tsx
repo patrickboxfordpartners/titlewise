@@ -51,7 +51,7 @@ export default function LandingFooter() {
           <div style={{ paddingBottom: 40 }}>
             <p style={{ fontSize: "0.6875rem", fontWeight: 400, letterSpacing: "0.07em", textTransform: "uppercase", color: DIM, marginBottom: 16 }}>Product</p>
             <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-              {[["Pricing", "/pricing"], ["Demo", "/demo"], ["Blog", "/blog"], ["FAQ", "/faq"], ["Sign in", "/sign-in"]].map(([label, href]) => (
+              {[["Pricing", "/pricing"], ["Demo", "/demo"], ["Blog", "/blog"], ["FAQ", "/faq"], ["Log in", "/login"]].map(([label, href]) => (
                 <li key={label}><Link href={href} style={{ fontSize: "0.875rem", fontWeight: 300, color: MUTED, textDecoration: "none" }}>{label}</Link></li>
               ))}
             </ul>

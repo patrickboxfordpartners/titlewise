@@ -47,7 +47,7 @@ export default function SignupPage() {
         setError("Account created but login failed. Please try logging in.")
         router.push("/login")
       } else {
-        router.push("/welcome?subscribed=false")
+        router.push("/pricing")
         router.refresh()
       }
     } catch (err) {

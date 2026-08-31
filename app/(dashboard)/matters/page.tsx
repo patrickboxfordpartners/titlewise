@@ -80,16 +80,6 @@ function MattersContent() {
     setCreating(true)
     setFormError("")
 
-    // Dev mode: just show success message since we can't create without auth
-    if (process.env.NODE_ENV === "development") {
-      setTimeout(() => {
-        alert("Matter creation requires authentication. In production, this would create a new matter.")
-        setCreating(false)
-        setShowCreate(false)
-      }, 500)
-      return
-    }
-
     try {
       const res = await fetch("/api/checklist", {
         method: "POST",

@@ -68,7 +68,9 @@ function WelcomeContent() {
 
   async function handleComplete() {
     setCompleting(true)
-    // Skip API call in dev bypass mode - just redirect
+    try {
+      await fetch("/api/onboarding/complete", { method: "POST" })
+    } catch {}
     router.push("/matters?new=1")
   }
 

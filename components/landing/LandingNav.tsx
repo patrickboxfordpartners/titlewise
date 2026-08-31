@@ -37,8 +37,8 @@ export default function LandingNav() {
           <Link href="/demo" className="text-sm font-light text-[#64748d] hover:text-[#0d253d] transition-colors hidden sm:inline">
             Demo
           </Link>
-          <Link href="/sign-in" className="text-sm font-light text-[#64748d] hover:text-[#0d253d] transition-colors">
-            Sign in
+          <Link href="/login" className="text-sm font-light text-[#64748d] hover:text-[#0d253d] transition-colors">
+            Log in
           </Link>
           <Link href="/pricing">
             <Button size="sm">Get Started</Button>

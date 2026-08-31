@@ -18,7 +18,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     fetch("/api/settings")
       .then((r) => r.json())
       .then((d) => {
-        if (!d.user?.onboardingCompletedAt) {
+        const status = d.user?.subscriptionStatus
+        if (status !== "active" && status !== "trialing") {
+          router.push("/pricing")
+        } else if (!d.user?.onboardingCompletedAt) {
           router.push("/welcome")
         }
       })
