@@ -3,6 +3,22 @@ import { db } from "."
 import { users, type User } from "./schema"
 import { PLANS } from "@/lib/plans"
 
+/**
+ * Get user by ID
+ * @throws Error if user not found
+ */
+export async function getOrCreateUser(userId: string): Promise<User> {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId)
+  })
+
+  if (!user) {
+    throw new Error("User not found")
+  }
+
+  return user
+}
+
 type AccessResult =
   | { allowed: true; reason: "subscription"; remaining?: number }
   | { allowed: false; reason: "no_subscription" | "usage_limit"; message: string }

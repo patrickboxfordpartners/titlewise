@@ -26,15 +26,9 @@ function checkRateLimit(userId: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId: clerkId } = await auth()
-  if (!clerkId) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    })
-  }
-
-  const user = await getOrCreateUser(clerkId)
+  try {
+    const userId = await requireAuth()
+    const user = await getOrCreateUser(userId)
   const access = await checkSubscriptionAccess(user)
   if (!access.allowed) {
     return new Response(JSON.stringify({ error: access.message }), {
@@ -203,4 +197,10 @@ export async function POST(req: NextRequest) {
       Connection: "keep-alive",
     },
   })
+  } catch (error) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    })
+  }
 }
