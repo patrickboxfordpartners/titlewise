@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
+import { requireAuth } from '@/lib/auth-helpers'
 import { chromium } from 'playwright-core'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
 export async function POST(request: NextRequest) {
-  const userId = await requireAuth()
-  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  try {
+    const userId = await requireAuth()
 
   const wsEndpoint = process.env.BROWSER_WS_ENDPOINT
   if (!wsEndpoint) {
@@ -37,5 +37,8 @@ export async function POST(request: NextRequest) {
     })
   } finally {
     await browser.close()
+  }
+  } catch (error) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 }
