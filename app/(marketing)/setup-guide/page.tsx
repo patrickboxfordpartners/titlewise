@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import LandingNav from '@/components/landing/LandingNav';
 
 export const metadata: Metadata = {
