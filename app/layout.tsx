@@ -78,9 +78,11 @@ export default function RootLayout({
           fontWeight: { normal: 300, medium: 400, bold: 600 },
         },
         elements: {
+          rootBox: 'bg-white',
+          card: 'bg-white shadow-lg border border-[#e3e8ee]',
+          main: 'bg-white',
           formButtonPrimary:
             'bg-[#0066cc] hover:bg-[#0052a3] text-white font-normal rounded-full shadow-sm hover:shadow-md transition-all',
-          card: 'shadow-lg border border-[#e3e8ee]',
           headerTitle: 'font-light text-[#0d253d] tracking-tight',
           headerSubtitle: 'font-light text-[#64748d]',
           socialButtonsBlockButton:
