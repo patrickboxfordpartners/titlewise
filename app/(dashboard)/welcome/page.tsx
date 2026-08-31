@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
 import { CheckCircle, Sparkles, FileText, Shield, Calculator, Building, Mail, Bot, ArrowRight } from "lucide-react"
@@ -51,7 +51,7 @@ const TOOLS = [
   },
 ]
 
-export default function WelcomePage() {
+function WelcomeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const subscribed = searchParams.get("subscribed") === "true"
@@ -266,5 +266,13 @@ export default function WelcomePage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function WelcomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center"><div className="animate-pulse text-[#64748d]">Loading...</div></div>}>
+      <WelcomeContent />
+    </Suspense>
   )
 }
