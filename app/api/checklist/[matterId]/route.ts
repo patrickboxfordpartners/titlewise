@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
@@ -8,7 +8,7 @@ import { getOrCreateUser } from "@/lib/db/get-user"
 
 // GET, get matter with all checklist items
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { matterId } = await params
@@ -56,7 +56,7 @@ const reopenMatterSchema = z.object({
 
 // PATCH, update an item, add an item, delete an item, or close the matter
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { matterId } = await params

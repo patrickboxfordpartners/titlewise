@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { matters, checklistItems } from "@/lib/db/schema"
@@ -10,7 +10,7 @@ import { randomBytes } from "crypto"
 // POST /api/checklist/portal?matterId=xxx, generate portal token (auth required)
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const matterId = new URL(req.url).searchParams.get("matterId")

@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { users } from "@/lib/db/schema"
@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
 export async function DELETE(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { searchParams } = new URL(req.url)

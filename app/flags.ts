@@ -1,10 +1,10 @@
 import { flag } from "flags/next";
-import { auth } from "@clerk/nextjs/server";
+import { requireAuth } from "@/lib/auth-helpers";
 import { getOrCreateUser, getTrialStatus } from "@/lib/db/get-user";
 import { PLANS, type PlanKey } from "@/lib/plans";
 
 async function getUserPlan(): Promise<PlanKey | null> {
-  const { userId } = await auth();
+  const userId = await requireAuth();
   if (!userId) return null;
   const user = await getOrCreateUser(userId);
   const tier = user.subscriptionTier;
@@ -67,7 +67,7 @@ export const isTrialFlag = flag<boolean>({
   key: "is-trial",
   description: "Whether the user is on a 7-day free trial",
   async decide() {
-    const { userId } = await auth();
+    const userId = await requireAuth();
     if (!userId) return false;
     const user = await getOrCreateUser(userId);
     return getTrialStatus(user).isTrial;
@@ -78,7 +78,7 @@ export const trialDaysRemainingFlag = flag<number>({
   key: "trial-days-remaining",
   description: "Days remaining on the free trial (0 if not trialing)",
   async decide() {
-    const { userId } = await auth();
+    const userId = await requireAuth();
     if (!userId) return 0;
     const user = await getOrCreateUser(userId);
     const { daysRemaining } = getTrialStatus(user);

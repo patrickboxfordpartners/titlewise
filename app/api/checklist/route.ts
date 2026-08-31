@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
@@ -17,7 +17,7 @@ const createSchema = z.object({
 
 // GET, list all matters with item counts
 export async function GET() {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const user = await getOrCreateUser(userId)
@@ -41,7 +41,7 @@ export async function GET() {
 
 // POST, create a new matter with auto-generated checklist
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   let body: unknown

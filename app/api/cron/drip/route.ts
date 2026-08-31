@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { clerkClient } from "@clerk/nextjs/server"
 import { db } from "@/lib/db"
 import { users } from "@/lib/db/schema"
 import { sendDripEmail } from "@/lib/email/drip"
@@ -45,16 +44,13 @@ export async function GET(req: NextRequest) {
 
   const results = { day3: 0, day7: 0, errors: 0 }
 
-  const clerk = await clerkClient()
-
   for (const user of candidates) {
     try {
-      const clerkUser = await clerk.users.getUser(user.clerkId)
-      const email = clerkUser.emailAddresses[0]?.emailAddress
+      // Use email directly from database (NextAuth migration)
+      const email = user.email
       if (!email) continue
 
-      const name =
-        [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") || user.name || "there"
+      const name = user.name || "there"
       const plan = user.subscriptionTier ?? "solo"
 
       const isDay3 =

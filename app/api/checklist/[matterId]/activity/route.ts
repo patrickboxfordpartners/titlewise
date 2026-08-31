@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { users, matters, statusUpdates, titleAnalyses, cdReviews, hoaReviews, feeEstimates, wireInstructions } from "@/lib/db/schema"
@@ -6,7 +6,7 @@ import { eq, and, desc } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { matterId } = await params

@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { db } from "@/lib/db"
 import { apiKeys, users } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs"
 const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 32)
 
 export async function POST(request: Request) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 })
 
   // Get user

@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
@@ -13,7 +13,7 @@ import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 const inviteSchema = z.object({ email: z.email() })
 
 export async function GET() {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const user = await getOrCreateUser(userId)
@@ -40,7 +40,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const user = await getOrCreateUser(userId)
@@ -115,7 +115,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const user = await getOrCreateUser(userId)

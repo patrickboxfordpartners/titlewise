@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
@@ -13,7 +13,7 @@ const updateSchema = z.object({
 })
 
 export async function GET() {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
@@ -36,7 +36,7 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }

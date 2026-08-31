@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { teamMembers } from "@/lib/db/schema"
@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   let body: unknown

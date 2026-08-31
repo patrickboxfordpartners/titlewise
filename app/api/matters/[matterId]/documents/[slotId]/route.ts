@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
@@ -20,7 +20,7 @@ async function getOwnedMatter(matterId: string, userId: string) {
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ matterId: string; slotId: string }> }) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { matterId, slotId } = await params
@@ -44,7 +44,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ ma
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ matterId: string; slotId: string }> }) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { matterId, slotId } = await params

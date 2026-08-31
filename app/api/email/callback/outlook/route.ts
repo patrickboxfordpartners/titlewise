@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { db } from "@/lib/db"
@@ -8,7 +8,7 @@ import { encryptToken } from "@/lib/email/crypto"
 import { getOrCreateUser } from "@/lib/db/get-user"
 
 export async function GET(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) {
     return NextResponse.redirect(new URL("/sign-in", req.url))
   }

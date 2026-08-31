@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest } from "next/server"
 import { db } from "@/lib/db"
 import { chatMessages, matters } from "@/lib/db/schema"

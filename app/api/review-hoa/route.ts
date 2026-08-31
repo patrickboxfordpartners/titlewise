@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { hoaReviews } from "@/lib/db/schema"
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
@@ -110,7 +110,7 @@ const resultSchema = z.object({
 })
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { allowed } = await checkRateLimit(userId)

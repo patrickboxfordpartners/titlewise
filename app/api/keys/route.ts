@@ -1,10 +1,10 @@
-import { auth } from "@clerk/nextjs/server"
+import { requireAuth } from "@/lib/auth-helpers"
 import { db } from "@/lib/db"
 import { apiKeys, apiUsageLogs, users } from "@/lib/db/schema"
 import { eq, and, gte, sql } from "drizzle-orm"
 
 export async function GET() {
-  const { userId } = await auth()
+  const userId = await requireAuth()
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 })
 
   // Get user
