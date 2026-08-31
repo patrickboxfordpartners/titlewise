@@ -57,7 +57,7 @@ export default function FAQPage() {
           <p style={{
             fontSize: "0.75rem",
             fontWeight: 400,
-            color: "#533afd",
+            color: "#0066cc",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             marginBottom: 16,
@@ -101,7 +101,7 @@ export default function FAQPage() {
                 color: "#0d253d",
                 marginBottom: 32,
                 paddingBottom: 16,
-                borderBottom: "2px solid #533afd",
+                borderBottom: "2px solid #0066cc",
                 display: "inline-block",
               }}>
                 {cat}
@@ -160,7 +160,7 @@ export default function FAQPage() {
         <div style={{
           marginTop: 16,
           padding: "40px 48px",
-          backgroundColor: "var(--canvas-cream, #f5e9d4)",
+          backgroundColor: "var(--canvas-cream, #f6f9fc)",
           borderRadius: 12,
           textAlign: "center",
         }}>

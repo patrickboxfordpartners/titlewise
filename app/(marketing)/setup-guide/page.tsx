@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function SetupGuidePage() {
   const BG = "#0d253d";
-  const PANEL = "#1c1e54";
+  const PANEL = "#0d253d";
   const BORDER = "#273951";
   const TEXT = "#ffffff";
   const MUTED = "#64748d";
   const DIM = "#64748d";
-  const BLUE = "#533afd";
+  const BLUE = "#0066cc";
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>

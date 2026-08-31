@@ -47,9 +47,9 @@ TitleWise Law Office`
 const TOOLS = [
   { icon: FileText, label: "Status Updates", desc: "Client emails drafted. Seconds, not minutes.", color: "blue" },
   { icon: FileSearch, label: "Title Analyzer", desc: "Schedule B requirements in plain English.", color: "blue" },
-  { icon: FileCheck, label: "CD Reviewer", desc: "Compare CD against contract. Discrepancies flagged.", color: "purple" },
+  { icon: FileCheck, label: "CD Reviewer", desc: "Compare CD against contract. Discrepancies flagged.", color: "blue" },
   { icon: Shield, label: "Wire Fraud Prevention", desc: "Fraud indicators detected automatically.", color: "red" },
-  { icon: Building, label: "HOA Reviewer", desc: "Dues, assessments, restrictions extracted.", color: "purple" },
+  { icon: Building, label: "HOA Reviewer", desc: "Dues, assessments, restrictions extracted.", color: "blue" },
   { icon: DollarSign, label: "Fee Estimator", desc: "Professional estimate letters auto-generated.", color: "green" },
   { icon: Calculator, label: "Tax Proration", desc: "Buyer/seller prorations calculated instantly.", color: "green" },
   { icon: ClipboardList, label: "Closing Checklist", desc: "State-specific checklists for 7 states.", color: "blue" },
@@ -57,7 +57,7 @@ const TOOLS = [
 
 const colorMap: Record<string, string> = {
   blue: "text-blue-600 bg-blue-500/10 border-blue-500/30",
-  purple: "text-purple-600 bg-purple-500/10 border-purple-500/30",
+  indigo: "text-blue-600 bg-blue-500/10 border-blue-500/30",
   red: "text-red-600 bg-red-500/10 border-red-500/30",
   green: "text-green-600 bg-green-500/10 border-green-500/30",
 }

@@ -15,7 +15,7 @@ export default function TermsPage() {
 
       <div className="mx-auto max-w-3xl px-6 pt-32 pb-20 lg:px-8">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Terms of Service" }]} />
-        <p className="text-xs font-normal uppercase tracking-wider text-[#533afd] mt-8">Legal</p>
+        <p className="text-xs font-normal uppercase tracking-wider text-[#0066cc] mt-8">Legal</p>
         <h1 className="mt-3 text-5xl font-light tracking-[-1.4px] text-[#0d253d]">Terms of Service</h1>
         <p className="mt-4 text-sm font-light text-[#64748d]">Last updated: May 7, 2026</p>
 
@@ -82,7 +82,7 @@ export default function TermsPage() {
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-[#0d253d]">Contact</h2>
             <p>
               Boxford Partners LLC DBA TitleWise<br />
-              <a href="mailto:hello@titlewise.app" className="text-[#533afd] hover:underline">hello@titlewise.app</a>
+              <a href="mailto:hello@titlewise.app" className="text-[#0066cc] hover:underline">hello@titlewise.app</a>
             </p>
           </div>
         </div>

@@ -15,7 +15,7 @@ export default function PrivacyPage() {
 
       <div className="mx-auto max-w-3xl px-6 pt-32 pb-20 lg:px-8">
         <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]} />
-        <p className="text-xs font-normal uppercase tracking-wider text-[#533afd] mt-8">Legal</p>
+        <p className="text-xs font-normal uppercase tracking-wider text-[#0066cc] mt-8">Legal</p>
         <h1 className="mt-3 text-5xl font-light tracking-[-1.4px] text-[#0d253d]">Privacy Policy</h1>
         <p className="mt-4 text-sm font-light text-[#64748d]">Last updated: May 7, 2026</p>
 
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
             <p>Questions about this policy or requests related to your data:</p>
             <p className="mt-2">
               Boxford Partners LLC DBA TitleWise<br />
-              <a href="mailto:hello@titlewise.app" className="text-[#533afd] hover:underline">hello@titlewise.app</a>
+              <a href="mailto:hello@titlewise.app" className="text-[#0066cc] hover:underline">hello@titlewise.app</a>
             </p>
           </div>
         </div>

@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
           <p style={{
             fontSize: "0.75rem",
             fontWeight: 400,
-            color: "#533afd",
+            color: "#0066cc",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             marginBottom: 16,
@@ -67,7 +67,7 @@ export default function BlogIndexPage() {
                     fontWeight: 400,
                     letterSpacing: "0.07em",
                     textTransform: "uppercase",
-                    color: "#533afd",
+                    color: "#0066cc",
                   }}>
                     {post.category}
                   </span>
@@ -101,7 +101,7 @@ export default function BlogIndexPage() {
                 <Link href={`/blog/${post.slug}`} style={{
                   fontSize: "0.875rem",
                   fontWeight: 400,
-                  color: "#533afd",
+                  color: "#0066cc",
                   textDecoration: "none",
                 }}>
                   Read more &rarr;

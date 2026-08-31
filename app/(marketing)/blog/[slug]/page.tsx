@@ -110,7 +110,7 @@ export default async function BlogPostPage({ params }: Props) {
           margin-bottom: 0.35rem;
         }
         .tw-prose a {
-          color: #533afd;
+          color: #0066cc;
           text-decoration: underline;
         }
         .tw-prose strong {
@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: Props) {
           color: #0d253d;
         }
         .tw-prose blockquote {
-          border-left: 3px solid #533afd;
+          border-left: 3px solid #0066cc;
           padding-left: 1.25rem;
           margin: 1.5rem 0;
           color: #64748d;
@@ -155,7 +155,7 @@ export default async function BlogPostPage({ params }: Props) {
               fontWeight: 400,
               letterSpacing: "0.07em",
               textTransform: "uppercase",
-              color: "#533afd",
+              color: "#0066cc",
             }}>
               {post.category}
               <span style={{ color: "rgba(237,238,240,0.3)", fontWeight: 300 }}>·</span>
@@ -205,13 +205,13 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Direct Answer box */}
       <section style={{
-        backgroundColor: "#f5e9d4",
+        backgroundColor: "#f6f9fc",
         borderTop: "1px solid rgba(83,58,253,0.12)",
         borderBottom: "1px solid rgba(83,58,253,0.12)",
         padding: "40px 32px",
       }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
-          <div style={{ borderLeft: "4px solid #533afd", paddingLeft: 20 }}>
+          <div style={{ borderLeft: "4px solid #0066cc", paddingLeft: 20 }}>
             <p style={{
               fontSize: "0.6875rem",
               fontWeight: 300,

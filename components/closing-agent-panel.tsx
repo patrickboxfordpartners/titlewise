@@ -56,8 +56,8 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
   if (!hasAccess) {
     return (
       <div className="bg-card border border-border rounded-xl p-5 flex items-center gap-4">
-        <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
-          <Bot className="h-5 w-5 text-purple-600" />
+        <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+          <Bot className="h-5 w-5 text-blue-600" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-foreground">Closing Agent</p>
@@ -77,7 +77,7 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       <div className="flex items-center justify-between px-5 py-4">
         <div className="flex items-center gap-2">
-          <Bot className="h-4 w-4 text-purple-600" />
+          <Bot className="h-4 w-4 text-blue-600" />
           <span className="text-sm font-semibold text-foreground">Closing Agent</span>
           {report && updatedItems > 0 && (
             <span className="text-[10px] text-green-600 font-medium">{updatedItems} item{updatedItems !== 1 ? "s" : ""} updated</span>
@@ -95,7 +95,7 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
           <button
             onClick={runAgent}
             disabled={running}
-            className="flex items-center gap-1 text-xs font-medium text-purple-600 hover:text-purple-700 transition-colors disabled:opacity-60"
+            className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors disabled:opacity-60"
           >
             {running ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Zap className="h-3.5 w-3.5" />}
             {running ? "Analyzing..." : report ? "Re-run" : "Run"}

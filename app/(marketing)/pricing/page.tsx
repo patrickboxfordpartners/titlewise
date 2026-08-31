@@ -115,7 +115,7 @@ export default function PricingPage() {
             Monthly
           </span>
           <button
-            className={`relative h-7 w-12 rounded-full transition-colors duration-200 ${annual ? "bg-[#533afd]" : "bg-[#e3e8ee]"}`}
+            className={`relative h-7 w-12 rounded-full transition-colors duration-200 ${annual ? "bg-[#0066cc]" : "bg-[#e3e8ee]"}`}
             onClick={() => setAnnual(!annual)}
             aria-label="Toggle annual billing"
           >
@@ -127,7 +127,7 @@ export default function PricingPage() {
           </button>
           <span className={`text-sm font-light transition-colors ${annual ? "text-[#0d253d]" : "text-[#64748d]"}`}>
             Annual
-            <span className="ml-1 text-xs text-[#533afd] font-normal">-20%</span>
+            <span className="ml-1 text-xs text-[#0066cc] font-normal">-20%</span>
           </span>
         </motion.div>
 
@@ -141,7 +141,7 @@ export default function PricingPage() {
               <motion.div
                 key={key}
                 className={`relative rounded-xl p-8 ${
-                  isPopular ? "bg-[#1c1e54] text-white shadow-md" : "bg-white text-[#0d253d] border border-[#e3e8ee]"
+                  isPopular ? "bg-[#0d253d] text-white shadow-md" : "bg-white text-[#0d253d] border border-[#e3e8ee]"
                 }`}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -149,7 +149,7 @@ export default function PricingPage() {
                 whileHover={{ y: -4, boxShadow: "0 8px 24px -8px rgba(0,55,112,0.08)" }}
               >
                 {isPopular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#533afd] px-4 py-1 text-xs font-normal text-white">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#0066cc] px-4 py-1 text-xs font-normal text-white">
                     Most Popular
                   </span>
                 )}
@@ -174,7 +174,7 @@ export default function PricingPage() {
                 </div>
                 {annual && (
                   <motion.div
-                    className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#b9b9f9] px-3 py-1 text-xs font-normal text-[#4434d4]"
+                    className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#e3f2fd] px-3 py-1 text-xs font-normal text-[#0052a3]"
                     style={{ fontFeatureSettings: '"tnum"' }}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -188,7 +188,7 @@ export default function PricingPage() {
                   {details.features.map((f) => (
                     <li key={f.text} className={`flex items-start gap-3 text-sm font-light ${f.included ? (isPopular ? "text-white" : "text-[#0d253d]") : "opacity-40"}`}>
                       {f.included ? (
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#533afd]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0066cc]" />
                       ) : (
                         <X className="mt-0.5 h-4 w-4 shrink-0 opacity-30" />
                       )}
@@ -203,7 +203,7 @@ export default function PricingPage() {
                 >
                   <Button
                     variant="hero"
-                    className={`w-full pointer-events-none ${isPopular ? "bg-[#533afd] hover:bg-[#4434d4] text-white" : "bg-[#533afd] hover:bg-[#4434d4] text-white"}`}
+                    className={`w-full pointer-events-none ${isPopular ? "bg-[#0066cc] hover:bg-[#0052a3] text-white" : "bg-[#0066cc] hover:bg-[#0052a3] text-white"}`}
                     size="lg"
                   >
                     {key === "solo" ? "Start 7-Day Free Trial" : "Get Started"}
@@ -215,7 +215,7 @@ export default function PricingPage() {
         </div>
 
         {/* Cream band spacer */}
-        <div className="w-full h-24" style={{ backgroundColor: "#f5e9d4" }} />
+        <div className="w-full h-24" style={{ backgroundColor: "#f6f9fc" }} />
 
         {/* FAQ */}
         <motion.div

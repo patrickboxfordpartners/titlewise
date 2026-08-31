@@ -14,7 +14,7 @@
   --popover: #ffffff;
   --popover-foreground: #0d253d;
 
-  --primary: #533afd; /* indigo - brand primary */
+  --primary: #0066cc; /* blue - brand primary */
   --primary-foreground: #ffffff;
 
   --secondary: #f6f9fc; /* canvas-soft */
@@ -23,7 +23,7 @@
   --muted: #f6f9fc;
   --muted-foreground: #64748d; /* ink-mute */
 
-  --accent: #533afd; /* use primary, not separate blue */
+  --accent: #0066cc; /* use primary */
   --accent-foreground: #ffffff;
 
   --destructive: #ea2261; /* ruby */
@@ -35,8 +35,8 @@
 
   --border: #e3e8ee; /* hairline */
   --input: #ffffff;
-  --ring: #533afd;
-  --canvas-cream: #f5e9d4;
+  --ring: #0066cc;
+  --canvas-cream: #f6f9fc;
 
   --radius: 0.75rem; /* 12px - DESIGN.md rounded-lg */
 
