@@ -113,16 +113,20 @@ export default function HomePage() {
           backgroundColor: "rgba(255,255,255,0.92)",
           backdropFilter: "blur(12px)",
           borderBottom: `1px solid ${HAIRLINE}`,
-          padding: "0 32px",
-          height: 64,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          maxWidth: 1200,
-          margin: "0 auto",
           width: "100%",
         }}
       >
+        <div
+          style={{
+            padding: "0 32px",
+            height: 64,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            maxWidth: 1200,
+            margin: "0 auto",
+          }}
+        >
         <Link
           href="/"
           style={{
@@ -192,6 +196,7 @@ export default function HomePage() {
             Get started
           </Link>
         </div>
+        </div>
       </nav>
       <style>{`
         @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
@@ -233,15 +238,11 @@ export default function HomePage() {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              opacity: 0.06,
+              opacity: 0.09,
             }}
           >
             <source
-              src="https://cdn.coverr.co/videos/coverr-law-office-establishing-shot/1080p.mp4"
-              type="video/mp4"
-            />
-            <source
-              src="https://cdn.coverr.co/videos/coverr-modern-office-space/1080p.mp4"
+              src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4"
               type="video/mp4"
             />
           </video>
@@ -1192,7 +1193,7 @@ export default function HomePage() {
                 margin: 0,
               }}
             >
-              &copy; {new Date().getFullYear()} Boxford Partners LLC. All rights
+              &copy; {new Date().getFullYear()} Boxford Partners LLC DBA TitleWISE. All rights
               reserved. &nbsp;&middot;&nbsp; 345 California St., Suite 600, San
               Francisco CA 94104
             </p>
