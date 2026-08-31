@@ -285,6 +285,15 @@ code, pre, .font-mono {
   background: var(--section-accent);
 }
 
+/* Force Clerk auth pages to white background */
+.cl-rootBox,
+.cl-card,
+.cl-main,
+.cl-internal-b3fm6y {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
 @media print {
   aside,
   header,
