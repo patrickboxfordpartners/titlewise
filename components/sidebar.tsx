@@ -240,7 +240,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             <div style={{ position: "fixed", inset: 0, zIndex: 999 }} onClick={() => setShowUserMenu(false)} />
             <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 8, right: 8, backgroundColor: "#ffffff", borderRadius: 8, border: "1px solid #e3e8ee", boxShadow: "0 8px 24px rgba(0,0,0,0.1)", zIndex: 1000, padding: 4 }}>
               <button
-                onClick={() => signOut({ redirectUrl: "/" })}
+                onClick={() => signOut({ callbackUrl: "/" })}
                 style={{ width: "100%", padding: "8px 12px", background: "none", border: "none", color: "#64748d", fontSize: "0.875rem", fontWeight: 300, textAlign: "left", cursor: "pointer", borderRadius: 6, transition: "background-color 0.15s" }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
