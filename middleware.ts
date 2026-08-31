@@ -1,54 +1,64 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 
-const isPublicRoute = createRouteMatcher([
+const PUBLIC_ROUTES = [
   "/",
   "/pricing",
-  "/blog(.*)",
-  "/faq(.*)",
-  "/demo(.*)",
-  "/privacy(.*)",
-  "/terms(.*)",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/api/webhooks(.*)",
+  "/blog",
+  "/faq",
+  "/demo",
+  "/privacy",
+  "/terms",
+  "/login",
+  "/signup",
+  "/api/webhooks",
   "/api/stripe/webhook",
   "/api/postmark/inbound",
-  "/matter-portal(.*)",
+  "/api/auth",
+  "/matter-portal",
   "/api/checklist/portal",
-  "/join(.*)",
+  "/join",
   "/robots.txt",
   "/sitemap.xml",
   "/opengraph-image",
-  "/.well-known(.*)",
+  "/.well-known",
   "/auth.md",
-])
-
-// API routes handle their own auth and return 401 JSON — don't let Clerk
-// rewrite them to the sign-in page, which breaks JSON clients.
-const isApiRoute = createRouteMatcher(["/api/(.*)"])
+]
 
 const MARKDOWN_PATHS = new Set(["/", "/pricing", "/faq"])
 
-// DEV BYPASS - Remove in production
-const DEV_BYPASS_PATHS = new Set(["/welcome", "/matters"])
+function isPublicPath(pathname: string): boolean {
+  return PUBLIC_ROUTES.some(route =>
+    pathname === route || pathname.startsWith(route + "/")
+  )
+}
 
-export default clerkMiddleware(async (auth, req) => {
-  // Allow access to welcome page in dev without auth
-  if (process.env.NODE_ENV === "development" && DEV_BYPASS_PATHS.has(req.nextUrl.pathname)) {
-    return NextResponse.next()
-  }
+export default auth((req) => {
+  const { pathname } = req.nextUrl
+
+  // Handle markdown requests
   const accept = req.headers.get("accept") || ""
-  if (accept.includes("text/markdown") && MARKDOWN_PATHS.has(req.nextUrl.pathname)) {
+  if (accept.includes("text/markdown") && MARKDOWN_PATHS.has(pathname)) {
     const url = req.nextUrl.clone()
     url.pathname = "/api/markdown"
-    url.searchParams.set("path", req.nextUrl.pathname)
+    url.searchParams.set("path", pathname)
     return NextResponse.rewrite(url)
   }
 
-  if (!isPublicRoute(req) && !isApiRoute(req)) {
-    await auth.protect()
+  // Allow public routes
+  if (isPublicPath(pathname)) {
+    return NextResponse.next()
   }
+
+  // Require authentication for protected routes
+  if (!req.auth) {
+    const url = req.nextUrl.clone()
+    url.pathname = "/login"
+    url.searchParams.set("from", pathname)
+    return NextResponse.redirect(url)
+  }
+
+  return NextResponse.next()
 })
 
 export const config = {

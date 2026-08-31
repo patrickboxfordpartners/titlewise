@@ -2,10 +2,11 @@ import { pgTable, text, timestamp, integer, uuid, jsonb, index } from "drizzle-o
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
-  clerkId: text("clerk_id").notNull().unique(),
-  email: text("email").notNull(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash"),
   name: text("name"),
   firmName: text("firm_name"),
+  clerkId: text("clerk_id"), // Legacy - will be removed after migration
   stripeCustomerId: text("stripe_customer_id").unique(),
   stripeSubscriptionId: text("stripe_subscription_id").unique(),
   stripePriceId: text("stripe_price_id"),
