@@ -1,4 +1,4 @@
-# TitleWise Production Testing Checklist
+# TITLEwise Production Testing Checklist
 
 ## ✅ Pre-Deployment Complete
 

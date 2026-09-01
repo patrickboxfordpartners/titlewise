@@ -1,4 +1,4 @@
-# TitleWise Design Upgrade - Taste Skill Applied
+# TITLEwise Design Upgrade - Taste Skill Applied
 
 **Date:** 2026-05-05  
 **Skill Used:** design-taste-frontend (Anti-Slop Design Framework)  

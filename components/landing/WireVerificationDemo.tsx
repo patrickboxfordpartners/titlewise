@@ -80,7 +80,7 @@ export default function WireVerificationDemo() {
             Every wire verified before it moves.
           </h2>
           <p style={{ fontSize: "0.9rem", color: MUTED, maxWidth: 480 }}>
-            TitleWise cross-checks wire instructions against prior closings, flags last-minute changes, and catches spoofed emails before funds leave the account.
+            TITLEwise cross-checks wire instructions against prior closings, flags last-minute changes, and catches spoofed emails before funds leave the account.
           </p>
         </div>
 

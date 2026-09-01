@@ -1,6 +1,6 @@
 ---
-title: Privacy Policy - TitleWise
-description: TitleWise Privacy Policy. Learn how we collect, use, and protect your data. SOC 2 Type II certified with attorney-client privilege protections.
+title: Privacy Policy - TITLEwise
+description: TITLEwise Privacy Policy. Learn how we collect, use, and protect your data. SOC 2 Type II certified with attorney-client privilege protections.
 canonical: https://titlewise.app/privacy
 last-updated: 2026-08-27
 ---
@@ -11,14 +11,14 @@ last-updated: 2026-08-27
 
 ## Introduction
 
-TitleWise ("we," "our," or "us") is committed to protecting the privacy and security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered real estate closing platform at titlewise.app (the "Service").
+TITLEwise ("we," "our," or "us") is committed to protecting the privacy and security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered real estate closing platform at titlewise.app (the "Service").
 
-By using TitleWise, you agree to the collection and use of information in accordance with this policy.
+By using TITLEwise, you agree to the collection and use of information in accordance with this policy.
 
 ## Information We Collect
 
 ### Account Information
-When you create a TitleWise account, we collect:
+When you create a TITLEwise account, we collect:
 - Full name
 - Email address
 - Phone number
@@ -65,7 +65,7 @@ We use collected information to:
 ## Data Processing & AI Models
 
 ### How We Use AI
-TitleWise uses large language models (GPT-4o, Claude 3.5 Sonnet) to analyze documents. When you upload a document:
+TITLEwise uses large language models (GPT-4o, Claude 3.5 Sonnet) to analyze documents. When you upload a document:
 1. The document is sent to our secure servers
 2. We extract text and structured data
 3. We send relevant excerpts to third-party AI providers via their APIs
@@ -120,7 +120,7 @@ We may disclose information if required by:
 - Protection of our rights, property, or safety
 
 ### Business Transfers
-If TitleWise is acquired or merged with another company, your information may be transferred. We will notify you before your data is subject to a different privacy policy.
+If TITLEwise is acquired or merged with another company, your information may be transferred. We will notify you before your data is subject to a different privacy policy.
 
 ## Your Rights & Choices
 
@@ -137,11 +137,11 @@ To exercise these rights, email hello@titlewise.app or use the settings page in 
 
 ## Children's Privacy
 
-TitleWise is not intended for individuals under 18 years old. We do not knowingly collect personal information from children. If you believe we have inadvertently collected such data, please contact us immediately.
+TITLEwise is not intended for individuals under 18 years old. We do not knowingly collect personal information from children. If you believe we have inadvertently collected such data, please contact us immediately.
 
 ## International Users
 
-TitleWise is operated from the United States and complies with U.S. privacy laws. If you access our Service from outside the U.S., your data may be transferred to and processed in the United States. By using TitleWise, you consent to this transfer.
+TITLEwise is operated from the United States and complies with U.S. privacy laws. If you access our Service from outside the U.S., your data may be transferred to and processed in the United States. By using TITLEwise, you consent to this transfer.
 
 For users in the European Economic Area (EEA), we comply with GDPR requirements and provide appropriate safeguards for international data transfers.
 
@@ -163,7 +163,7 @@ We may update this Privacy Policy from time to time. We will notify you of mater
 - Sending an email notification to registered users
 - Displaying an in-app notification
 
-Continued use of TitleWise after changes indicates acceptance of the updated policy.
+Continued use of TITLEwise after changes indicates acceptance of the updated policy.
 
 ## Contact Us
 
@@ -176,8 +176,8 @@ Questions, concerns, or requests regarding this Privacy Policy? Contact us:
 
 ## Attorney-Client Privilege
 
-TitleWise is designed for use by licensed attorneys. We understand that documents you process may be subject to attorney-client privilege. We implement appropriate technical and organizational measures to protect privileged information and comply with ethical rules governing legal practice.
+TITLEwise is designed for use by licensed attorneys. We understand that documents you process may be subject to attorney-client privilege. We implement appropriate technical and organizational measures to protect privileged information and comply with ethical rules governing legal practice.
 
 ---
 
-*This Privacy Policy is a binding agreement between you and Boxford Partners, the operator of TitleWise.*
+*This Privacy Policy is a binding agreement between you and Boxford Partners, the operator of TITLEwise.*

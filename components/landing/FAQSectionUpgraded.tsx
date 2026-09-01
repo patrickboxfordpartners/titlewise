@@ -5,13 +5,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 const faqs = [
   {
     value: "what",
-    question: "What is TitleWise?",
-    answer: "TitleWise is an AI-powered closing platform built specifically for real estate attorneys. It combines 12 document analysis tools, an autonomous closing coordinator agent, client portals, TRID compliance checks, and wire fraud protection—so you can close faster with fewer errors.",
+    question: "What is TITLEwise?",
+    answer: "TITLEwise is an AI-powered closing platform built specifically for real estate attorneys. It combines 12 document analysis tools, an autonomous closing coordinator agent, client portals, TRID compliance checks, and wire fraud protection—so you can close faster with fewer errors.",
   },
   {
     value: "security",
     question: "Is my data secure?",
-    answer: "Absolutely. All data is encrypted in transit and at rest. We never share or sell your information. TitleWise is built with the security and confidentiality standards real estate attorneys expect.",
+    answer: "Absolutely. All data is encrypted in transit and at rest. We never share or sell your information. TITLEwise is built with the security and confidentiality standards real estate attorneys expect.",
   },
   {
     value: "tools",
@@ -31,12 +31,12 @@ const faqs = [
   {
     value: "states",
     question: "Which states are supported?",
-    answer: "TitleWise includes state-specific checklist templates for NH, MA, NY, CA, FL, TX, and PA, with more states being added regularly. The document analysis tools work with closings in all 50 states.",
+    answer: "TITLEwise includes state-specific checklist templates for NH, MA, NY, CA, FL, TX, and PA, with more states being added regularly. The document analysis tools work with closings in all 50 states.",
   },
   {
     value: "integration",
     question: "Does it integrate with my existing workflow?",
-    answer: "Yes. TitleWise works alongside your current tools. Upload documents in standard formats (PDF, DOCX), review AI-generated insights, and export results as polished PDFs ready for clients or co-counsel.",
+    answer: "Yes. TITLEwise works alongside your current tools. Upload documents in standard formats (PDF, DOCX), review AI-generated insights, and export results as polished PDFs ready for clients or co-counsel.",
   },
   {
     value: "cancel",
@@ -55,7 +55,7 @@ export default function FAQSectionUpgraded() {
               Frequently Asked Questions
             </h2>
             <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-[40ch]">
-              Everything you need to know about TitleWise.
+              Everything you need to know about TITLEwise.
             </p>
           </div>
 

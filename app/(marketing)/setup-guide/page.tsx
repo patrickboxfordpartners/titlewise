@@ -12,9 +12,9 @@ export default function SetupGuidePage() {
   const PANEL = "#0d253d";
   const BORDER = "#273951";
   const TEXT = "#ffffff";
-  const MUTED = "#64748d";
-  const DIM = "#64748d";
-  const BLUE = "#0066cc";
+  const MUTED = "var(--muted-foreground)";
+  const DIM = "var(--muted-foreground)";
+  const BLUE = "var(--primary)";
 
   return (
     <div style={{ minHeight: "100vh", background: BG }}>
@@ -26,7 +26,7 @@ export default function SetupGuidePage() {
             What to Expect
           </h1>
           <p style={{ color: MUTED, fontSize: 18, fontWeight: 300, lineHeight: 1.7 }}>
-            Your setup consultation is booked. Here's how we'll get you live with TitleWise.
+            Your setup consultation is booked. Here's how we'll get you live with TITLEwise.
           </p>
         </div>
 

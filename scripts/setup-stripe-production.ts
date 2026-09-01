@@ -42,7 +42,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 const PRODUCTS = [
   {
     key: 'solo',
-    name: 'TitleWise Solo',
+    name: 'TITLEwise Solo',
     description: 'For solo practitioners',
     monthlyPrice: 14900, // $149.00 in cents
     annualPrice: 11920,  // $119.20 in cents (20% off)
@@ -57,7 +57,7 @@ const PRODUCTS = [
   },
   {
     key: 'small_firm',
-    name: 'TitleWise Small Firm',
+    name: 'TITLEwise Small Firm',
     description: 'Up to 5 attorneys',
     monthlyPrice: 34900, // $349.00
     annualPrice: 27920,  // $279.20 (20% off)
@@ -72,7 +72,7 @@ const PRODUCTS = [
   },
   {
     key: 'pro',
-    name: 'TitleWise Pro',
+    name: 'TITLEwise Pro',
     description: 'Full platform with AI agent',
     monthlyPrice: 59900, // $599.00
     annualPrice: 47920,  // $479.20 (20% off)
@@ -87,7 +87,7 @@ const PRODUCTS = [
   },
   {
     key: 'enterprise',
-    name: 'TitleWise Enterprise',
+    name: 'TITLEwise Enterprise',
     description: 'Unlimited power for large firms',
     monthlyPrice: 99900, // $999.00
     annualPrice: 79920,  // $799.20 (20% off)
@@ -103,7 +103,7 @@ const PRODUCTS = [
 ];
 
 async function main() {
-  console.log('\n🔵 TitleWise Stripe Production Setup\n');
+  console.log('\n🔵 TITLEwise Stripe Production Setup\n');
   console.log('Creating products and prices in PRODUCTION mode...\n');
 
   const results: Record<string, { productId: string; monthlyPriceId: string; annualPriceId: string }> = {};

@@ -126,7 +126,7 @@ export default function TitleAnalysisDemo() {
             Upload a commitment. Get answers in seconds.
           </h2>
           <p style={{ fontSize: "0.9rem", color: MUTED, maxWidth: 480 }}>
-            TitleWise reads the title commitment, surfaces every exception and requirement, and flags what needs action before closing.
+            TITLEwise reads the title commitment, surfaces every exception and requirement, and flags what needs action before closing.
           </p>
         </div>
 

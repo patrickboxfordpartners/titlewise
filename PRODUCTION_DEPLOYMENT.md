@@ -1,6 +1,6 @@
-# TitleWise Production Deployment Checklist
+# TITLEwise Production Deployment Checklist
 
-This guide walks through the steps to move TitleWise from development mode to production.
+This guide walks through the steps to move TITLEwise from development mode to production.
 
 ## Current State
 
@@ -17,7 +17,7 @@ This guide walks through the steps to move TitleWise from development mode to pr
 
 1. Go to https://dashboard.clerk.com
 2. Click "Create Application"
-3. Name: "TitleWise Production"
+3. Name: "TITLEwise Production"
 4. Select authentication methods (Email, Google, etc.)
 5. Click "Create Application"
 
@@ -53,7 +53,7 @@ Decision: Keep custom `teamMembers` for now (simpler) or migrate to Organization
 Create three products:
 
 **Solo Plan:**
-- Name: TitleWise Solo
+- Name: TITLEwise Solo
 - Description: For solo practitioners
 - Pricing:
   - Monthly: $99/month
@@ -62,7 +62,7 @@ Create three products:
 - Copy annual price ID: `price_...`
 
 **Small Firm Plan:**
-- Name: TitleWise Small Firm
+- Name: TITLEwise Small Firm
 - Description: Up to 5 attorneys
 - Pricing:
   - Monthly: $249/month
@@ -71,7 +71,7 @@ Create three products:
 - Copy annual price ID: `price_...`
 
 **Team Plan:**
-- Name: TitleWise Team
+- Name: TITLEwise Team
 - Description: Up to 15 attorneys
 - Pricing:
   - Monthly: $499/month
@@ -127,7 +127,7 @@ npm run db:push
 
 1. Go to https://account.postmarkapp.com
 2. Click "Servers" → "Add Server"
-3. Name: "TitleWise Production"
+3. Name: "TITLEwise Production"
 4. Copy Server API Token
 
 **Verify Domain:**

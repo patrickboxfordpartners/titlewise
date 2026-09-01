@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Page Not Found",
-  description: "The page you are looking for does not exist. Return to TitleWise to explore AI tools for real estate closing attorneys.",
+  description: "The page you are looking for does not exist. Return to TITLEwise to explore AI tools for real estate closing attorneys.",
 }
 
 export default function NotFound() {

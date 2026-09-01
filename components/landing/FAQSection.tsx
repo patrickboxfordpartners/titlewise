@@ -20,7 +20,7 @@ export default function FAQSection() {
             Frequently Asked Questions
           </h2>
           <p className="mt-4 text-center text-muted-foreground">
-            Common questions about TitleWise and AI-powered title review.
+            Common questions about TITLEwise and AI-powered title review.
           </p>
 
           <Accordion type="single" collapsible className="mt-10 w-full">

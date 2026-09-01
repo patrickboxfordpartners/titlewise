@@ -22,7 +22,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 
 const PRODUCT_UPDATES = {
   solo: {
-    name: 'TitleWise Solo',
+    name: 'TITLEwise Solo',
     description: 'AI-powered closing platform for solo practitioners. Includes all 12 core tools, 100 AI generations per month, and email support.',
     features: [
       { name: '1 attorney seat' },
@@ -36,7 +36,7 @@ const PRODUCT_UPDATES = {
     ],
   },
   small_firm: {
-    name: 'TitleWise Small Firm',
+    name: 'TITLEwise Small Firm',
     description: 'Built for growing firms. Up to 5 attorneys with shared history, client portals, and wire fraud protection.',
     features: [
       { name: 'Up to 5 attorney seats' },
@@ -50,7 +50,7 @@ const PRODUCT_UPDATES = {
     ],
   },
   pro: {
-    name: 'TitleWise Pro',
+    name: 'TITLEwise Pro',
     description: 'Full platform with autonomous AI agent. TRID compliance engine, 1,500 generations, and priority support for up to 10 attorneys.',
     features: [
       { name: 'Up to 10 attorney seats' },
@@ -64,7 +64,7 @@ const PRODUCT_UPDATES = {
     ],
   },
   enterprise: {
-    name: 'TitleWise Enterprise',
+    name: 'TITLEwise Enterprise',
     description: 'Unlimited power for large firms. 25 seats, 5,000 generations, custom integrations, and dedicated account management.',
     features: [
       { name: 'Up to 25 attorney seats' },
@@ -113,7 +113,7 @@ async function main() {
   console.log('✅ All products updated!\n');
   console.log('📌 Next: Update account-level branding\n');
   console.log('Go to Stripe Dashboard → Settings → Branding:');
-  console.log('  1. Icon: Upload TitleWise logo');
+  console.log('  1. Icon: Upload TITLEwise logo');
   console.log('  2. Brand color: #2563eb (or your primary color)');
   console.log('  3. Accent color: #1e40af');
   console.log('  4. Save changes\n');

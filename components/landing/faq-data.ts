@@ -4,8 +4,8 @@ export const faqs = [
     value: "what",
     category: "Product",
     featured: true,
-    question: "What is TitleWise?",
-    answer: "TitleWise is an AI-powered closing platform built specifically for real estate attorneys. It combines seven document analysis tools, an autonomous closing coordinator agent, client portals, TRID compliance checks, and wire fraud protection — so you can close faster with fewer errors.",
+    question: "What is TITLEwise?",
+    answer: "TITLEwise is an AI-powered closing platform built specifically for real estate attorneys. It combines seven document analysis tools, an autonomous closing coordinator agent, client portals, TRID compliance checks, and wire fraud protection — so you can close faster with fewer errors.",
   },
   {
     value: "tools",
@@ -18,8 +18,8 @@ export const faqs = [
     value: "vs-production",
     category: "Product",
     featured: true,
-    question: "How is TitleWise different from Qualia or SoftPro?",
-    answer: "Qualia, SoftPro, and similar platforms manage the production pipeline: escrow, title orders, scheduling, and closing workflow. They are not built to review documents. TitleWise is specifically built for examination intelligence — analyzing the content of title commitments, HUDs, closing disclosures, deeds, and other documents for issues that require attorney attention. The two categories of software solve different problems.",
+    question: "How is TITLEwise different from Qualia or SoftPro?",
+    answer: "Qualia, SoftPro, and similar platforms manage the production pipeline: escrow, title orders, scheduling, and closing workflow. They are not built to review documents. TITLEwise is specifically built for examination intelligence — analyzing the content of title commitments, HUDs, closing disclosures, deeds, and other documents for issues that require attorney attention. The two categories of software solve different problems.",
   },
   {
     value: "agent",
@@ -54,21 +54,21 @@ export const faqs = [
     category: "Product",
     featured: false,
     question: "How long does title document review actually take?",
-    answer: "For a typical residential closing, most attorneys spend two to four hours reviewing documents across seven or more document types. The majority of that time is pattern-based work that repeats across every file. TitleWise handles that layer in seconds and surfaces only the anomalies that need attorney attention.",
+    answer: "For a typical residential closing, most attorneys spend two to four hours reviewing documents across seven or more document types. The majority of that time is pattern-based work that repeats across every file. TITLEwise handles that layer in seconds and surfaces only the anomalies that need attorney attention.",
   },
   {
     value: "states",
     category: "Product",
     featured: false,
     question: "Which states are supported?",
-    answer: "TitleWise includes state-specific checklist templates for NH, MA, NY, CA, FL, TX, and PA, with more states being added regularly. The document analysis tools work with closings in all 50 states.",
+    answer: "TITLEwise includes state-specific checklist templates for NH, MA, NY, CA, FL, TX, and PA, with more states being added regularly. The document analysis tools work with closings in all 50 states.",
   },
   {
     value: "integration",
     category: "Product",
     featured: false,
     question: "Does it integrate with my existing workflow?",
-    answer: "Yes. TitleWise works alongside your current tools. Upload documents in standard formats (PDF, DOCX), review AI-generated insights, and export results as polished PDFs ready for clients or co-counsel.",
+    answer: "Yes. TITLEwise works alongside your current tools. Upload documents in standard formats (PDF, DOCX), review AI-generated insights, and export results as polished PDFs ready for clients or co-counsel.",
   },
 
   // ── Accuracy & AI ──────────────────────────────────────────────────────
@@ -77,21 +77,21 @@ export const faqs = [
     category: "Accuracy & AI",
     featured: true,
     question: "How accurate is AI for reviewing closing documents?",
-    answer: "For pattern-based review — detecting missing fields, flagging standard exceptions, identifying inconsistencies between documents — AI is highly reliable. For judgment calls that require legal interpretation, the attorney stays in the loop. TitleWise is designed to handle the former and surface the latter, not to replace attorney judgment on complex decisions.",
+    answer: "For pattern-based review — detecting missing fields, flagging standard exceptions, identifying inconsistencies between documents — AI is highly reliable. For judgment calls that require legal interpretation, the attorney stays in the loop. TITLEwise is designed to handle the former and surface the latter, not to replace attorney judgment on complex decisions.",
   },
   {
     value: "ai-replace",
     category: "Accuracy & AI",
     featured: false,
     question: "Will AI replace title attorneys?",
-    answer: "No. AI handles the repetitive, rules-based layer of title examination. The judgment work — evaluating risk, interpreting unusual easements, certifying title, advising clients — requires legal expertise and professional responsibility that no AI can substitute. TitleWise is built to make attorneys more productive, not to replace them.",
+    answer: "No. AI handles the repetitive, rules-based layer of title examination. The judgment work — evaluating risk, interpreting unusual easements, certifying title, advising clients — requires legal expertise and professional responsibility that no AI can substitute. TITLEwise is built to make attorneys more productive, not to replace them.",
   },
   {
     value: "ai-mistakes",
     category: "Accuracy & AI",
     featured: false,
     question: "What happens if the AI makes a mistake?",
-    answer: "TitleWise surfaces findings for attorney review — it does not make final decisions. Every output is reviewed by the attorney before any action is taken. The attorney remains responsible for certification, and the platform is designed to assist that judgment, not bypass it.",
+    answer: "TITLEwise surfaces findings for attorney review — it does not make final decisions. Every output is reviewed by the attorney before any action is taken. The attorney remains responsible for certification, and the platform is designed to assist that judgment, not bypass it.",
   },
 
   // ── Security & Privacy ─────────────────────────────────────────────────
@@ -100,13 +100,13 @@ export const faqs = [
     category: "Security & Privacy",
     featured: true,
     question: "Is my client data secure?",
-    answer: "Yes. All data is encrypted in transit and at rest. We never share or sell your information. TitleWise is built with the security and confidentiality standards real estate attorneys require.",
+    answer: "Yes. All data is encrypted in transit and at rest. We never share or sell your information. TITLEwise is built with the security and confidentiality standards real estate attorneys require.",
   },
   {
     value: "confidentiality",
     category: "Security & Privacy",
     featured: false,
-    question: "Does TitleWise train AI models on my documents?",
+    question: "Does TITLEwise train AI models on my documents?",
     answer: "No. Your documents are processed to generate analysis for your matter only. They are never used to train AI models or shared with any third party.",
   },
 
@@ -122,8 +122,8 @@ export const faqs = [
     value: "trial",
     category: "Pricing & Plans",
     featured: false,
-    question: "Is there a free trial?",
-    answer: "Yes. You can get started with TitleWise and explore the platform before committing to a paid plan. No credit card required to begin.",
+    question: "How do I get started?",
+    answer: "Pick the plan that fits your practice and subscribe. You will have full access to every TITLEwise tool from day one. No setup fees, cancel anytime.",
   },
   {
     value: "plans",

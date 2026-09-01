@@ -1,342 +1,504 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
-import {
-  Copy, Check, RotateCcw, FileText, FileSearch, FileCheck,
-  Shield, Building, DollarSign, Calculator, ClipboardList,
-  X, ChevronRight, Play, Loader2,
-} from "lucide-react"
-import LandingFooter from "@/components/landing/LandingFooter"
 
-const MOCK_MATTER = {
-  clientName: "Robert and Susan Hartley",
-  propertyAddress: "18 Birchwood Lane, Portsmouth, NH 03801",
-  transactionType: "Purchase",
-  closingStage: "Clear to Close",
-  completedItems: "Title search completed, title insurance commitment issued, survey received, HOA docs reviewed, wire instructions verified",
-  outstandingItems: "Final walkthrough pending, lender final approval email outstanding, closing date confirmation needed from buyer",
-  upcomingDeadlines: "Closing scheduled for May 28 at 10:00 AM, Loan commitment expires May 31",
-  attorneyName: "Sarah Mitchell",
-  tone: "professional",
+const BG = "#0f1219"
+const PANEL = "#141820"
+const BORDER = "rgba(237,238,240,0.08)"
+const TEXT = "#EDEEF0"
+const MUTED = "rgba(237,238,240,0.45)"
+const DIM = "rgba(237,238,240,0.2)"
+const BLUE = "#3b82f6"
+const GREEN = "#22c55e"
+const RED = "#ef4444"
+const YELLOW = "#f59e0b"
+
+const MATTER = {
+  client: "Sarah and David Thompson",
+  address: "18 Harbor View Drive, Portsmouth, NH",
+  type: "Purchase",
+  stage: "Title Search Ordered",
+  closingDate: "Sep 15, 2026",
+  fileNumber: "2026-NH-41892",
 }
 
-const MOCK_OUTPUT = `Subject: Closing Update — 18 Birchwood Lane, Portsmouth, NH 03801
-
-Dear Robert and Susan,
-
-I wanted to reach out with a quick status update on your purchase of 18 Birchwood Lane.
-
-Great news — we've received our Clear to Close from the lender and we're on track for your scheduled closing on May 28 at 10:00 AM. The title search has been completed, title insurance commitment has been issued, and we've reviewed and cleared the HOA documentation.
-
-A few items remaining before closing:
-
-• We're waiting on the lender's final approval email — this is standard and expected within the next 24-48 hours.
-• Please confirm your final walkthrough is complete and there are no outstanding concerns with the property.
-• Note that your loan commitment expires May 31, so we're prioritizing a smooth close on the 28th.
-
-Wire instructions have been verified on our end. Once we receive the final lender confirmation, I'll send over the exact figures for your cashier's check or wire transfer.
-
-Please don't hesitate to reach out with any questions. We're in the final stretch — everything is on schedule.
-
-Best regards,
-Sarah Mitchell
-TitleWise Law Office`
-
-const TOOLS = [
-  { icon: FileText, label: "Status Updates", desc: "Client emails drafted. Seconds, not minutes.", color: "blue" },
-  { icon: FileSearch, label: "Title Analyzer", desc: "Schedule B requirements in plain English.", color: "blue" },
-  { icon: FileCheck, label: "CD Reviewer", desc: "Compare CD against contract. Discrepancies flagged.", color: "blue" },
-  { icon: Shield, label: "Wire Fraud Prevention", desc: "Fraud indicators detected automatically.", color: "red" },
-  { icon: Building, label: "HOA Reviewer", desc: "Dues, assessments, restrictions extracted.", color: "blue" },
-  { icon: DollarSign, label: "Fee Estimator", desc: "Professional estimate letters auto-generated.", color: "green" },
-  { icon: Calculator, label: "Tax Proration", desc: "Buyer/seller prorations calculated instantly.", color: "green" },
-  { icon: ClipboardList, label: "Closing Checklist", desc: "State-specific checklists for 7 states.", color: "blue" },
+const CHECKLIST = [
+  { id: 1, label: "Signed purchase/sale agreement received", initial: true },
+  { id: 2, label: "Title search ordered", initial: true },
+  { id: 3, label: "Title commitment received and reviewed", initial: false },
+  { id: 4, label: "Title exceptions cleared", initial: false },
+  { id: 5, label: "Survey reviewed", initial: false },
+  { id: 6, label: "Wire instructions verified", initial: false },
+  { id: 7, label: "Closing date confirmed with all parties", initial: false },
+  { id: 8, label: "Settlement statement prepared", initial: false },
 ]
 
-const colorMap: Record<string, string> = {
-  blue: "text-blue-600 bg-blue-500/10 border-blue-500/30",
-  indigo: "text-blue-600 bg-blue-500/10 border-blue-500/30",
-  red: "text-red-600 bg-red-500/10 border-red-500/30",
-  green: "text-green-600 bg-green-500/10 border-green-500/30",
+const WIRE = {
+  bank: "First National Bank",
+  account: "****4821",
+  routing: "021000021",
+  amount: "$487,250.00",
 }
 
-function typewriterEffect(
-  text: string,
-  setter: (fn: (prev: string) => string) => void,
-  onDone: () => void
-) {
-  let i = 0
-  const interval = setInterval(() => {
-    if (i >= text.length) {
-      clearInterval(interval)
-      onDone()
-      return
-    }
-    const chunkSize = Math.floor(Math.random() * 8) + 3
-    setter((prev) => prev + text.slice(i, i + chunkSize))
-    i += chunkSize
-  }, 25)
-  return interval
-}
+const WIRE_CHECKS = [
+  { id: 1, label: "Account matches prior closing", status: "pass" },
+  { id: 2, label: "Routing number verified", status: "pass" },
+  { id: 3, label: "Beneficiary cross-reference", status: "pass" },
+  { id: 4, label: "Amount within expected range", status: "pass" },
+  { id: 5, label: "Last-minute change detection", status: "warn" },
+  { id: 6, label: "Email domain spoofing check", status: "pass" },
+]
+
+const ANALYSIS_LINES = [
+  "Analyzing title commitment for 18 Harbor View Drive...",
+  "",
+  "3 exceptions identified",
+  "2 requirements flagged as actionable",
+  "1 mortgage lien requires payoff at closing",
+  "",
+  "KEY FINDING: Active mortgage lien (Book 4821) must be",
+  "discharged before title can transfer.",
+  "",
+  "Easement affects northerly 15ft. Survey recommended.",
+]
+
+const AGENT_STEPS = [
+  "Analyzing matter: 18 Harbor View Drive...",
+  "Reading email thread for updates...",
+  "Title commitment found in inbox (Sep 2)",
+  "Marking: Title commitment received ✓",
+  "Running wire fraud verification...",
+  "6 checks complete. 1 caution flag.",
+  "Drafting status update email...",
+  "Surfacing blocker: wire instructions received late",
+  "Done. 1 item updated, 1 blocker flagged.",
+]
+
+const EMAIL_DRAFT = `Subject: Status Update | 18 Harbor View Drive
+
+Dear Sarah and David,
+
+Quick update: we have received and reviewed the title commitment for your property. We are now working through the title exceptions.
+
+Next step: we are still awaiting wire instructions from the lender. I will follow up with them today.
+
+Best regards,
+Patrick Mitchell`
+
+const FORM_FIELDS = [
+  { key: "client", label: "Client Name", value: MATTER.client },
+  { key: "address", label: "Property Address", value: MATTER.address },
+  { key: "type", label: "Transaction Type", value: MATTER.type },
+  { key: "stage", label: "Current Stage", value: MATTER.stage },
+]
 
 export default function DemoPage() {
-  const [output, setOutput] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
-  const [hasGenerated, setHasGenerated] = useState(false)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [phase, setPhase] = useState<"idle" | "uploading" | "filling" | "analyzing" | "agents" | "done">("idle")
+  const [uploadPct, setUploadPct] = useState(0)
+  const [fields, setFields] = useState<Record<string, string>>({})
+  const [activeField, setActiveField] = useState<string | null>(null)
+  const [analysisText, setAnalysisText] = useState("")
+  const [completed, setCompleted] = useState<number[]>([1, 2])
+  const [agentLog, setAgentLog] = useState<string[]>([])
+  const [wireVisible, setWireVisible] = useState(false)
+  const [wireChecks, setWireChecks] = useState<number[]>([])
+  const [blocker, setBlocker] = useState(false)
+  const [emailDraft, setEmailDraft] = useState("")
+  const timeouts = useRef<ReturnType<typeof setTimeout>[]>([])
+  const logRef = useRef<HTMLDivElement>(null)
 
-  function handleGenerate() {
-    if (loading) return
-    setOutput("")
-    setLoading(true)
-    setHasGenerated(true)
+  function clear() { timeouts.current.forEach(clearTimeout); timeouts.current = [] }
+  function sched(fn: () => void, ms: number) { const t = setTimeout(fn, ms); timeouts.current.push(t); return t }
 
-    if (intervalRef.current) clearInterval(intervalRef.current)
-
-    intervalRef.current = typewriterEffect(
-      MOCK_OUTPUT,
-      setOutput,
-      () => setLoading(false)
-    )
+  function typeText(text: string, setter: (s: string) => void, speed: number, done?: () => void) {
+    let i = 0
+    function next() {
+      if (i <= text.length) {
+        setter(text.slice(0, i))
+        i++
+        if (i <= text.length) sched(next, speed)
+        else if (done) sched(done, 200)
+      }
+    }
+    next()
   }
 
-  function handleReset() {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    setOutput("")
-    setLoading(false)
-    setHasGenerated(false)
+  function run() {
+    clear()
+    setPhase("idle"); setUploadPct(0); setFields({}); setActiveField(null)
+    setAnalysisText(""); setCompleted([1, 2]); setAgentLog([]); setWireVisible(false)
+    setWireChecks([]); setBlocker(false); setEmailDraft("")
+
+    let t = 500
+
+    // Upload
+    sched(() => {
+      setPhase("uploading")
+      let p = 0
+      const tick = setInterval(() => { p += 6; setUploadPct(Math.min(p, 100)); if (p >= 100) clearInterval(tick) }, 50)
+    }, t)
+    t += 1200
+
+    // Fill form fields
+    sched(() => setPhase("filling"), t)
+    FORM_FIELDS.forEach(({ key, value }, idx) => {
+      sched(() => {
+        setActiveField(key)
+        let i = 0
+        function type() {
+          if (i <= value.length) {
+            const c = i; setFields(prev => ({ ...prev, [key]: value.slice(0, c) }))
+            i++; if (i <= value.length) sched(type, 20); else setActiveField(null)
+          }
+        }
+        type()
+      }, t + idx * 700)
+    })
+    t += FORM_FIELDS.length * 700 + 400
+
+    // Title analysis stream
+    sched(() => {
+      setPhase("analyzing")
+      const fullText = ANALYSIS_LINES.join("\n")
+      typeText(fullText, setAnalysisText, 12)
+    }, t)
+    t += ANALYSIS_LINES.join("\n").length * 12 + 600
+
+    // Agent phase
+    sched(() => setPhase("agents"), t)
+    AGENT_STEPS.forEach((step, idx) => {
+      sched(() => {
+        setAgentLog(prev => [...prev, step])
+        if (step.includes("Title commitment")) sched(() => setCompleted(prev => [...prev, 3]), 200)
+        if (step.includes("wire fraud")) setWireVisible(true)
+        if (step.includes("6 checks")) {
+          WIRE_CHECKS.forEach((c, ci) => sched(() => setWireChecks(prev => [...prev, c.id]), ci * 180))
+        }
+        if (step.includes("Surfacing blocker")) sched(() => setBlocker(true), 200)
+        if (step.includes("Drafting")) typeText(EMAIL_DRAFT, setEmailDraft, 12)
+      }, t + idx * 800)
+    })
+    t += AGENT_STEPS.length * 800 + EMAIL_DRAFT.length * 12 + 800
+
+    sched(() => setPhase("done"), t)
+    sched(run, t + 4000)
   }
 
-  async function handleCopy() {
-    await navigator.clipboard.writeText(output)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 640) {
+      setPhase("done")
+      setFields(Object.fromEntries(FORM_FIELDS.map(f => [f.key, f.value])))
+      setAnalysisText(ANALYSIS_LINES.join("\n"))
+      setCompleted([1, 2, 3]); setAgentLog(AGENT_STEPS)
+      setWireVisible(true); setWireChecks(WIRE_CHECKS.map(c => c.id))
+      setBlocker(true); setEmailDraft(EMAIL_DRAFT)
+      return
+    }
+    run()
+    return clear
+  }, [])
+
+  useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight }, [agentLog])
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#f8fafc" }}>
-      {/* Top nav */}
-      <header style={{ position: "sticky", top: 0, zIndex: 50, height: 60, backgroundColor: "#111827", borderBottom: "1px solid rgba(237,238,240,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
+    <div style={{ minHeight: "100vh", background: BG }}>
+
+      {/* Nav */}
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, height: 56, borderBottom: `1px solid ${BORDER}`, background: BG, backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 24px" }}>
         <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
-          <svg height="22" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "auto" }}>
-            <rect x="10" y="0" width="24" height="32" rx="4" fill="rgba(255,255,255,0.35)" />
-            <rect x="2" y="8" width="24" height="32" rx="4" fill="#2563EB" />
-          </svg>
-          <span style={{ fontFamily: "inherit", fontSize: "1rem", lineHeight: 1 }}>
-            <span style={{ fontWeight: 700, color: "#EDEEF0", letterSpacing: "-0.01em" }}>TITLE</span>
-            <span style={{ fontWeight: 300, color: "rgba(237,238,240,0.5)" }}>wise</span>
+          <svg height="20" viewBox="0 0 36 43" fill="none"><rect x="10" y="0" width="24" height="32" rx="4" fill="rgba(255,255,255,0.25)" /><rect x="2" y="8" width="24" height="32" rx="4" fill={BLUE} /></svg>
+          <span style={{ fontSize: 15 }}>
+            <span style={{ fontWeight: 700, color: TEXT, letterSpacing: "-0.01em" }}>TITLE</span>
+            <span style={{ fontWeight: 300, color: MUTED }}>wise</span>
           </span>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <Link href="/sign-in" style={{ fontSize: "0.875rem", color: "rgba(237,238,240,0.5)", textDecoration: "none" }}>
-            Sign in
-          </Link>
-          <Link href="/sign-up" style={{ fontSize: "0.875rem", fontWeight: 600, color: "#fff", backgroundColor: "#2563EB", borderRadius: 8, padding: "7px 14px", textDecoration: "none" }}>
-            Get started
-          </Link>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <Link href="/login" style={{ fontSize: 13, fontWeight: 300, color: MUTED, textDecoration: "none" }}>Log in</Link>
+          <Link href="/pricing" style={{ fontSize: 13, fontWeight: 400, color: "#fff", background: BLUE, borderRadius: 9999, padding: "6px 16px", textDecoration: "none" }}>Get started</Link>
         </div>
-      </header>
+      </nav>
 
-      {/* Demo banner */}
-      {!dismissed && (
-        <div className="bg-blue-600 text-white px-4 py-2.5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-sm mx-auto">
-            <span className="font-bold">Demo Mode</span>
-            <span className="text-white/70">—</span>
-            <span className="text-white/80">Pre-filled with a sample matter. Click Generate to see it in action.</span>
-            <Link href="/sign-up" className="font-bold underline hover:no-underline ml-1">
-              Start free →
-            </Link>
+      {/* Hero */}
+      <section style={{ padding: "96px 24px 40px", textAlign: "center" }}>
+        <p style={{ fontSize: 11, fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase", color: BLUE, marginBottom: 12 }}>Interactive Demo</p>
+        <h1 style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)", fontWeight: 300, letterSpacing: "-1.2px", color: TEXT, marginBottom: 12 }}>
+          Watch TITLEwise work a real closing
+        </h1>
+        <p style={{ fontSize: 14, fontWeight: 300, color: MUTED, maxWidth: 440, margin: "0 auto" }}>
+          Document entry on the left. File details in the center. AI agents working live on the right.
+        </p>
+      </section>
+
+      {/* 3-Column Demo */}
+      <section style={{ padding: "0 24px 80px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+
+          {/* Status pill */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 24 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", borderRadius: 9999, background: "rgba(59,130,246,0.08)", border: `1px solid rgba(59,130,246,0.2)` }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: phase === "done" ? GREEN : BLUE, animation: phase !== "idle" && phase !== "done" ? "tw-pulse 1.5s ease-in-out infinite" : "none" }} />
+              <span style={{ fontSize: 12, fontWeight: 300, color: TEXT }}>
+                {phase === "idle" && "Starting demo..."}
+                {phase === "uploading" && "Uploading title commitment..."}
+                {phase === "filling" && "Populating matter details..."}
+                {phase === "analyzing" && "Analyzing title commitment..."}
+                {phase === "agents" && "Agent analyzing, verifying wire, drafting email..."}
+                {phase === "done" && "Complete. Restarting..."}
+              </span>
+            </div>
           </div>
-          <button onClick={() => setDismissed(true)} className="text-white/70 hover:text-white transition-colors shrink-0">
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
 
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <p className="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-2">Status Update Generator — Demo</p>
-          <h1 className="text-3xl font-black text-foreground tracking-tight">See TitleWise in Action</h1>
-          <p className="text-sm text-muted-foreground mt-1 font-medium">
-            A real closing matter, pre-filled. Hit Generate to watch the AI draft a client email in seconds.
-          </p>
-        </motion.div>
+          {/* Grid */}
+          <div className="tw-demo-3col" style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 2,
+            borderRadius: 12, overflow: "hidden",
+            border: `1px solid ${BORDER}`,
+            boxShadow: "0 24px 64px rgba(0,0,0,0.4)",
+          }}>
 
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Left: Form (read-only prefilled) */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-            <div className="bg-card rounded-2xl border border-blue-500/30 p-6">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-sm font-black uppercase tracking-wide text-foreground">Matter Details</h2>
-                <span className="text-[10px] font-bold text-blue-600 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 uppercase tracking-wide">
-                  Sample Matter
-                </span>
+            {/* ── LEFT: Document Entry ── */}
+            <div className="tw-demo-left" style={{ background: PANEL, padding: 24 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: DIM, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Document Entry</p>
+
+              {/* Upload */}
+              <div style={{
+                border: `1px dashed ${phase === "uploading" ? BLUE : BORDER}`,
+                borderRadius: 8, padding: 16, textAlign: "center", marginBottom: 20,
+                background: phase === "uploading" ? "rgba(59,130,246,0.05)" : "transparent",
+                transition: "all 0.3s",
+              }}>
+                <p style={{ fontSize: 12, color: phase === "uploading" ? BLUE : DIM, marginBottom: phase === "uploading" ? 8 : 0 }}>
+                  {phase === "idle" ? "title-commitment-18-harbor-view.pdf" : phase === "uploading" ? "Uploading..." : "✓ title-commitment-18-harbor-view.pdf"}
+                </p>
+                {phase === "uploading" && (
+                  <div style={{ background: BORDER, borderRadius: 99, height: 3, overflow: "hidden" }}>
+                    <div style={{ background: BLUE, height: "100%", width: `${uploadPct}%`, transition: "width 0.05s linear", borderRadius: 99 }} />
+                  </div>
+                )}
               </div>
 
-              <div className="space-y-4">
-                {[
-                  { label: "Client Name", value: MOCK_MATTER.clientName },
-                  { label: "Property Address", value: MOCK_MATTER.propertyAddress },
-                  { label: "Transaction Type", value: MOCK_MATTER.transactionType },
-                  { label: "Closing Stage", value: MOCK_MATTER.closingStage },
-                  { label: "Attorney Name", value: MOCK_MATTER.attorneyName },
-                ].map((field) => (
-                  <div key={field.label}>
-                    <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">{field.label}</label>
-                    <p className="mt-1 text-sm font-medium text-foreground bg-muted/30 rounded-lg px-3 py-2 border border-border">
-                      {field.value}
-                    </p>
+              {/* Form fields */}
+              {FORM_FIELDS.map(({ key, label }) => {
+                const isActive = activeField === key
+                return (
+                  <div key={key} style={{ marginBottom: 12 }}>
+                    <p style={{ fontSize: 10, fontWeight: 600, color: DIM, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 4 }}>{label}</p>
+                    <div style={{
+                      background: "rgba(255,255,255,0.04)",
+                      border: `1px solid ${isActive ? "rgba(59,130,246,0.5)" : BORDER}`,
+                      borderRadius: 6, padding: "6px 10px", minHeight: 26,
+                      transition: "border-color 0.2s",
+                      boxShadow: isActive ? "0 0 0 2px rgba(59,130,246,0.12)" : "none",
+                    }}>
+                      <span style={{ fontSize: 13, color: TEXT }}>
+                        {fields[key] || ""}
+                        {isActive && <span style={{ display: "inline-block", width: 1.5, height: "0.85em", background: BLUE, marginLeft: 1, verticalAlign: "text-bottom", animation: "tw-blink 0.8s step-end infinite" }} />}
+                      </span>
+                    </div>
                   </div>
+                )
+              })}
+
+              {/* Analysis stream */}
+              {analysisText && (
+                <div style={{ marginTop: 16 }}>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: DIM, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 6 }}>Analysis</p>
+                  <div style={{
+                    background: "#0a0d12", borderRadius: 8, padding: 12,
+                    fontFamily: "'SF Mono', 'Fira Code', monospace",
+                    fontSize: 11, color: MUTED, lineHeight: 1.6,
+                    whiteSpace: "pre-wrap", maxHeight: 160, overflowY: "auto",
+                  }}>
+                    {analysisText}
+                    {phase === "analyzing" && analysisText.length < ANALYSIS_LINES.join("\n").length && (
+                      <span style={{ display: "inline-block", width: 1.5, height: "0.85em", background: BLUE, marginLeft: 1, verticalAlign: "text-bottom", animation: "tw-blink 0.8s step-end infinite" }} />
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── CENTER: File Information ── */}
+            <div className="tw-demo-center" style={{ background: "#0a0d12", padding: 24, borderLeft: `1px solid ${BORDER}`, borderRight: `1px solid ${BORDER}` }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: DIM, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>File Information</p>
+
+              {/* Matter card */}
+              <div style={{ background: PANEL, borderRadius: 8, border: `1px solid ${BORDER}`, padding: 14, marginBottom: 16 }}>
+                <p style={{ fontSize: 14, fontWeight: 400, color: TEXT, marginBottom: 2 }}>{fields.client || "..."}</p>
+                <p style={{ fontSize: 12, color: MUTED }}>{fields.address || ""}</p>
+                {fields.type && (
+                  <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
+                    <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 9999, background: "rgba(59,130,246,0.12)", color: BLUE }}>{fields.type}</span>
+                    <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 9999, background: "rgba(245,158,11,0.12)", color: YELLOW }}>{fields.stage || ""}</span>
+                  </div>
+                )}
+                <p style={{ fontSize: 10, color: DIM, marginTop: 8 }}>{MATTER.fileNumber} &middot; Closing {MATTER.closingDate}</p>
+              </div>
+
+              {/* Checklist */}
+              <div style={{ marginBottom: 16 }}>
+                <p style={{ fontSize: 10, fontWeight: 600, color: DIM, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 10 }}>Closing Checklist</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                  {CHECKLIST.map((item) => {
+                    const done = completed.includes(item.id)
+                    const justDone = !item.initial && done
+                    return (
+                      <div key={item.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{
+                          width: 14, height: 14, borderRadius: "50%",
+                          border: `1.5px solid ${done ? GREEN : BORDER}`,
+                          background: done ? GREEN : "transparent",
+                          flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                          transition: "all 0.3s",
+                          boxShadow: justDone ? "0 0 8px rgba(34,197,94,0.5)" : "none",
+                        }}>
+                          {done && <svg width="7" height="7" viewBox="0 0 8 8"><path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round"/></svg>}
+                        </div>
+                        <span style={{
+                          fontSize: 12, color: done ? MUTED : "rgba(237,238,240,0.25)",
+                          textDecoration: done ? "line-through" : "none",
+                          transition: "all 0.3s",
+                        }}>{item.label}</span>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Wire verification */}
+              {wireVisible && (
+                <div style={{ animation: "tw-fade-in 0.3s ease" }}>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: DIM, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 10 }}>Wire Verification</p>
+                  <div style={{ background: PANEL, borderRadius: 8, border: `1px solid ${BORDER}`, padding: 12, marginBottom: 10 }}>
+                    {Object.entries({ Bank: WIRE.bank, Account: WIRE.account, Routing: WIRE.routing, Amount: WIRE.amount }).map(([k, v]) => (
+                      <div key={k} style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                        <span style={{ fontSize: 11, color: DIM }}>{k}</span>
+                        <span style={{ fontSize: 11, color: TEXT, fontFamily: k === "Account" || k === "Routing" ? "'SF Mono', monospace" : "inherit" }}>{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                    {WIRE_CHECKS.map((c) => {
+                      const vis = wireChecks.includes(c.id)
+                      return (
+                        <div key={c.id} style={{
+                          display: "flex", justifyContent: "space-between", alignItems: "center",
+                          padding: "3px 8px", borderRadius: 4,
+                          opacity: vis ? 1 : 0.2, transition: "all 0.25s",
+                          borderLeft: vis ? `2px solid ${c.status === "pass" ? GREEN : YELLOW}` : "2px solid transparent",
+                        }}>
+                          <span style={{ fontSize: 11, color: vis ? TEXT : DIM }}>{c.label}</span>
+                          <span style={{ fontSize: 10, fontWeight: 600, color: c.status === "pass" ? GREEN : YELLOW }}>
+                            {vis ? (c.status === "pass" ? "PASS" : "FLAG") : ""}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── RIGHT: Agent Activity ── */}
+            <div className="tw-demo-right" style={{ background: PANEL, padding: 24 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: DIM, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Agent Activity</p>
+
+              {/* Log */}
+              <div ref={logRef} style={{
+                background: "#0a0d12", borderRadius: 8, padding: 12, marginBottom: 16,
+                minHeight: 100, maxHeight: 150, overflowY: "auto",
+                display: "flex", flexDirection: "column", gap: 4,
+              }}>
+                {agentLog.length === 0 && (
+                  <p style={{ fontSize: 11, fontFamily: "'SF Mono', monospace", color: DIM }}>Waiting for document...</p>
+                )}
+                {agentLog.map((line, i) => (
+                  <p key={i} style={{ fontSize: 11, fontFamily: "'SF Mono', monospace", color: i === agentLog.length - 1 ? MUTED : DIM, margin: 0, lineHeight: 1.5 }}>
+                    <span style={{ color: "rgba(59,130,246,0.5)", marginRight: 6 }}>&#8250;</span>{line}
+                  </p>
                 ))}
-
-                <div>
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">Completed Items</label>
-                  <p className="mt-1 text-sm text-muted-foreground bg-muted/30 rounded-lg px-3 py-2 border border-border leading-relaxed">
-                    {MOCK_MATTER.completedItems}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">Outstanding Items</label>
-                  <p className="mt-1 text-sm text-muted-foreground bg-muted/30 rounded-lg px-3 py-2 border border-border leading-relaxed">
-                    {MOCK_MATTER.outstandingItems}
-                  </p>
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">Upcoming Deadlines</label>
-                  <p className="mt-1 text-sm text-muted-foreground bg-muted/30 rounded-lg px-3 py-2 border border-border leading-relaxed">
-                    {MOCK_MATTER.upcomingDeadlines}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 flex gap-3">
-                <button
-                  onClick={handleGenerate}
-                  disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 bg-primary text-white font-black text-sm py-3 rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-60"
-                >
-                  {loading ? (
-                    <><Loader2 className="h-4 w-4 animate-spin" /> Generating...</>
-                  ) : (
-                    <><Play className="h-4 w-4" fill="currentColor" /> Generate Status Update</>
-                  )}
-                </button>
-                {hasGenerated && !loading && (
-                  <button
-                    onClick={handleReset}
-                    className="px-3 py-3 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                    title="Reset"
-                  >
-                    <RotateCcw className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right: Output */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <div className="bg-card rounded-2xl border border-blue-500/30 p-6 min-h-[400px] flex flex-col">
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-sm font-black uppercase tracking-wide text-foreground">Generated Email</h2>
-                {output && (
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
-                  >
-                    {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                    {copied ? "Copied!" : "Copy"}
-                  </button>
+                {phase === "agents" && (
+                  <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: BLUE, animation: "tw-pulse 1s ease-in-out infinite", marginTop: 4 }} />
                 )}
               </div>
 
-              {!hasGenerated && !loading && (
-                <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 text-muted-foreground">
-                  <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border-2 border-blue-500/20 flex items-center justify-center">
-                    <FileText className="h-7 w-7 text-blue-600" strokeWidth={2} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-foreground">Ready to generate</p>
-                    <p className="text-xs mt-1">Click Generate to watch the AI draft a client email from the matter details.</p>
-                  </div>
+              {/* Blocker */}
+              {blocker && (
+                <div style={{
+                  padding: "10px 12px", borderRadius: 8, marginBottom: 16,
+                  background: "rgba(239,68,68,0.08)", border: `1px solid rgba(239,68,68,0.25)`,
+                  borderLeft: `3px solid ${RED}`,
+                  animation: "tw-fade-in 0.3s ease",
+                }}>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: RED, marginBottom: 3, letterSpacing: "0.04em", textTransform: "uppercase" }}>Blocker</p>
+                  <p style={{ fontSize: 12, color: MUTED, margin: 0 }}>Wire instructions received late. Flag for verbal confirmation.</p>
                 </div>
               )}
 
-              {(output || loading) && (
-                <div className="flex-1 text-sm text-foreground leading-relaxed font-mono whitespace-pre-wrap overflow-y-auto">
-                  {output}
-                  {loading && (
-                    <span className="inline-block w-0.5 h-4 bg-primary animate-pulse ml-0.5 align-middle" />
+              {/* Email draft */}
+              {emailDraft && (
+                <div style={{ animation: "tw-fade-in 0.3s ease" }}>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: DIM, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 8 }}>Drafted Status Email</p>
+                  <div style={{
+                    background: "#0a0d12", borderRadius: 8, padding: 12,
+                    fontFamily: "'SF Mono', 'Fira Code', monospace",
+                    fontSize: 11, color: MUTED, lineHeight: 1.7,
+                    whiteSpace: "pre-wrap", maxHeight: 240, overflowY: "auto",
+                  }}>
+                    {emailDraft}
+                    {emailDraft.length > 0 && emailDraft.length < EMAIL_DRAFT.length && (
+                      <span style={{ display: "inline-block", width: 1.5, height: "0.85em", background: BLUE, marginLeft: 1, verticalAlign: "text-bottom", animation: "tw-blink 0.8s step-end infinite" }} />
+                    )}
+                  </div>
+                  {emailDraft.length === EMAIL_DRAFT.length && (
+                    <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                      <div style={{ padding: "6px 14px", borderRadius: 6, background: BLUE, fontSize: 12, fontWeight: 600, color: "#fff", cursor: "default" }}>Send email</div>
+                      <div style={{ padding: "6px 14px", borderRadius: 6, border: `1px solid ${BORDER}`, fontSize: 12, color: DIM, cursor: "default" }}>Edit</div>
+                    </div>
                   )}
                 </div>
               )}
             </div>
-          </motion.div>
+          </div>
+
+          {/* CTA below demo */}
+          <div style={{ textAlign: "center", marginTop: 48 }}>
+            <p style={{ fontSize: 14, fontWeight: 300, color: MUTED, marginBottom: 20 }}>
+              30 minutes back. Every file.
+            </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 16 }}>
+              <Link href="/pricing" style={{ display: "inline-flex", alignItems: "center", background: BLUE, color: "#fff", fontSize: 14, fontWeight: 400, padding: "10px 24px", borderRadius: 9999, textDecoration: "none" }}>
+                Get started
+              </Link>
+              <Link href="/pricing" style={{ fontSize: 13, fontWeight: 300, color: MUTED, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
+                View pricing
+              </Link>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* All tools section */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-12">
-          <p className="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-1">8 Tools. One Platform.</p>
-          <h2 className="text-xl font-black text-foreground tracking-tight mb-6">Everything a closing attorney needs, built-in</h2>
+      {/* Footer */}
+      <footer style={{ borderTop: `1px solid ${BORDER}`, padding: "32px 24px", textAlign: "center" }}>
+        <p style={{ fontSize: 12, fontWeight: 300, color: DIM }}>
+          &copy; 2026 Boxford Partners LLC DBA TITLEwise
+        </p>
+      </footer>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            {TOOLS.map(({ icon: Icon, label, desc, color }) => {
-              const cls = colorMap[color] ?? colorMap.blue
-              const [iconCls, bgCls, borderCls] = cls.split(" ")
-              return (
-                <div
-                  key={label}
-                  className={`bg-card rounded-2xl border-2 ${borderCls} p-4`}
-                  style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
-                >
-                  <div className={`w-9 h-9 rounded-xl ${bgCls} border ${borderCls} flex items-center justify-center mb-3`}>
-                    <Icon className={`h-4.5 w-4.5 ${iconCls}`} strokeWidth={2.5} />
-                  </div>
-                  <p className="text-sm font-black text-foreground">{label}</p>
-                  <p className="text-xs text-muted-foreground mt-1 font-medium leading-relaxed">{desc}</p>
-                </div>
-              )
-            })}
-          </div>
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-card rounded-2xl border border-blue-500/20 p-8 text-center"
-        >
-          <h3 className="text-2xl font-black text-foreground tracking-tight mb-2">
-            30 minutes back. Every file.
-          </h3>
-          <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto font-medium">
-            TitleWise handles the repetitive work so you can focus on the closing. Try it free — no credit card required.
-          </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center gap-2 bg-primary text-white font-black px-6 py-3 rounded-xl hover:bg-primary/90 transition-colors text-sm"
-            >
-              Get started
-              <ChevronRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors"
-            >
-              View pricing →
-            </Link>
-          </div>
-        </motion.div>
-      </div>
-      <LandingFooter />
+      <style>{`
+        @keyframes tw-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes tw-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        @keyframes tw-fade-in { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+        @media (max-width: 1024px) {
+          .tw-demo-3col { grid-template-columns: 1fr 1fr !important; }
+          .tw-demo-right { grid-column: 1 / -1 !important; }
+        }
+        @media (max-width: 640px) {
+          .tw-demo-3col { grid-template-columns: 1fr !important; }
+          .tw-demo-left, .tw-demo-center, .tw-demo-right { border-left: none !important; border-right: none !important; }
+        }
+      `}</style>
     </div>
   )
 }

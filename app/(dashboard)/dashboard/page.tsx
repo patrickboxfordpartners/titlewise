@@ -53,7 +53,7 @@ export default function DashboardPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: "var(--background)" }}>
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* Header */}
         <motion.div
@@ -61,8 +61,8 @@ export default function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-light tracking-[-0.72px] text-[#0d253d] mb-2">Dashboard</h1>
-          <p className="text-sm font-light text-[#64748d]">Your closing activity overview</p>
+          <h1 className="text-3xl font-light tracking-[-0.72px] text-foreground mb-2">Dashboard</h1>
+          <p className="text-sm font-light text-muted-foreground">Your closing activity overview</p>
         </motion.div>
 
         {/* Stats */}
@@ -71,61 +71,61 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white border border-[#e3e8ee] rounded-xl p-5"
+            className="bg-card border border-border rounded-xl p-5"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-[#0066cc]/10 flex items-center justify-center">
-                <FileText className="h-5 w-5 text-[#0066cc]" />
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="h-5 w-5 text-primary" />
               </div>
-              <p className="text-2xl font-light text-[#0d253d]">{loading ? "–" : stats?.activeMatters}</p>
+              <p className="text-2xl font-light text-foreground">{loading ? "–" : stats?.activeMatters}</p>
             </div>
-            <p className="text-xs font-light text-[#64748d]">Active matters</p>
+            <p className="text-xs font-light text-muted-foreground">Active matters</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white border border-[#e3e8ee] rounded-xl p-5"
+            className="bg-card border border-border rounded-xl p-5"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-[#0066cc]/10 flex items-center justify-center">
-                <Clock className="h-5 w-5 text-[#0066cc]" />
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Clock className="h-5 w-5 text-primary" />
               </div>
-              <p className="text-2xl font-light text-[#0d253d]">{loading ? "–" : stats?.closingThisWeek}</p>
+              <p className="text-2xl font-light text-foreground">{loading ? "–" : stats?.closingThisWeek}</p>
             </div>
-            <p className="text-xs font-light text-[#64748d]">Closing this week</p>
+            <p className="text-xs font-light text-muted-foreground">Closing this week</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white border border-[#e3e8ee] rounded-xl p-5"
+            className="bg-card border border-border rounded-xl p-5"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-[#0066cc]/10 flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-[#0066cc]" />
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 text-primary" />
               </div>
-              <p className="text-2xl font-light text-[#0d253d]">
+              <p className="text-2xl font-light text-foreground">
                 {loading ? "–" : `${stats?.generationsUsed}/${stats?.generationsLimit}`}
               </p>
             </div>
-            <p className="text-xs font-light text-[#64748d]">AI generations this month</p>
+            <p className="text-xs font-light text-muted-foreground">AI generations this month</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="bg-white border border-[#e3e8ee] rounded-xl p-5"
+            className="bg-card border border-border rounded-xl p-5"
           >
             <Link href="/matters?new=1" className="block h-full">
               <div className="flex flex-col items-center justify-center h-full gap-2">
-                <div className="w-10 h-10 rounded-full bg-[#0066cc] flex items-center justify-center">
-                  <Plus className="h-5 w-5 text-white" />
+                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                  <Plus className="h-5 w-5 text-primary-foreground" />
                 </div>
-                <p className="text-sm font-normal text-[#0066cc]">New Matter</p>
+                <p className="text-sm font-normal text-primary">New Matter</p>
               </div>
             </Link>
           </motion.div>
@@ -138,17 +138,17 @@ export default function DashboardPage() {
           transition={{ delay: 0.3 }}
           className="mb-8"
         >
-          <h2 className="text-sm font-normal uppercase tracking-widest text-[#64748d] mb-4">Quick Actions</h2>
+          <h2 className="text-sm font-normal uppercase tracking-widest text-muted-foreground mb-4">Quick Actions</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {TOOLS.map((tool, i) => (
               <Link
                 key={tool.href}
                 href={tool.href}
-                className="group bg-white border border-[#e3e8ee] rounded-xl p-4 hover:border-[#0066cc]/40 hover:shadow-sm transition-all"
+                className="group bg-card border border-border rounded-xl p-4 hover:border-primary/40 hover:shadow-sm transition-all"
               >
-                <tool.icon className="h-5 w-5 text-[#0066cc] mb-2" />
-                <p className="text-xs font-light text-[#0d253d] leading-tight mb-1">{tool.title}</p>
-                <p className="text-[10px] font-light text-[#64748d] leading-tight">{tool.desc}</p>
+                <tool.icon className="h-5 w-5 text-primary mb-2" />
+                <p className="text-xs font-light text-foreground leading-tight mb-1">{tool.title}</p>
+                <p className="text-[10px] font-light text-muted-foreground leading-tight">{tool.desc}</p>
               </Link>
             ))}
           </div>
@@ -161,14 +161,14 @@ export default function DashboardPage() {
           transition={{ delay: 0.35 }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-normal uppercase tracking-widest text-[#64748d]">Recent Activity</h2>
-            <Link href="/history" className="text-xs font-light text-[#0066cc] hover:underline">
+            <h2 className="text-sm font-normal uppercase tracking-widest text-muted-foreground">Recent Activity</h2>
+            <Link href="/history" className="text-xs font-light text-primary hover:underline">
               View all
             </Link>
           </div>
-          <div className="bg-white border border-[#e3e8ee] rounded-xl p-5">
-            <p className="text-sm font-light text-[#64748d] text-center py-8">
-              No recent activity. <Link href="/matters?new=1" className="text-[#0066cc] hover:underline">Create your first matter</Link> to get started.
+          <div className="bg-card border border-border rounded-xl p-5">
+            <p className="text-sm font-light text-muted-foreground text-center py-8">
+              No recent activity. <Link href="/matters?new=1" className="text-primary hover:underline">Create your first matter</Link> to get started.
             </p>
           </div>
         </motion.div>

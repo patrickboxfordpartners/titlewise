@@ -74,9 +74,9 @@ export const posts: Post[] = [
 
 <p>For a busy practice running twenty or thirty closings a month, that's not a small change. It's the difference between title review being a bottleneck and it being something that gets handled efficiently at every stage.</p>
 
-<h2>How TitleWise Fits</h2>
+<h2>How TITLEwise Fits</h2>
 
-<p>TitleWise handles the pattern work across seven document types: title commitments, closing disclosures, HUD-1s, deeds, title plants, lien searches, and surveys. It checks the fields, finds the inconsistencies, and flags what needs a closer look.</p>
+<p>TITLEwise handles the pattern work across seven document types: title commitments, closing disclosures, HUD-1s, deeds, title plants, lien searches, and surveys. It checks the fields, finds the inconsistencies, and flags what needs a closer look.</p>
 
 <p>What comes out the other side is a set of exceptions, discrepancies, and items that need the attorney's judgment. The mechanical work is already done. The attorney focuses on what they were trained to do, which is the 10 to 15 percent of each file that actually requires them.</p>
 

@@ -1,5 +1,5 @@
 ---
-title: Authentication Guide - TitleWise
+title: Authentication Guide - TITLEwise
 description: Authentication methods for AI agents and developers. Bearer token authentication with OAuth2 support.
 canonical: https://titlewise.app/auth.md
 last-updated: 2026-08-27
@@ -9,7 +9,7 @@ last-updated: 2026-08-27
 
 ## Service
 
-- **Name:** TitleWise
+- **Name:** TITLEwise
 - **URL:** https://titlewise.app
 - **Description:** AI-powered tools for real estate closing attorneys
 

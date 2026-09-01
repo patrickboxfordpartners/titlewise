@@ -20,7 +20,7 @@ const stripe = new Stripe(STRIPE_SECRET_KEY, {
 
 const PRODUCTS = {
   solo: {
-    name: 'TitleWise Solo',
+    name: 'TITLEwise Solo',
     description: 'Everything you need to automate your closing workflow. AI-powered document analysis, compliance checks, and client communications — all in one platform designed for solo practitioners.',
     marketing_features: [
       { name: '✓ 100 AI generations per month' },
@@ -34,7 +34,7 @@ const PRODUCTS = {
     ],
   },
   small_firm: {
-    name: 'TitleWise Small Firm',
+    name: 'TITLEwise Small Firm',
     description: 'Built for growing firms. Share knowledge across your team, give clients real-time access to their matters, and protect against wire fraud with institutional memory. Perfect for 2-5 attorneys.',
     marketing_features: [
       { name: '✓ Up to 5 attorney seats' },
@@ -48,7 +48,7 @@ const PRODUCTS = {
     ],
   },
   pro: {
-    name: 'TitleWise Pro',
+    name: 'TITLEwise Pro',
     description: 'The complete platform with autonomous AI. Your closing agent handles routine tasks automatically, TRID compliance is built-in, and your team of up to 10 attorneys works from one source of truth.',
     marketing_features: [
       { name: '✓ Up to 10 attorney seats' },
@@ -62,7 +62,7 @@ const PRODUCTS = {
     ],
   },
   enterprise: {
-    name: 'TitleWise Enterprise',
+    name: 'TITLEwise Enterprise',
     description: 'Maximum power and customization for large firms. Handle 5,000 closings per month across 25 attorneys, integrate with your existing systems, and get dedicated support from a team that knows your workflow.',
     marketing_features: [
       { name: '✓ Up to 25 attorney seats' },
@@ -105,7 +105,7 @@ async function main() {
   console.log('The checkout page will now show:');
   console.log('  • Detailed product description');
   console.log('  • Feature list with checkmarks');
-  console.log('  • TitleWise logo\n');
+  console.log('  • TITLEwise logo\n');
 }
 
 main().catch((error) => {

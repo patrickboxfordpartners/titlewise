@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: TitleWise API
+  title: TITLEwise API
   version: 1.0.0
   description: |
     AI-powered document analysis for real estate closing attorneys.
@@ -29,7 +29,7 @@ info:
     - `500` - Internal Server Error
 
   contact:
-    name: TitleWise API Support
+    name: TITLEwise API Support
     email: hello@titlewise.app
     url: https://titlewise.app/support
   termsOfService: https://titlewise.app/terms
@@ -351,7 +351,7 @@ components:
       scheme: bearer
       bearerFormat: tw_live_<key>
       description: |
-        API key authentication. Generate keys in your TitleWise dashboard under Settings → API Keys.
+        API key authentication. Generate keys in your TITLEwise dashboard under Settings → API Keys.
 
         **Format:** `tw_live_` followed by 32 random characters
 

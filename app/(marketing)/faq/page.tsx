@@ -7,15 +7,15 @@ import FAQCategoryNav from "@/components/landing/FAQCategoryNav"
 import { faqs } from "@/components/landing/faq-data"
 
 export const metadata: Metadata = {
-  title: "FAQ — TitleWise",
-  description: "Answers to common questions about TitleWise: AI document review for real estate closing attorneys, pricing, security, accuracy, and how it compares to existing software.",
+  title: "FAQ — TITLEwise",
+  description: "Answers to common questions about TITLEwise: AI document review for real estate closing attorneys, pricing, security, accuracy, and how it compares to existing software.",
   alternates: { canonical: "https://titlewise.app/faq" },
   openGraph: {
     type: "website",
-    title: "FAQ — TitleWise",
-    description: "Answers to common questions about TitleWise: AI document review for real estate closing attorneys.",
+    title: "FAQ — TITLEwise",
+    description: "Answers to common questions about TITLEwise: AI document review for real estate closing attorneys.",
     url: "https://titlewise.app/faq",
-    siteName: "TitleWise",
+    siteName: "TITLEwise",
   },
 }
 
@@ -37,7 +37,7 @@ const faqSchema = {
 export default function FAQPage() {
   return (
     <div
-      className="min-h-screen bg-white text-[#0d253d]"
+      className="min-h-screen bg-background text-foreground"
       style={{ fontFamily: "var(--font-sans)", WebkitFontSmoothing: "antialiased" }}
     >
       <script
@@ -57,7 +57,7 @@ export default function FAQPage() {
           <p style={{
             fontSize: "0.75rem",
             fontWeight: 400,
-            color: "#0066cc",
+            color: "var(--primary)",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             marginBottom: 16,
@@ -74,8 +74,8 @@ export default function FAQPage() {
           }}>
             Frequently Asked Questions
           </h1>
-          <p style={{ fontSize: "1rem", fontWeight: 300, color: "#64748d", lineHeight: 1.7, maxWidth: 520, margin: "0 auto" }}>
-            Everything you need to know about TitleWise — AI document review built for real estate closing attorneys.
+          <p style={{ fontSize: "1rem", fontWeight: 300, color: "var(--muted-foreground)", lineHeight: 1.7, maxWidth: 520, margin: "0 auto" }}>
+            Everything you need to know about TITLEwise — AI document review built for real estate closing attorneys.
           </p>
         </div>
       </section>
@@ -98,10 +98,10 @@ export default function FAQPage() {
                 fontSize: "1.375rem",
                 fontWeight: 300,
                 letterSpacing: "-0.26px",
-                color: "#0d253d",
+                color: "var(--foreground)",
                 marginBottom: 32,
                 paddingBottom: 16,
-                borderBottom: "2px solid #0066cc",
+                borderBottom: "2px solid var(--primary)",
                 display: "inline-block",
               }}>
                 {cat}
@@ -112,14 +112,14 @@ export default function FAQPage() {
                   <details
                     key={faq.value}
                     style={{
-                      borderBottom: i < items.length - 1 ? "1px solid #e3e8ee" : "none",
+                      borderBottom: i < items.length - 1 ? "1px solid var(--border)" : "none",
                     }}
                   >
                     <summary style={{
                       padding: "20px 0",
                       fontSize: "0.9375rem",
                       fontWeight: 300,
-                      color: "#0d253d",
+                      color: "var(--foreground)",
                       cursor: "pointer",
                       listStyle: "none",
                       display: "flex",
@@ -133,7 +133,7 @@ export default function FAQPage() {
                         height="16"
                         viewBox="0 0 16 16"
                         fill="none"
-                        style={{ flexShrink: 0, color: "#64748d" }}
+                        style={{ flexShrink: 0, color: "var(--muted-foreground)" }}
                       >
                         <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -143,7 +143,7 @@ export default function FAQPage() {
                       fontSize: "0.9375rem",
                       fontWeight: 300,
                       lineHeight: 1.8,
-                      color: "#64748d",
+                      color: "var(--muted-foreground)",
                       margin: 0,
                       maxWidth: 680,
                     }}>
@@ -211,7 +211,7 @@ export default function FAQPage() {
             color: "var(--primary)",
             marginBottom: 20,
           }}>
-            TitleWise
+            TITLEwise
           </p>
           <h2 style={{
             fontFamily: "var(--font-display)",
@@ -246,7 +246,7 @@ export default function FAQPage() {
             borderRadius: 9999,
             textDecoration: "none",
           }}>
-            Try TitleWise Free
+            Try TITLEwise Free
           </Link>
         </div>
       </section>

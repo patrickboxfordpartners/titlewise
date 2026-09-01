@@ -1,4 +1,4 @@
-# Postmark Setup for TitleWise
+# Postmark Setup for TITLEwise
 
 ## Step 1: Add Sender Signatures
 
@@ -57,11 +57,11 @@ Target: inbound.postmarkapp.com
 
 ## Step 5: Get API Keys
 
-1. Navigate to **Servers** > **mailBOXFORD** (or create new server "TitleWise")
+1. Navigate to **Servers** > **mailBOXFORD** (or create new server "TITLEwise")
 2. Copy **Server API Token** for sending email
 3. Copy **Inbound Hook Credential** for webhook verification
 
-## Step 6: Add to TitleWise .env.local
+## Step 6: Add to TITLEwise .env.local
 
 ```bash
 POSTMARK_API_KEY="<server-api-token>"

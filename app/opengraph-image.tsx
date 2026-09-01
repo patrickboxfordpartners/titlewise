@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og"
 
-export const alt = "TitleWise - AI Closing Platform for Real Estate Attorneys"
+export const alt = "TITLEwise - AI Closing Platform for Real Estate Attorneys"
 export const size = {
   width: 1200,
   height: 630,
@@ -61,7 +61,7 @@ export default async function Image() {
             marginBottom: "16px",
           }}
         >
-          TitleWise
+          TITLEwise
         </div>
 
         {/* Tagline */}

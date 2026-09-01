@@ -69,7 +69,7 @@ export default function ContactSectionUpgraded() {
               Request a Demo
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed max-w-[65ch]">
-              See how TitleWise can streamline your real estate practice. Fill out the form and our team will reach out within 1 business day.
+              See how TITLEwise can streamline your real estate practice. Fill out the form and our team will reach out within 1 business day.
             </p>
 
             <div className="mt-10 space-y-5">

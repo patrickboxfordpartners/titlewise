@@ -6,8 +6,8 @@ export function GET() {
   const agentCard = {
     version: "1.0",
     agent: {
-      name: "TitleWise",
-      displayName: "TitleWise Real Estate Closing Assistant",
+      name: "TITLEwise",
+      displayName: "TITLEwise Real Estate Closing Assistant",
       description: "AI-powered tools for real estate closing attorneys: title analysis, closing disclosure review, wire fraud detection, and HOA document extraction",
       type: "service",
       url: "https://titlewise.app",
@@ -64,7 +64,6 @@ export function GET() {
     pricing: {
       model: "subscription",
       url: "https://titlewise.app/pricing",
-      freeTrialDays: 14,
       plans: [
         { name: "Solo", price: 149, currency: "USD", interval: "month" },
         { name: "Small Firm", price: 349, currency: "USD", interval: "month" },

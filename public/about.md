@@ -1,25 +1,25 @@
 ---
-title: About TitleWise
-description: TitleWise is an AI-powered platform for real estate closing attorneys, built by Boxford Partners to automate document review and reduce errors.
+title: About TITLEwise
+description: TITLEwise is an AI-powered platform for real estate closing attorneys, built by Boxford Partners to automate document review and reduce errors.
 canonical: https://titlewise.app/about
 last-updated: 2026-08-27
 ---
 
-# About TitleWise
+# About TITLEwise
 
 ## Who We Are
 
-TitleWise is an AI-powered SaaS platform designed specifically for real estate closing attorneys and title companies. We help legal professionals automate time-consuming document review tasks, reduce errors, and close transactions faster.
+TITLEwise is an AI-powered SaaS platform designed specifically for real estate closing attorneys and title companies. We help legal professionals automate time-consuming document review tasks, reduce errors, and close transactions faster.
 
 ## Our Story
 
-TitleWise was built by Boxford Partners, an embedded operations consulting firm based in San Francisco. The product emerged from real problems we observed inside real estate closing operations during consulting engagements with title companies and law firms across the United States.
+TITLEwise was built by Boxford Partners, an embedded operations consulting firm based in San Francisco. The product emerged from real problems we observed inside real estate closing operations during consulting engagements with title companies and law firms across the United States.
 
 We saw attorneys spending hours manually reviewing title commitments, closing disclosures, and HOA documents—work that was both repetitive and error-prone. We also witnessed the growing threat of wire fraud, which has cost the real estate industry hundreds of millions of dollars. These problems demanded a solution that combined legal expertise with modern AI technology.
 
 ## What We Built
 
-TitleWise combines natural language processing, document parsing, and cross-matter memory to automate the core workflows of real estate closing attorneys:
+TITLEwise combines natural language processing, document parsing, and cross-matter memory to automate the core workflows of real estate closing attorneys:
 
 - **Title Analysis:** Parse title commitments, flag Schedule B exceptions, identify liens and encumbrances
 - **Closing Disclosure Review:** TRID-compliant CD analysis with tolerance violation detection
@@ -30,7 +30,7 @@ TitleWise combines natural language processing, document parsing, and cross-matt
 
 ## Our Technology
 
-We built TitleWise on a modern tech stack designed for reliability, security, and performance:
+We built TITLEwise on a modern tech stack designed for reliability, security, and performance:
 
 - **Infrastructure:** Hosted on Vercel with global edge deployment
 - **Database:** Neon Postgres with connection pooling for high availability
@@ -40,7 +40,7 @@ We built TitleWise on a modern tech stack designed for reliability, security, an
 
 ## Our Team
 
-TitleWise is built by Boxford Partners, a consulting firm specializing in operations design and AI integration for professional services. Our team combines legal domain expertise with software engineering and machine learning experience.
+TITLEwise is built by Boxford Partners, a consulting firm specializing in operations design and AI integration for professional services. Our team combines legal domain expertise with software engineering and machine learning experience.
 
 ## Our Commitment
 

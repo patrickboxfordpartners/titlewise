@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [pathname, router])
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#ffffff" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "var(--background)" }}>
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 bg-black/20 z-10 lg:hidden" onClick={() => setMobileOpen(false)} />
@@ -46,19 +46,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Mobile top bar */}
       <header
         className="lg:hidden fixed top-0 left-0 right-0 z-10 h-12 flex items-center px-4 gap-3 border-b"
-        style={{ backgroundColor: "#ffffff", borderColor: "#e3e8ee" }}
+        style={{ backgroundColor: "var(--background)", borderColor: "var(--border)" }}
       >
         <button
           onClick={() => setMobileOpen(true)}
-          className="text-[#64748d] hover:text-[#0d253d]"
+          className="text-muted-foreground hover:text-foreground"
           aria-label="Open menu"
         >
           <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
             <path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
-        <span style={{ color: "#0d253d", fontSize: "1rem", fontWeight: 300, letterSpacing: "-0.02em" }}>
-          TitleWise
+        <span style={{ color: "var(--foreground)", fontSize: "1rem", fontWeight: 300, letterSpacing: "-0.02em" }}>
+          TITLEwise
         </span>
       </header>
 

@@ -8,11 +8,11 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: {
-    default: "TitleWise, AI Tools for Real Estate Closing Attorneys",
-    template: "%s | TitleWise",
+    default: "TITLEwise, AI Tools for Real Estate Closing Attorneys",
+    template: "%s | TITLEwise",
   },
   description:
-    "TitleWise gives closing attorneys AI-powered tools that handle the repetitive work, status updates, title analysis, CD review, wire verification, and more. Save 30+ minutes per file.",
+    "TITLEwise gives closing attorneys AI-powered tools that handle the repetitive work, status updates, title analysis, CD review, wire verification, and more. Save 30+ minutes per file.",
   keywords: [
     "real estate closing attorney",
     "title commitment analyzer",
@@ -32,23 +32,23 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    title: "TitleWise, AI Tools for Real Estate Closing Attorneys",
+    title: "TITLEwise, AI Tools for Real Estate Closing Attorneys",
     description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
-    siteName: "TitleWise",
+    siteName: "TITLEwise",
     url: "https://titlewise.app",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "TitleWise - AI Closing Platform for Real Estate Attorneys",
+        alt: "TITLEwise - AI Closing Platform for Real Estate Attorneys",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TitleWise, AI Tools for Real Estate Closing Attorneys",
+    title: "TITLEwise, AI Tools for Real Estate Closing Attorneys",
     description: "Save 30+ minutes per file with AI-powered tools built for real estate closing attorneys.",
   },
   robots: {
@@ -65,8 +65,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('tw-theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()` }} />
         <link
-          href="https://fonts.bunny.net/css?family=cabinet-grotesk:400,500,600,700,800|dm-sans:400,500,600,700|jetbrains-mono:400,500,600"
+          href="https://fonts.bunny.net/css?family=cabinet-grotesk:400,500,600,700,800|dm-sans:400,500,600,700|inter:300,400,500,600|jetbrains-mono:400,500,600"
           rel="stylesheet"
         />
       </head>

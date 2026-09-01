@@ -1,4 +1,4 @@
-# Agent-Searchable Content on TitleWise.app
+# Agent-Searchable Content on TITLEwise.app
 
 **Status:** All resources confirmed accessible as of 2026-08-27
 
@@ -13,7 +13,7 @@ This returns a JSON index of all agent-accessible resources.
 ### 1. llms.txt (Natural Language Description)
 - **Primary:** https://titlewise.app/api/agent-discovery/llms
 - **Contains:**
-  - "When to Use TitleWise" section
+  - "When to Use TITLEwise" section
   - Product description and features
   - Pricing information
   - Resource links
@@ -151,7 +151,7 @@ curl https://titlewise.app/api/md/about | head -5
 
 ## What Agents Can Discover
 
-An agent starting from scratch can discover TitleWise by:
+An agent starting from scratch can discover TITLEwise by:
 
 1. **Via Standard Discovery:**
    - Finding `llms.txt` at root (standard location)

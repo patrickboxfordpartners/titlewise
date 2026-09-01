@@ -71,6 +71,60 @@
   --color-canvas: #ffffff;
 }
 
+.dark {
+  --background: #0f1219;
+  --foreground: #EDEEF0;
+
+  --surface: #141820;
+  --surface-elevated: #1a1f2b;
+
+  --card: #141820;
+  --card-foreground: #EDEEF0;
+
+  --popover: #141820;
+  --popover-foreground: #EDEEF0;
+
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+
+  --secondary: #1a1f2b;
+  --secondary-foreground: #EDEEF0;
+
+  --muted: #1a1f2b;
+  --muted-foreground: rgba(237,238,240,0.45);
+
+  --accent: #3b82f6;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  --border: rgba(237,238,240,0.08);
+  --input: #1a1f2b;
+  --ring: #3b82f6;
+  --canvas-cream: #141820;
+
+  --section-dark: #0a0d12;
+  --section-alt: #141820;
+  --section-accent: #141820;
+
+  --text-primary: #EDEEF0;
+  --text-muted: rgba(237,238,240,0.45);
+  --text-dim: rgba(237,238,240,0.2);
+
+  --color-sidebar: #0f1219;
+  --color-sidebar-text: #EDEEF0;
+  --color-sidebar-muted: rgba(237,238,240,0.45);
+  --color-sidebar-border: rgba(237,238,240,0.08);
+  --color-sidebar-active: rgba(59,130,246,0.1);
+  --color-sidebar-hover: rgba(237,238,240,0.04);
+  --color-canvas: #0f1219;
+}
+
 
 @theme inline {
   --color-background: var(--background);
@@ -163,7 +217,7 @@
 
 .sidebar-nav-item.active {
   background-color: var(--color-sidebar-active);
-  color: #0066cc;
+  color: var(--primary);
   font-weight: 400;
 }
 
@@ -186,14 +240,14 @@
 .sidebar-matter-item:hover {
   background-color: var(--color-sidebar-hover);
   color: var(--color-sidebar-text);
-  border-left-color: #e3e8ee;
+  border-left-color: var(--border);
 }
 
 .sidebar-matter-item.active {
   background-color: var(--color-sidebar-active);
-  color: #0066cc;
+  color: var(--primary);
   font-weight: 400;
-  border-left-color: #0066cc;
+  border-left-color: var(--primary);
 }
 
 .sidebar-matter-all {
@@ -217,7 +271,7 @@
 
 .sidebar-matter-all.active {
   background-color: var(--color-sidebar-active);
-  color: #0066cc;
+  color: var(--primary);
   font-weight: 400;
 }
 
@@ -229,16 +283,16 @@
   width: 100%;
   padding: 0.5rem;
   border-radius: 9999px;
-  background-color: #0066cc;
-  color: #ffffff;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
   font-size: 0.875rem;
   font-weight: 400;
   text-decoration: none;
-  transition: background-color 0.15s;
+  transition: opacity 0.15s;
 }
 
 .sidebar-new-matter:hover {
-  background-color: #0052a3;
+  opacity: 0.9;
 }
 
 .sidebar-new-matter-section {

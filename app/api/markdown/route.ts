@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server"
 export const dynamic = "force-static"
 
 const PAGES: Record<string, string> = {
-  "/": `# TitleWise — AI Tools for Real Estate Closing Attorneys
+  "/": `# TITLEwise — AI Tools for Real Estate Closing Attorneys
 
 > Automate document review, wire verification, closing checklists, and client communication.
 
-## What is TitleWise?
+## What is TITLEwise?
 
-TitleWise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently.
+TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently.
 
 ## Key Features
 
@@ -47,7 +47,7 @@ Enterprise plan includes API access for AI agent integration.
 - [Sign Up](/sign-up)
 - [Contact](mailto:hello@titlewise.app)
 `,
-  "/pricing": `# TitleWise Pricing
+  "/pricing": `# TITLEwise Pricing
 
 ## Plans
 
@@ -83,10 +83,10 @@ Enterprise plan includes API access for AI agent integration.
 Enterprise plan includes programmatic access to all AI tools via REST API.
 See [/auth.md](/auth.md) for authentication details.
 `,
-  "/faq": `# TitleWise FAQ
+  "/faq": `# TITLEwise FAQ
 
-## What is TitleWise?
-TitleWise is an AI-powered SaaS platform for real estate closing attorneys that automates document review, wire verification, and client communication.
+## What is TITLEwise?
+TITLEwise is an AI-powered SaaS platform for real estate closing attorneys that automates document review, wire verification, and client communication.
 
 ## Who is it for?
 Solo closing attorneys, small title firms (2-10 attorneys), and any attorney handling residential real estate closings.

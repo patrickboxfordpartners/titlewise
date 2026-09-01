@@ -1,4 +1,4 @@
-# TitleWise Monitoring Setup
+# TITLEwise Monitoring Setup
 
 Production monitoring is configured with **Sentry** (error tracking) and **PostHog** (product analytics).
 
@@ -15,7 +15,7 @@ Production monitoring is configured with **Sentry** (error tracking) and **PostH
 
 ### 2. Add to Vercel Environment Variables
 
-Add to Vercel → TitleWise → Settings → Environment Variables:
+Add to Vercel → TITLEwise → Settings → Environment Variables:
 
 ```bash
 NEXT_PUBLIC_SENTRY_DSN=https://YOUR_DSN_HERE@sentry.io/PROJECT_ID

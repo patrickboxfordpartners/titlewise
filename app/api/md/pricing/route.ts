@@ -3,13 +3,13 @@ import { NextResponse } from "next/server"
 export const dynamic = "force-static"
 
 const CONTENT = `---
-title: TitleWise Pricing
-description: Machine-readable pricing plans for AI agents. Plans from $149/month to $999/month with 14-day free trial.
+title: TITLEwise Pricing
+description: Machine-readable pricing plans for AI agents. Plans from $149/month to $999/month.
 canonical: https://titlewise.app/pricing
 last-updated: 2026-08-27
 ---
 
-# TitleWise Pricing
+# TITLEwise Pricing
 
 > Machine-readable pricing for AI agents
 

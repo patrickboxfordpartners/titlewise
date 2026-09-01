@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
     // Send email notification to hello@titlewise.app
     const emailBody = `
-New demo request from TitleWise website:
+New demo request from TITLEwise website:
 
 Name: ${name}
 Email: ${email}

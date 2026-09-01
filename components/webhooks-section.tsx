@@ -362,7 +362,7 @@ export function WebhooksSection() {
         <p className="text-xs font-medium text-blue-700 mb-2">Webhook Security</p>
         <p className="text-xs text-blue-600/80 mb-2">
           All webhook requests include an <code className="bg-blue-500/10 px-1 py-0.5 rounded">X-Webhook-Signature</code> header.
-          Verify this HMAC-SHA256 signature using your signing secret to ensure requests came from TitleWise.
+          Verify this HMAC-SHA256 signature using your signing secret to ensure requests came from TITLEwise.
         </p>
         <a
           href="/api-docs#webhooks"

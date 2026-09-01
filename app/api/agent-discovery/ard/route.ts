@@ -6,8 +6,8 @@ export function GET() {
   const ard = {
     "specVersion": "0.91",
     "host": {
-      "name": "TitleWise",
-      "displayName": "TitleWise",
+      "name": "TITLEwise",
+      "displayName": "TITLEwise",
       "url": "https://titlewise.app",
       "description": "AI-powered tools for real estate closing attorneys"
     },
@@ -66,14 +66,14 @@ export function GET() {
       },
       {
         "identifier": "urn:air:titlewise.app:mcp:server",
-        "displayName": "TitleWise MCP Server",
+        "displayName": "TITLEwise MCP Server",
         "mediaType": "application/mcp+json",
         "url": "https://titlewise.app/.well-known/mcp/server-card.json",
-        "description": "Model Context Protocol server for AI agent integration with all TitleWise tools",
+        "description": "Model Context Protocol server for AI agent integration with all TITLEwise tools",
         "representativeQueries": [
-          "Connect to TitleWise as an MCP server",
-          "Use TitleWise tools via MCP",
-          "Integrate TitleWise into my agent workflow"
+          "Connect to TITLEwise as an MCP server",
+          "Use TITLEwise tools via MCP",
+          "Integrate TITLEwise into my agent workflow"
         ]
       }
     ]

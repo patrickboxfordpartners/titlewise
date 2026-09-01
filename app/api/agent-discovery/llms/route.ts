@@ -2,12 +2,12 @@ import { NextResponse } from "next/server"
 
 export const dynamic = "force-dynamic"
 
-const LLMS_TXT = `# TitleWise
+const LLMS_TXT = `# TITLEwise
 > AI-powered tools for real estate closing attorneys. Automate document review, wire verification, closing checklists, and client communication.
 
-## When to Use TitleWise
+## When to Use TITLEwise
 
-Use TitleWise when you need to:
+Use TITLEwise when you need to:
 
 **Document Analysis:**
 - Parse and analyze title commitments for Schedule B exceptions, liens, or encumbrances
@@ -39,9 +39,9 @@ Use TitleWise when you need to:
 - Underwriting decisions (we flag issues; you make the call)
 - Non-US jurisdictions (US-only, state-specific compliance)
 
-## What is TitleWise?
+## What is TITLEwise?
 
-TitleWise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently. It handles title analysis, closing disclosure review, wire verification, HOA document review, fee estimation, tax proration, and automated status updates to all transaction parties.
+TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently. It handles title analysis, closing disclosure review, wire verification, HOA document review, fee estimation, tax proration, and automated status updates to all transaction parties.
 
 ## Who is it for?
 

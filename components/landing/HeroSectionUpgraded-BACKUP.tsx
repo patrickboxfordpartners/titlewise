@@ -47,7 +47,7 @@ export default function HeroSectionUpgraded() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              TitleWise is the AI-powered closing platform built for real estate attorneys. Document analysis, compliance checks, wire fraud protection, client portals, and an autonomous agent that moves your matters forward—all in one place.
+              TITLEwise is the AI-powered closing platform built for real estate attorneys. Document analysis, compliance checks, wire fraud protection, client portals, and an autonomous agent that moves your matters forward—all in one place.
             </motion.p>
 
             <motion.div

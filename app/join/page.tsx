@@ -51,7 +51,7 @@ function JoinContent() {
         {status === "success" && (
           <>
             <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-foreground mb-2">Welcome to TitleWise</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-2">Welcome to TITLEwise</h2>
             <p className="text-sm text-muted-foreground">Redirecting you to your workspace...</p>
           </>
         )}

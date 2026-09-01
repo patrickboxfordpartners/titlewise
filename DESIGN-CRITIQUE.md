@@ -1,4 +1,4 @@
-# TitleWise Design System Critique
+# TITLEwise Design System Critique
 **Date:** 2026-08-28  
 **Scope:** Complete design system audit across marketing pages, components, and user flows
 
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-TitleWise has partially implemented the Stripe-inspired design system from DESIGN.md, but **significant inconsistencies remain** that dilute the brand's intended editorial lightness and financial-infrastructure sophistication.
+TITLEwise has partially implemented the Stripe-inspired design system from DESIGN.md, but **significant inconsistencies remain** that dilute the brand's intended editorial lightness and financial-infrastructure sophistication.
 
 ### Critical Issues
 1. **Typography chaos:** 101+ instances of heavy font weights (600-800) still present

@@ -1,4 +1,4 @@
-# TitleWise
+# TITLEwise
 
 AI-powered tools for real estate closing attorneys. Save 30+ minutes per file.
 

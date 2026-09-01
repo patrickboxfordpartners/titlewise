@@ -221,10 +221,10 @@ function MattersContent() {
               marginBottom: 12,
             }}>
               <p style={{ fontSize: "0.875rem", fontWeight: 400, color: "#b8860b", marginBottom: 4 }}>
-                Trial limit reached
+                Matter limit reached
               </p>
               <p style={{ fontSize: "0.8125rem", fontWeight: 300, color: "var(--color-text-muted)", marginBottom: 10 }}>
-                Your 7-day trial includes up to 3 active matters. Upgrade to unlock unlimited matters.
+                Your current plan has reached its active matter limit. Upgrade to unlock more.
               </p>
               <Link
                 href="/pricing"
@@ -280,7 +280,7 @@ function MattersContent() {
           </div>
           <h2 className="text-xl font-light text-foreground mb-2 tracking-[-0.2px]">Create your first matter</h2>
           <p className="text-sm font-light text-muted-foreground mb-6 max-w-sm mx-auto">
-            Matters are the foundation of TitleWise. Each matter represents a real estate closing with its own checklist, documents, and AI tools.
+            Matters are the foundation of TITLEwise. Each matter represents a real estate closing with its own checklist, documents, and AI tools.
           </p>
 
           <div className="bg-card border border-border rounded-xl p-6 mb-6 text-left">

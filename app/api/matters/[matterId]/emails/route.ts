@@ -56,7 +56,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ mat
   if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 400 })
 
   const inboxAddress = matterInboxAddress(matterId)
-  const fromName = user.name ? `${user.name} via TitleWise` : "TitleWise"
+  const fromName = user.name ? `${user.name} via TITLEwise` : "TITLEwise"
 
   const result = await postmark.sendEmail({
     From: `${fromName} <${POSTMARK_FROM_EMAIL}>`,

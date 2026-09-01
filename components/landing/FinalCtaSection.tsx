@@ -14,7 +14,7 @@ export default function FinalCtaSection() {
             Ready to close smarter?
           </h2>
           <p className="mt-4 text-lg text-slate-300 font-medium w-full px-4">
-            Join real estate attorneys who are closing faster and smarter with TitleWise.
+            Join real estate attorneys who are closing faster and smarter with TITLEwise.
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/pricing">

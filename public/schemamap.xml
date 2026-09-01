@@ -4,36 +4,36 @@
     <loc>https://titlewise.app/api/v1/openapi.json</loc>
     <type>application/openapi+json</type>
     <lastmod>2026-08-27</lastmod>
-    <title>TitleWise API OpenAPI Specification</title>
+    <title>TITLEwise API OpenAPI Specification</title>
   </feed>
   <feed>
     <loc>https://titlewise.app/.well-known/ai-catalog.json</loc>
     <type>application/json</type>
     <lastmod>2026-08-27</lastmod>
-    <title>TitleWise AI Catalog</title>
+    <title>TITLEwise AI Catalog</title>
   </feed>
   <feed>
     <loc>https://titlewise.app/.well-known/ard.json</loc>
     <type>application/json</type>
     <lastmod>2026-08-27</lastmod>
-    <title>TitleWise Agent Resource Directory</title>
+    <title>TITLEwise Agent Resource Directory</title>
   </feed>
   <feed>
     <loc>https://titlewise.app/.well-known/agent-skills/index.json</loc>
     <type>application/json</type>
     <lastmod>2026-08-27</lastmod>
-    <title>TitleWise Agent Skills Index</title>
+    <title>TITLEwise Agent Skills Index</title>
   </feed>
   <feed>
     <loc>https://titlewise.app/.well-known/mcp/server-card.json</loc>
     <type>application/json</type>
     <lastmod>2026-08-27</lastmod>
-    <title>TitleWise MCP Server Card</title>
+    <title>TITLEwise MCP Server Card</title>
   </feed>
   <feed>
     <loc>https://titlewise.app/sitemap.xml</loc>
     <type>application/xml</type>
     <lastmod>2026-08-27</lastmod>
-    <title>TitleWise Sitemap</title>
+    <title>TITLEwise Sitemap</title>
   </feed>
 </schemamap>

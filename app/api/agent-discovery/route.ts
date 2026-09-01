@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic"
 // Central agent discovery endpoint - returns all agent-accessible resources
 export function GET() {
   const discovery = {
-    name: "TitleWise",
+    name: "TITLEwise",
     description: "AI-powered tools for real estate closing attorneys",
     url: "https://titlewise.app",
     resources: {

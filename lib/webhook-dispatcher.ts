@@ -50,7 +50,7 @@ async function dispatchWebhook(
         "Content-Type": "application/json",
         "X-Webhook-Signature": signature,
         "X-Webhook-Event": payload.event,
-        "User-Agent": "TitleWise-Webhooks/1.0",
+        "User-Agent": "TITLEwise-Webhooks/1.0",
       },
       body: payloadString,
       signal: controller.signal,

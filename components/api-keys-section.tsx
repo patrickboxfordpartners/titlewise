@@ -117,7 +117,7 @@ export function ApiKeysSection() {
           </button>
         </div>
         <p className="text-xs text-muted-foreground mb-4">
-          API keys allow external applications to integrate with TitleWise. Available on Enterprise plan.
+          API keys allow external applications to integrate with TITLEwise. Available on Enterprise plan.
         </p>
 
         {/* New key success alert */}

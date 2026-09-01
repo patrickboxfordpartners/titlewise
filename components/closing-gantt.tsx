@@ -19,7 +19,7 @@ interface ClosingGanttProps {
   readonly?: boolean
 }
 
-// Inject TitleWise-themed overrides on top of frappe-gantt default CSS
+// Inject TITLEwise-themed overrides on top of frappe-gantt default CSS
 const GANTT_STYLES = `
   .gantt .grid-header { fill: #1e293b; stroke: #475569; }
   .gantt .grid-row { fill: transparent; }

@@ -1,5 +1,5 @@
 /**
- * Stripe product/price setup script for TitleWise.
+ * Stripe product/price setup script for TITLEwise.
  * Run once per Stripe account to create the product, prices, and portal config.
  *
  * Usage:
@@ -25,9 +25,9 @@ const plans = [
 ] as const
 
 async function main() {
-  console.log("Creating TitleWise product...")
+  console.log("Creating TITLEwise product...")
   const product = await stripe.products.create({
-    name: "TitleWise",
+    name: "TITLEwise",
     description: "AI tools for real estate closing attorneys",
   })
 
@@ -59,7 +59,7 @@ async function main() {
   console.log("Configuring customer portal...")
   await stripe.billingPortal.configurations.create({
     business_profile: {
-      headline: "TitleWise — Manage your subscription",
+      headline: "TITLEwise — Manage your subscription",
     },
     features: {
       subscription_cancel: { enabled: true, mode: "at_period_end" },

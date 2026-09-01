@@ -1,9 +1,9 @@
-# TitleWise
+# TITLEwise
 > AI-powered tools for real estate closing attorneys. Automate document review, wire verification, closing checklists, and client communication.
 
-## When to Use TitleWise
+## When to Use TITLEwise
 
-Use TitleWise when you need to:
+Use TITLEwise when you need to:
 
 **Document Analysis:**
 - Parse and analyze title commitments for Schedule B exceptions, liens, or encumbrances
@@ -35,8 +35,8 @@ Use TitleWise when you need to:
 - Underwriting decisions (we flag issues; you make the call)
 - Non-US jurisdictions (US-only, state-specific compliance)
 
-## What is TitleWise?
-TitleWise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently. It handles title analysis, closing disclosure review, wire verification, HOA document review, fee estimation, tax proration, and automated status updates to all transaction parties.
+## What is TITLEwise?
+TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered tools to manage their practice more efficiently. It handles title analysis, closing disclosure review, wire verification, HOA document review, fee estimation, tax proration, and automated status updates to all transaction parties.
 
 ## Who is it for?
 - Solo real estate closing attorneys
@@ -68,7 +68,7 @@ TitleWise is a SaaS platform that gives real estate closing attorneys AI-powered
 - Enterprise: $999/month (unlimited users, API access, custom integrations)
 
 ## Company
-TitleWise is built by Boxford Partners, an embedded operations consulting firm based in San Francisco. The product was built from problems observed inside real estate closing operations during consulting engagements.
+TITLEwise is built by Boxford Partners, an embedded operations consulting firm based in San Francisco. The product was built from problems observed inside real estate closing operations during consulting engagements.
 
 ## Contact
 - Website: https://titlewise.app

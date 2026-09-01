@@ -28,7 +28,7 @@ I will be in touch as each milestone is completed. Please don't hesitate to reac
 
 Best regards,
 Patrick Mitchell
-TitleWise Closing Group`
+TITLEwise Closing Group`
 
 const FIELD_SEQUENCE = [
   { key: "client", label: "Client Name", delay: 400 },
@@ -171,7 +171,7 @@ export default function EmailDemo() {
             From checklist to client email in seconds.
           </h2>
           <p style={{ fontSize: "0.9rem", color: MUTED, maxWidth: 480 }}>
-            Enter the matter details. TitleWise reads the checklist state and drafts a professional update — ready to review and send.
+            Enter the matter details. TITLEwise reads the checklist state and drafts a professional update — ready to review and send.
           </p>
         </div>
 

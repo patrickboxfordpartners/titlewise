@@ -1,4 +1,4 @@
-# TitleWise Personality Injection
+# TITLEwise Personality Injection
 
 **Date:** 2026-05-06  
 **Target:** Marketing site + Dashboard UI  

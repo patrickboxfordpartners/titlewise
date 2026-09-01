@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       allow_promotion_codes: true,
       subscription_data: {
         metadata: { plan: planKey, clerkId: userId },
-        description: `TitleWise ${plan.name} - ${plan.description}`,
+        description: `TITLEwise ${plan.name} - ${plan.description}`,
       },
       metadata: { clerkId: userId, plan: planKey },
       billing_address_collection: "auto",
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
       },
       custom_text: {
         submit: {
-          message: "Start your TitleWise subscription today. Cancel anytime.",
+          message: "Start your TITLEwise subscription today. Cancel anytime.",
         },
       },
     })

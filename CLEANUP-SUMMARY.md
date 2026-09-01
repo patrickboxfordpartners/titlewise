@@ -1,4 +1,4 @@
-# TitleWise Design System Cleanup - Complete
+# TITLEwise Design System Cleanup - Complete
 
 **Date:** 2026-08-28  
 **Status:** ✅ All tasks completed

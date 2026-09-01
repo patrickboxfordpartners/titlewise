@@ -105,9 +105,9 @@ export async function POST(req: NextRequest) {
   await postmark.sendEmail({
     From: POSTMARK_FROM_EMAIL,
     To: email,
-    Subject: "You've been invited to TitleWise",
-    TextBody: `${inviterName}${firmName} has invited you to join their TitleWise workspace.\n\nAccept your invitation:\n${inviteUrl}\n\nThis link expires if the invitation is revoked.\n\n— TitleWise`,
-    HtmlBody: `<p>${inviterName}${firmName} has invited you to join their TitleWise workspace.</p><p><a href="${inviteUrl}" style="background:#3b82f6;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600">Accept Invitation</a></p><p style="color:#888;font-size:12px">This link expires if the invitation is revoked.</p>`,
+    Subject: "You've been invited to TITLEwise",
+    TextBody: `${inviterName}${firmName} has invited you to join their TITLEwise workspace.\n\nAccept your invitation:\n${inviteUrl}\n\nThis link expires if the invitation is revoked.\n\n— TITLEwise`,
+    HtmlBody: `<p>${inviterName}${firmName} has invited you to join their TITLEwise workspace.</p><p><a href="${inviteUrl}" style="background:#3b82f6;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;font-weight:600">Accept Invitation</a></p><p style="color:#888;font-size:12px">This link expires if the invitation is revoked.</p>`,
     MessageStream: "outbound",
   })
 

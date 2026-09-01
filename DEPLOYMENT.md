@@ -1,4 +1,4 @@
-# TitleWise API - Production Deployment Guide
+# TITLEwise API - Production Deployment Guide
 
 ## Pre-Deployment Checklist
 
@@ -191,7 +191,7 @@ If critical issues found post-deployment:
 ### Customer Onboarding
 
 1. **Email existing Enterprise customers:**
-   - Subject: "New: TitleWise API Now Available"
+   - Subject: "New: TITLEwise API Now Available"
    - Body: Quick start guide + `/api-docs` link
    - CTA: "Generate Your First API Key"
 

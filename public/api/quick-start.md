@@ -1,4 +1,4 @@
-# TitleWise API - Quick Start Guide
+# TITLEwise API - Quick Start Guide
 
 Get your first API call working in under 5 minutes.
 

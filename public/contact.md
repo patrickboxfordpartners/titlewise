@@ -1,11 +1,11 @@
 ---
-title: Contact TitleWise
-description: Contact TitleWise for support, sales inquiries, partnerships, or security questions. Email hello@titlewise.app or support@titlewise.app.
+title: Contact TITLEwise
+description: Contact TITLEwise for support, sales inquiries, partnerships, or security questions. Email hello@titlewise.app or support@titlewise.app.
 canonical: https://titlewise.app/contact
 last-updated: 2026-08-27
 ---
 
-# Contact TitleWise
+# Contact TITLEwise
 
 ## Get in Touch
 
@@ -54,7 +54,7 @@ We partner with:
 - Law practice management software providers
 - Closing service providers
 
-If you're interested in integrating TitleWise into your platform or referring clients to us, please email partnerships@titlewise.app.
+If you're interested in integrating TITLEwise into your platform or referring clients to us, please email partnerships@titlewise.app.
 
 ## Security & Compliance
 
@@ -71,7 +71,7 @@ For press inquiries, interviews, or media kit requests, please email hello@title
 
 ## Feedback
 
-We love hearing from users! If you have feature requests, product feedback, or ideas for improving TitleWise, please email hello@titlewise.app or use the feedback widget in your dashboard.
+We love hearing from users! If you have feature requests, product feedback, or ideas for improving TITLEwise, please email hello@titlewise.app or use the feedback widget in your dashboard.
 
 ## Emergency Contact
 

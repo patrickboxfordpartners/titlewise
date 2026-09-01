@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = post.canonical ?? `https://titlewise.app/blog/${post.slug}`
 
   return {
-    title: `${post.title} | TitleWise`,
+    title: `${post.title} | TITLEwise`,
     description: post.description,
     alternates: { canonical },
     openGraph: {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.description,
       url: canonical,
-      siteName: "TitleWise",
+      siteName: "TITLEwise",
     },
   }
 }
@@ -56,7 +56,7 @@ export default async function BlogPostPage({ params }: Props) {
     },
     publisher: {
       "@type": "Organization",
-      name: "TitleWise",
+      name: "TITLEwise",
       url: "https://titlewise.app",
     },
     url: canonical,
@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: "var(--font-sans)", WebkitFontSmoothing: "antialiased" }}>
+    <div className="min-h-screen bg-background" style={{ fontFamily: "var(--font-sans)", WebkitFontSmoothing: "antialiased" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -77,7 +77,7 @@ export default async function BlogPostPage({ params }: Props) {
           font-weight: 300;
           letter-spacing: 0.04em;
           text-transform: uppercase;
-          color: #0d253d;
+          color: var(--foreground);
           margin-top: 2.5rem;
           margin-bottom: 1rem;
           line-height: 1.3;
@@ -85,7 +85,7 @@ export default async function BlogPostPage({ params }: Props) {
         .tw-prose h3 {
           font-size: 1rem;
           font-weight: 300;
-          color: #0d253d;
+          color: var(--foreground);
           margin-top: 1.75rem;
           margin-bottom: 0.75rem;
           line-height: 1.4;
@@ -94,7 +94,7 @@ export default async function BlogPostPage({ params }: Props) {
           font-size: 1rem;
           font-weight: 300;
           line-height: 1.85;
-          color: #0d253d;
+          color: var(--foreground);
           margin-bottom: 1.25rem;
           margin-top: 0;
         }
@@ -106,22 +106,22 @@ export default async function BlogPostPage({ params }: Props) {
           font-size: 1rem;
           font-weight: 300;
           line-height: 1.8;
-          color: #0d253d;
+          color: var(--foreground);
           margin-bottom: 0.35rem;
         }
         .tw-prose a {
-          color: #0066cc;
+          color: var(--primary);
           text-decoration: underline;
         }
         .tw-prose strong {
           font-weight: 400;
-          color: #0d253d;
+          color: var(--foreground);
         }
         .tw-prose blockquote {
-          border-left: 3px solid #0066cc;
+          border-left: 3px solid var(--primary);
           padding-left: 1.25rem;
           margin: 1.5rem 0;
-          color: #64748d;
+          color: var(--muted-foreground);
           font-weight: 300;
           font-style: italic;
         }
@@ -155,7 +155,7 @@ export default async function BlogPostPage({ params }: Props) {
               fontWeight: 400,
               letterSpacing: "0.07em",
               textTransform: "uppercase",
-              color: "#0066cc",
+              color: "var(--primary)",
             }}>
               {post.category}
               <span style={{ color: "rgba(237,238,240,0.3)", fontWeight: 300 }}>·</span>
@@ -205,13 +205,13 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Direct Answer box */}
       <section style={{
-        backgroundColor: "#f6f9fc",
+        backgroundColor: "var(--surface)",
         borderTop: "1px solid rgba(83,58,253,0.12)",
         borderBottom: "1px solid rgba(83,58,253,0.12)",
         padding: "40px 32px",
       }}>
         <div style={{ maxWidth: 680, margin: "0 auto" }}>
-          <div style={{ borderLeft: "4px solid #0066cc", paddingLeft: 20 }}>
+          <div style={{ borderLeft: "4px solid var(--primary)", paddingLeft: 20 }}>
             <p style={{
               fontSize: "0.6875rem",
               fontWeight: 300,
@@ -261,7 +261,7 @@ export default async function BlogPostPage({ params }: Props) {
             color: "var(--primary)",
             marginBottom: 20,
           }}>
-            TitleWise
+            TITLEwise
           </p>
           <h2 style={{
             fontFamily: "var(--font-display)",
@@ -296,7 +296,7 @@ export default async function BlogPostPage({ params }: Props) {
             borderRadius: 9999,
             textDecoration: "none",
           }}>
-            Try TitleWise Free
+            Try TITLEwise Free
           </Link>
         </div>
       </section>

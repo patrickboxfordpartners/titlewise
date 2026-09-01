@@ -14,7 +14,7 @@ export default function APIDocsPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-foreground">TitleWise API Documentation</h1>
+              <h1 className="text-2xl font-semibold text-foreground">TITLEwise API Documentation</h1>
               <p className="text-sm text-muted-foreground mt-1">
                 AI-powered document analysis for real estate closing attorneys
               </p>
@@ -149,7 +149,7 @@ print(f"Remaining: {response.headers['X-RateLimit-Remaining']}")`}</code>
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between text-sm">
             <p className="text-muted-foreground">
-              © 2026 TitleWise. API v1.0.0
+              © 2026 TITLEwise. API v1.0.0
             </p>
             <div className="flex items-center gap-4">
               <a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">

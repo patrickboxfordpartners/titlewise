@@ -50,6 +50,11 @@ export default auth((req) => {
     return NextResponse.next()
   }
 
+  // TEMP: bypass auth for local design work
+  if (process.env.BYPASS_AUTH === "true") {
+    return NextResponse.next()
+  }
+
   // Require authentication for protected routes
   if (!req.auth) {
     const url = req.nextUrl.clone()

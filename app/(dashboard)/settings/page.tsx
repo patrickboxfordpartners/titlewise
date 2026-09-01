@@ -225,7 +225,7 @@ function SettingsContent() {
               className={inputClass}
             />
             <p className="text-xs text-muted-foreground mt-1">
-              Enter a URL to your company logo. Will display in the sidebar. Leave blank to use the default TitleWise logo.
+              Enter a URL to your company logo. Will display in the sidebar. Leave blank to use the default TITLEwise logo.
             </p>
           </div>
           {customLogoUrl && (
@@ -263,7 +263,7 @@ function SettingsContent() {
       >
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Connected Email</h2>
         <p className="text-xs text-muted-foreground mb-4">
-          Send emails directly from TitleWise using your own inbox.
+          Send emails directly from TITLEwise using your own inbox.
         </p>
         <div className="space-y-3">
           {/* Gmail */}

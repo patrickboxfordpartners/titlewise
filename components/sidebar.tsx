@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { useState, useEffect } from "react"
 import { Logo } from "@/components/logo"
+import ThemeToggle from "@/components/ThemeToggle"
 import Image from "next/image"
 
 type MatterItem = {
@@ -62,9 +63,9 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   }, [])
 
   return (
-    <div className="h-full flex flex-col bg-white border-r" style={{ borderColor: "#e3e8ee" }}>
+    <div className="h-full flex flex-col border-r" style={{ backgroundColor: "var(--color-sidebar)", borderColor: "var(--color-sidebar-border)" }}>
       {/* Logo */}
-      <div className="p-4 border-b" style={{ borderColor: "#e3e8ee" }}>
+      <div className="p-4 border-b" style={{ borderColor: "var(--color-sidebar-border)" }}>
         <Link href="/matters" className="block">
           {customLogo ? (
             <Image
@@ -82,34 +83,19 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
 
       {/* Trial banner */}
       {trialStatus?.isTrial && (
-        <div style={{
-          margin: "0.75rem",
-          padding: "0.75rem",
-          borderRadius: 8,
-          backgroundColor: "#fff8e6",
-          border: "1px solid #ffd666",
-        }}>
-          <p style={{ fontSize: "0.6875rem", fontWeight: 400, color: "#d48806", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+        <div className="mx-3 my-3 p-3 rounded-lg border" style={{ backgroundColor: "color-mix(in srgb, var(--warning) 10%, var(--color-sidebar))", borderColor: "color-mix(in srgb, var(--warning) 30%, transparent)" }}>
+          <p className="text-[0.6875rem] font-normal uppercase tracking-wider mb-1" style={{ color: "var(--warning)" }}>
             Free Trial
           </p>
-          <p style={{ fontSize: "0.75rem", fontWeight: 300, color: "#64748d", marginBottom: 8 }}>
+          <p className="text-xs font-light mb-2" style={{ color: "var(--color-sidebar-muted)" }}>
             {trialStatus.daysRemaining > 0
               ? `${trialStatus.daysRemaining} day${trialStatus.daysRemaining === 1 ? "" : "s"} remaining`
               : "Trial ends today"}
           </p>
           <Link
             href="/pricing"
-            style={{
-              display: "block",
-              textAlign: "center",
-              padding: "6px 12px",
-              borderRadius: 9999,
-              backgroundColor: "#0066cc",
-              color: "#ffffff",
-              fontSize: "0.75rem",
-              fontWeight: 400,
-              textDecoration: "none",
-            }}
+            className="block text-center py-1.5 px-3 rounded-full text-xs font-normal no-underline"
+            style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
           >
             Upgrade
           </Link>
@@ -150,7 +136,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             >
               All matters
               {matters.length > 0 && (
-                <span style={{ fontSize: "0.65rem", backgroundColor: "#f0f9ff", color: "#0066cc", borderRadius: 10, padding: "1px 6px", fontWeight: 400 }}>
+                <span style={{ fontSize: "0.65rem", backgroundColor: "color-mix(in srgb, var(--primary) 10%, var(--color-sidebar))", color: "var(--primary)", borderRadius: 10, padding: "1px 6px", fontWeight: 400 }}>
                   {matters.length}
                 </span>
               )}
@@ -172,7 +158,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
             })}
 
             {matters.length === 0 && (
-              <p style={{ padding: "4px 10px 4px 36px", fontSize: "0.75rem", fontWeight: 300, color: "#cbd5e1" }}>
+              <p style={{ padding: "4px 10px 4px 36px", fontSize: "0.75rem", fontWeight: 300, color: "var(--color-sidebar-muted)" }}>
                 No active matters
               </p>
             )}
@@ -219,18 +205,24 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         </Link>
       </div>
 
+      {/* Theme toggle */}
+      <div style={{ padding: "0 0.75rem 0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <ThemeToggle />
+        <span style={{ fontSize: "0.75rem", fontWeight: 300, color: "var(--color-sidebar-muted)" }}>Theme</span>
+      </div>
+
       {/* User footer */}
       <div className="sidebar-footer" style={{ position: "relative" }}>
         <button
           onClick={() => setShowUserMenu((v) => !v)}
           style={{ display: "flex", alignItems: "center", gap: "0.75rem", width: "100%", background: "none", border: "none", cursor: "pointer", borderRadius: 8, padding: "0.5rem", transition: "background-color 0.15s" }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-sidebar-hover)"}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
         >
-          <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#0066cc", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 400, color: "#fff", flexShrink: 0 }}>
+          <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.75rem", fontWeight: 400, color: "var(--primary-foreground)", flexShrink: 0 }}>
             {initials}
           </div>
-          <p style={{ color: "#64748d", fontSize: "0.8rem", fontWeight: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textAlign: "left" }}>
+          <p style={{ color: "var(--color-sidebar-muted)", fontSize: "0.8rem", fontWeight: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textAlign: "left" }}>
             {displayName}
           </p>
         </button>
@@ -238,11 +230,11 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         {showUserMenu && (
           <>
             <div style={{ position: "fixed", inset: 0, zIndex: 999 }} onClick={() => setShowUserMenu(false)} />
-            <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 8, right: 8, backgroundColor: "#ffffff", borderRadius: 8, border: "1px solid #e3e8ee", boxShadow: "0 8px 24px rgba(0,0,0,0.1)", zIndex: 1000, padding: 4 }}>
+            <div style={{ position: "absolute", bottom: "calc(100% + 4px)", left: 8, right: 8, backgroundColor: "var(--color-sidebar)", borderRadius: 8, border: "1px solid var(--color-sidebar-border)", boxShadow: "0 8px 24px rgba(0,0,0,0.15)", zIndex: 1000, padding: 4 }}>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                style={{ width: "100%", padding: "8px 12px", background: "none", border: "none", color: "#64748d", fontSize: "0.875rem", fontWeight: 300, textAlign: "left", cursor: "pointer", borderRadius: 6, transition: "background-color 0.15s" }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"}
+                style={{ width: "100%", padding: "8px 12px", background: "none", border: "none", color: "var(--color-sidebar-muted)", fontSize: "0.875rem", fontWeight: 300, textAlign: "left", cursor: "pointer", borderRadius: 6, transition: "background-color 0.15s" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--color-sidebar-hover)"}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
               >
                 Sign out

@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 
 const steps = [
   { step: "01", icon: FileText, title: "Upload", description: "Drop in your title commitment, closing disclosure, HOA docs, or wire instructions." },
-  { step: "02", icon: FileSearch, title: "Analyze", description: "TitleWise reviews the document across compliance, fraud, and accuracy checks -- flagging what matters." },
+  { step: "02", icon: FileSearch, title: "Analyze", description: "TITLEwise reviews the document across compliance, fraud, and accuracy checks -- flagging what matters." },
   { step: "03", icon: Bot, title: "Automate", description: "The AI agent updates your checklists, drafts client emails, and moves matters forward automatically." },
   { step: "04", icon: Zap, title: "Close", description: "Export polished PDFs, share client portals, and clear-to-close with confidence." },
 ]
