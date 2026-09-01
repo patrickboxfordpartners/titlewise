@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import FAQSection from "@/components/landing/FAQSection"
 import StickyMobileCTA from "@/components/landing/StickyMobileCTA"
@@ -9,6 +10,10 @@ import { useThemeColors } from "@/lib/useThemeColors"
 
 export default function HomePageClient() {
   const c = useThemeColors()
+  const [hoveredStat, setHoveredStat] = useState<number | null>(null)
+  const [hoveredFeature, setHoveredFeature] = useState<string | null>(null)
+  const [hoveredStep, setHoveredStep] = useState<string | null>(null)
+  const [expandedPlan, setExpandedPlan] = useState<string | null>(null)
 
   return (
     <div
@@ -96,6 +101,7 @@ export default function HomePageClient() {
         </div>
       </nav>
       <style>{`
+        @keyframes tw-fade-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
 
         /* Tablet */
@@ -167,15 +173,25 @@ export default function HomePageClient() {
       <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, padding: "72px 32px", backgroundColor: c.bg }}>
         <div className="tw-stats-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "48px 40px" }}>
           {[
-            { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise cross-references every wire instruction against institutional memory across all your closings." },
-            { stat: "93%", label: "Faster title commitment review", body: "What takes 45 minutes by hand takes 30 seconds with TITLEwise. Exceptions flagged, requirements listed, red flags surfaced, structured and ready to act on." },
-            { stat: "$4,100", label: "Average TRID violation penalty", body: "Tolerance violations and fee misclassifications add up fast. TITLEwise automatically checks Bucket A/B/C classifications and cure amount calculations." },
-            { stat: "12", label: "AI tools in one platform", body: "Title analysis, CD review, wire verification, HOA review, fee estimates, tax proration, status updates, and more. Everything closing attorneys need." },
-          ].map((item) => (
-            <div key={item.stat}>
+            { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise cross-references every wire instruction against institutional memory across all your closings.", source: "FBI Internet Crime Complaint Center, 2023 Annual Report" },
+            { stat: "93%", label: "Faster title commitment review", body: "What takes 45 minutes by hand takes 30 seconds with TITLEwise. Exceptions flagged, requirements listed, red flags surfaced, structured and ready to act on.", source: "Based on average manual review time of 45 min vs. 30 sec AI analysis" },
+            { stat: "$4,100", label: "Average TRID violation penalty", body: "Tolerance violations and fee misclassifications add up fast. TITLEwise automatically checks Bucket A/B/C classifications and cure amount calculations.", source: "CFPB enforcement actions, average per-loan TRID penalty" },
+            { stat: "12", label: "AI tools in one platform", body: "Title analysis, CD review, wire verification, HOA review, fee estimates, tax proration, status updates, and more. Everything closing attorneys need.", source: "Title analysis, CD review, wire verification, HOA review, fee estimate, tax proration, status update, client portal, team invites, email integration, closing checklist, autonomous agent" },
+          ].map((item, idx) => (
+            <div
+              key={item.stat}
+              style={{ position: "relative", cursor: "default" }}
+              onMouseEnter={() => setHoveredStat(idx)}
+              onMouseLeave={() => setHoveredStat(null)}
+            >
               <p style={{ fontSize: "2.5rem", fontWeight: 300, color: c.ink, letterSpacing: "-1.4px", lineHeight: 1, marginBottom: 8, fontFeatureSettings: '"tnum", "ss01"' }}>{item.stat}</p>
               <p style={{ fontSize: "13px", fontWeight: 400, color: c.primary, marginBottom: 12, letterSpacing: "-0.39px" }}>{item.label}</p>
               <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, lineHeight: 1.55 }}>{item.body}</p>
+              {hoveredStat === idx && (
+                <div style={{ marginTop: 12, padding: "10px 12px", borderRadius: 8, background: c.isDark ? "rgba(59,130,246,0.08)" : "#eff6ff", border: `1px solid ${c.isDark ? "rgba(59,130,246,0.2)" : "#bfdbfe"}`, animation: "tw-fade-in 0.15s ease" }}>
+                  <p style={{ fontSize: "11px", fontWeight: 400, color: c.primary, margin: 0, lineHeight: 1.5 }}>{item.source}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -187,14 +203,22 @@ export default function HomePageClient() {
           <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: c.ink, marginBottom: 64 }}>Open a matter. Close the deal.</h2>
           <div className="tw-how-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "48px 56px" }}>
             {[
-              { n: "01", title: "Create the matter", body: "Client name, property address, transaction type. TITLEwise generates a state-specific closing checklist and sets up the workspace in seconds." },
-              { n: "02", title: "Let AI handle the analysis", body: "Upload title commitments, closing disclosures, HOA docs, or wire instructions. TITLEwise reads them, flags issues, and drafts status updates, ready to review." },
-              { n: "03", title: "Close with confidence", body: "Wire verification cross-checks every instruction against prior closings. Compliance runs automatically. Your checklist tracks every step to clear-to-close." },
+              { n: "01", title: "Create the matter", body: "Client name, property address, transaction type. TITLEwise generates a state-specific closing checklist and sets up the workspace in seconds.", detail: "Checklists are tailored to your state's requirements. NH, MA, CA, TX, FL, and 45 more. Each transaction type gets its own workflow." },
+              { n: "02", title: "Let AI handle the analysis", body: "Upload title commitments, closing disclosures, HOA docs, or wire instructions. TITLEwise reads them, flags issues, and drafts status updates, ready to review.", detail: "AI reads the full document, not just keywords. It understands exception schedules, requirement sections, fee tables, and HOA transfer provisions." },
+              { n: "03", title: "Close with confidence", body: "Wire verification cross-checks every instruction against prior closings. Compliance runs automatically. Your checklist tracks every step to clear-to-close.", detail: "Every wire instruction is compared against your historical closing data. Changed account numbers, new routing numbers, and last-minute changes are flagged instantly." },
             ].map((item) => (
-              <div key={item.n}>
+              <div
+                key={item.n}
+                style={{ cursor: "default", transition: "transform 0.15s" }}
+                onMouseEnter={() => setHoveredStep(item.n)}
+                onMouseLeave={() => setHoveredStep(null)}
+              >
                 <p style={{ fontSize: "11px", fontWeight: 300, color: c.muted, marginBottom: 16 }}>{item.n}</p>
                 <h3 style={{ fontSize: "20px", fontWeight: 300, color: c.ink, marginBottom: 12, lineHeight: 1.4, letterSpacing: "-0.2px" }}>{item.title}</h3>
                 <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, lineHeight: 1.55 }}>{item.body}</p>
+                <div style={{ maxHeight: hoveredStep === item.n ? 80 : 0, overflow: "hidden", transition: "max-height 0.25s ease, opacity 0.2s ease", opacity: hoveredStep === item.n ? 1 : 0 }}>
+                  <p style={{ fontSize: "13px", fontWeight: 300, color: c.primary, lineHeight: 1.55, marginTop: 12, paddingTop: 12, borderTop: `1px solid ${c.isDark ? "rgba(59,130,246,0.15)" : "#bfdbfe"}` }}>{item.detail}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -211,22 +235,30 @@ export default function HomePageClient() {
           <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, marginBottom: 56, maxWidth: 480 }}>12 AI tools and an autonomous closing agent. Every plan includes every tool.</p>
           <div className="tw-features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0 48px" }}>
             {[
-              ["Title Commitment Analysis", "Exceptions, requirements, and red flags in 30 seconds"],
-              ["Closing Disclosure Reviewer", "TRID compliance against federal tolerances, automatic"],
-              ["Wire Fraud Prevention", "Cross-matter verification catches fraudulent instructions"],
-              ["HOA Document Review", "Fees, restrictions, and pending assessments surfaced instantly"],
-              ["Status Update Generator", "AI drafts client updates from checklist state, one click to send"],
-              ["Fee Estimate Tool", "County-specific closing cost breakdowns for any transaction type"],
-              ["Tax Proration Calculator", "Per-diem buyer/seller calculations with settlement formatting"],
-              ["Client Portal", "Shareable read-only checklist view for your clients"],
-              ["Team Invites", "Role-based access for colleagues across matters"],
-              ["Email Integration", "Postmark, Gmail, or custom SMTP, sends from your inbox"],
-              ["Closing Checklist", "State-specific checklists auto-generated per transaction"],
-              ["Autonomous Closing Agent", "AI that monitors matters, updates checklists, surfaces blockers"],
-            ].map(([title, sub]) => (
-              <div key={title} style={{ paddingTop: 20, paddingBottom: 20, borderTop: `1px solid ${c.hairline}` }}>
+              ["Title Commitment Analysis", "Exceptions, requirements, and red flags in 30 seconds", "Upload a PDF or paste text. AI identifies Schedule B exceptions, flags actionable requirements, and highlights risks like open liens or unreleased mortgages."],
+              ["Closing Disclosure Reviewer", "TRID compliance against federal tolerances, automatic", "Checks Bucket A/B/C fee classifications, calculates tolerance thresholds, and flags cure amounts before they become violations."],
+              ["Wire Fraud Prevention", "Cross-matter verification catches fraudulent instructions", "Compares wire instructions against your historical closings. Flags changed account numbers, new routing numbers, domain spoofing, and last-minute changes."],
+              ["HOA Document Review", "Fees, restrictions, and pending assessments surfaced instantly", "Reads HOA resale certificates, CC&Rs, and estoppel letters. Surfaces transfer fees, special assessments, rental restrictions, and pending litigation."],
+              ["Status Update Generator", "AI drafts client updates from checklist state, one click to send", "Reads your matter's current state and drafts a professional status email with next steps. Review, edit, and send directly from TITLEwise."],
+              ["Fee Estimate Tool", "County-specific closing cost breakdowns for any transaction type", "Generates buyer and seller fee estimates using county-specific recording fees, transfer taxes, and title insurance rates."],
+              ["Tax Proration Calculator", "Per-diem buyer/seller calculations with settlement formatting", "Enter assessed value and tax dates. Get per-diem proration with buyer/seller credits formatted for the settlement statement."],
+              ["Client Portal", "Shareable read-only checklist view for your clients", "Generate a secure link your clients can use to track closing progress. No login required. Updates in real time as you check items off."],
+              ["Team Invites", "Role-based access for colleagues across matters", "Invite paralegals and associates with role-based permissions. Everyone sees the matters they need, nothing they don't."],
+              ["Email Integration", "Postmark, Gmail, or custom SMTP, sends from your inbox", "Connect your email and send status updates, closing instructions, and follow-ups directly from TITLEwise. Logged to the matter automatically."],
+              ["Closing Checklist", "State-specific checklists auto-generated per transaction", "Each new matter gets a checklist tailored to your state and transaction type. Purchase, sale, refinance, and cash purchase workflows built in."],
+              ["Autonomous Closing Agent", "AI that monitors matters, updates checklists, surfaces blockers", "Neil monitors your matters continuously. Reads incoming emails, checks off completed items, flags overdue tasks, and drafts communications."],
+            ].map(([title, sub, detail]) => (
+              <div
+                key={title}
+                style={{ paddingTop: 20, paddingBottom: 20, borderTop: `1px solid ${c.hairline}`, cursor: "default" }}
+                onMouseEnter={() => setHoveredFeature(title)}
+                onMouseLeave={() => setHoveredFeature(null)}
+              >
                 <p style={{ fontSize: "15px", fontWeight: 400, color: c.ink, marginBottom: 4 }}>{title}</p>
                 <p style={{ fontSize: "13px", fontWeight: 300, color: c.muted, letterSpacing: "-0.39px" }}>{sub}</p>
+                <div style={{ maxHeight: hoveredFeature === title ? 100 : 0, overflow: "hidden", transition: "max-height 0.25s ease, opacity 0.2s ease", opacity: hoveredFeature === title ? 1 : 0 }}>
+                  <p style={{ fontSize: "13px", fontWeight: 300, color: c.isDark ? "rgba(237,238,240,0.6)" : "#475569", lineHeight: 1.55, marginTop: 8 }}>{detail}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -251,21 +283,46 @@ export default function HomePageClient() {
           </div>
           <div className="tw-pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {[
-              { name: "Solo", price: "$149", note: "1 attorney &middot; 100 AI generations/mo" },
-              { name: "Small Firm", price: "$349", note: "Up to 5 seats &middot; Client portal", featured: true },
-              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support" },
-              { name: "Enterprise", price: "$999", note: "25 seats &middot; Custom onboarding" },
-            ].map((plan) => (
-              <Link key={plan.name} href="/pricing" style={{ textDecoration: "none" }}>
-                <div style={{ backgroundColor: plan.featured ? c.sectionDark : c.cardBg, border: `1px solid ${plan.featured ? c.sectionDark : c.cardBorder}`, borderRadius: 12, padding: "28px 24px", cursor: "pointer" }}>
-                  <p style={{ fontSize: "13px", fontWeight: 400, color: plan.featured ? c.sectionDarkMuted : c.muted, marginBottom: 10, letterSpacing: "-0.39px" }}>{plan.name}</p>
-                  <p style={{ fontSize: "2rem", fontWeight: 300, color: plan.featured ? c.sectionDarkText : c.ink, letterSpacing: "-0.96px", lineHeight: 1, marginBottom: 12, fontFeatureSettings: '"tnum", "ss01"' }}>
-                    {plan.price}<span style={{ fontSize: "0.875rem", fontWeight: 300, color: plan.featured ? "rgba(255,255,255,0.5)" : c.muted }}>/mo</span>
+              { name: "Solo", price: "$149", note: "1 attorney &middot; 100 AI generations/mo", features: ["1 user seat", "100 AI generations/mo", "All 12 tools included", "Unlimited matters", "Email support"] },
+              { name: "Small Firm", price: "$349", note: "Up to 5 seats &middot; Client portal", featured: true, features: ["Up to 5 user seats", "500 AI generations/mo", "Client portal access", "Team collaboration", "Priority email support"] },
+              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,000 AI generations/mo", "Client portal access", "API access", "Priority support with SLA"] },
+              { name: "Enterprise", price: "$999", note: "25 seats &middot; Custom onboarding", features: ["Up to 25 user seats", "Unlimited AI generations", "Custom onboarding", "Dedicated account manager", "SSO and audit logs"] },
+            ].map((plan) => {
+              const isExpanded = expandedPlan === plan.name
+              const fg = plan.featured ? c.sectionDarkText : c.ink
+              const mutedFg = plan.featured ? "rgba(255,255,255,0.5)" : c.muted
+              return (
+                <div
+                  key={plan.name}
+                  onClick={() => setExpandedPlan(isExpanded ? null : plan.name)}
+                  style={{ backgroundColor: plan.featured ? c.sectionDark : c.cardBg, border: `1px solid ${plan.featured ? c.sectionDark : c.cardBorder}`, borderRadius: 12, padding: "28px 24px", cursor: "pointer", transition: "box-shadow 0.2s, transform 0.15s", transform: isExpanded ? "translateY(-2px)" : "none", boxShadow: isExpanded ? (c.isDark ? "0 12px 32px rgba(0,0,0,0.4)" : "0 12px 32px rgba(0,55,112,0.12)") : "none" }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <p style={{ fontSize: "13px", fontWeight: 400, color: mutedFg, marginBottom: 10, letterSpacing: "-0.39px" }}>{plan.name}</p>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ opacity: 0.4, transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", marginTop: 2 }}>
+                      <path d="M2 4l4 4 4-4" stroke={fg} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <p style={{ fontSize: "2rem", fontWeight: 300, color: fg, letterSpacing: "-0.96px", lineHeight: 1, marginBottom: 12, fontFeatureSettings: '"tnum", "ss01"' }}>
+                    {plan.price}<span style={{ fontSize: "0.875rem", fontWeight: 300, color: mutedFg }}>/mo</span>
                   </p>
-                  <p style={{ fontSize: "13px", fontWeight: 300, color: plan.featured ? "rgba(255,255,255,0.5)" : c.muted, lineHeight: 1.5, letterSpacing: "-0.39px" }} dangerouslySetInnerHTML={{ __html: plan.note }} />
+                  <p style={{ fontSize: "13px", fontWeight: 300, color: mutedFg, lineHeight: 1.5, letterSpacing: "-0.39px" }} dangerouslySetInnerHTML={{ __html: plan.note }} />
+                  <div style={{ maxHeight: isExpanded ? 200 : 0, overflow: "hidden", transition: "max-height 0.3s ease" }}>
+                    <ul style={{ listStyle: "none", margin: 0, padding: 0, marginTop: 16, borderTop: `1px solid ${plan.featured ? "rgba(255,255,255,0.1)" : c.hairline}`, paddingTop: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {plan.features.map((f) => (
+                        <li key={f} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke={c.primary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                          <span style={{ fontSize: "13px", fontWeight: 300, color: plan.featured ? "rgba(255,255,255,0.7)" : c.muted }}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link href="/pricing" onClick={(e) => e.stopPropagation()} style={{ display: "inline-flex", alignItems: "center", gap: 4, marginTop: 16, fontSize: "13px", fontWeight: 400, color: c.primary, textDecoration: "none" }}>
+                      Full details &rarr;
+                    </Link>
+                  </div>
                 </div>
-              </Link>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
