@@ -894,7 +894,7 @@ export default function AnalyzePage() {
           }}>
             {events.length === 0 && !running ? (
               <div style={{ padding: "40px 20px", textAlign: "center", color: dimText, fontSize: "0.78rem" }}>
-                Click "Demo" to see 14 agents catch a BEC attack in real-time, or paste your own document and click "Analyze".
+                Click "BEC Attack" to see 14 agents catch wire fraud in real-time, or paste your own document and click "Analyze".
               </div>
             ) : (
               events.map((evt, i) => {
