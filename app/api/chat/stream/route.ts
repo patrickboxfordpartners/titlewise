@@ -94,6 +94,7 @@ export async function POST(req: NextRequest) {
     matterId,
     userId: user.id,
     userName: user.name ?? "Attorney",
+    userEmail: user.email,
   }
 
   const encoder = new TextEncoder()

@@ -4,12 +4,15 @@ import {
   emailThreads,
 } from "@/lib/db/schema"
 import { eq, and, desc } from "drizzle-orm"
+import { sendEmail } from "@/lib/email/send"
 import type { AisaTool } from "./aisa"
 
 export type ToolContext = {
   matterId: string
   userId: string
   userName: string
+  userEmail: string
+  confirmationGranted?: boolean
 }
 
 export const NEIL_TOOLS: AisaTool[] = [
@@ -268,19 +271,40 @@ export async function executeTool(
     case "draft_status_update": {
       const recipients = args.recipients as string[]
       const keyPoints = args.key_points as string[]
+      const parties = await db.select().from(matterParties)
+        .where(eq(matterParties.matterId, ctx.matterId))
+      const matched = parties.filter(p => recipients.includes(p.role))
+      const recipientDetails = matched.map(p => ({ name: p.name, role: p.role, email: p.email }))
       return JSON.stringify({
-        action: "confirmation_required",
-        message: "I've drafted the status update above. Say 'send it' to confirm, or ask me to revise.",
-        recipients,
+        action: "draft_ready",
+        recipients: recipientDetails,
         key_points: keyPoints,
+        instruction: "Compose the email draft in your response. Show the To, Subject, and Body. Then ask the user to confirm before calling send_email.",
       })
     }
 
     case "send_email": {
-      return JSON.stringify({
-        action: "confirmation_required",
-        message: "Email sending requires explicit user confirmation. Please confirm you want to send this.",
-      })
+      const to = args.to as string
+      const subject = args.subject as string
+      const body = args.body as string
+      if (!to || !subject || !body) {
+        return JSON.stringify({ error: "Missing required fields: to, subject, body" })
+      }
+      try {
+        await sendEmail({ userId: ctx.userId, to, subject, body })
+        await db.insert(emailThreads).values({
+          matterId: ctx.matterId,
+          userId: ctx.userId,
+          direction: "outbound",
+          fromAddress: ctx.userEmail,
+          toAddress: to,
+          subject,
+          bodyText: body,
+        })
+        return JSON.stringify({ sent: true, to, subject })
+      } catch (err) {
+        return JSON.stringify({ error: err instanceof Error ? err.message : "Failed to send email" })
+      }
     }
 
     case "analyze_document": {
