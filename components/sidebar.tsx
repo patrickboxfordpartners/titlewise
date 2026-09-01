@@ -25,7 +25,6 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const [mattersOpen, setMattersOpen] = useState(true)
   const [matters, setMatters] = useState<MatterItem[]>([])
   const [showUserMenu, setShowUserMenu] = useState(false)
-  const [trialStatus, setTrialStatus] = useState<{ isTrial: boolean; daysRemaining: number } | null>(null)
   const [customLogo, setCustomLogo] = useState<string | null>(null)
 
   const isMatterSection = pathname === "/matters" || pathname.startsWith("/matters/")
@@ -47,13 +46,6 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
       })
       .catch(() => {})
   }, [pathname])
-
-  useEffect(() => {
-    fetch("/api/user/trial-status")
-      .then((r) => r.json())
-      .then((d) => setTrialStatus(d))
-      .catch(() => {})
-  }, [])
 
   useEffect(() => {
     fetch("/api/settings")
@@ -80,27 +72,6 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
           )}
         </Link>
       </div>
-
-      {/* Trial banner */}
-      {trialStatus?.isTrial && (
-        <div className="mx-3 my-3 p-3 rounded-lg border" style={{ backgroundColor: "color-mix(in srgb, var(--warning) 10%, var(--color-sidebar))", borderColor: "color-mix(in srgb, var(--warning) 30%, transparent)" }}>
-          <p className="text-[0.6875rem] font-normal uppercase tracking-wider mb-1" style={{ color: "var(--warning)" }}>
-            Free Trial
-          </p>
-          <p className="text-xs font-light mb-2" style={{ color: "var(--color-sidebar-muted)" }}>
-            {trialStatus.daysRemaining > 0
-              ? `${trialStatus.daysRemaining} day${trialStatus.daysRemaining === 1 ? "" : "s"} remaining`
-              : "Trial ends today"}
-          </p>
-          <Link
-            href="/pricing"
-            className="block text-center py-1.5 px-3 rounded-full text-xs font-normal no-underline"
-            style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
-          >
-            Upgrade
-          </Link>
-        </div>
-      )}
 
       {/* Nav */}
       <nav style={{ flex: 1, padding: "0.75rem", display: "flex", flexDirection: "column", gap: "4px", overflowY: "auto" }}>

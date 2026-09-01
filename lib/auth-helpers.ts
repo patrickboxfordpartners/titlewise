@@ -21,13 +21,13 @@ export async function getCurrentUser() {
 }
 
 /**
- * Get current user ID or throw 401
+ * Get current user ID or return null
  * Use in API routes that require authentication
  */
-export async function requireAuth() {
+export async function requireAuth(): Promise<string | null> {
   const session = await auth()
   if (!session?.user?.id) {
-    throw new Error("Unauthorized")
+    return null
   }
   return session.user.id
 }

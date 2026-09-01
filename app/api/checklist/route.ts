@@ -4,7 +4,7 @@ import { z } from "zod/v4"
 import { db } from "@/lib/db"
 import { matters, checklistItems } from "@/lib/db/schema"
 import { eq, desc, and, ne, count } from "drizzle-orm"
-import { getOrCreateUser, getTrialStatus } from "@/lib/db/get-user"
+import { getOrCreateUser } from "@/lib/db/get-user"
 import { getTemplateItems } from "@/lib/checklist-templates"
 
 const createSchema = z.object({
