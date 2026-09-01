@@ -246,6 +246,7 @@ function landingPageHTML(baseUrl: string): string {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TitleWise — AI Closing Platform for Real Estate Attorneys</title>
 <meta name="description" content="From intake to clear-to-close. AI tools for title analysis, CD review, wire fraud prevention, and status updates. Built for real estate closing attorneys.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 43'%3E%3Crect x='10' y='0' width='24' height='32' rx='4' fill='%23ffffff59'/%3E%3Crect x='2' y='8' width='24' height='32' rx='4' fill='%232563EB'/%3E%3C/svg%3E">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#111827;--text:#EDEEF0;--muted:rgba(237,238,240,0.5);--dim:rgba(237,238,240,0.22);--rule:rgba(237,238,240,0.07);--blue:#3b82f6;--alt:rgba(237,238,240,0.025);--nav-bg:#111827f0;--logo-back:rgba(255,255,255,0.35);--logo-front:#2563EB}
@@ -363,19 +364,21 @@ section .sub{font-size:0.9rem;color:var(--muted);max-width:480px}
 .features-grid .feat h3{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:4px}
 .features-grid .feat p{font-size:0.8125rem;color:var(--muted)}
 
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px}
-.pricing-grid .card{border:1px solid var(--rule);border-radius:10px;padding:28px 24px;text-decoration:none;display:block;transition:all 0.2s}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:32px}
+.pricing-grid .card{border:1px solid var(--rule);border-radius:10px;padding:28px 24px;text-decoration:none;display:flex;flex-direction:column;transition:all 0.2s}
 .pricing-grid .card.hl{background:rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.25)}
 .pricing-grid .card:hover{border-color:rgba(59,130,246,0.25);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}
 .pricing-grid .card .name{font-size:0.8125rem;color:var(--muted);margin-bottom:10px;font-weight:500}
 .pricing-grid .card .price{font-size:2rem;font-weight:800;color:var(--text);letter-spacing:-0.03em;line-height:1;margin-bottom:12px}
 .pricing-grid .card .price span{font-size:0.875rem;font-weight:400;color:var(--muted)}
 .pricing-grid .card .info{font-size:0.8125rem;color:var(--dim);line-height:1.5}
-.pricing-grid .card .feat-list{list-style:none;padding:0;margin:16px 0;text-align:left}
+.pricing-grid .card .feat-list{list-style:none;padding:0;margin:16px 0;text-align:left;flex:1}
 .pricing-grid .card .feat-list li{font-size:0.8125rem;color:var(--muted);padding:4px 0;border-top:1px solid var(--rule)}
 .pricing-grid .card .feat-list li::before{content:"\\2713 ";color:#4ade80;font-weight:700}
-.pricing-btn{display:inline-block;margin-top:16px;padding:10px 20px;background:#2563eb;color:#fff;border-radius:6px;text-decoration:none;font-size:0.8125rem;font-weight:600;transition:background 0.2s}
-.pricing-btn:hover{background:#1d4ed8}
+.pricing-btn{display:block;width:100%;text-align:center;padding:10px 20px;background:#2563eb;color:#fff !important;border-radius:6px;text-decoration:none !important;font-size:0.8125rem;font-weight:600;transition:background 0.2s;margin-top:auto}
+.pricing-btn:hover{background:#1d4ed8;color:#fff !important}
+@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pricing-grid{grid-template-columns:1fr}}
 
 .faq-section{border-top:1px solid var(--rule);padding:80px 32px}
 .faq-inner{max-width:720px;margin:0 auto}
@@ -392,6 +395,17 @@ section .sub{font-size:0.9rem;color:var(--muted);max-width:480px}
 .cta-section h2{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;letter-spacing:-0.03em;color:var(--text);margin-bottom:16px;line-height:1.1}
 .cta-section p{font-size:0.9375rem;color:var(--muted);margin-bottom:36px;line-height:1.7}
 .cta-section .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--card);border-top:1px solid var(--rule);padding:16px 24px;box-shadow:0 -4px 20px rgba(0,0,0,0.15)}
+.cb-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.cb-inner p{font-size:0.8125rem;color:var(--muted);margin:0;line-height:1.5}
+.cb-inner a{color:var(--blue);text-decoration:none}
+.cb-btns{display:flex;gap:8px;flex-shrink:0}
+.cb-btns button{padding:8px 16px;border-radius:6px;font-size:0.8125rem;font-weight:600;cursor:pointer;border:none;transition:background 0.2s}
+.cb-btns button:first-child{background:#2563eb;color:#fff}
+.cb-btns button:first-child:hover{background:#1d4ed8}
+.cb-btns button:last-child{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+.cb-btns button:last-child:hover{border-color:var(--muted)}
 
 footer{border-top:1px solid var(--rule);background:var(--bg)}
 .footer-inner{max-width:1060px;margin:0 auto;padding:56px 32px 0}
@@ -465,14 +479,14 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
     <span style="font-size:1.125rem;line-height:1"><b style="font-weight:700;color:var(--text);letter-spacing:-0.01em">TITLE</b><span style="font-weight:300;color:var(--muted)">wise</span></span>
   </a>
   <div class="nav-right">
-    <a href="/#pricing" class="tw-nav-link">Pricing</a>
+    <a href="/pricing" class="tw-nav-link">Pricing</a>
     <a href="/demo" class="tw-nav-link">Demo</a>
     <a href="/login" class="tw-nav-link">Log in</a>
     <div class="theme-toggle">
       <button id="btn-dark" class="active" onclick="setTheme('dark')" aria-label="Dark mode"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
       <button id="btn-light" onclick="setTheme('light')" aria-label="Light mode"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>
     </div>
-    <a href="/demo" class="nav-cta">Try the demo</a>
+    <a href="/pricing" class="nav-cta">Get Started</a>
   </div>
 </nav>
 
@@ -696,7 +710,7 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
       <div class="footer-col">
         <p class="footer-col-title">Product</p>
         <ul>
-          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/pricing">Pricing</a></li>
           <li><a href="/demo">Demo</a></li>
           <li><a href="/blog">Blog</a></li>
         </ul>
@@ -787,6 +801,16 @@ function toggleFaq(el){
   document.getElementById('inlineSafeBtn').addEventListener('click',function(){runInlineDemo('verify_wire');});
 })();
 
+(function(){
+  if(localStorage.getItem('tw-cookies'))return;
+  var b=document.createElement('div');
+  b.id='cookie-banner';
+  b.innerHTML='<div class="cb-inner"><p>We use cookies to improve your experience and analyze site traffic. See our <a href="/privacy">Privacy Policy</a>.</p><div class="cb-btns"><button onclick="acceptCookies()">Accept</button><button onclick="declineCookies()">Decline</button></div></div>';
+  document.body.appendChild(b);
+})();
+function acceptCookies(){localStorage.setItem('tw-cookies','accepted');document.getElementById('cookie-banner').remove();}
+function declineCookies(){localStorage.setItem('tw-cookies','declined');document.getElementById('cookie-banner').remove();}
+
 if(navigator.modelContext&&navigator.modelContext.provideContext){
   navigator.modelContext.provideContext({tools:[
     {name:"analyze_commitment",description:"Analyze a title commitment document for red flags, requirements, and exceptions",inputSchema:{type:"object",properties:{document_text:{type:"string",description:"Full text of the title commitment"}},required:["document_text"]},execute:async function(i){var r=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tool:"analyze_commitment",document_text:i.document_text})});return r.json();}},
@@ -808,6 +832,7 @@ function tryPageHTML(baseUrl: string): string {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TitleWise — Live Analysis</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 43'%3E%3Crect x='10' y='0' width='24' height='32' rx='4' fill='%23ffffff59'/%3E%3Crect x='2' y='8' width='24' height='32' rx='4' fill='%232563EB'/%3E%3C/svg%3E">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
@@ -2207,7 +2232,7 @@ const BLOG_FOOTER_HTML = `
       <div class="footer-col">
         <p class="footer-col-title">Product</p>
         <ul>
-          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/pricing">Pricing</a></li>
           <li><a href="/demo">Demo</a></li>
           <li><a href="/blog">Blog</a></li>
         </ul>
@@ -2265,6 +2290,162 @@ footer{border-top:1px solid var(--rule);background:var(--bg)}
 const BLOG_FAQ_JS = `
 function toggleFaq(el){var item=el.parentElement;item.classList.toggle('open');}
 `;
+
+function legalPageHTML(baseUrl: string, title: string, updated: string, content: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${title} — TitleWise</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 43'%3E%3Crect x='10' y='0' width='24' height='32' rx='4' fill='%23ffffff59'/%3E%3Crect x='2' y='8' width='24' height='32' rx='4' fill='%232563EB'/%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#111827;--text:#EDEEF0;--muted:rgba(237,238,240,0.5);--dim:rgba(237,238,240,0.22);--rule:rgba(237,238,240,0.07);--blue:#3b82f6;--nav-bg:#111827f0;--logo-back:rgba(255,255,255,0.35);--logo-front:#2563EB}
+[data-theme="light"]{--bg:#f8fafc;--text:#0f172a;--muted:#64748b;--dim:#94a3b8;--rule:rgba(15,23,42,0.08);--blue:#2563eb;--nav-bg:rgba(248,250,252,0.92);--logo-back:rgba(15,23,42,0.12);--logo-front:#2563EB}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;transition:background 0.2s,color 0.2s}
+nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between}
+nav a.logo{text-decoration:none;display:flex;align-items:center;gap:10px}
+nav .nav-right{display:flex;align-items:center;gap:24px}
+nav .nav-right a{font-size:0.875rem;color:var(--muted);text-decoration:none;transition:color 0.15s}
+nav .nav-right a:hover{color:var(--text)}
+.nav-cta{font-size:0.875rem;font-weight:600;color:#fff !important;background:var(--blue);border-radius:8px;padding:8px 18px;white-space:nowrap;transition:all 0.2s}
+.nav-cta:hover{background:#1d4ed8;transform:translateY(-1px)}
+.theme-toggle{display:flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.theme-toggle button{background:transparent;border:none;padding:7px 10px;color:var(--muted);cursor:pointer;transition:all 0.15s;display:flex;align-items:center}
+.theme-toggle button.active{background:var(--blue);color:#fff}
+.theme-toggle button svg{width:14px;height:14px;fill:currentColor}
+.content{max-width:720px;margin:0 auto;padding:80px 32px 120px}
+.content .eyebrow{font-size:0.75rem;font-weight:700;color:var(--blue);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px}
+.content h1{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:8px}
+.content .updated{font-size:0.8rem;color:var(--dim);margin-bottom:48px}
+.content h2{font-size:1.125rem;font-weight:700;color:var(--text);margin-top:40px;margin-bottom:12px}
+.content p{font-size:0.9375rem;color:var(--muted);line-height:1.75;margin-bottom:16px}
+.content ul{padding-left:1.5rem;margin-bottom:16px}
+.content li{font-size:0.9375rem;color:var(--muted);line-height:1.75;margin-bottom:8px}
+.content strong{color:var(--text);font-weight:600}
+.content a{color:var(--blue);text-decoration:none}
+.content a:hover{text-decoration:underline}
+footer{border-top:1px solid var(--rule);background:var(--bg)}
+.footer-inner{max-width:1060px;margin:0 auto;padding:56px 32px 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:0 48px}
+.footer-brand{display:flex;align-items:center;gap:8px}
+.footer-desc{margin-top:16px;font-size:0.875rem;color:var(--muted);line-height:1.65;max-width:280px}
+.footer-badge{display:inline-flex;align-items:center;gap:7px;margin-top:20px;padding:5px 10px 5px 8px;border:1px solid var(--rule);border-radius:6px;text-decoration:none;background:transparent}
+.footer-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0}
+.footer-badge .txt{font-size:0.65rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+.footer-col-title{font-size:0.6875rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.footer-col ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:12px}
+.footer-col ul a{font-size:0.875rem;color:var(--muted);text-decoration:none}
+.footer-col ul a:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--rule);margin-top:40px;padding:20px 0 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-bottom p{font-size:0.75rem;color:var(--dim);margin:0}
+@media(max-width:768px){nav{padding:0 20px}.footer-grid{grid-template-columns:1fr 1fr;row-gap:32px}.content{padding:48px 20px 80px}.footer-inner{padding:40px 24px 0}}
+@media(max-width:480px){nav{padding:0 16px}nav .nav-right a.tw-nav-link{display:none}.footer-grid{grid-template-columns:1fr;text-align:center}.content{padding:40px 16px 64px}}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--card);border-top:1px solid var(--rule);padding:16px 24px;box-shadow:0 -4px 20px rgba(0,0,0,0.15)}
+.cb-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.cb-inner p{font-size:0.8125rem;color:var(--muted);margin:0;line-height:1.5}
+.cb-inner a{color:var(--blue);text-decoration:none}
+.cb-btns{display:flex;gap:8px;flex-shrink:0}
+.cb-btns button{padding:8px 16px;border-radius:6px;font-size:0.8125rem;font-weight:600;cursor:pointer;border:none;transition:background 0.2s}
+.cb-btns button:first-child{background:#2563eb;color:#fff}
+.cb-btns button:first-child:hover{background:#1d4ed8}
+.cb-btns button:last-child{background:transparent;color:var(--muted);border:1px solid var(--rule)}
+.cb-btns button:last-child:hover{border-color:var(--muted)}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="/">
+    <svg height="28" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="0" width="24" height="32" rx="4" fill="var(--logo-back)"/>
+      <rect x="2" y="8" width="24" height="32" rx="4" fill="var(--logo-front)"/>
+    </svg>
+    <span style="font-size:1.125rem;line-height:1"><b style="font-weight:700;color:var(--text);letter-spacing:-0.01em">TITLE</b><span style="font-weight:300;color:var(--muted)">wise</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="/pricing" class="tw-nav-link">Pricing</a>
+    <a href="/demo" class="tw-nav-link">Demo</a>
+    <a href="/login" class="tw-nav-link">Log in</a>
+    <div class="theme-toggle">
+      <button id="btn-dark" class="active" onclick="setTheme('dark')" aria-label="Dark mode"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <button id="btn-light" onclick="setTheme('light')" aria-label="Light mode"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></button>
+    </div>
+    <a href="/pricing" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+<div class="content">
+  ${updated ? `<p class="eyebrow">Legal</p>` : ""}
+  <h1>${title}</h1>
+  ${updated ? `<p class="updated">Last updated: ${updated}</p>` : ""}
+  ${content}
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg height="22" viewBox="0 0 36 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="0" width="24" height="32" rx="4" fill="var(--logo-back)"/>
+            <rect x="2" y="8" width="24" height="32" rx="4" fill="var(--logo-front)"/>
+          </svg>
+          <span style="font-size:1rem;line-height:1"><b style="font-weight:700;color:var(--text);letter-spacing:-0.01em">TITLE</b><span style="font-weight:300;color:var(--muted)">wise</span></span>
+        </div>
+        <p class="footer-desc">AI-powered closing platform for real estate attorneys. From intake to clear-to-close.</p>
+        <a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer" class="footer-badge">
+          <span class="dot"></span>
+          <span class="txt">A Boxford Partners Company</span>
+        </a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Product</p>
+        <ul>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/demo">Demo</a></li>
+          <li><a href="/blog">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Company</p>
+        <ul>
+          <li><a href="https://boxfordpartners.com" target="_blank" rel="noopener noreferrer">Boxford Partners</a></li>
+          <li><a href="mailto:hello@titlewise.app">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Legal</p>
+        <ul>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Boxford Partners LLC. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<script>
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('btn-dark').classList.toggle('active',t==='dark');
+  document.getElementById('btn-light').classList.toggle('active',t==='light');
+  try{localStorage.setItem('tw-theme',t)}catch(e){}
+}
+(function(){var t;try{t=localStorage.getItem('tw-theme')}catch(e){}if(t)setTheme(t);})();
+(function(){
+  if(localStorage.getItem('tw-cookies'))return;
+  var b=document.createElement('div');
+  b.id='cookie-banner';
+  b.innerHTML='<div class="cb-inner"><p>We use cookies to improve your experience and analyze site traffic. See our <a href="/privacy">Privacy Policy</a>.</p><div class="cb-btns"><button onclick="acceptCookies()">Accept</button><button onclick="declineCookies()">Decline</button></div></div>';
+  document.body.appendChild(b);
+})();
+function acceptCookies(){localStorage.setItem('tw-cookies','accepted');document.getElementById('cookie-banner').remove();}
+function declineCookies(){localStorage.setItem('tw-cookies','declined');document.getElementById('cookie-banner').remove();}
+</script>
+</body>
+</html>`;
+}
 
 function blogIndexHTML(baseUrl: string): string {
   const postCards = BLOG_POSTS.map(p => `
@@ -2709,6 +2890,13 @@ Tools require payment via the x402 protocol. After authentication:
       });
     }
 
+    if (url.pathname === "/favicon.ico" || url.pathname === "/favicon.svg") {
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 43"><rect x="10" y="0" width="24" height="32" rx="4" fill="#ffffff59"/><rect x="2" y="8" width="24" height="32" rx="4" fill="#2563EB"/></svg>`;
+      return new Response(svg, {
+        headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=31536000" },
+      });
+    }
+
     if (url.pathname === "/demo" || url.pathname === "/try") {
       return new Response(tryPageHTML(baseUrl), {
         headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -2784,43 +2972,63 @@ Tools require payment via the x402 protocol. After authentication:
     }
 
     if (url.pathname === "/privacy") {
-      return new Response(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Privacy Policy — TitleWise</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;padding:2rem}.wrap{max-width:680px;margin:0 auto}.logo{display:flex;align-items:center;gap:8px;margin-bottom:2.5rem;text-decoration:none}.logo b{font-size:1rem;color:#fff}.logo span{font-size:1rem;font-weight:300;color:#94a3b8}h1{font-size:1.75rem;font-weight:700;margin-bottom:0.5rem}p.updated{font-size:0.8rem;color:#64748b;margin-bottom:2rem}h2{font-size:1.1rem;font-weight:600;margin-top:2rem;margin-bottom:0.75rem;color:#e2e8f0}p,li{font-size:0.9rem;color:#94a3b8;line-height:1.7;margin-bottom:0.75rem}ul{padding-left:1.5rem;margin-bottom:1rem}a{color:#60a5fa}</style></head><body><div class="wrap">
-<a class="logo" href="/"><b>TITLE</b><span>wise</span></a>
-<h1>Privacy Policy</h1>
-<p class="updated">Last updated: August 25, 2026</p>
-<p>Boxford Partners LLC ("Boxford Partners," "we," "us," or "our") operates titlewise.app and the TitleWise platform. This Privacy Policy explains what information we collect, how we use it, and your rights with respect to it.</p>
+      return new Response(legalPageHTML(baseUrl, "Privacy Policy", "August 25, 2026", `
+<p>Boxford Partners LLC (&ldquo;Boxford Partners,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates titlewise.app and the TitleWise platform. This Privacy Policy explains what information we collect, how we use it, and your rights with respect to it.</p>
 <h2>Information We Collect</h2>
 <p>We collect information you provide directly to us:</p>
-<ul><li><strong>Account data</strong> — name, email address, firm size, and billing information processed through Stripe.</li><li><strong>Documents</strong> — title commitments, wire instructions, closing disclosures, and HOA documents you submit for analysis. Documents are processed in real-time and not retained beyond the analysis session unless you explicitly save them to a deal file.</li><li><strong>Usage data</strong> — which tools you use, analysis counts, and interactions within the platform.</li></ul>
+<ul><li><strong>Account data</strong> &mdash; name, email address, firm size, and billing information processed through Stripe.</li><li><strong>Documents</strong> &mdash; title commitments, wire instructions, closing disclosures, and HOA documents you submit for analysis. Documents are processed in real-time and not retained beyond the analysis session unless you explicitly save them to a deal file.</li><li><strong>Usage data</strong> &mdash; which tools you use, analysis counts, and interactions within the platform.</li></ul>
 <h2>How We Use Your Information</h2>
 <ul><li>To analyze documents and deliver results to you only</li><li>To operate, maintain, and improve TitleWise</li><li>To process payments and manage subscriptions</li><li>To send transactional communications (alerts, receipts)</li><li>To comply with legal obligations</li></ul>
 <p>We do not use your documents to train AI models. We do not sell personal information.</p>
 <h2>Third-Party Service Providers</h2>
 <p>We use trusted third-party providers to operate our services. These providers process data only as directed by us:</p>
-<ul><li><strong>Cloudflare</strong> — hosting, CDN, and encrypted object storage (R2)</li><li><strong>Anthropic</strong> — AI-powered document analysis (receives document text during analysis only)</li><li><strong>Stripe</strong> — payment processing (we do not store full card numbers)</li><li><strong>Telnyx</strong> — SMS alert delivery for fraud notifications</li><li><strong>Tavily</strong> — web verification of entities during analysis</li></ul>
+<ul><li><strong>Cloudflare</strong> &mdash; hosting, CDN, and encrypted object storage (R2)</li><li><strong>Anthropic</strong> &mdash; AI-powered document analysis (receives document text during analysis only)</li><li><strong>Stripe</strong> &mdash; payment processing (we do not store full card numbers)</li><li><strong>Telnyx</strong> &mdash; SMS alert delivery for fraud notifications</li><li><strong>Tavily</strong> &mdash; web verification of entities during analysis</li></ul>
 <h2>Data Storage and Security</h2>
 <p>All data is encrypted in transit (TLS 1.3) and at rest. Saved documents are stored in Cloudflare R2 (US regions). Account data is stored in Cloudflare D1. No third party receives your full documents outside of the analysis session.</p>
 <h2>Data Retention</h2>
 <p>We retain your data for as long as your account is active or as needed to provide services. Unsaved documents are discarded immediately after analysis. You may request deletion of all your data at any time from Account settings.</p>
 <h2>Your Rights</h2>
-<p>Depending on your location, you may have the right to access, correct, delete, or restrict processing of your personal data. California residents have additional rights under the CCPA, including the right to know what data we have collected and the right to opt out of any sale of personal information. We do not sell personal information.</p>
-<h2>Children's Privacy</h2>
+<p>Depending on your location, you may have the right to access, correct, delete, or restrict processing of your personal data. To exercise any of these rights, contact us at hello@boxfordpartners.com.</p>
+
+<h2>California Residents &mdash; CCPA/CPRA Notice</h2>
+<p>If you are a California resident, the California Consumer Privacy Act (CCPA) as amended by the California Privacy Rights Act (CPRA) provides you with the following rights:</p>
+<ul>
+<li><strong>Right to Know</strong> &mdash; You may request the categories and specific pieces of personal information we have collected about you in the past 12 months, the categories of sources, the business purpose for collecting it, and the categories of third parties with whom we share it.</li>
+<li><strong>Right to Delete</strong> &mdash; You may request deletion of your personal information, subject to certain exceptions (e.g., legal compliance, completing a transaction).</li>
+<li><strong>Right to Correct</strong> &mdash; You may request correction of inaccurate personal information.</li>
+<li><strong>Right to Opt Out of Sale/Sharing</strong> &mdash; We do not sell or share personal information for cross-context behavioral advertising. No opt-out is required.</li>
+<li><strong>Right to Limit Use of Sensitive Personal Information</strong> &mdash; We only use sensitive personal information (such as document contents) for the purposes of providing our services to you.</li>
+<li><strong>Non-Discrimination</strong> &mdash; We will not discriminate against you for exercising any of these rights.</li>
+</ul>
+<p>To submit a verifiable consumer request, email hello@boxfordpartners.com. We will respond within 45 days. You may designate an authorized agent to make a request on your behalf.</p>
+<p><strong>Categories of personal information collected in the past 12 months:</strong> Identifiers (name, email), commercial information (subscription plan, payment history), internet/electronic activity (usage logs), and professional information (firm name). We do not collect biometric data.</p>
+
+<h2>Illinois Residents &mdash; BIPA Notice</h2>
+<p>TitleWise does not collect, capture, purchase, receive, or otherwise obtain biometric identifiers or biometric information (as defined under the Illinois Biometric Information Privacy Act, 740 ILCS 14) from any user. Our document analysis tools process text only and do not use facial recognition, fingerprint scanning, voiceprints, or any other biometric technology.</p>
+
+<h2>Virginia, Colorado, Connecticut, Utah, and Texas Residents</h2>
+<p>If you reside in a state with comprehensive consumer privacy legislation (including the Virginia CDPA, Colorado Privacy Act, Connecticut Data Privacy Act, Utah Consumer Privacy Act, or Texas Data Privacy and Security Act), you have the right to:</p>
+<ul>
+<li>Confirm whether we process your personal data and access it</li>
+<li>Correct inaccuracies in your personal data</li>
+<li>Delete your personal data</li>
+<li>Obtain a portable copy of your data</li>
+<li>Opt out of targeted advertising, sale of personal data, or profiling with legal effects</li>
+</ul>
+<p>We do not engage in targeted advertising, sell personal data, or profile users for decisions that produce legal or similarly significant effects. To exercise your rights, contact hello@boxfordpartners.com. If we deny your request, you may appeal by replying to our response.</p>
+
+<h2>Children&rsquo;s Privacy</h2>
 <p>Our services are not directed to individuals under 18. We do not knowingly collect personal information from minors.</p>
 <h2>Changes to This Policy</h2>
-<p>We may update this policy from time to time. Material changes will be noted with a new "Last updated" date. Continued use of our services after changes constitutes acceptance.</p>
+<p>We may update this policy from time to time. Material changes will be noted with a new &ldquo;Last updated&rdquo; date. Continued use of our services after changes constitutes acceptance.</p>
 <h2>Contact</h2>
 <p>Boxford Partners LLC<br><a href="mailto:hello@boxfordpartners.com">hello@boxfordpartners.com</a></p>
-</div></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+`), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
     if (url.pathname === "/terms") {
-      return new Response(`<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Terms of Service — TitleWise</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;padding:2rem}.wrap{max-width:680px;margin:0 auto}.logo{display:flex;align-items:center;gap:8px;margin-bottom:2.5rem;text-decoration:none}.logo b{font-size:1rem;color:#fff}.logo span{font-size:1rem;font-weight:300;color:#94a3b8}h1{font-size:1.75rem;font-weight:700;margin-bottom:0.5rem}p.updated{font-size:0.8rem;color:#64748b;margin-bottom:2rem}h2{font-size:1.1rem;font-weight:600;margin-top:2rem;margin-bottom:0.75rem;color:#e2e8f0}p,li{font-size:0.9rem;color:#94a3b8;line-height:1.7;margin-bottom:0.75rem}ul{padding-left:1.5rem;margin-bottom:1rem}a{color:#60a5fa}</style></head><body><div class="wrap">
-<a class="logo" href="/"><b>TITLE</b><span>wise</span></a>
-<h1>Terms of Service</h1>
-<p class="updated">Last updated: August 25, 2026</p>
-<p>These Terms of Service ("Terms") govern your access to and use of TitleWise, operated by Boxford Partners LLC ("Boxford Partners," "we," "us," or "our"). By accessing or using our services, you agree to these Terms.</p>
+      return new Response(legalPageHTML(baseUrl, "Terms of Service", "August 25, 2026", `
+<p>These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of TitleWise, operated by Boxford Partners LLC (&ldquo;Boxford Partners,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;). By accessing or using our services, you agree to these Terms.</p>
 <h2>Services</h2>
 <p>TitleWise provides AI-powered document analysis tools for real estate closing professionals. The service analyzes title commitments, wire instructions, closing disclosures, and HOA documents to surface potential issues for attorney review. We reserve the right to modify, suspend, or discontinue any service at any time with reasonable notice.</p>
 <h2>Not Legal Advice</h2>
@@ -2831,20 +3039,96 @@ Tools require payment via the x402 protocol. After authentication:
 <p>You agree to use our services only for lawful purposes. You may not:</p>
 <ul><li>Submit documents you lack authorization to analyze</li><li>Attempt to reverse-engineer or extract the underlying models</li><li>Use automated tools to scrape results at scale</li><li>Resell access without a written agreement</li><li>Engage in any activity that interferes with the operation of our infrastructure</li></ul>
 <h2>Payments and Subscriptions</h2>
-<p>Paid services are billed in advance on a monthly basis. All fees are non-refundable except as required by law. We use Stripe to process payments — your payment information is subject to Stripe's terms and privacy policy. We reserve the right to change pricing with 30 days' notice to existing subscribers. You may cancel at any time; access continues through the end of the billing period.</p>
+<p>Paid services are billed in advance on a monthly basis. All fees are non-refundable except as required by law. We use Stripe to process payments &mdash; your payment information is subject to Stripe&rsquo;s terms and privacy policy. We reserve the right to change pricing with 30 days&rsquo; notice to existing subscribers. You may cancel at any time; access continues through the end of the billing period.</p>
 <h2>Intellectual Property</h2>
 <p>All content, software, and materials within TitleWise are owned by or licensed to Boxford Partners. You retain ownership of any documents or data you submit to our services.</p>
 <h2>Disclaimer of Warranties</h2>
-<p>Our services are provided "as is" and "as available" without warranties of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement.</p>
+<p>Our services are provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without warranties of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement.</p>
 <h2>Limitation of Liability</h2>
 <p>To the fullest extent permitted by law, Boxford Partners shall not be liable for any indirect, incidental, special, consequential, or punitive damages. Our total liability for any claim arising from these Terms shall not exceed the amount you paid us in the twelve months preceding the claim. We are not liable for losses arising from reliance on analysis output without independent verification.</p>
 <h2>Governing Law</h2>
 <p>These Terms are governed by the laws of the Commonwealth of Massachusetts, without regard to its conflict of law provisions.</p>
 <h2>Changes to These Terms</h2>
-<p>We may revise these Terms at any time with 30 days' notice via email. Continued use of our services after changes take effect constitutes acceptance.</p>
+<p>We may revise these Terms at any time with 30 days&rsquo; notice via email. Continued use of our services after changes take effect constitutes acceptance.</p>
 <h2>Contact</h2>
 <p>Boxford Partners LLC<br><a href="mailto:hello@boxfordpartners.com">hello@boxfordpartners.com</a></p>
-</div></body></html>`, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+`), { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+
+    if (url.pathname === "/pricing") {
+      return new Response(legalPageHTML(baseUrl, "Pricing", "", `
+<style>
+.content{max-width:1060px;padding-top:48px}
+.pricing-hero{text-align:center;margin-bottom:48px}
+.pricing-hero h1{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:12px}
+.pricing-hero .sub{font-size:1rem;color:var(--muted);max-width:540px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:0}
+.pricing-grid .card{border:1px solid var(--rule);border-radius:10px;padding:28px 24px;text-decoration:none;display:flex;flex-direction:column;transition:all 0.2s}
+.pricing-grid .card.hl{background:rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.25)}
+.pricing-grid .card:hover{border-color:rgba(59,130,246,0.25);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+.pricing-grid .card .name{font-size:0.8125rem;color:var(--muted);margin-bottom:10px;font-weight:500}
+.pricing-grid .card .price{font-size:2rem;font-weight:800;color:var(--text);letter-spacing:-0.03em;line-height:1;margin-bottom:12px}
+.pricing-grid .card .price span{font-size:0.875rem;font-weight:400;color:var(--muted)}
+.pricing-grid .card .info{font-size:0.8125rem;color:var(--dim);line-height:1.5}
+.pricing-grid .card .feat-list{list-style:none;padding:0;margin:16px 0;text-align:left;flex:1}
+.pricing-grid .card .feat-list li{font-size:0.8125rem;color:var(--muted);padding:4px 0;border-top:1px solid var(--rule)}
+.pricing-grid .card .feat-list li::before{content:"\\2713 ";color:#4ade80;font-weight:700}
+.pricing-btn{display:block;width:100%;text-align:center;padding:10px 20px;background:#2563eb;color:#fff !important;border-radius:6px;text-decoration:none !important;font-size:0.8125rem;font-weight:600;transition:background 0.2s;margin-top:auto}
+.pricing-btn:hover{background:#1d4ed8;color:#fff !important}
+.pricing-faq{margin-top:64px;border-top:1px solid var(--rule);padding-top:48px}
+.pricing-faq h2{font-size:1.25rem;font-weight:700;margin-bottom:24px}
+.pricing-faq details{border-bottom:1px solid var(--rule)}
+.pricing-faq summary{font-size:0.9375rem;font-weight:600;color:var(--text);padding:16px 0;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
+.pricing-faq summary::-webkit-details-marker{display:none}
+.pricing-faq summary::after{content:"+";font-size:1.25rem;color:var(--muted);font-weight:300;transition:transform 0.2s}
+.pricing-faq details[open] summary::after{content:"\\2212"}
+.pricing-faq .faq-answer{font-size:0.875rem;color:var(--muted);line-height:1.7;padding:0 0 16px}
+@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pricing-grid{grid-template-columns:1fr}}
+</style>
+<div class="pricing-hero">
+  <h1>Simple pricing. No surprises.</h1>
+  <p class="sub">One flat monthly rate. All tools included. No per-file fees, no feature gating.</p>
+</div>
+<div class="pricing-grid">
+  <div class="card">
+    <p class="name">Solo</p>
+    <p class="price">$149<span>/mo</span></p>
+    <p class="info">1 attorney &middot; All tools included</p>
+    <ul class="feat-list"><li>4 AI analysis tools</li><li>100 docs/month</li><li>Wire fraud detection</li><li>Email support</li></ul>
+    <a href="/api/subscribe?plan=solo" class="pricing-btn">Subscribe</a>
+  </div>
+  <div class="card hl">
+    <p class="name">Small Firm</p>
+    <p class="price">$349<span>/mo</span></p>
+    <p class="info">Up to 5 seats &middot; All tools included</p>
+    <ul class="feat-list"><li>Everything in Solo</li><li>500 docs/month</li><li>Multi-agent verification panel</li><li>Deal audit cross-referencing</li><li>Priority support</li></ul>
+    <a href="/api/subscribe?plan=small_firm" class="pricing-btn">Subscribe</a>
+  </div>
+  <div class="card">
+    <p class="name">Pro</p>
+    <p class="price">$599<span>/mo</span></p>
+    <p class="info">Up to 10 seats &middot; Priority support</p>
+    <ul class="feat-list"><li>Everything in Small Firm</li><li>Unlimited docs</li><li>Tavily web verification</li><li>County records search</li><li>SMS/voice alerts</li><li>API access</li></ul>
+    <a href="/api/subscribe?plan=pro" class="pricing-btn">Subscribe</a>
+  </div>
+  <div class="card">
+    <p class="name">Enterprise</p>
+    <p class="price">$999<span>/mo</span></p>
+    <p class="info">25 seats &middot; Custom onboarding</p>
+    <ul class="feat-list"><li>Everything in Pro</li><li>Dedicated account manager</li><li>Custom integrations</li><li>Fraud pattern database</li><li>SLA guarantee</li><li>SSO/SAML</li></ul>
+    <a href="/api/subscribe?plan=enterprise" class="pricing-btn">Contact sales</a>
+  </div>
+</div>
+<div class="pricing-faq">
+  <h2>Frequently asked questions</h2>
+  <details><summary>What counts as a document?</summary><p class="faq-answer">Any file you upload for analysis: title commitments, closing disclosures, wire instructions, HOA letters. Re-analyzing the same document doesn't count again.</p></details>
+  <details><summary>Can I change plans later?</summary><p class="faq-answer">Yes. Upgrade or downgrade anytime. Changes take effect on your next billing cycle with prorated credits.</p></details>
+  <details><summary>Is there a free trial?</summary><p class="faq-answer">Try the demo on our homepage at no cost. All paid plans include a 14-day money-back guarantee.</p></details>
+  <details><summary>What payment methods do you accept?</summary><p class="faq-answer">All major credit cards via Stripe. Enterprise plans can pay by invoice.</p></details>
+  <details><summary>Do you offer annual billing?</summary><p class="faq-answer">Yes. Annual plans save 20%. Contact us for details.</p></details>
+</div>
+`), { headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
     if (url.pathname === "/blog") {
