@@ -18,7 +18,6 @@ type Settings = {
   subscriptionTier: string | null
   monthlyUsageCount: number | null
   usageResetAt: string | null
-  trialEndsAt: string | null
   hasStripeCustomer: boolean
 }
 
@@ -350,7 +349,6 @@ function SettingsContent() {
         subscriptionTier={settings.subscriptionTier}
         monthlyUsageCount={settings.monthlyUsageCount}
         usageResetAt={settings.usageResetAt}
-        trialEndsAt={settings.trialEndsAt}
         hasStripeCustomer={settings.hasStripeCustomer}
         onManageBilling={handlePortal}
         portalLoading={portalLoading}

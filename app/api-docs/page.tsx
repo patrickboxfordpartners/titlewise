@@ -27,7 +27,7 @@ export default function APIDocsPage() {
                 Get API Key →
               </a>
               <a
-                href="/dashboard"
+                href="/matters"
                 className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
               >
                 Dashboard

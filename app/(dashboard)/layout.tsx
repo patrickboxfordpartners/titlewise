@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       .then((r) => r.json())
       .then((d) => {
         const status = d.user?.subscriptionStatus
-        if (status !== "active" && status !== "trialing") {
+        if (status !== "active") {
           router.push("/pricing")
         } else if (!d.user?.onboardingCompletedAt) {
           router.push("/welcome")

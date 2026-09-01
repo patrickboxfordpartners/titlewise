@@ -9,7 +9,6 @@ type SubscriptionPanelProps = {
   subscriptionTier: string | null
   monthlyUsageCount: number | null
   usageResetAt: string | null
-  trialEndsAt: string | null
   hasStripeCustomer: boolean
   onManageBilling: () => void
   portalLoading: boolean
@@ -20,13 +19,12 @@ export function SubscriptionPanel({
   subscriptionTier,
   monthlyUsageCount,
   usageResetAt,
-  trialEndsAt,
   hasStripeCustomer,
   onManageBilling,
   portalLoading,
 }: SubscriptionPanelProps) {
   const currentPlan = subscriptionTier ? PLANS[subscriptionTier as keyof typeof PLANS] : null
-  const isActive = subscriptionStatus === "active" || subscriptionStatus === "trialing"
+  const isActive = subscriptionStatus === "active"
 
   const upgradeOptions = currentPlan
     ? Object.entries(PLANS)
@@ -40,14 +38,12 @@ export function SubscriptionPanel({
 
   const statusColors: Record<string, string> = {
     active: "text-green-600",
-    trialing: "text-blue-600",
     past_due: "text-red-600",
     canceled: "text-muted-foreground",
   }
 
   const statusLabels: Record<string, string> = {
     active: "Active",
-    trialing: "Trial",
     past_due: "Past Due",
     canceled: "Canceled",
     inactive: "Inactive",
@@ -192,17 +188,6 @@ export function SubscriptionPanel({
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Trial Warning */}
-      {subscriptionStatus === "trialing" && trialEndsAt && (
-        <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-          <p className="text-sm font-medium text-blue-600 mb-1">Trial Period</p>
-          <p className="text-xs text-blue-600/80">
-            Your trial ends on {new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-            {" "}({Math.max(0, Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / 86400000))} days remaining)
-          </p>
         </div>
       )}
 

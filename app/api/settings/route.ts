@@ -26,7 +26,6 @@ export async function GET() {
       firmName: user.firmName,
       subscriptionStatus: user.subscriptionStatus,
       subscriptionTier: user.subscriptionTier,
-      trialEndsAt: user.trialEndsAt,
       monthlyUsageCount: user.monthlyUsageCount,
       hasStripeCustomer: !!user.stripeCustomerId,
       onboardingCompletedAt: user.onboardingCompletedAt,

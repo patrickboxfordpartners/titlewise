@@ -25,16 +25,9 @@ type AccessResult =
 
 export async function checkSubscriptionAccess(user: User): Promise<AccessResult> {
   const isActive = user.subscriptionStatus === "active"
-  const isTrialing =
-    user.subscriptionStatus === "trialing" &&
-    (!user.trialEndsAt || new Date(user.trialEndsAt) > new Date())
 
-  if (!isActive && !isTrialing) {
-    const message =
-      user.subscriptionStatus === "trialing"
-        ? "Your free trial has ended. Subscribe to continue using TITLEwise."
-        : "Subscribe to continue using TITLEwise."
-    return { allowed: false, reason: "no_subscription", message }
+  if (!isActive) {
+    return { allowed: false, reason: "no_subscription", message: "Subscribe to continue using TITLEwise." }
   }
 
   // Check per-tier generation limit
@@ -66,11 +59,3 @@ export async function incrementUsage(userId: string): Promise<void> {
     .where(eq(users.id, userId))
 }
 
-export function getTrialStatus(user: User): { isTrial: boolean; daysRemaining: number } {
-  const isTrialing = user.subscriptionStatus === "trialing"
-  if (!isTrialing || !user.trialEndsAt) return { isTrial: false, daysRemaining: 0 }
-  const msLeft = new Date(user.trialEndsAt).getTime() - Date.now()
-  if (msLeft <= 0) return { isTrial: false, daysRemaining: 0 }
-  const daysRemaining = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)))
-  return { isTrial: true, daysRemaining }
-}

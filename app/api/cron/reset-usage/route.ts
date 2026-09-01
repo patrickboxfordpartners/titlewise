@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { users } from "@/lib/db/schema"
-import { eq, or } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { logger } from "@/lib/logger"
 
 export const runtime = "nodejs"
@@ -22,12 +22,7 @@ export async function GET(req: NextRequest) {
         usageResetAt: now,
         updatedAt: now,
       })
-      .where(
-        or(
-          eq(users.subscriptionStatus, "active"),
-          eq(users.subscriptionStatus, "trialing")
-        )
-      )
+      .where(eq(users.subscriptionStatus, "active"))
       .returning({ id: users.id })
 
     logger.info("cron/reset-usage", `Reset usage for ${result.length} users`)
