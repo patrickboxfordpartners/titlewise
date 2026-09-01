@@ -28,6 +28,12 @@ function checkRateLimit(userId: string): boolean {
 export async function POST(req: NextRequest) {
   try {
     const userId = await requireAuth()
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      })
+    }
     const user = await getOrCreateUser(userId)
   const access = await checkSubscriptionAccess(user)
   if (!access.allowed) {

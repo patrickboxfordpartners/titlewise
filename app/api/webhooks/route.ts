@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic"
 export async function GET(request: NextRequest) {
   try {
     const userId = await requireAuth()
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
@@ -32,6 +33,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const userId = await requireAuth()
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
@@ -103,6 +105,7 @@ export async function POST(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const userId = await requireAuth()
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
@@ -135,6 +138,7 @@ export async function PATCH(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const userId = await requireAuth()
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
