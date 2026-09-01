@@ -27,7 +27,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [customLogo, setCustomLogo] = useState<string | null>(null)
 
-  const isMatterSection = pathname === "/matters" || pathname.startsWith("/matters/")
+  const isMatterSection = pathname === "/dashboard" || pathname === "/matters" || pathname.startsWith("/matters/")
   const isHistory = pathname === "/history"
   const isSettings = pathname === "/settings"
 
@@ -58,7 +58,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
     <div className="h-full flex flex-col border-r" style={{ backgroundColor: "var(--color-sidebar)", borderColor: "var(--color-sidebar-border)" }}>
       {/* Logo */}
       <div className="p-4 border-b" style={{ borderColor: "var(--color-sidebar-border)" }}>
-        <Link href="/matters" className="block">
+        <Link href="/dashboard" className="block">
           {customLogo ? (
             <Image
               src={customLogo}
@@ -101,9 +101,9 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
         {mattersOpen && (
           <div style={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 4 }}>
             <Link
-              href="/matters"
+              href="/dashboard"
               onClick={onClose}
-              className={`sidebar-matter-all${pathname === "/matters" ? " active" : ""}`}
+              className={`sidebar-matter-all${pathname === "/dashboard" ? " active" : ""}`}
             >
               All matters
               {matters.length > 0 && (
@@ -168,7 +168,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
 
       {/* New matter CTA */}
       <div className="sidebar-new-matter-section">
-        <Link href="/matters?new=1" onClick={onClose} className="sidebar-new-matter">
+        <Link href="/dashboard?new=1" onClick={onClose} className="sidebar-new-matter">
           <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
             <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>

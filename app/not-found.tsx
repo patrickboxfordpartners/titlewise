@@ -68,7 +68,7 @@ export default function NotFound() {
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
         <Link
-          href="/matters"
+          href="/dashboard"
           style={{
             display: "inline-flex",
             alignItems: "center",

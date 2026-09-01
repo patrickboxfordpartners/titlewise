@@ -241,7 +241,7 @@ function WelcomeContent() {
             </button>
           </div>
           <button
-            onClick={() => router.push("/matters")}
+            onClick={() => router.push("/dashboard")}
             className="block mx-auto text-sm font-light text-muted-foreground hover:text-foreground transition-colors"
           >
             Skip tour

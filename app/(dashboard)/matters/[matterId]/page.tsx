@@ -95,7 +95,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   useEffect(() => {
     async function load() {
       const res = await fetch(`/api/checklist/${matterId}`)
-      if (!res.ok) { router.push("/matters"); return }
+      if (!res.ok) { router.push("/dashboard"); return }
       const data = await res.json()
       setMatter(data.matter)
       setItems(data.items ?? [])
@@ -149,7 +149,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: "close" }),
     })
-    router.push("/matters")
+    router.push("/dashboard")
   }
 
   async function reopenMatter() {
@@ -204,7 +204,7 @@ export default function MatterDetailPage({ params }: { params: Promise<{ matterI
   return (
     <div className="max-w-3xl mx-auto px-6 py-10">
       {/* Back */}
-      <Link href="/matters" className="inline-flex items-center gap-1.5 text-xs font-light text-muted-foreground hover:text-foreground transition-colors mb-6">
+      <Link href="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-light text-muted-foreground hover:text-foreground transition-colors mb-6">
         <ArrowLeft className="h-3.5 w-3.5" />
         All matters
       </Link>

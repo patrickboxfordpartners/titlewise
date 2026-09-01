@@ -27,7 +27,7 @@ function JoinContent() {
       .then(data => {
         if (data.ok || data.alreadyAccepted) {
           setStatus("success")
-          setTimeout(() => router.push("/matters"), 1500)
+          setTimeout(() => router.push("/dashboard"), 1500)
         } else {
           setStatus("error")
           setMessage(data.error ?? "Failed to accept invitation.")

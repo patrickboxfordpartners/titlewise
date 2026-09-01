@@ -104,6 +104,8 @@ export default function HomepageDemo() {
   const [wireChecks, setWireChecks] = useState<number[]>([])
   const [blocker, setBlocker] = useState(false)
   const [emailDraft, setEmailDraft] = useState("")
+  const [isMobile, setIsMobile] = useState(false)
+  const [activeTab, setActiveTab] = useState<"entry" | "file" | "agent">("file")
   const timeouts = useRef<ReturnType<typeof setTimeout>[]>([])
   const logRef = useRef<HTMLDivElement>(null)
 
@@ -152,6 +154,7 @@ export default function HomepageDemo() {
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.innerWidth < 640) {
+      setIsMobile(true)
       setPhase("done")
       setFields(Object.fromEntries(FORM_FIELDS.map(f => [f.key, f.value])))
       setAnalysisText(ANALYSIS_LINES.join("\n"))
@@ -172,7 +175,7 @@ export default function HomepageDemo() {
         <div style={{ marginBottom: 48 }}>
           <p style={{ fontSize: "10px", fontWeight: 400, color: c.primary, letterSpacing: "0.1px", textTransform: "uppercase", marginBottom: 16 }}>Live Demo</p>
           <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: textColor, marginBottom: 12 }}>Watch TITLEwise work a real closing</h2>
-          <p style={{ fontSize: "15px", fontWeight: 300, color: mutedColor, maxWidth: 520 }}>Document entry on the left. File details in the center. AI agents working live on the right.</p>
+          <p className="tw-hp-demo-desc" style={{ fontSize: "15px", fontWeight: 300, color: mutedColor, maxWidth: 520 }}>Document entry on the left. File details in the center. AI agents working live on the right.</p>
         </div>
 
         {/* Status pill */}
@@ -190,11 +193,37 @@ export default function HomepageDemo() {
           </div>
         </div>
 
+        {/* Mobile tabs */}
+        {isMobile && (
+          <div style={{ display: "flex", gap: 4, marginBottom: 12, background: c.isDark ? "rgba(255,255,255,0.04)" : "#f1f5f9", borderRadius: 8, padding: 3 }}>
+            {([["entry", "Documents"], ["file", "File Info"], ["agent", "AI Agent"]] as const).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                style={{
+                  flex: 1,
+                  padding: "8px 0",
+                  fontSize: 12,
+                  fontWeight: activeTab === key ? 500 : 300,
+                  color: activeTab === key ? textColor : mutedColor,
+                  background: activeTab === key ? panelBg : "transparent",
+                  border: activeTab === key ? `1px solid ${border}` : "1px solid transparent",
+                  borderRadius: 6,
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* 3-column grid */}
-        <div className="tw-hp-demo-3col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${border}`, boxShadow: c.isDark ? "0 24px 64px rgba(0,0,0,0.4)" : "0 24px 64px rgba(0,55,112,0.08)" }}>
+        <div className="tw-hp-demo-3col" style={{ display: isMobile ? "block" : "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 2, borderRadius: 12, overflow: "hidden", border: `1px solid ${border}`, boxShadow: c.isDark ? "0 24px 64px rgba(0,0,0,0.4)" : "0 24px 64px rgba(0,55,112,0.08)" }}>
 
           {/* LEFT: Document Entry */}
-          <div className="tw-hp-demo-left" style={{ background: panelBg, padding: 24 }}>
+          <div className="tw-hp-demo-left" style={{ background: panelBg, padding: 24, display: isMobile && activeTab !== "entry" ? "none" : "block" }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: dimText, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Document Entry</p>
             <div style={{ border: `1px dashed ${phase === "uploading" ? c.primary : border}`, borderRadius: 8, padding: 16, textAlign: "center", marginBottom: 20, background: phase === "uploading" ? (c.isDark ? "rgba(59,130,246,0.05)" : "#eff6ff") : "transparent", transition: "all 0.3s" }}>
               <p style={{ fontSize: 12, color: phase === "uploading" ? c.primary : dimText, marginBottom: phase === "uploading" ? 8 : 0 }}>
@@ -234,7 +263,7 @@ export default function HomepageDemo() {
           </div>
 
           {/* CENTER: File Information */}
-          <div className="tw-hp-demo-center" style={{ background: centerBg, padding: 24, borderLeft: `1px solid ${border}`, borderRight: `1px solid ${border}` }}>
+          <div className="tw-hp-demo-center" style={{ background: centerBg, padding: 24, borderLeft: isMobile ? "none" : `1px solid ${border}`, borderRight: isMobile ? "none" : `1px solid ${border}`, display: isMobile && activeTab !== "file" ? "none" : "block" }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: dimText, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>File Information</p>
             <div style={{ background: panelBg, borderRadius: 8, border: `1px solid ${border}`, padding: 14, marginBottom: 16 }}>
               <p style={{ fontSize: 14, fontWeight: 400, color: textColor, marginBottom: 2 }}>{fields.client || "..."}</p>
@@ -291,7 +320,7 @@ export default function HomepageDemo() {
           </div>
 
           {/* RIGHT: Agent Activity */}
-          <div className="tw-hp-demo-right" style={{ background: panelBg, padding: 24 }}>
+          <div className="tw-hp-demo-right" style={{ background: panelBg, padding: 24, display: isMobile && activeTab !== "agent" ? "none" : "block" }}>
             <p style={{ fontSize: 11, fontWeight: 700, color: dimText, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16 }}>Agent Activity</p>
             <div ref={logRef} style={{ background: codeBg, borderRadius: 8, padding: 12, marginBottom: 16, minHeight: 100, maxHeight: 150, overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
               {agentLog.length === 0 && <p style={{ fontSize: 11, fontFamily: "'SF Mono', monospace", color: dimText }}>Waiting for document...</p>}
@@ -348,6 +377,7 @@ export default function HomepageDemo() {
         @media (max-width: 640px) {
           .tw-hp-demo-3col { grid-template-columns: 1fr !important; }
           .tw-hp-demo-left, .tw-hp-demo-center, .tw-hp-demo-right { border-left: none !important; border-right: none !important; }
+          .tw-hp-demo-desc { display: none !important; }
         }
       `}</style>
     </section>

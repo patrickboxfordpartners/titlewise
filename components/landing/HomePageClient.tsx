@@ -35,6 +35,7 @@ export default function HomePageClient() {
         }}
       >
         <div
+          className="tw-nav-inner"
           style={{
             padding: "0 32px",
             height: 64,
@@ -96,17 +97,36 @@ export default function HomePageClient() {
       </nav>
       <style>{`
         @media (max-width: 640px) { .tw-nav-link { display: none !important; } }
+
+        /* Tablet */
         @media (max-width: 768px) {
           .tw-stats-grid { grid-template-columns: 1fr 1fr !important; }
-          .tw-features-grid { grid-template-columns: 1fr !important; }
+          .tw-features-grid { grid-template-columns: 1fr 1fr !important; }
           .tw-pricing-grid { grid-template-columns: 1fr 1fr !important; }
           .tw-how-grid { grid-template-columns: 1fr !important; }
           .tw-footer-grid { grid-template-columns: 1fr 1fr !important; row-gap: 32px !important; }
+          .tw-hero-wrapper { padding: 100px 24px 80px !important; }
+          .tw-hero-inner { max-width: 600px !important; }
+          .tw-section-pad { padding-left: 24px !important; padding-right: 24px !important; }
+          .tw-section-lg { padding-top: 72px !important; padding-bottom: 72px !important; }
+          .tw-nav-inner { padding-left: 20px !important; padding-right: 20px !important; }
         }
+
+        /* Mobile */
         @media (max-width: 480px) {
           .tw-stats-grid { grid-template-columns: 1fr !important; }
+          .tw-features-grid { grid-template-columns: 1fr !important; }
           .tw-pricing-grid { grid-template-columns: 1fr !important; }
           .tw-footer-grid { grid-template-columns: 1fr !important; text-align: center; }
+          .tw-hero-wrapper { padding: 80px 20px 64px !important; }
+          .tw-hero-inner { max-width: 100% !important; }
+          .tw-hero-sub { font-size: 0.9375rem !important; max-width: 100% !important; }
+          .tw-hero-buttons { flex-direction: column !important; align-items: center !important; }
+          .tw-hero-buttons a { width: 100% !important; justify-content: center !important; }
+          .tw-section-pad { padding-left: 20px !important; padding-right: 20px !important; }
+          .tw-section-lg { padding-top: 56px !important; padding-bottom: 56px !important; }
+          .tw-nav-inner { padding-left: 16px !important; padding-right: 16px !important; }
+          .tw-footer-bottom { flex-direction: column !important; text-align: center !important; }
         }
       `}</style>
 
@@ -125,16 +145,16 @@ export default function HomePageClient() {
           )}
           <div style={{ position: "absolute", inset: 0, background: c.isDark ? `linear-gradient(to bottom, rgba(15,18,25,0) 0%, rgba(15,18,25,0.6) 50%, ${c.bg} 100%)` : "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,1) 100%)" }} />
         </div>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "120px 32px 96px", position: "relative", zIndex: 1 }}>
-          <div style={{ maxWidth: 680 }}>
+        <div className="tw-hero-wrapper" style={{ maxWidth: 1200, margin: "0 auto", padding: "140px 32px 112px", position: "relative", zIndex: 1, textAlign: "center" }}>
+          <div className="tw-hero-inner" style={{ maxWidth: 960, margin: "0 auto" }}>
             <p style={{ fontSize: "10px", fontWeight: 400, color: c.primary, letterSpacing: "0.1px", textTransform: "uppercase", marginBottom: 24 }}>AI Closing Platform</p>
-            <h1 style={{ fontSize: "clamp(2.5rem, 5vw, 3.5rem)", fontWeight: 300, letterSpacing: "-1.4px", lineHeight: 1.03, color: c.ink, marginBottom: 24 }}>
+            <h1 style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", fontWeight: 300, letterSpacing: "-1.4px", lineHeight: 1.05, color: c.ink, marginBottom: 24 }}>
               The average closing takes 47 days.<br /><span style={{ color: c.primary }}>Yours doesn't have to.</span>
             </h1>
-            <p style={{ fontSize: "1.0625rem", fontWeight: 300, color: c.muted, lineHeight: 1.6, maxWidth: 520, marginBottom: 40 }}>
+            <p className="tw-hero-sub" style={{ fontSize: "1.0625rem", fontWeight: 300, color: c.muted, lineHeight: 1.6, maxWidth: 640, margin: "0 auto 40px" }}>
               AI closing coordinator for real estate attorneys. Title analysis in 30 seconds. TRID compliance checks automatic. Wire fraud caught before it happens.
             </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" as const }}>
+            <div className="tw-hero-buttons" style={{ display: "flex", gap: 12, flexWrap: "wrap" as const, justifyContent: "center" }}>
               <Link href="/pricing" style={{ display: "inline-flex", alignItems: "center", backgroundColor: c.primary, color: "#fff", fontSize: "1rem", fontWeight: 400, padding: "10px 24px", borderRadius: 9999, textDecoration: "none" }}>See pricing</Link>
               <Link href="/demo" style={{ display: "inline-flex", alignItems: "center", backgroundColor: c.isDark ? "transparent" : "#fff", border: `1px solid ${c.hairline}`, color: c.ink, fontSize: "1rem", fontWeight: 400, padding: "10px 24px", borderRadius: 9999, textDecoration: "none" }}>Try the demo</Link>
             </div>
@@ -144,7 +164,7 @@ export default function HomePageClient() {
       </section>
 
       {/* Stats */}
-      <section style={{ borderTop: `1px solid ${c.hairline}`, padding: "72px 32px", backgroundColor: c.bg }}>
+      <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, padding: "72px 32px", backgroundColor: c.bg }}>
         <div className="tw-stats-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "48px 40px" }}>
           {[
             { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise cross-references every wire instruction against institutional memory across all your closings." },
@@ -162,7 +182,7 @@ export default function HomePageClient() {
       </section>
 
       {/* How it works */}
-      <section style={{ backgroundColor: c.canvasSoft, padding: "96px 32px", borderTop: `1px solid ${c.hairline}` }}>
+      <section className="tw-section-pad tw-section-lg" style={{ backgroundColor: c.canvasSoft, padding: "96px 32px", borderTop: `1px solid ${c.hairline}` }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: c.ink, marginBottom: 64 }}>Open a matter. Close the deal.</h2>
           <div className="tw-how-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "48px 56px" }}>
@@ -185,7 +205,7 @@ export default function HomePageClient() {
       <HomepageDemo />
 
       {/* Features list */}
-      <section style={{ borderTop: `1px solid ${c.hairline}`, backgroundColor: c.canvasSoft, padding: "96px 32px" }}>
+      <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, backgroundColor: c.canvasSoft, padding: "96px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: c.ink, marginBottom: 16 }}>Everything built in.</h2>
           <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, marginBottom: 56, maxWidth: 480 }}>12 AI tools and an autonomous closing agent. Every plan includes every tool.</p>
@@ -214,7 +234,7 @@ export default function HomePageClient() {
       </section>
 
       {/* Social proof band */}
-      <section style={{ backgroundColor: c.sectionDark, padding: "96px 32px" }}>
+      <section className="tw-section-pad tw-section-lg" style={{ backgroundColor: c.sectionDark, padding: "96px 32px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.25rem)", fontWeight: 300, letterSpacing: "-0.96px", color: c.sectionDarkText, marginBottom: 20, lineHeight: 1.15 }}>Built for the attorneys who actually close.</h2>
           <p style={{ fontSize: "1.0625rem", fontWeight: 300, color: c.sectionDarkMuted, lineHeight: 1.6, marginBottom: 40 }}>Not a general legal tool. Not a CRM. TITLEwise is purpose-built for real estate closing attorneys. The only platform designed around the closing workflow from intake to clear-to-close.</p>
@@ -223,7 +243,7 @@ export default function HomePageClient() {
       </section>
 
       {/* Pricing preview */}
-      <section style={{ borderTop: `1px solid ${c.hairline}`, padding: "96px 32px", backgroundColor: c.bg }}>
+      <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, padding: "96px 32px", backgroundColor: c.bg }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ marginBottom: 56 }}>
             <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: c.ink, marginBottom: 12 }}>Simple pricing. No surprises.</h2>
@@ -251,7 +271,7 @@ export default function HomePageClient() {
       </section>
 
       {/* CTA */}
-      <section style={{ borderTop: `1px solid ${c.hairline}`, padding: "96px 32px", backgroundColor: c.canvasSoft }}>
+      <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, padding: "96px 32px", backgroundColor: c.canvasSoft }}>
         <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ fontSize: "clamp(1.75rem, 4vw, 2.5rem)", fontWeight: 300, letterSpacing: "-0.96px", color: c.ink, marginBottom: 16, lineHeight: 1.15 }}>Start closing smarter.</h2>
           <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, marginBottom: 36, lineHeight: 1.55 }}>Every tool included from day one. Set up in under five minutes.</p>
@@ -267,7 +287,7 @@ export default function HomePageClient() {
 
       {/* Footer */}
       <footer style={{ borderTop: `1px solid ${c.hairline}`, backgroundColor: c.bg }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 0" }}>
+        <div className="tw-section-pad" style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 32px 0" }}>
           <div className="tw-footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "0 48px" }}>
             <div style={{ paddingBottom: 40 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -311,7 +331,7 @@ export default function HomePageClient() {
               </ul>
             </div>
           </div>
-          <div style={{ borderTop: `1px solid ${c.hairline}`, paddingTop: 20, paddingBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" as const, gap: 16 }}>
+          <div className="tw-footer-bottom" style={{ borderTop: `1px solid ${c.hairline}`, paddingTop: 20, paddingBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" as const, gap: 16 }}>
             <p style={{ fontSize: "11px", fontWeight: 300, color: c.muted, margin: 0 }}>&copy; 2026 Boxford Partners LLC DBA TITLEwise. All rights reserved. &nbsp;&middot;&nbsp; 345 California St., Suite 600, San Francisco CA 94104</p>
             <a href="https://www.linkedin.com/company/boxfordpartners" target="_blank" rel="noopener noreferrer" aria-label="Boxford Partners on LinkedIn" style={{ color: c.muted }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
