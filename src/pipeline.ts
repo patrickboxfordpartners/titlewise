@@ -13,6 +13,13 @@ interface PipelineEnv {
   TAVILY_API_KEY: string;
   MITOSIS_API_KEY: string;
   MITOSIS_OFFICE_ID: string;
+  TENANT_ID?: string;
+}
+
+function createScopedMemory(env: PipelineEnv): MitosisMemory {
+  const memory = createScopedMemory(env);
+  if (env.TENANT_ID) memory.setTenant(env.TENANT_ID);
+  return memory;
 }
 
 interface PipelineEvent {
@@ -26,7 +33,41 @@ interface PipelineEvent {
 
 type EventEmitter = (event: PipelineEvent) => void;
 
-function extractEntitiesFromText(text: string): { banks: string[]; routingNumbers: string[]; beneficiaries: string[]; amounts: string[]; addresses: string[] } {
+export interface PanelVerdict {
+  agent: string;
+  role: string;
+  overall_risk: string;
+  confidence: number;
+  key_finding: string;
+  agrees_with_primary: boolean;
+  additional_concerns: string[];
+}
+
+export interface ConsensusResult {
+  consensusRisk: string;
+  highVotes: number;
+  agreeVotes: number;
+  consensusConfidence: number;
+  quorumMet: boolean;
+  abstainCount: number;
+  activeCount: number;
+}
+
+export function computeConsensus(verdicts: PanelVerdict[]): ConsensusResult {
+  const activeVerdicts = verdicts.filter(v => v.overall_risk !== "ABSTAIN");
+  const abstainCount = verdicts.length - activeVerdicts.length;
+  const highVotes = activeVerdicts.filter(v => v.overall_risk === "HIGH").length;
+  const agreeVotes = activeVerdicts.filter(v => v.agrees_with_primary).length;
+  const quorumMet = activeVerdicts.length >= 2;
+  const consensusRisk = !quorumMet ? "HIGH" : highVotes >= 2 ? "HIGH" : highVotes >= 1 ? "MEDIUM" : "LOW";
+  const consensusConfidence = activeVerdicts.length > 0
+    ? activeVerdicts.reduce((sum, v) => sum + v.confidence, 0) / activeVerdicts.length
+    : 0;
+
+  return { consensusRisk, highVotes, agreeVotes, consensusConfidence, quorumMet, abstainCount, activeCount: activeVerdicts.length };
+}
+
+export function extractEntitiesFromText(text: string): { banks: string[]; routingNumbers: string[]; beneficiaries: string[]; amounts: string[]; addresses: string[] } {
   const routingNumbers = [...text.matchAll(/\b(\d{9})\b/g)].map(m => m[1]).filter(n => {
     // ABA routing number checksum validation
     const d = n.split("").map(Number);
@@ -172,7 +213,7 @@ async function runMemoryCheck(entities: any, tool: string, env: PipelineEnv, emi
 
   emit({ stage: "memory", agent: "Mitosis Memory", status: "start", message: "Checking persistent memory for prior encounters", elapsed: Date.now() - startTime });
 
-  const memory = new MitosisMemory({ apiKey: env.MITOSIS_API_KEY, officeId: env.MITOSIS_OFFICE_ID });
+  const memory = createScopedMemory(env);
 
   // Query for any of the extracted entities
   const queries: string[] = [];
@@ -196,16 +237,6 @@ async function runMemoryCheck(entities: any, tool: string, env: PipelineEnv, emi
   }
 
   return priorFindings;
-}
-
-interface PanelVerdict {
-  agent: string;
-  role: string;
-  overall_risk: string;
-  confidence: number;
-  key_finding: string;
-  agrees_with_primary: boolean;
-  additional_concerns: string[];
 }
 
 const PANEL_AGENTS = [
@@ -273,8 +304,8 @@ Return JSON only:
     });
 
     if (!response.ok) {
-      emit({ stage: "adversarial", agent: panelAgent.name, status: "error", message: "Unavailable — deferring to other panelists", elapsed: Date.now() - startTime });
-      return { agent: panelAgent.name, role: panelAgent.role, overall_risk: "MEDIUM", confidence: 0.5, key_finding: "Agent unavailable", agrees_with_primary: true, additional_concerns: [] };
+      emit({ stage: "adversarial", agent: panelAgent.name, status: "error", message: "Unavailable — abstaining from vote", elapsed: Date.now() - startTime });
+      return { agent: panelAgent.name, role: panelAgent.role, overall_risk: "ABSTAIN", confidence: 0, key_finding: "Agent unavailable — not counted in consensus", agrees_with_primary: false, additional_concerns: [] };
     }
 
     const data: any = await response.json();
@@ -283,8 +314,8 @@ Return JSON only:
     const jsonMatch = text.match(/\{[\s\S]*\}/);
 
     if (!jsonMatch) {
-      emit({ stage: "adversarial", agent: panelAgent.name, status: "complete", message: "Could not parse my assessment — deferring", elapsed: Date.now() - startTime });
-      return { agent: panelAgent.name, role: panelAgent.role, overall_risk: "MEDIUM", confidence: 0.5, key_finding: "Parse error", agrees_with_primary: true, additional_concerns: [] };
+      emit({ stage: "adversarial", agent: panelAgent.name, status: "complete", message: "Could not parse my assessment — abstaining", elapsed: Date.now() - startTime });
+      return { agent: panelAgent.name, role: panelAgent.role, overall_risk: "ABSTAIN", confidence: 0, key_finding: "Parse error — not counted in consensus", agrees_with_primary: false, additional_concerns: [] };
     }
 
     const result = JSON.parse(jsonMatch[0]);
@@ -309,8 +340,8 @@ Return JSON only:
 
     return verdict;
   } catch {
-    emit({ stage: "adversarial", agent: panelAgent.name, status: "error", message: "Connection failed — deferring", elapsed: Date.now() - startTime });
-    return { agent: panelAgent.name, role: panelAgent.role, overall_risk: "MEDIUM", confidence: 0.5, key_finding: "Connection error", agrees_with_primary: true, additional_concerns: [] };
+    emit({ stage: "adversarial", agent: panelAgent.name, status: "error", message: "Connection failed — abstaining from vote", elapsed: Date.now() - startTime });
+    return { agent: panelAgent.name, role: panelAgent.role, overall_risk: "ABSTAIN", confidence: 0, key_finding: "Connection error — not counted in consensus", agrees_with_primary: false, additional_concerns: [] };
   }
 }
 
@@ -328,23 +359,26 @@ async function runVerificationPanel(primaryAnalysis: any, documentText: string, 
     PANEL_AGENTS.map(agent => runSinglePanelAgent(agent, findings, tavilyContext, documentText, anthropicKey, emit, startTime))
   );
 
-  // Consensus: count votes
-  const highVotes = verdicts.filter(v => v.overall_risk === "HIGH").length;
-  const agreeVotes = verdicts.filter(v => v.agrees_with_primary).length;
-  const consensusRisk = highVotes >= 2 ? "HIGH" : highVotes >= 1 ? "MEDIUM" : "LOW";
-  const consensusConfidence = verdicts.reduce((sum, v) => sum + v.confidence, 0) / verdicts.length;
+  const { consensusRisk, highVotes, agreeVotes, consensusConfidence, quorumMet, abstainCount, activeCount } = computeConsensus(verdicts);
+  const activeVerdicts = verdicts.filter(v => v.overall_risk !== "ABSTAIN");
 
   // Panel discussion — agents "respond" to each other
   emit({ stage: "adversarial", agent: "Closing Coordinator", status: "progress", message: "All three panelists have submitted. Comparing verdicts...", elapsed: Date.now() - startTime });
 
-  if (highVotes === 3) {
+  if (!quorumMet) {
+    emit({ stage: "adversarial", agent: "Closing Coordinator", status: "progress", message: `QUORUM LOST: ${abstainCount} of 3 panelists unavailable. Escalating to HIGH risk as a safety measure — insufficient independent verification.`, elapsed: Date.now() - startTime });
+  } else if (highVotes === activeVerdicts.length && activeVerdicts.length === 3) {
     emit({ stage: "adversarial", agent: "Closing Coordinator", status: "progress", message: `Unanimous: all 3 panelists agree — ${consensusRisk} risk. No further discussion needed.`, elapsed: Date.now() - startTime });
   } else if (highVotes >= 2) {
-    const dissenter = verdicts.find(v => v.overall_risk !== "HIGH");
-    emit({ stage: "adversarial", agent: dissenter?.agent || "Skeptic", status: "progress", message: `I had reservations, but I'm outvoted 2-1. Deferring to the majority.`, elapsed: Date.now() - startTime });
+    const dissenter = activeVerdicts.find(v => v.overall_risk !== "HIGH");
+    emit({ stage: "adversarial", agent: dissenter?.agent || "Skeptic", status: "progress", message: `I had reservations, but I'm outvoted ${highVotes}-${activeVerdicts.length - highVotes}. Deferring to the majority.`, elapsed: Date.now() - startTime });
   } else if (highVotes === 1) {
-    const alerter = verdicts.find(v => v.overall_risk === "HIGH");
+    const alerter = activeVerdicts.find(v => v.overall_risk === "HIGH");
     emit({ stage: "adversarial", agent: alerter?.agent || "Forensic Investigator", status: "progress", message: `I'm the only one flagging HIGH risk here. The others see it as moderate. Noting my concern for the record.`, elapsed: Date.now() - startTime });
+  }
+
+  if (abstainCount > 0 && quorumMet) {
+    emit({ stage: "adversarial", agent: "Closing Coordinator", status: "progress", message: `Note: ${abstainCount} panelist(s) were unavailable and did not vote.`, elapsed: Date.now() - startTime });
   }
 
   const allConcerns = verdicts.flatMap(v => v.additional_concerns);
@@ -457,7 +491,7 @@ async function runPatternMatch(entities: any, env: PipelineEnv, emit: EventEmitt
 
   emit({ stage: "pattern", agent: "Pattern Matcher", status: "start", message: "Querying fraud pattern database for known entities", elapsed: Date.now() - startTime });
 
-  const memory = new MitosisMemory({ apiKey: env.MITOSIS_API_KEY, officeId: env.MITOSIS_OFFICE_ID });
+  const memory = createScopedMemory(env);
   const matches: any[] = [];
 
   // Search for each entity individually in the fraud-patterns feed
@@ -517,7 +551,7 @@ async function writeFraudPatterns(entities: any, primaryAnalysis: any, tavilyRes
 
   emit({ stage: "frauddb", agent: "Fraud DB Writer", status: "start", message: "Writing flagged entities to fraud pattern database", elapsed: Date.now() - startTime });
 
-  const memory = new MitosisMemory({ apiKey: env.MITOSIS_API_KEY, officeId: env.MITOSIS_OFFICE_ID });
+  const memory = createScopedMemory(env);
   const timestamp = new Date().toISOString();
   const writes: Promise<void>[] = [];
 
@@ -594,7 +628,7 @@ async function runDealAudit(
 
   emit({ stage: "audit", agent: "Deal Auditor", status: "start", message: "Cross-referencing this document against all prior uploads in this deal", elapsed: Date.now() - startTime });
 
-  const memory = new MitosisMemory({ apiKey: env.MITOSIS_API_KEY, officeId: env.MITOSIS_OFFICE_ID });
+  const memory = createScopedMemory(env);
   const discrepancies: AuditDiscrepancy[] = [];
   let dealFactsCount = 0;
 
@@ -925,7 +959,8 @@ export async function runMultiPipeline(
   documentText: string,
   env: PipelineEnv,
   emit: EventEmitter,
-  workerUrl?: string
+  workerUrl?: string,
+  tenantId?: string
 ): Promise<{ events: PipelineEvent[]; result: any }> {
   const startTime = Date.now();
   const events: PipelineEvent[] = [];
@@ -957,7 +992,7 @@ export async function runMultiPipeline(
     message: `--- Full Pipeline: ${toolLabels[primaryTool]} ---`,
     elapsed: Date.now() - startTime,
   });
-  const { result: primaryResult } = await runPipeline(primaryTool, documentText, env, emit, workerUrl);
+  const { result: primaryResult } = await runPipeline(primaryTool, documentText, env, emit, workerUrl, tenantId);
 
   // Run lightweight analysis only (single AI call) for remaining document types
   const secondaryResults: any[] = [];
@@ -1007,7 +1042,8 @@ export async function runPipeline(
   documentText: string,
   env: PipelineEnv,
   emit: EventEmitter,
-  workerUrl?: string
+  workerUrl?: string,
+  tenantId?: string
 ): Promise<{ events: PipelineEvent[]; result: any }> {
   const startTime = Date.now();
   const events: PipelineEvent[] = [];
@@ -1088,7 +1124,7 @@ export async function runPipeline(
     writePromises.push((async () => {
       wrappedEmit({ stage: "memory", agent: "Mitosis Memory", status: "start", message: "Persisting full analysis to cross-session memory", elapsed: Date.now() - startTime });
       try {
-        const memory = new MitosisMemory({ apiKey: env.MITOSIS_API_KEY, officeId: env.MITOSIS_OFFICE_ID });
+        const memory = createScopedMemory(env);
         const feedName = tool === "verify_wire" ? "wire" : tool === "analyze_commitment" ? "commitment" : tool === "analyze_closing_disclosure" ? "cd" : "hoa";
         const fp = propertyFingerprint(entities.addresses[0], documentText);
         await memory.storeAnalysis(feedName, fp, `${tool}: ${entities.beneficiaries[0] || entities.addresses[0] || "analysis"}`, JSON.stringify({ primaryAnalysis, tavilyResults, adversarialResult, riskSynthesis }), { tool, risk: riskSynthesis.risk_level });
@@ -1128,7 +1164,7 @@ export async function runPipeline(
   if (env.MITOSIS_API_KEY && env.MITOSIS_OFFICE_ID) {
     wrappedEmit({ stage: "audit-trail", agent: "Audit Trail", status: "start", message: "Writing immutable compliance record of all agent decisions", elapsed: Date.now() - startTime });
     try {
-      const memory = new MitosisMemory({ apiKey: env.MITOSIS_API_KEY, officeId: env.MITOSIS_OFFICE_ID });
+      const memory = createScopedMemory(env);
       const auditRecord = {
         timestamp: new Date().toISOString(),
         document_type: tool,
