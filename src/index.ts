@@ -19,6 +19,7 @@ export interface Env {
   MITOSIS_OFFICE_ID: string;
   TAVILY_API_KEY: string;
   HACKATHON_MODE: string;
+  HACK_SECRET: string;
   TELNYX_API_KEY: string;
   TELNYX_PHONE_NUMBER: string;
   TELNYX_MESSAGING_PROFILE_ID: string;
@@ -3149,6 +3150,15 @@ Tools require payment via the x402 protocol. After authentication:
     }
 
     if (url.pathname === "/api/analyze" && request.method === "POST") {
+      const hackathonMode = env.HACKATHON_MODE === "true";
+      const authResult = await verifyICToken(request, hackathonMode, env.HACK_SECRET);
+      if (!authResult.success) {
+        return new Response(JSON.stringify({ error: authResult.error }), {
+          status: authResult.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
       try {
         const body = await request.json() as { tool: string; document_text: string; property_address?: string; expected_amount?: number; expected_beneficiary?: string };
         const { tool, document_text, property_address, expected_amount, expected_beneficiary } = body;
@@ -3227,13 +3237,21 @@ Tools require payment via the x402 protocol. After authentication:
     }
 
     if (url.pathname === "/api/stream" && request.method === "POST") {
+      const hackathonMode = env.HACKATHON_MODE === "true";
+      const authResult = await verifyICToken(request, hackathonMode, env.HACK_SECRET);
+      if (!authResult.success) {
+        return new Response(JSON.stringify({ error: authResult.error }), {
+          status: authResult.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
       const body = await request.json() as { tool: string; document_text: string };
       const { tool, document_text } = body;
 
       // x402 Payment Gate — validates Stripe payment receipts in real-time
-      // In HACKATHON_MODE, bypass but the infrastructure is fully functional
-      if (env.HACKATHON_MODE !== "true") {
-        const receipt = await validateReceipt(request.headers.get("X-Payment-Receipt"), env.STRIPE_SECRET_KEY);
+      if (!hackathonMode) {
+        const receipt = await validateReceipt(request.headers.get("X-Payment-Receipt"), env.STRIPE_SECRET_KEY, tool);
         if (!receipt.valid) {
           return build402Response(tool, baseUrl);
         }
@@ -3250,11 +3268,13 @@ Tools require payment via the x402 protocol. After authentication:
       const writer = writable.getWriter();
       const encoder = new TextEncoder();
 
+      const tenantId = authResult.agentId;
       const pipelineEnv = {
         ANTHROPIC_API_KEY: env.ANTHROPIC_API_KEY,
         TAVILY_API_KEY: env.TAVILY_API_KEY || "",
         MITOSIS_API_KEY: env.MITOSIS_API_KEY || "",
         MITOSIS_OFFICE_ID: env.MITOSIS_OFFICE_ID || "",
+        TENANT_ID: tenantId,
       };
 
       ctx.waitUntil((async () => {
@@ -3265,9 +3285,9 @@ Tools require payment via the x402 protocol. After authentication:
           };
           let result: any;
           if (tool === "auto") {
-            ({ result } = await runMultiPipeline(document_text, pipelineEnv, emitFn, url.origin));
+            ({ result } = await runMultiPipeline(document_text, pipelineEnv, emitFn, url.origin, tenantId));
           } else {
-            ({ result } = await runPipeline(tool, document_text, pipelineEnv, emitFn, url.origin));
+            ({ result } = await runPipeline(tool, document_text, pipelineEnv, emitFn, url.origin, tenantId));
           }
           writer.write(encoder.encode(`data: ${JSON.stringify({ stage: "final", agent: "Pipeline", status: "complete", message: "done", data: result, elapsed: 0 })}\n\n`));
         } catch (e: any) {
@@ -3572,13 +3592,28 @@ Tools require payment via the x402 protocol. After authentication:
     }
 
     if (url.pathname === "/api/documents" && request.method === "GET") {
+      const hackathonMode = env.HACKATHON_MODE === "true";
+      const authResult = await verifyICToken(request, hackathonMode, env.HACK_SECRET);
+      if (!authResult.success) {
+        return new Response(JSON.stringify({ error: authResult.error }), {
+          status: authResult.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
       if (!env.DOCS_BUCKET) {
         return new Response(JSON.stringify({ documents: [], note: "R2 not enabled" }), {
           headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
         });
       }
-      const fileNumber = url.searchParams.get("fileNumber") || "";
-      const listed = await env.DOCS_BUCKET.list({ prefix: fileNumber ? `${fileNumber}/` : undefined, limit: 50 });
+      const fileNumber = url.searchParams.get("fileNumber");
+      if (!fileNumber) {
+        return new Response(JSON.stringify({ error: "fileNumber query parameter required" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+      const listed = await env.DOCS_BUCKET.list({ prefix: `${fileNumber}/`, limit: 50 });
       const documents = listed.objects
         .filter(obj => !obj.key.includes("/.versions/"))
         .map(obj => ({
@@ -3593,6 +3628,15 @@ Tools require payment via the x402 protocol. After authentication:
     }
 
     if (url.pathname === "/api/notify" && request.method === "POST") {
+      const hackathonMode = env.HACKATHON_MODE === "true";
+      const authResult = await verifyICToken(request, hackathonMode, env.HACK_SECRET);
+      if (!authResult.success) {
+        return new Response(JSON.stringify({ error: authResult.error }), {
+          status: authResult.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
       try {
         const body = await request.json() as NotifyRequest & { mode?: "sms" | "voice" | "both" };
         const telnyxEnv = {
@@ -3664,7 +3708,7 @@ Tools require payment via the x402 protocol. After authentication:
     // Auth required for MCP endpoints
     if (url.pathname === "/sse" || url.pathname === "/mcp") {
       const hackathonMode = env.HACKATHON_MODE === "true";
-      const authResult = await verifyICToken(request, hackathonMode);
+      const authResult = await verifyICToken(request, hackathonMode, env.HACK_SECRET);
       if (!authResult.success) {
         return new Response(JSON.stringify({ error: authResult.error }), {
           status: authResult.status,
@@ -3672,7 +3716,10 @@ Tools require payment via the x402 protocol. After authentication:
         });
       }
 
-      return TitleWiseAgent.serveSSE("/sse").fetch(request, env, ctx);
+      if (url.pathname === "/mcp") {
+        return TitleWiseAgent.serve("/mcp", { binding: "TITLEWISE_AGENT" }).fetch(request, env, ctx);
+      }
+      return TitleWiseAgent.serveSSE("/sse", { binding: "TITLEWISE_AGENT" }).fetch(request, env, ctx);
     }
 
     return new Response("Not found", { status: 404 });
