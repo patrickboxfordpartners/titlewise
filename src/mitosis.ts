@@ -35,10 +35,22 @@ interface CortexAnswer {
 
 export class MitosisMemory {
   private config: MitosisConfig;
+  private tenantId: string | null = null;
   private feeds: Map<string, string> = new Map();
 
   constructor(config: MitosisConfig) {
     this.config = config;
+  }
+
+  setTenant(agentId: string): void {
+    this.tenantId = agentId;
+    this.feeds.clear();
+  }
+
+  private scopedFeedName(feed: string): string {
+    if (!this.tenantId) return feed;
+    const safe = this.tenantId.replace(/[^a-zA-Z0-9_-]/g, "_");
+    return `${safe}:${feed}`;
   }
 
   private headers(): Record<string, string> {
@@ -49,41 +61,42 @@ export class MitosisMemory {
   }
 
   async ensureFeed(feedName: string): Promise<string> {
-    if (this.feeds.has(feedName)) return this.feeds.get(feedName)!;
+    const scoped = this.scopedFeedName(feedName);
+    if (this.feeds.has(scoped)) return this.feeds.get(scoped)!;
 
     const res = await fetch(`${MITOSIS_ENDPOINT}/api/v1/offices/${this.config.officeId}/feeds`, {
       method: "POST",
       headers: this.headers(),
-      body: JSON.stringify({ name: feedName }),
+      body: JSON.stringify({ name: scoped }),
     });
 
     if (res.ok) {
       const data: any = await res.json();
-      const feedKey = data.feedKey || data.feed_key || feedName;
-      this.feeds.set(feedName, feedKey);
+      const feedKey = data.feedKey || data.feed_key || scoped;
+      this.feeds.set(scoped, feedKey);
       return feedKey;
     }
 
-    // Feed might already exist — try to list and find it
     const listRes = await fetch(`${MITOSIS_ENDPOINT}/api/v1/offices/${this.config.officeId}/feeds`, {
       headers: this.headers(),
     });
 
     if (listRes.ok) {
       const feeds: any[] = await listRes.json();
-      const existing = feeds.find((f: any) => f.name === feedName);
+      const existing = feeds.find((f: any) => f.name === scoped);
       if (existing) {
-        this.feeds.set(feedName, existing.feedKey || existing.feed_key || feedName);
-        return this.feeds.get(feedName)!;
+        this.feeds.set(scoped, existing.feedKey || existing.feed_key || scoped);
+        return this.feeds.get(scoped)!;
       }
     }
 
-    this.feeds.set(feedName, feedName);
-    return feedName;
+    this.feeds.set(scoped, scoped);
+    return scoped;
   }
 
   async storeAnalysis(feed: string, externalId: string, title: string, content: string, metadata?: Record<string, string>): Promise<void> {
     const feedKey = await this.ensureFeed(feed);
+    const enriched = { ...metadata, tenant: this.tenantId || "unknown" };
 
     await fetch(`${MITOSIS_ENDPOINT}/api/v1/offices/${this.config.officeId}/cortex/rows`, {
       method: "POST",
@@ -94,7 +107,7 @@ export class MitosisMemory {
           external_id: externalId,
           title,
           content,
-          metadata,
+          metadata: enriched,
         }],
         deferEmbed: false,
       }),
@@ -103,7 +116,7 @@ export class MitosisMemory {
 
   async queryPriorAnalyses(query: string, feed?: string): Promise<CortexAnswer | null> {
     const params: any = { query };
-    if (feed) params.feed = feed;
+    if (feed) params.feed = this.scopedFeedName(feed);
 
     const res = await fetch(`${MITOSIS_ENDPOINT}/api/v1/offices/${this.config.officeId}/cortex/ask`, {
       method: "POST",
@@ -116,10 +129,11 @@ export class MitosisMemory {
   }
 
   async remember(text: string, metadata?: Record<string, string>): Promise<void> {
+    const enriched = { ...metadata, tenant: this.tenantId || "unknown" };
     await fetch(`${MITOSIS_ENDPOINT}/api/v1/offices/${this.config.officeId}/cortex/remember`, {
       method: "POST",
       headers: this.headers(),
-      body: JSON.stringify({ text, metadata }),
+      body: JSON.stringify({ text, metadata: enriched }),
     });
   }
 }
@@ -132,13 +146,30 @@ export async function adversarialVerify(
   primaryAnalysis: any,
   documentText: string,
   anthropicKey: string
-): Promise<{ verified: boolean; disagreements: string[]; confidence: number }> {
+): Promise<{ verified: boolean; disagreements: string[]; confidence: number; additional_concerns?: string[] }> {
   const findings = primaryAnalysis.redFlags || primaryAnalysis.fraudIndicators || [];
-  if (findings.length === 0) {
-    return { verified: true, disagreements: [], confidence: 1.0 };
-  }
 
-  const verificationPrompt = `You are an independent verification agent. A primary analyst flagged the following issues in a real estate document. Your job is to INDEPENDENTLY assess whether each finding is legitimate or a false positive.
+  // Even when primary found nothing, independently scan the document for missed threats
+  const verificationPrompt = findings.length === 0
+    ? `You are an independent verification agent reviewing a real estate document. The primary analyst found NO fraud indicators or red flags. Your job is to INDEPENDENTLY review the document and determine if the primary analyst missed anything.
+
+ORIGINAL DOCUMENT:
+${documentText.substring(0, 10000)}
+
+Assess independently. Return JSON:
+{
+  "verifications": [],
+  "missed_findings": [
+    {
+      "finding": "description of missed issue",
+      "severity": "HIGH" or "MEDIUM" or "LOW",
+      "reason": "why this matters"
+    }
+  ],
+  "overall_confidence": 0.0 to 1.0,
+  "additional_concerns": ["anything the primary analyst missed"]
+}`
+    : `You are an independent verification agent. A primary analyst flagged the following issues in a real estate document. Your job is to INDEPENDENTLY assess whether each finding is legitimate or a false positive.
 
 PRIMARY FINDINGS:
 ${JSON.stringify(findings, null, 2)}
@@ -174,29 +205,38 @@ For each finding, assess independently. Return JSON:
   });
 
   if (!response.ok) {
-    return { verified: true, disagreements: ["Verification agent unavailable"], confidence: 0.5 };
+    // Verification unavailable — do NOT default to safe
+    return { verified: false, disagreements: ["Verification agent unavailable — cannot confirm safety"], confidence: 0 };
   }
 
   const data: any = await response.json();
   const text = data.content?.[0]?.text;
-  if (!text) return { verified: true, disagreements: [], confidence: 0.5 };
+  if (!text) return { verified: false, disagreements: ["Empty response from verification agent"], confidence: 0 };
 
   try {
     const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return { verified: true, disagreements: [], confidence: 0.5 };
+    if (!jsonMatch) return { verified: false, disagreements: ["Could not parse verification response"], confidence: 0 };
     const result = JSON.parse(jsonMatch[0]);
 
     const disagreements = (result.verifications || [])
       .filter((v: any) => !v.verified)
       .map((v: any) => v.reason);
 
+    // Check for missed findings the adversarial agent caught independently
+    const missedFindings = (result.missed_findings || [])
+      .filter((f: any) => f.severity === "HIGH" || f.severity === "MEDIUM");
+    const additionalConcerns = result.additional_concerns || [];
+
+    const allIssues = [...disagreements, ...missedFindings.map((f: any) => f.finding)];
+
     return {
-      verified: disagreements.length === 0,
-      disagreements,
+      verified: allIssues.length === 0 && additionalConcerns.length === 0,
+      disagreements: allIssues,
       confidence: result.overall_confidence ?? 0.8,
+      additional_concerns: additionalConcerns,
     };
   } catch {
-    return { verified: true, disagreements: [], confidence: 0.5 };
+    return { verified: false, disagreements: ["Verification parse error — cannot confirm safety"], confidence: 0 };
   }
 }
 
