@@ -92,7 +92,8 @@ export async function createCheckoutSession(
 
 export async function validateReceipt(
   receiptHeader: string | null,
-  stripeKey?: string
+  stripeKey?: string,
+  expectedTool?: string
 ): Promise<PaymentReceipt> {
   if (!receiptHeader) {
     return { valid: false, method: "none", error: "No payment receipt provided" };
@@ -116,15 +117,21 @@ export async function validateReceipt(
       return { valid: false, method: "stripe", error: "Payment intent not found" };
     }
 
-    if (pi.status === "succeeded") {
-      return {
-        valid: true,
-        method: "stripe",
-        receipt_id: receiptId,
-        amount_cents: pi.amount,
-      };
+    if (pi.status !== "succeeded") {
+      return { valid: false, method: "stripe", error: `Payment status: ${pi.status}` };
     }
-    return { valid: false, method: "stripe", error: `Payment status: ${pi.status}` };
+
+    // Verify the receipt was issued for the requested tool
+    if (expectedTool && pi.metadata?.tool && pi.metadata.tool !== expectedTool) {
+      return { valid: false, method: "stripe", error: `Receipt is for tool "${pi.metadata.tool}", not "${expectedTool}"` };
+    }
+
+    return {
+      valid: true,
+      method: "stripe",
+      receipt_id: receiptId,
+      amount_cents: pi.amount,
+    };
   }
 
   if (method === "stripe" && stripeKey && receiptId.startsWith("cs_")) {
@@ -137,20 +144,26 @@ export async function validateReceipt(
       return { valid: false, method: "stripe", error: "Session not found" };
     }
 
-    if (session.payment_status === "paid") {
-      return {
-        valid: true,
-        method: "stripe",
-        receipt_id: session.payment_intent || receiptId,
-        amount_cents: session.amount_total,
-      };
+    if (session.payment_status !== "paid") {
+      return { valid: false, method: "stripe", error: `Session status: ${session.payment_status}` };
     }
-    return { valid: false, method: "stripe", error: `Session status: ${session.payment_status}` };
+
+    // Verify tool binding on the checkout session
+    if (expectedTool && session.metadata?.tool && session.metadata.tool !== expectedTool) {
+      return { valid: false, method: "stripe", error: `Receipt is for tool "${session.metadata.tool}", not "${expectedTool}"` };
+    }
+
+    return {
+      valid: true,
+      method: "stripe",
+      receipt_id: session.payment_intent || receiptId,
+      amount_cents: session.amount_total,
+    };
   }
 
-  // x402 native format — accept if well-formed (future: validate on-chain)
-  if (method === "x402" && receiptId.length > 10) {
-    return { valid: true, method: "x402", receipt_id: receiptId };
+  // x402 native format — reject without on-chain verification
+  if (method === "x402") {
+    return { valid: false, method: "x402", error: "x402 on-chain verification not yet implemented" };
   }
 
   return { valid: false, method, error: "Receipt validation failed" };

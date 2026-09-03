@@ -9,7 +9,7 @@ export type AuthResult =
   | { success: true; agentId: string; scopes: string[] }
   | { success: false; error: string; status: number }
 
-export async function verifyICToken(request: Request, hackathonMode = false): Promise<AuthResult> {
+export async function verifyICToken(request: Request, hackathonMode = false, hackSecret?: string): Promise<AuthResult> {
   const authHeader = request.headers.get("Authorization");
 
   if (!authHeader) {
@@ -26,13 +26,16 @@ export async function verifyICToken(request: Request, hackathonMode = false): Pr
     return { success: false, error: "Empty token", status: 401 };
   }
 
-  // Hackathon mode: accept any non-empty Bearer token for judge demo access
+  // Hackathon mode: require a specific shared secret, not any nonempty string
   if (hackathonMode) {
-    return {
-      success: true,
-      agentId: `demo:${token.slice(0, 8)}`,
-      scopes: ["hack:*"],
-    };
+    if (hackSecret && token === hackSecret) {
+      return {
+        success: true,
+        agentId: `demo:hack`,
+        scopes: ["hack:*"],
+      };
+    }
+    // Fall through to normal IC token validation
   }
 
   if (!token.startsWith("agt_") && !token.startsWith("ic_")) {
@@ -75,11 +78,10 @@ export async function verifyICToken(request: Request, hackathonMode = false): Pr
       scopes: payload.scopes,
     };
   } catch {
-    // If IC verification is unreachable, fall back to format-based acceptance
     return {
-      success: true,
-      agentId: `unverified:${token.slice(0, 8)}`,
-      scopes: ["hack:*"],
+      success: false,
+      error: "IC verification service unreachable — cannot authenticate",
+      status: 503,
     };
   }
 }
