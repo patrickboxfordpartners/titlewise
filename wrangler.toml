@@ -5,11 +5,11 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = true
 
 routes = [
-  { pattern = "titlewise.app", custom_domain = true },
+  { pattern = "agent.titlewise.app", custom_domain = true },
 ]
 
 [vars]
-TITLEWISE_API_URL = "https://titlewise.app"
+TITLEWISE_API_URL = "https://agent.titlewise.app"
 HACKATHON_MODE = "true"
 
 # Secrets (set via `npx wrangler secret put <NAME>`):
