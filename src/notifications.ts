@@ -16,7 +16,6 @@ export interface NotifyRequest {
     status: "ready" | "hold";
     flags?: string[];
   };
-  recipientPhone?: string;
 }
 
 interface TelnyxEnv {
@@ -138,11 +137,12 @@ export async function makeVoiceCall(
 export async function handleNotification(
   req: NotifyRequest,
   env: TelnyxEnv,
-  mode: "sms" | "voice" | "both" = "sms"
+  mode: "sms" | "voice" | "both" = "sms",
+  contactPhone?: string,
 ): Promise<{ sms?: any; voice?: any; message: string }> {
-  const phone = req.recipientPhone || env.DEMO_NOTIFY_PHONE;
+  const phone = contactPhone || env.DEMO_NOTIFY_PHONE;
   if (!phone) {
-    return { message: "No recipient phone number configured" };
+    return { message: "No recipient phone number found. Register contacts via /api/contacts or set DEMO_NOTIFY_PHONE." };
   }
 
   const messages = buildMessage(req);

@@ -3601,6 +3601,8 @@ Tools require payment via the x402 protocol. After authentication:
         });
       }
 
+      const agentId = authResult.agentId;
+
       if (!env.DOCS_BUCKET) {
         return new Response(JSON.stringify({ documents: [], note: "R2 not enabled" }), {
           headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
@@ -3613,6 +3615,13 @@ Tools require payment via the x402 protocol. After authentication:
           headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
         });
       }
+      if (!/^[A-Za-z0-9._-]+$/.test(fileNumber)) {
+        return new Response(JSON.stringify({ error: "Invalid fileNumber format" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+      console.log(`[audit] agent=${agentId} accessed documents for fileNumber=${fileNumber}`);
       const listed = await env.DOCS_BUCKET.list({ prefix: `${fileNumber}/`, limit: 50 });
       const documents = listed.objects
         .filter(obj => !obj.key.includes("/.versions/"))
@@ -3622,8 +3631,78 @@ Tools require payment via the x402 protocol. After authentication:
           uploaded: obj.uploaded.toISOString(),
           version: obj.customMetadata?.version || "1",
         }));
-      return new Response(JSON.stringify({ documents }), {
+      return new Response(JSON.stringify({ documents, accessedBy: agentId }), {
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+
+    if (url.pathname === "/api/contacts" && (request.method === "GET" || request.method === "POST")) {
+      const hackathonMode = env.HACKATHON_MODE === "true";
+      const authResult = await verifyICToken(request, hackathonMode, env.HACK_SECRET);
+      if (!authResult.success) {
+        return new Response(JSON.stringify({ error: authResult.error }), {
+          status: authResult.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
+      if (!env.DOCS_BUCKET) {
+        return new Response(JSON.stringify({ error: "Storage not configured" }), {
+          status: 503,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
+      const fileNumber = url.searchParams.get("fileNumber");
+      if (!fileNumber || !/^[A-Za-z0-9._-]+$/.test(fileNumber)) {
+        return new Response(JSON.stringify({ error: "Valid fileNumber query parameter required" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
+      const contactsKey = `contacts/${fileNumber}.json`;
+
+      if (request.method === "GET") {
+        const obj = await env.DOCS_BUCKET.get(contactsKey);
+        const contacts = obj ? await obj.json() : {};
+        return new Response(JSON.stringify({ fileNumber, contacts }), {
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
+      // POST: upsert contacts for a deal
+      const body = await request.json() as {
+        contacts: Record<string, { name: string; phone: string; email?: string }>;
+      };
+      if (!body.contacts || typeof body.contacts !== "object") {
+        return new Response(JSON.stringify({ error: "Body must include contacts object with role keys" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+
+      const validRoles = ["buyer_agent", "seller_agent", "lender", "closing_attorney", "title_officer"];
+      const cleaned: Record<string, { name: string; phone: string; email?: string }> = {};
+      for (const [role, info] of Object.entries(body.contacts)) {
+        if (!validRoles.includes(role)) continue;
+        if (!info.phone || !/^\+?[0-9]{10,15}$/.test(info.phone.replace(/[\s()-]/g, ""))) continue;
+        cleaned[role] = { name: info.name || role, phone: info.phone.replace(/[\s()-]/g, ""), email: info.email };
+      }
+
+      // Merge with existing contacts
+      const existing = await env.DOCS_BUCKET.get(contactsKey);
+      const merged = existing ? { ...(await existing.json() as object), ...cleaned } : cleaned;
+      await env.DOCS_BUCKET.put(contactsKey, JSON.stringify(merged));
+      console.log(`[audit] agent=${authResult.agentId} updated contacts for fileNumber=${fileNumber} roles=${Object.keys(cleaned).join(",")}`);
+      return new Response(JSON.stringify({ fileNumber, contacts: merged, updated: Object.keys(cleaned) }), {
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+
+    if (url.pathname === "/api/contacts" && request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET, POST", "Access-Control-Allow-Headers": "Content-Type, Authorization" },
       });
     }
 
@@ -3637,6 +3716,7 @@ Tools require payment via the x402 protocol. After authentication:
         });
       }
 
+      console.log(`[audit] agent=${authResult.agentId} triggered notification`);
       try {
         const body = await request.json() as NotifyRequest & { mode?: "sms" | "voice" | "both" };
         const telnyxEnv = {
@@ -3658,7 +3738,50 @@ Tools require payment via the x402 protocol. After authentication:
           });
         }
 
-        const result = await handleNotification(body, telnyxEnv, body.mode || "sms");
+        // Look up deal contacts from R2 to resolve recipient(s) by role
+        let contacts: Record<string, { name: string; phone: string }> | null = null;
+        if (env.DOCS_BUCKET && body.dealInfo?.fileNumber) {
+          const contactsObj = await env.DOCS_BUCKET.get(`contacts/${body.dealInfo.fileNumber}.json`);
+          if (contactsObj) {
+            contacts = await contactsObj.json() as Record<string, { name: string; phone: string }>;
+          }
+        }
+
+        // hold_all_parties fans out to every registered contact
+        if (body.action === "hold_all_parties" && contacts) {
+          const allPhones = Object.values(contacts).map(c => c.phone).filter(Boolean);
+          if (allPhones.length === 0) {
+            const result = await handleNotification(body, telnyxEnv, body.mode || "sms");
+            return new Response(JSON.stringify({ success: true, ...result }), {
+              headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+            });
+          }
+          const results = await Promise.all(
+            allPhones.map(phone => handleNotification(body, telnyxEnv, body.mode || "sms", phone))
+          );
+          const sent = results.filter(r => r.sms?.success || r.voice?.success).length;
+          return new Response(JSON.stringify({
+            success: sent > 0,
+            totalRecipients: allPhones.length,
+            sent,
+            failed: allPhones.length - sent,
+            details: results.map((r, i) => ({ phone: allPhones[i], ...r })),
+          }), {
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+          });
+        }
+
+        // Single-recipient actions
+        const roleMap: Record<string, string> = {
+          notify_buyer_agent: "buyer_agent",
+          notify_seller_agent: "seller_agent",
+          send_to_lender: "lender",
+          escalate_compliance: "closing_attorney",
+        };
+        const targetRole = roleMap[body.action];
+        const recipientPhone = (targetRole && contacts?.[targetRole]?.phone) || undefined;
+
+        const result = await handleNotification(body, telnyxEnv, body.mode || "sms", recipientPhone);
         return new Response(JSON.stringify({ success: true, ...result }), {
           headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
         });
@@ -3701,6 +3824,60 @@ Tools require payment via the x402 protocol. After authentication:
 
     if (url.pathname === "/cotal" || url.pathname === "/.well-known/agent.json") {
       return new Response(JSON.stringify(getCotalManifest(baseUrl), null, 2), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (url.pathname === "/.well-known/agent-card.json") {
+      const agentCard = {
+        name: "TitleWise",
+        description: "Real estate document intelligence agent. Analyzes title commitments, verifies wire instructions, reviews closing disclosures, and audits HOA documents.",
+        url: baseUrl,
+        version: "1.0.0",
+        capabilities: {
+          streaming: true,
+          pushNotifications: false,
+          stateTransitionHistory: false,
+        },
+        authentication: {
+          schemes: ["bearer"],
+          credentials: "IC agent token (agt_...) with scope titlewise:analyze or titlewise:read",
+        },
+        defaultInputModes: ["text", "application/pdf"],
+        defaultOutputModes: ["text", "application/json"],
+        skills: [
+          { id: "analyze_commitment", name: "Analyze Title Commitment", description: "Multi-agent panel reviews a title commitment for risks, exceptions, and red flags" },
+          { id: "verify_wire", name: "Verify Wire Instructions", description: "Adversarial verification of wire transfer instructions for fraud indicators" },
+          { id: "analyze_closing_disclosure", name: "Analyze Closing Disclosure", description: "Reviews closing disclosure for fee accuracy, tolerance violations, and missing items" },
+          { id: "review_hoa", name: "Review HOA Documents", description: "Analyzes HOA estoppel letters and covenants for financial and compliance risks" },
+        ],
+      };
+      return new Response(JSON.stringify(agentCard, null, 2), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (url.pathname === "/mcp.json") {
+      const mcpDiscovery = {
+        name: "TitleWise Agent",
+        description: "Real estate document intelligence via MCP",
+        transport: {
+          type: "streamable-http",
+          url: `${baseUrl}/mcp`,
+        },
+        authentication: {
+          type: "bearer",
+          description: "IC agent token (agt_...) required. Scopes: titlewise:analyze, titlewise:read",
+        },
+        tools: [
+          { name: "analyze_commitment", description: "Analyze a title commitment document" },
+          { name: "verify_wire", description: "Verify wire transfer instructions for fraud" },
+          { name: "analyze_closing_disclosure", description: "Review a closing disclosure" },
+          { name: "review_hoa", description: "Analyze HOA documents" },
+          { name: "recall", description: "Retrieve prior analysis from agent memory" },
+        ],
+      };
+      return new Response(JSON.stringify(mcpDiscovery, null, 2), {
         headers: { "Content-Type": "application/json" },
       });
     }
