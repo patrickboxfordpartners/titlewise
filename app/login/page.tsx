@@ -1,10 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Logo } from "@/components/logo"
+
+const PHOTOS = [
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=2074&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2070&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=2070&auto=format&fit=crop",
+]
 
 export default function LoginPage() {
   const router = useRouter()
@@ -12,6 +18,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+
+  const photo = useMemo(() => PHOTOS[Math.floor(Math.random() * PHOTOS.length)], [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -39,65 +47,48 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden" style={{ backgroundColor: "var(--background)" }}>
-      {/* Blue gradient backdrop */}
-      <div
-        className="absolute top-0 left-0 right-0 z-0"
-        style={{
-          height: "40vh",
-          background: "linear-gradient(90deg, color-mix(in srgb, var(--primary) 15%, var(--background)), color-mix(in srgb, var(--primary) 40%, var(--background)), color-mix(in srgb, var(--primary) 60%, var(--background)))",
-          filter: "blur(60px)",
-          opacity: 0.5,
-        }}
-      />
-      <div className="absolute inset-0 z-0" style={{ background: `linear-gradient(to bottom, transparent, var(--background) 70%)` }} />
+    <div className="min-h-screen flex">
+      {/* Left side - Form */}
+      <div className="flex-1 flex items-center justify-center p-8 bg-white">
+        <div className="w-full max-w-[400px]">
+          <div className="flex justify-center mb-14">
+            <img src="/logo.svg" alt="TITLEwise" className="h-9 w-auto" />
+          </div>
 
-      <div className="relative z-10 w-full max-w-md px-6">
-        <div className="mb-8 flex justify-center">
-          <Logo href="/" />
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-8 shadow-lg">
-          <h1 className="text-2xl font-light tracking-tight text-foreground mb-2">
+          <h1 className="text-[32px] font-bold text-gray-900 tracking-tight mb-2">
             Welcome back
           </h1>
-          <p className="text-sm font-light text-muted-foreground mb-6">
-            Log in to your TITLEwise account
+          <p className="text-gray-500 text-[15px] mb-8">
+            AI-powered tools for title attorneys
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-light text-muted-foreground mb-1">
-                Email
-              </label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-border rounded-lg font-light text-foreground bg-input focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder:text-muted-foreground/50"
-                placeholder="you@firm.com"
+                className="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg text-[15px] placeholder:text-gray-400 focus:bg-white focus:border-gray-300 focus:outline-none transition-colors"
+                placeholder="Email address"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-light text-muted-foreground mb-1">
-                Password
-              </label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-border rounded-lg font-light text-foreground bg-input focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none placeholder:text-muted-foreground/50"
-                placeholder="Enter your password"
+                className="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg text-[15px] placeholder:text-gray-400 focus:bg-white focus:border-gray-300 focus:outline-none transition-colors"
+                placeholder="Password"
               />
             </div>
 
             {error && (
-              <div className="text-destructive text-sm font-light">
+              <div className="text-red-600 text-sm">
                 {error}
               </div>
             )}
@@ -105,21 +96,45 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-normal rounded-full py-2 shadow-sm hover:shadow-md transition-all disabled:opacity-60"
+              className="w-full h-12 text-[15px] font-medium bg-gray-900 text-white hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-60"
             >
               {loading ? "Logging in..." : "Log in"}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm font-light text-muted-foreground">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-primary hover:text-primary/80 font-normal">
-                Sign up
-              </Link>
-            </p>
+          <div className="flex items-center gap-4 my-6">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="text-xs text-gray-400 uppercase">or</span>
+            <div className="flex-1 h-px bg-gray-200" />
           </div>
+
+          <p className="text-sm text-gray-500 text-center">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-gray-900 font-medium hover:underline">
+              Sign up
+            </Link>
+          </p>
+
+          <p className="mt-10 text-xs text-gray-400 text-center">
+            By continuing, you agree to our{" "}
+            <Link href="/terms" className="underline hover:text-gray-500">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy" className="underline hover:text-gray-500">
+              Privacy Policy
+            </Link>
+          </p>
         </div>
+      </div>
+
+      {/* Right side - Photo */}
+      <div className="hidden lg:block flex-1 relative overflow-hidden">
+        <img
+          src={photo}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
       </div>
     </div>
   )
