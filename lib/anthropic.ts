@@ -1,8 +1,12 @@
 import Anthropic from "@anthropic-ai/sdk"
 import { env } from "./env"
 
+const proxyKey = process.env.AI_PROXY_KEY
+const proxyUrl = process.env.AI_PROXY_URL
+
 export const anthropic = new Anthropic({
-  apiKey: env.ANTHROPIC_API_KEY,
+  apiKey: proxyKey || env.ANTHROPIC_API_KEY,
+  ...(proxyUrl && { baseURL: proxyUrl }),
   defaultHeaders: env.ANTHROPIC_WORKSPACE_ID
     ? { "anthropic-workspace-id": env.ANTHROPIC_WORKSPACE_ID }
     : undefined,

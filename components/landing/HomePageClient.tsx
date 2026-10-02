@@ -79,7 +79,6 @@ export default function HomePageClient() {
           <Link href="/pricing" className="tw-nav-link" style={{ fontSize: "0.9375rem", fontWeight: 300, color: c.muted, textDecoration: "none" }}>Pricing</Link>
           <Link href="/blog" className="tw-nav-link" style={{ fontSize: "0.9375rem", fontWeight: 300, color: c.muted, textDecoration: "none" }}>Blog</Link>
           <Link href="/demo" className="tw-nav-link" style={{ fontSize: "0.9375rem", fontWeight: 300, color: c.muted, textDecoration: "none" }}>Demo</Link>
-          <Link href="/analyze" className="tw-nav-link" style={{ fontSize: "0.9375rem", fontWeight: 300, color: c.muted, textDecoration: "none" }}>Analyze</Link>
           <Link href="/login" className="tw-nav-link" style={{ fontSize: "0.9375rem", fontWeight: 300, color: c.muted, textDecoration: "none" }}>Log in</Link>
           <ThemeToggle />
           <Link
