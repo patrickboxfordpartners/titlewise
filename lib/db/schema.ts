@@ -26,7 +26,10 @@ export const users = pgTable("users", {
   customLogoUrl: text("custom_logo_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
+}, (table) => [
+  // Serves drip (status + created_at window) and monthly usage reset (status).
+  index("idx_users_status_created").on(table.subscriptionStatus, table.createdAt),
+])
 
 export const statusUpdates = pgTable("status_updates", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -76,6 +79,7 @@ export const matters = pgTable("matters", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
   index("idx_matters_user_id").on(table.userId),
+  index("idx_matters_user_updated").on(table.userId, table.updatedAt),
 ])
 
 export const checklistItems = pgTable("checklist_items", {
@@ -288,6 +292,7 @@ export const emailThreads = pgTable("email_threads", {
 }, (table) => [
   index("idx_email_threads_matter_id").on(table.matterId),
   index("idx_email_threads_created").on(table.createdAt),
+  index("idx_email_threads_matter_created").on(table.matterId, table.createdAt),
 ])
 
 export type EmailThread = typeof emailThreads.$inferSelect
@@ -353,6 +358,7 @@ export const blogPosts = pgTable("blog_posts", {
   index("idx_blog_posts_slug").on(table.slug),
   index("idx_blog_posts_status").on(table.status),
   index("idx_blog_posts_published").on(table.publishedAt),
+  index("idx_blog_posts_status_published").on(table.status, table.publishedAt),
 ])
 
 export type BlogPost = typeof blogPosts.$inferSelect

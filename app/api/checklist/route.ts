@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
 import { matters, checklistItems } from "@/lib/db/schema"
-import { eq, desc, and, ne, count } from "drizzle-orm"
+import { eq, desc, inArray, sql } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 import { getTemplateItems } from "@/lib/checklist-templates"
 
@@ -26,15 +26,28 @@ export async function GET() {
     .orderBy(desc(matters.updatedAt))
     .limit(50)
 
-  // Get item counts per matter
-  const mattersWithCounts = await Promise.all(
-    allMatters.map(async (m) => {
-      const items = await db.select().from(checklistItems).where(eq(checklistItems.matterId, m.id))
-      const total = items.length
-      const complete = items.filter((i) => i.status === "complete").length
-      return { ...m, totalItems: total, completedItems: complete }
-    })
-  )
+  const matterIds = allMatters.map((m) => m.id)
+  const countRows = matterIds.length === 0
+    ? []
+    : await db
+        .select({
+          matterId: checklistItems.matterId,
+          total: sql<number>`count(*)::int`,
+          complete: sql<number>`count(*) filter (where ${checklistItems.status} = 'complete')::int`,
+        })
+        .from(checklistItems)
+        .where(inArray(checklistItems.matterId, matterIds))
+        .groupBy(checklistItems.matterId)
+
+  const counts = new Map(countRows.map((row) => [row.matterId, row]))
+  const mattersWithCounts = allMatters.map((m) => {
+    const row = counts.get(m.id)
+    return {
+      ...m,
+      totalItems: Number(row?.total ?? 0),
+      completedItems: Number(row?.complete ?? 0),
+    }
+  })
 
   return NextResponse.json({ matters: mattersWithCounts })
 }

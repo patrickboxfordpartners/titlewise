@@ -29,23 +29,42 @@ export type StreamChunk =
   | { type: "tool_call_end"; id: string }
   | { type: "done" }
 
+async function requestChatCompletion(body: string): Promise<Response> {
+  const maxAttempts = 3
+  let lastError: unknown
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const res = await fetch("https://api.aisa.one/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${env.AISA_API_KEY}`,
+        },
+        body,
+      })
+      if (res.ok) return res
+      const retryable = res.status === 429 || res.status === 529 || res.status >= 500
+      if (!retryable || attempt === maxAttempts - 1) return res
+      await res.text().catch(() => undefined)
+    } catch (err) {
+      lastError = err
+      if (attempt === maxAttempts - 1) throw err
+    }
+    await new Promise((resolve) => setTimeout(resolve, 400 * 2 ** attempt))
+  }
+  throw lastError instanceof Error ? lastError : new Error("AIsa request failed")
+}
+
 export async function* streamChat(
   messages: AisaMessage[],
   tools: AisaTool[],
 ): AsyncGenerator<StreamChunk> {
-  const res = await fetch("https://api.aisa.one/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${env.AISA_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "anthropic/claude-sonnet-5",
-      messages,
-      tools,
-      stream: true,
-    }),
-  })
+  const res = await requestChatCompletion(JSON.stringify({
+    model: "anthropic/claude-sonnet-5",
+    messages,
+    tools,
+    stream: true,
+  }))
 
   if (!res.ok) {
     const text = await res.text()

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { blogPosts } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
+import { secretsMatch } from "@/lib/secret-compare"
 
 export const dynamic = "force-dynamic"
 
@@ -15,8 +16,7 @@ export async function GET(_req: NextRequest, { params }: Props) {
 }
 
 export async function PATCH(req: NextRequest, { params }: Props) {
-  const apiKey = req.headers.get("x-api-key")
-  if (apiKey !== process.env.CONTENT_API_KEY) {
+  if (!secretsMatch(req.headers.get("x-api-key"), process.env.CONTENT_API_KEY)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   const { slug } = await params

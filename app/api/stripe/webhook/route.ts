@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm"
 import type Stripe from "stripe"
 import { logger } from "@/lib/logger"
 import { sendDripEmail } from "@/lib/email/drip"
+import { isUniqueViolation } from "@/lib/db/errors"
 
 export async function POST(req: NextRequest) {
   const body = await req.text()
@@ -23,10 +24,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
   }
 
-  // Idempotency check, skip if already processed
-  const existing = await db.select().from(processedEvents).where(eq(processedEvents.id, event.id)).limit(1)
-  if (existing.length > 0) {
-    return NextResponse.json({ received: true, duplicate: true })
+  // Claim the event id before side effects so overlapping deliveries cannot double-apply.
+  try {
+    await db.insert(processedEvents).values({ id: event.id })
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      return NextResponse.json({ received: true, duplicate: true })
+    }
+    logger.error("stripe/webhook", "Idempotency insert failed", { error: String(err) })
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
   }
 
   try {
@@ -139,14 +145,13 @@ export async function POST(req: NextRequest) {
     }
   } catch (err) {
     logger.error("stripe/webhook", `Error processing ${event.type}`, { error: String(err) })
+    // Release the claim so Stripe's retry can process the event.
+    try {
+      await db.delete(processedEvents).where(eq(processedEvents.id, event.id))
+    } catch (deleteErr) {
+      logger.error("stripe/webhook", "Failed to release idempotency key after error", { error: String(deleteErr) })
+    }
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
-  }
-
-  // Mark as processed
-  try {
-    await db.insert(processedEvents).values({ id: event.id })
-  } catch {
-    // Non-critical, if this fails, worst case is re-processing on retry
   }
 
   return NextResponse.json({ received: true })

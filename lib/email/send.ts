@@ -16,7 +16,15 @@ export async function sendEmail({
   subject: string
   body: string
 }): Promise<void> {
-  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+  const [user] = await db
+    .select({
+      email: users.email,
+      googleRefreshToken: users.googleRefreshToken,
+      outlookRefreshToken: users.outlookRefreshToken,
+    })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1)
   if (!user) throw new Error("User not found")
 
   if (user.googleRefreshToken) {

@@ -1,8 +1,8 @@
 import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { matters, checklistItems, titleAnalyses, statusUpdates, users } from "@/lib/db/schema"
-import { eq, and } from "drizzle-orm"
+import { matters, checklistItems, titleAnalyses, statusUpdates } from "@/lib/db/schema"
+import { eq, and, sql } from "drizzle-orm"
 import { getOrCreateUser, checkSubscriptionAccess } from "@/lib/db/get-user"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { logger } from "@/lib/logger"
@@ -32,7 +32,8 @@ export async function POST(req: NextRequest) {
 
   const recentAnalyses = await db.select({
     propertyAddress: titleAnalyses.propertyAddress,
-    analysis: titleAnalyses.analysis,
+    summary: sql<string | null>`${titleAnalyses.analysis}->>'summary'`,
+    redFlagCount: sql<number>`coalesce(jsonb_array_length(${titleAnalyses.analysis}->'redFlags'), 0)::int`,
     createdAt: titleAnalyses.createdAt,
   }).from(titleAnalyses)
     .where(and(eq(titleAnalyses.userId, user.id), eq(titleAnalyses.matterId, matterId)))
@@ -68,8 +69,7 @@ ${pending.map(i => `- ${i.title} (assigned: ${i.assignedTo ?? "unassigned"})`).j
 
 RECENT TITLE ANALYSES:
 ${recentAnalyses.length > 0 ? recentAnalyses.map(a => {
-  const analysis = a.analysis as any
-  return `- Analyzed: ${a.propertyAddress ?? matter.propertyAddress}\n  Red flags: ${analysis?.redFlags?.length ?? 0}\n  Summary: ${analysis?.summary ?? "N/A"}`
+  return `- Analyzed: ${a.propertyAddress ?? matter.propertyAddress}\n  Red flags: ${Number(a.redFlagCount) || 0}\n  Summary: ${a.summary ?? "N/A"}`
 }).join("\n") : "No title analyses linked to this matter yet"}
 
 ${SAFETY_PREAMBLE}

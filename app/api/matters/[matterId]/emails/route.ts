@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
 import { matters, emailThreads } from "@/lib/db/schema"
-import { eq, and, asc } from "drizzle-orm"
+import { eq, and, desc } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 
@@ -33,9 +33,10 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ mat
   const { matter } = await getOwnedMatter(matterId, userId)
   if (!matter) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const emails = await db.select().from(emailThreads)
+  const emails = (await db.select().from(emailThreads)
     .where(eq(emailThreads.matterId, matterId))
-    .orderBy(asc(emailThreads.createdAt))
+    .orderBy(desc(emailThreads.createdAt))
+    .limit(200)).reverse()
 
   const inboxAddress = matterInboxAddress(matterId)
   return NextResponse.json({ emails, inboxAddress })
