@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import crypto from "node:crypto"
 import { db } from "@/lib/db"
 import { matters, emailThreads } from "@/lib/db/schema"
 import { eq, like } from "drizzle-orm"
@@ -28,7 +29,12 @@ export async function POST(req: NextRequest) {
   const secret = process.env.POSTMARK_INBOUND_WEBHOOK_SECRET
   if (secret) {
     const sig = req.headers.get("x-postmark-signature")
-    if (sig !== secret) {
+    if (!sig) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    const actual = crypto.createHash('sha256').update(sig).digest()
+    const expected = crypto.createHash('sha256').update(secret).digest()
+    if (!crypto.timingSafeEqual(actual, expected)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
   }
