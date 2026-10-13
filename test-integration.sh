@@ -136,7 +136,7 @@ echo "Test $TOTAL_TESTS: Invalid API key"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 INVALID_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/v1/analyze-commitment" \
-  -H "Authorization: Bearer tw_live_invalid123456" \
+  -H "Authorization: Bearer ${INVALID_API_KEY:-not-a-key}" \
   -H "Content-Type: application/json" \
   -d '{"document_text": "test"}')
 

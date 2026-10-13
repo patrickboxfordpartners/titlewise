@@ -58,10 +58,10 @@ After deploying:
 
 ### Current Status
 
-✅ **Already Configured**:
-- Project key: `phc_S9m5GZ2t6EXZ4DAO4zbMHycBcWiJHefj5KR7SbJjy8l`
-- Host: `https://us.i.posthog.com`
-- User identification: Automatic via Clerk
+✅ **Configured from the environment**:
+- Project key: `NEXT_PUBLIC_POSTHOG_KEY` (public write-only project key; do not commit the value)
+- Host: `NEXT_PUBLIC_POSTHOG_HOST` (defaults to `https://us.i.posthog.com`)
+- User identification: Automatic via the signed-in session when the key is set
 
 ### Events Being Tracked
 
@@ -96,21 +96,9 @@ TEAM_MEMBER_INVITED
 
 ### 3. Best Practices
 
-**Move PostHog key to environment variable:**
+**PostHog key stays in the environment:**
 
-1. Add to Vercel:
-   ```bash
-   NEXT_PUBLIC_POSTHOG_KEY=phc_S9m5GZ2t6EXZ4DAO4zbMHycBcWiJHefj5KR7SbJjy8l
-   NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
-   ```
-
-2. Update `components/posthog-provider.tsx`:
-   ```typescript
-   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-     // ... rest of config
-   })
-   ```
+`components/posthog-provider.tsx` reads `NEXT_PUBLIC_POSTHOG_KEY` and `NEXT_PUBLIC_POSTHOG_HOST`. Analytics stays off until the key is set on the host (for example in Vercel). Do not commit the key.
 
 ---
 

@@ -7,8 +7,10 @@ import { useSession } from "next-auth/react"
 
 function PostHogIdentify() {
   const { data: session } = useSession()
+  const enabled = Boolean(process.env.NEXT_PUBLIC_POSTHOG_KEY)
 
   useEffect(() => {
+    if (!enabled) return
     if (session?.user) {
       posthog.identify(session.user.id!, {
         email: session.user.email ?? undefined,
@@ -17,15 +19,17 @@ function PostHogIdentify() {
     } else {
       posthog.reset()
     }
-  }, [session?.user?.id])
+  }, [enabled, session?.user?.id])
 
   return null
 }
 
 export function PHProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    posthog.init("phc_S9m5GZ2t6EXZ4DAO4zbMHycBcWiJHefj5KR7SbJjy8l", {
-      api_host: "https://us.i.posthog.com",
+    const key = process.env.NEXT_PUBLIC_POSTHOG_KEY
+    if (!key) return
+    posthog.init(key, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
       person_profiles: "identified_only",
       capture_pageview: true,
       capture_pageleave: true,
