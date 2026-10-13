@@ -134,7 +134,7 @@ print(f"Remaining: {response.headers['X-RateLimit-Remaining']}")`}</code>
           <h3 className="text-lg font-medium text-foreground mb-3">cURL</h3>
           <pre className="bg-muted/40 border border-border rounded-lg p-4 overflow-x-auto">
             <code className="text-sm font-mono text-foreground">{`curl -X POST https://titlewise.app/api/v1/analyze-commitment \\
-  -H "Authorization: Bearer tw_live_YOUR_API_KEY" \\
+  -H "Authorization: Bearer $TITLEWISE_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
     "document_text": "COMMITMENT FOR TITLE INSURANCE...",
