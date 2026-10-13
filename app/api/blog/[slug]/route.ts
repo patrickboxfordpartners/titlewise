@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import crypto from "node:crypto"
 import { db } from "@/lib/db"
 import { blogPosts } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
@@ -16,7 +17,12 @@ export async function GET(_req: NextRequest, { params }: Props) {
 
 export async function PATCH(req: NextRequest, { params }: Props) {
   const apiKey = req.headers.get("x-api-key")
-  if (apiKey !== process.env.CONTENT_API_KEY) {
+  if (!apiKey || !process.env.CONTENT_API_KEY) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+  const actual = crypto.createHash('sha256').update(apiKey).digest()
+  const expected = crypto.createHash('sha256').update(process.env.CONTENT_API_KEY).digest()
+  if (!crypto.timingSafeEqual(actual, expected)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   const { slug } = await params
