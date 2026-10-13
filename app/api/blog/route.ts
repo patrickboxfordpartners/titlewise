@@ -1,3 +1,4 @@
+import crypto from "node:crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { blogPosts } from "@/lib/db/schema"
@@ -16,7 +17,12 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get("x-api-key")
-  if (apiKey !== process.env.CONTENT_API_KEY) {
+  if (!apiKey || !process.env.CONTENT_API_KEY) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+  const actual = crypto.createHash('sha256').update(apiKey).digest()
+  const expected = crypto.createHash('sha256').update(process.env.CONTENT_API_KEY).digest()
+  if (!crypto.timingSafeEqual(actual, expected)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   try {
