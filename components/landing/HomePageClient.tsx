@@ -154,7 +154,7 @@ export default function HomePageClient() {
           <div className="tw-hero-inner" style={{ maxWidth: 960, margin: "0 auto" }}>
             <p style={{ fontSize: "10px", fontWeight: 400, color: c.primary, letterSpacing: "0.1px", textTransform: "uppercase", marginBottom: 24 }}>AI Closing Platform</p>
             <h1 style={{ fontSize: "clamp(2.5rem, 5vw, 3.75rem)", fontWeight: 300, letterSpacing: "-1.4px", lineHeight: 1.05, color: c.ink, marginBottom: 24 }}>
-              The average closing takes 47 days.<br /><span style={{ color: c.primary }}>Yours doesn't have to.</span>
+              The average closing takes 47 days.<br /><span style={{ color: c.primary }}>Yours doesn&apos;t have to.</span>
             </h1>
             <p className="tw-hero-sub" style={{ fontSize: "1.0625rem", fontWeight: 300, color: c.muted, lineHeight: 1.6, maxWidth: 640, margin: "0 auto 40px" }}>
               AI closing coordinator for real estate attorneys. Title analysis in 30 seconds. TRID compliance checks automatic. Wire fraud caught before it happens.

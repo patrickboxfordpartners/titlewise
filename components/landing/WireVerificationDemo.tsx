@@ -50,13 +50,18 @@ export default function WireVerificationDemo() {
   }
 
   useEffect(() => {
-    if (window.innerWidth < 640) {
-      setVisibleChecks(CHECKS.map(c => c.id))
-      setVerdict("done")
-      return
+    const handle = window.setTimeout(() => {
+      if (window.innerWidth < 640) {
+        setVisibleChecks(CHECKS.map(c => c.id))
+        setVerdict("done")
+        return
+      }
+      run()
+    }, 0)
+    return () => {
+      window.clearTimeout(handle)
+      clear()
     }
-    run()
-    return clear
   }, [])
 
   const BG = "#0f1219"

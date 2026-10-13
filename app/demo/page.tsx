@@ -5,19 +5,33 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { FileText, X, Loader2, AlertTriangle, CheckCircle, Check, Phone, ShieldAlert, Clock, Ban } from "lucide-react"
 import ThemeToggle from "@/components/ThemeToggle"
-import { useThemeColors } from "@/lib/useThemeColors"
+import { useThemeColors, type ThemeColors } from "@/lib/useThemeColors"
 
 const FONT_SANS = "Inter, 'SF Pro Display', system-ui, -apple-system, sans-serif"
 const FONT_MONO = "'JetBrains Mono', 'SF Mono', Monaco, monospace"
 
 // ── Types ──
 
+type EventData = {
+  beneficiaries?: string[]
+  routingNumbers?: string[]
+  banks?: string[]
+  amounts?: string[]
+  addresses?: string[]
+  entity?: string
+  verified?: boolean
+  field?: string
+  current_value?: string
+  prior_value?: string
+  prior_document?: string
+}
+
 interface RecordedEvent {
   stage: string
   agent: string
   status: "start" | "progress" | "complete" | "error"
   message: string
-  data?: any
+  data?: EventData
   delay: number
 }
 
@@ -26,7 +40,7 @@ interface AgentEvent {
   agent: string
   status: "start" | "progress" | "complete" | "error"
   message: string
-  data?: any
+  data?: EventData
   elapsed: number
 }
 
@@ -342,7 +356,7 @@ function updateDealFromEvent(evt: AgentEvent, currentDeal: DealFacts): DealFacts
 
   if (evt.stage === "audit" && evt.status === "progress" && evt.data?.field) {
     const ad = evt.data
-    d.flags.push(`${ad.field.replace(/_/g, " ")}: "${ad.current_value}" vs "${ad.prior_value}" (${ad.prior_document})`)
+    d.flags.push(`${ad.field?.replace(/_/g, " ")}: "${ad.current_value}" vs "${ad.prior_value}" (${ad.prior_document})`)
   }
 
   return d
@@ -359,11 +373,10 @@ export default function DemoPage() {
   const [textInput, setTextInput] = useState("")
   const [running, setRunning] = useState(false)
   const [events, setEvents] = useState<AgentEvent[]>([])
-  const [verdict, setVerdict] = useState<any>(null)
+  const [verdict, setVerdict] = useState<typeof SAFE_VERDICT | null>(null)
   const [agentCount, setAgentCount] = useState(0)
   const [deal, setDeal] = useState<DealFacts>(EMPTY_DEAL)
   const [docCount, setDocCount] = useState(0)
-  const [dealStatus, setDealStatus] = useState<"waiting" | "progress" | "ready" | "hold">("waiting")
   const [alertTime, setAlertTime] = useState<number | null>(null)
   const [alertElapsed, setAlertElapsed] = useState(0)
   const [notifyStatus, setNotifyStatus] = useState<"idle" | "sending" | "sent">("idle")
@@ -372,7 +385,7 @@ export default function DemoPage() {
   useEffect(() => { dealRef.current = deal }, [deal])
 
   useEffect(() => {
-    if (!alertTime) { setAlertElapsed(0); return }
+    if (!alertTime) return
     const id = setInterval(() => setAlertElapsed(Math.floor((Date.now() - alertTime) / 1000)), 1000)
     return () => clearInterval(id)
   }, [alertTime])
@@ -388,13 +401,13 @@ export default function DemoPage() {
   const pipelineInfo = verdict?.pipeline || null
   const hasFlags = deal.flags.length > 0
   const checkedCount = Object.values(deal.milestones).filter(Boolean).length
-
-  useEffect(() => {
-    if (hasFlags) setDealStatus("hold")
-    else if (checkedCount >= 6 && deal.property.address && deal.wire.routing) setDealStatus("ready")
-    else if (docCount > 0) setDealStatus("progress")
-    else setDealStatus("waiting")
-  }, [hasFlags, checkedCount, deal.property.address, deal.wire.routing, docCount])
+  const dealStatus: "waiting" | "progress" | "ready" | "hold" = hasFlags
+    ? "hold"
+    : checkedCount >= 6 && deal.property.address && deal.wire.routing
+      ? "ready"
+      : docCount > 0
+        ? "progress"
+        : "waiting"
 
   function formatElapsed(s: number): string {
     const m = Math.floor(s / 60)
@@ -416,10 +429,12 @@ export default function DemoPage() {
     setDeal(EMPTY_DEAL)
     dealRef.current = EMPTY_DEAL
     setDocCount(0)
-    setDealStatus("waiting")
     setAlertTime(null)
+    setAlertElapsed(0)
     setNotifyStatus("idle")
   }, [clearTimeouts])
+
+  const playRecordingRef = useRef<(demoKey: "safe" | "fraud") => void>(() => {})
 
   const playRecording = useCallback((demoKey: "safe" | "fraud") => {
     resetState()
@@ -470,7 +485,7 @@ export default function DemoPage() {
           setRunning(false)
 
           const restartT = setTimeout(() => {
-            playRecording(demoKey)
+            playRecordingRef.current(demoKey)
           }, 6000)
           timeoutsRef.current.push(restartT)
         }
@@ -479,11 +494,15 @@ export default function DemoPage() {
     })
   }, [resetState])
 
+  useEffect(() => {
+    playRecordingRef.current = playRecording
+  }, [playRecording])
+
   // Auto-start with BEC attack on mount
   useEffect(() => {
-    const t = setTimeout(() => playRecording("fraud"), 600)
+    const t = setTimeout(() => playRecordingRef.current("fraud"), 600)
     return () => { clearTimeout(t); clearTimeouts() }
-  }, [])
+  }, [clearTimeouts])
 
   const border = c.hairline
   const panelBg = c.cardBg
@@ -639,9 +658,9 @@ export default function DemoPage() {
                 {(rs?.signals || []).length > 0 && (
                   <>
                     <p style={{ fontSize: "0.625rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#f87171", marginTop: 16, marginBottom: 6 }}>
-                      Fraud Indicators ({(rs.signals || []).length})
+                      Fraud Indicators ({(rs?.signals || []).length})
                     </p>
-                    {(rs.signals || []).map((s: string, i: number) => (
+                    {(rs?.signals || []).map((s: string, i: number) => (
                       <div key={i} style={{
                         fontSize: "0.68rem", padding: "4px 8px", borderLeft: "3px solid #f87171",
                         backgroundColor: c.isDark ? "rgba(127,29,29,0.12)" : "#fef2f2",
@@ -872,7 +891,7 @@ export default function DemoPage() {
 
 // ── Helper Components ──
 
-function ResponseStep({ num, children, c, critical }: { num: number; children: React.ReactNode; c: any; critical?: boolean }) {
+function ResponseStep({ num, children, c, critical }: { num: number; children: React.ReactNode; c: ThemeColors; critical?: boolean }) {
   return (
     <div style={{
       display: "flex", gap: 10, marginBottom: 10, padding: "8px 10px", borderRadius: 6,
@@ -892,7 +911,7 @@ function ResponseStep({ num, children, c, critical }: { num: number; children: R
   )
 }
 
-function FactGroup({ title, children, c, danger }: { title: string; children: React.ReactNode; c: any; danger?: boolean }) {
+function FactGroup({ title, children, c, danger }: { title: string; children: React.ReactNode; c: ThemeColors; danger?: boolean }) {
   return (
     <div style={{ marginBottom: 12 }}>
       <p style={{ fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: danger ? "#f87171" : c.muted, marginBottom: 4 }}>{title}</p>
@@ -901,7 +920,7 @@ function FactGroup({ title, children, c, danger }: { title: string; children: Re
   )
 }
 
-function FactItem({ value, label, c, status, placeholder }: { value: string | null; label: string; c: any; status?: string; placeholder?: string }) {
+function FactItem({ value, label, c, status, placeholder }: { value: string | null; label: string; c: ThemeColors; status?: string; placeholder?: string }) {
   const borderColor = status === "verified" ? "#4ade80" : status === "unverified" ? "#f87171" : status === "mismatch" ? "#f87171" : c.hairline
   const bg = status === "verified" ? (c.isDark ? "rgba(5,46,22,0.08)" : "transparent") : status === "unverified" ? (c.isDark ? "rgba(127,29,29,0.08)" : "transparent") : "transparent"
   const hasNumber = value ? /[\$\d]/.test(value) : false

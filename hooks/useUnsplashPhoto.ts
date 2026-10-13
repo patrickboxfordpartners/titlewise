@@ -23,7 +23,10 @@ export function useUnsplashPhoto(): UnsplashPhoto {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
         const { data, ts } = JSON.parse(cached);
-        if (Date.now() - ts < CACHE_TTL) { setPhoto(data); return; }
+        if (Date.now() - ts < CACHE_TTL) {
+          queueMicrotask(() => setPhoto(data));
+          return;
+        }
       }
     } catch {}
 

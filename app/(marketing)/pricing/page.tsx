@@ -213,7 +213,7 @@ export default function PricingPage() {
             <AccordionItem value="trial">
               <AccordionTrigger className="text-sm font-light text-foreground">How do I get started?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                Select a plan below and you'll be set up in minutes. Billing starts immediately when you subscribe. Monthly plans renew each month; annual plans renew once per year at a 20% discount.
+                Select a plan below and you&apos;ll be set up in minutes. Billing starts immediately when you subscribe. Monthly plans renew each month; annual plans renew once per year at a 20% discount.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="billing">
@@ -243,7 +243,7 @@ export default function PricingPage() {
             <AccordionItem value="cancel">
               <AccordionTrigger className="text-sm font-light text-foreground">What happens if I cancel?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                You can cancel anytime with no penalties. You'll retain access through the end of your current billing period. Your data is kept for 30 days in case you decide to come back.
+                You can cancel anytime with no penalties. You&apos;ll retain access through the end of your current billing period. Your data is kept for 30 days in case you decide to come back.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="seats">

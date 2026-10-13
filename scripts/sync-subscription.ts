@@ -42,7 +42,10 @@ async function main() {
     process.exit(1);
   }
 
-  const subscriptions = (customer as any).subscriptions.data;
+  const subscriptions =
+    "subscriptions" in customer && customer.subscriptions && "data" in customer.subscriptions
+      ? customer.subscriptions.data
+      : [];
   if (subscriptions.length === 0) {
     console.error('❌ No subscriptions found');
     process.exit(1);

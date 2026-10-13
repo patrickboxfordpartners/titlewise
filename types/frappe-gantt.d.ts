@@ -1,5 +1,5 @@
 declare module "frappe-gantt" {
-  interface GanttTask {
+  export interface GanttTask {
     id: string
     name: string
     start: string
@@ -8,6 +8,8 @@ declare module "frappe-gantt" {
     dependencies?: string
     custom_class?: string
     description?: string
+    _start?: Date | string
+    _end?: Date | string
     [key: string]: unknown
   }
 

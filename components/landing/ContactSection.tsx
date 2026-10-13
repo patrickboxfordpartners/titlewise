@@ -196,7 +196,7 @@ export default function ContactSection() {
                   {submitting ? "Sending..." : <><Send className="mr-1 h-4 w-4" /> Send Request</>}
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
-                  We'll never share your information with third parties.
+                  We&apos;ll never share your information with third parties.
                 </p>
               </motion.form>
             )}

@@ -51,7 +51,7 @@ function SettingsContent() {
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
-      .then((data: any) => {
+      .then((data: Settings & { user?: { customLogoUrl?: string | null } }) => {
         setSettings(data)
         setName(data.name ?? "")
         setFirmName(data.firmName ?? "")
@@ -368,8 +368,10 @@ function SettingsContent() {
   )
 }
 
+type TeamMemberRow = { id: string; invitedEmail: string }
+
 function TeamSection() {
-  const [data, setData] = useState<{ members: any[]; pending: any[]; seatLimit: number; seatsUsed: number } | null>(null)
+  const [data, setData] = useState<{ members: TeamMemberRow[]; pending: TeamMemberRow[]; seatLimit: number; seatsUsed: number } | null>(null)
   const [email, setEmail] = useState("")
   const [inviting, setInviting] = useState(false)
   const [inviteResult, setInviteResult] = useState<{ url?: string; error?: string } | null>(null)
@@ -434,7 +436,7 @@ function TeamSection() {
       {data.members.length > 0 && (
         <div className="space-y-2 mb-3">
           <p className="text-xs font-medium text-muted-foreground">Active</p>
-          {data.members.map((m: any) => (
+          {data.members.map((m) => (
             <div key={m.id} className="flex items-center justify-between text-sm py-1.5">
               <span>{m.invitedEmail}</span>
               <button onClick={() => handleRevoke(m.id)} className="text-xs text-red-500 hover:text-red-600 transition-colors">Remove</button>
@@ -447,7 +449,7 @@ function TeamSection() {
       {data.pending.length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-medium text-muted-foreground">Pending Invites</p>
-          {data.pending.map((m: any) => (
+          {data.pending.map((m) => (
             <div key={m.id} className="flex items-center justify-between text-sm py-1.5 text-muted-foreground">
               <span>{m.invitedEmail}</span>
               <button onClick={() => handleRevoke(m.id)} className="text-xs hover:text-foreground transition-colors">Cancel</button>

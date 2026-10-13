@@ -130,12 +130,17 @@ Provide a comprehensive closing coordinator report as JSON:
     }
 
     // Auto-apply suggested checklist updates
-    const reportData = report as any
+    const reportData = report as {
+      checklist_updates?: Array<{ item_title?: string; suggested_status?: string }>
+      draft_status_email?: { subject?: string; body?: string }
+    }
     let updatedItems = 0
     if (Array.isArray(reportData.checklist_updates)) {
       for (const update of reportData.checklist_updates) {
+        const needle = update.item_title?.toLowerCase().slice(0, 30)
+        if (!needle) continue
         const matchingItem = items.find(i =>
-          i.title.toLowerCase().includes(update.item_title?.toLowerCase().slice(0, 30))
+          i.title.toLowerCase().includes(needle)
         )
         if (matchingItem && update.suggested_status && matchingItem.status !== update.suggested_status) {
           await db.update(checklistItems)

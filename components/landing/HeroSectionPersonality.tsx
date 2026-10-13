@@ -7,7 +7,16 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 import HeroBackground from "./HeroBackground"
 import { useRef } from "react"
 
-const MagneticButton = ({ children, href, variant, ...props }: any) => {
+const MagneticButton = ({
+  children,
+  href,
+  variant,
+  ...props
+}: {
+  children: React.ReactNode
+  href: string
+  variant?: React.ComponentProps<typeof Button>["variant"]
+} & Omit<React.ComponentProps<typeof Button>, "children" | "variant">) => {
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)

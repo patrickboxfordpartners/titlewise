@@ -8,15 +8,11 @@ function JoinContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const token = searchParams.get("token")
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
-  const [message, setMessage] = useState("")
+  const [status, setStatus] = useState<"loading" | "success" | "error">(token ? "loading" : "error")
+  const [message, setMessage] = useState(token ? "" : "Invalid invitation link.")
 
   useEffect(() => {
-    if (!token) {
-      setStatus("error")
-      setMessage("Invalid invitation link.")
-      return
-    }
+    if (!token) return
 
     fetch("/api/team/join", {
       method: "POST",

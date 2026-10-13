@@ -182,7 +182,7 @@ export function WebhooksSection() {
               <div className="flex-1">
                 <p className="text-sm font-medium text-green-700 mb-1">Webhook created successfully</p>
                 <p className="text-xs text-green-600/80 mb-3">
-                  Save your signing secret now — it won't be shown again. Use it to verify webhook signatures.
+                  Save your signing secret now — it won&apos;t be shown again. Use it to verify webhook signatures.
                 </p>
                 <div className="flex items-center gap-2">
                   <code className="flex-1 text-xs font-mono bg-green-500/10 px-3 py-2 rounded border border-green-500/20 break-all">
