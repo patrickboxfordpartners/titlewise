@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { blogPosts } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { secretsMatch } from "@/lib/secret-compare"
 
 export const dynamic = "force-dynamic"
 
 interface Props { params: Promise<{ slug: string }> }
 
-export async function GET(_req: NextRequest, { params }: Props) {
+export async function GET(req: NextRequest, { params }: Props) {
   const { slug } = await params
-  const [post] = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug))
+  // Drafts are only visible to the content pipeline (CONTENT_API_KEY).
+  const canSeeDrafts = secretsMatch(req.headers.get("x-api-key"), process.env.CONTENT_API_KEY)
+  const where = canSeeDrafts
+    ? eq(blogPosts.slug, slug)
+    : and(eq(blogPosts.slug, slug), eq(blogPosts.status, "published"))
+  const [post] = await db.select().from(blogPosts).where(where)
   if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 })
   return NextResponse.json(post)
 }
