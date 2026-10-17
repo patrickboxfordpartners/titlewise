@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 import { db } from "@/lib/db"
 import { users, processedEvents } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { and, eq, lt } from "drizzle-orm"
 import type Stripe from "stripe"
 import { logger } from "@/lib/logger"
 import { sendDripEmail } from "@/lib/email/drip"
@@ -24,14 +24,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
   }
 
-  // Claim the event id before side effects so overlapping deliveries cannot double-apply.
+  // Idempotency, two rows in processed_events:
+  //   "claim:<event id>"  = a delivery is processing this event right now
+  //   "<event id>"        = the event finished processing
+  // A retry that arrives while another delivery holds the claim gets a 409, so
+  // Stripe retries later instead of us acknowledging an event that may still
+  // fail. A claim older than CLAIM_TTL_MS (crashed or timed-out run) is taken over.
+  const claimId = `claim:${event.id}`
   try {
-    await db.insert(processedEvents).values({ id: event.id })
-  } catch (err) {
-    if (isUniqueViolation(err)) {
+    const done = await db.select({ id: processedEvents.id }).from(processedEvents)
+      .where(eq(processedEvents.id, event.id)).limit(1)
+    if (done.length > 0) {
       return NextResponse.json({ received: true, duplicate: true })
     }
-    logger.error("stripe/webhook", "Idempotency insert failed", { error: String(err) })
+    const claimed = await claimEvent(claimId)
+    if (!claimed) {
+      return NextResponse.json({ error: "Event is already being processed" }, { status: 409 })
+    }
+  } catch (err) {
+    logger.error("stripe/webhook", "Idempotency claim failed", { error: String(err) })
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
   }
 
@@ -147,12 +158,48 @@ export async function POST(req: NextRequest) {
     logger.error("stripe/webhook", `Error processing ${event.type}`, { error: String(err) })
     // Release the claim so Stripe's retry can process the event.
     try {
-      await db.delete(processedEvents).where(eq(processedEvents.id, event.id))
+      await db.delete(processedEvents).where(eq(processedEvents.id, claimId))
     } catch (deleteErr) {
-      logger.error("stripe/webhook", "Failed to release idempotency key after error", { error: String(deleteErr) })
+      logger.error("stripe/webhook", "Failed to release idempotency claim after error", { error: String(deleteErr) })
     }
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
   }
 
+  // Mark done, then drop the claim. If marking done fails, keep the claim and
+  // return 500 so Stripe retries; handlers are written to be safe to re-run.
+  try {
+    await db.insert(processedEvents).values({ id: event.id }).onConflictDoNothing()
+    await db.delete(processedEvents).where(eq(processedEvents.id, claimId))
+  } catch (err) {
+    logger.error("stripe/webhook", "Failed to record processed event", { error: String(err) })
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
+  }
+
   return NextResponse.json({ received: true })
+}
+
+const CLAIM_TTL_MS = 5 * 60 * 1000
+
+/** Insert the claim row. Returns false while another live delivery holds it. */
+async function claimEvent(claimId: string): Promise<boolean> {
+  try {
+    await db.insert(processedEvents).values({ id: claimId })
+    return true
+  } catch (err) {
+    if (!isUniqueViolation(err)) throw err
+  }
+  // Someone holds the claim. Take it over only if it's stale; the conditional
+  // delete means just one taker wins.
+  const staleBefore = new Date(Date.now() - CLAIM_TTL_MS)
+  const removed = await db.delete(processedEvents)
+    .where(and(eq(processedEvents.id, claimId), lt(processedEvents.processedAt, staleBefore)))
+    .returning({ id: processedEvents.id })
+  if (removed.length === 0) return false
+  try {
+    await db.insert(processedEvents).values({ id: claimId })
+    return true
+  } catch (err) {
+    if (isUniqueViolation(err)) return false
+    throw err
+  }
 }
