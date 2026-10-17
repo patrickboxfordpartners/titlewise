@@ -476,7 +476,10 @@ export default function HistoryPage() {
     setLoading(false)
   }, [debouncedSearch, fromDate, toDate])
 
-  useEffect(() => { fetchHistory() }, [fetchHistory])
+  useEffect(() => {
+    const handle = window.setTimeout(() => { void fetchHistory() }, 0)
+    return () => window.clearTimeout(handle)
+  }, [fetchHistory])
 
   function handleCopy(id: string, text: string) {
     navigator.clipboard.writeText(text)

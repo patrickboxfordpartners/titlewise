@@ -33,10 +33,6 @@ export function ApiKeysSection() {
   const [copied, setCopied] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
 
-  useEffect(() => {
-    loadKeys()
-  }, [])
-
   async function loadKeys() {
     setLoading(true)
     const res = await fetch("/api/keys")
@@ -44,6 +40,11 @@ export function ApiKeysSection() {
     setKeys(data.keys || [])
     setLoading(false)
   }
+
+  useEffect(() => {
+    const handle = window.setTimeout(() => { void loadKeys() }, 0)
+    return () => window.clearTimeout(handle)
+  }, [])
 
   async function handleGenerate() {
     if (!newKeyName.trim()) return
@@ -134,7 +135,7 @@ export function ApiKeysSection() {
                   API Key Generated
                 </p>
                 <p className="text-xs text-green-600/80 dark:text-green-400/80 mb-3">
-                  Copy this key now — it won't be shown again.
+                  Copy this key now — it won&apos;t be shown again.
                 </p>
                 <div className="flex items-center gap-2 bg-green-950/20 border border-green-500/30 rounded-md p-3">
                   <code className="flex-1 text-xs font-mono text-green-700 dark:text-green-300 break-all">
@@ -155,7 +156,7 @@ export function ApiKeysSection() {
                   onClick={() => setNewKey(null)}
                   className="mt-3 text-xs text-green-600 hover:text-green-700 underline"
                 >
-                  I've saved it securely
+                  I&apos;ve saved it securely
                 </button>
               </div>
             </div>

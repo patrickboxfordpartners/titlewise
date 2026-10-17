@@ -21,7 +21,7 @@ export default function PrivacyPage() {
 
         <div className="mt-12 space-y-8 text-foreground font-light leading-relaxed">
 
-          <p>Boxford Partners LLC DBA TITLEwise ("TITLEwise," "we," "us," or "our") operates titlewise.app and the associated AI-powered closing platform. This Privacy Policy explains what information we collect, how we use it, and your rights with respect to it.</p>
+          <p>Boxford Partners LLC DBA TITLEwise (&quot;TITLEwise,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates titlewise.app and the associated AI-powered closing platform. This Privacy Policy explains what information we collect, how we use it, and your rights with respect to it.</p>
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Information We Collect</h2>
@@ -38,7 +38,7 @@ export default function PrivacyPage() {
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-1">
               <li>To provide AI-powered document analysis and closing tools</li>
-              <li>To respond to inquiries and deliver services you've requested</li>
+              <li>To respond to inquiries and deliver services you&apos;ve requested</li>
               <li>To operate, maintain, and improve our platform</li>
               <li>To process payments and manage subscriptions</li>
               <li>To send transactional communications related to your account</li>
@@ -76,17 +76,17 @@ export default function PrivacyPage() {
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Your Rights</h2>
-            <p>Depending on your location, you may have the right to access, correct, delete, or restrict processing of your personal data. California residents have additional rights under the CCPA, including the right to know what data we've collected and the right to opt out of any sale of personal information. We do not sell personal information.</p>
+            <p>Depending on your location, you may have the right to access, correct, delete, or restrict processing of your personal data. California residents have additional rights under the CCPA, including the right to know what data we&apos;ve collected and the right to opt out of any sale of personal information. We do not sell personal information.</p>
           </div>
 
           <div>
-            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Children's Privacy</h2>
+            <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Children&apos;s Privacy</h2>
             <p>Our services are not directed to individuals under 18. We do not knowingly collect personal information from minors.</p>
           </div>
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Changes to This Policy</h2>
-            <p>We may update this policy from time to time. Material changes will be noted with a new "Last updated" date. Continued use of our services after changes constitutes acceptance.</p>
+            <p>We may update this policy from time to time. Material changes will be noted with a new &quot;Last updated&quot; date. Continued use of our services after changes constitutes acceptance.</p>
           </div>
 
           <div>

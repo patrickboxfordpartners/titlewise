@@ -2,21 +2,40 @@ import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { blogPosts } from "@/lib/db/schema"
 import { eq, desc } from "drizzle-orm"
+import { secretsMatch } from "@/lib/secret-compare"
 
 export const dynamic = "force-dynamic"
 
 export async function GET() {
   const posts = await db
-    .select()
+    .select({
+      id: blogPosts.id,
+      slug: blogPosts.slug,
+      title: blogPosts.title,
+      excerpt: blogPosts.excerpt,
+      author: blogPosts.author,
+      authorUrl: blogPosts.authorUrl,
+      category: blogPosts.category,
+      readTime: blogPosts.readTime,
+      brand: blogPosts.brand,
+      tags: blogPosts.tags,
+      status: blogPosts.status,
+      canonical: blogPosts.canonical,
+      publishedAt: blogPosts.publishedAt,
+      createdAt: blogPosts.createdAt,
+      updatedAt: blogPosts.updatedAt,
+    })
     .from(blogPosts)
     .where(eq(blogPosts.status, "published"))
     .orderBy(desc(blogPosts.publishedAt))
-  return NextResponse.json(posts)
+    .limit(100)
+  return NextResponse.json(posts, {
+    headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
+  })
 }
 
 export async function POST(req: NextRequest) {
-  const apiKey = req.headers.get("x-api-key")
-  if (apiKey !== process.env.CONTENT_API_KEY) {
+  if (!secretsMatch(req.headers.get("x-api-key"), process.env.CONTENT_API_KEY)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
   try {
@@ -35,8 +54,7 @@ export async function POST(req: NextRequest) {
     }).returning()
     return NextResponse.json(post, { status: 201 })
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    console.error("[blog] POST error:", message)
-    return NextResponse.json({ error: message }, { status: 500 })
+    console.error("[blog] POST error:", err instanceof Error ? err.message : String(err))
+    return NextResponse.json({ error: "Failed to create post" }, { status: 500 })
   }
 }

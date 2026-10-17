@@ -81,6 +81,7 @@ function EmailRow({ email }: { email: EmailItem }) {
 export default function EmailThreadsPanel({ matterId }: { matterId: string }) {
   const [emails, setEmails] = useState<EmailItem[]>([])
   const [inboxAddress, setInboxAddress] = useState("")
+  const [truncated, setTruncated] = useState(false)
   const [loading, setLoading] = useState(true)
   const [showCompose, setShowCompose] = useState(false)
   const [sending, setSending] = useState(false)
@@ -94,6 +95,7 @@ export default function EmailThreadsPanel({ matterId }: { matterId: string }) {
       .then(d => {
         setEmails(d.emails ?? [])
         setInboxAddress(d.inboxAddress ?? "")
+        setTruncated(Boolean(d.truncated))
       })
       .finally(() => setLoading(false))
   }, [matterId])
@@ -244,6 +246,9 @@ export default function EmailThreadsPanel({ matterId }: { matterId: string }) {
 
       {!loading && emails.length > 0 && (
         <div className="border-t border-border">
+          {truncated && (
+            <p className="px-4 py-2 text-xs text-muted-foreground">Showing the most recent {emails.length} emails. Older emails are not shown.</p>
+          )}
           {emails.map(email => (
             <EmailRow key={email.id} email={email} />
           ))}

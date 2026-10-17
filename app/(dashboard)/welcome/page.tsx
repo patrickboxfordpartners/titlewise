@@ -191,13 +191,13 @@ function WelcomeContent() {
             <AccordionItem value="first-matter">
               <AccordionTrigger className="text-sm font-light text-foreground">What should I do first?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                Create your first matter by clicking the button below. You'll add basic information like client name, property address, and closing date. TITLEwise will automatically generate a closing checklist based on your transaction type and state.
+                Create your first matter by clicking the button below. You&apos;ll add basic information like client name, property address, and closing date. TITLEwise will automatically generate a closing checklist based on your transaction type and state.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="tools">
               <AccordionTrigger className="text-sm font-light text-foreground">When do I use the AI tools?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                Access AI tools from any matter's detail page. Upload a title commitment for analysis, verify wire instructions for fraud detection, or generate a status update email based on your checklist progress. Each tool is designed for a specific closing task.
+                Access AI tools from any matter&apos;s detail page. Upload a title commitment for analysis, verify wire instructions for fraud detection, or generate a status update email based on your checklist progress. Each tool is designed for a specific closing task.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="checklist">
@@ -215,7 +215,7 @@ function WelcomeContent() {
             <AccordionItem value="limits">
               <AccordionTrigger className="text-sm font-light text-foreground">Are there usage limits?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                Your plan includes a monthly generation limit for AI tools (100 for Solo, 500 for Small Firm, 1,500 for Pro). One "generation" is one AI tool run. Track your usage in Settings. Limits reset on your billing date.
+                Your plan includes a monthly generation limit for AI tools (100 for Solo, 500 for Small Firm, 1,500 for Pro). One &quot;generation&quot; is one AI tool run. Track your usage in Settings. Limits reset on your billing date.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

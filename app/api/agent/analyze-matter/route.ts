@@ -1,11 +1,12 @@
 import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
-import { matters, checklistItems, titleAnalyses, statusUpdates, users } from "@/lib/db/schema"
-import { eq, and } from "drizzle-orm"
+import { matters, checklistItems, titleAnalyses, statusUpdates } from "@/lib/db/schema"
+import { eq, and, sql } from "drizzle-orm"
 import { getOrCreateUser, checkSubscriptionAccess } from "@/lib/db/get-user"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { logger } from "@/lib/logger"
+import { z } from "zod"
 
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
@@ -18,8 +19,9 @@ export async function POST(req: NextRequest) {
   const access = await checkSubscriptionAccess(user)
   if (!access.allowed) return NextResponse.json({ error: access.message }, { status: 403 })
 
-  const { matterId } = await req.json()
-  if (!matterId) return NextResponse.json({ error: "matterId required" }, { status: 400 })
+  const parsed = z.object({ matterId: z.string().uuid() }).safeParse(await req.json().catch(() => null))
+  if (!parsed.success) return NextResponse.json({ error: "matterId (uuid) required" }, { status: 400 })
+  const { matterId } = parsed.data
 
   const matterRows = await db.select().from(matters)
     .where(and(eq(matters.id, matterId), eq(matters.userId, user.id)))
@@ -32,7 +34,8 @@ export async function POST(req: NextRequest) {
 
   const recentAnalyses = await db.select({
     propertyAddress: titleAnalyses.propertyAddress,
-    analysis: titleAnalyses.analysis,
+    summary: sql<string | null>`${titleAnalyses.analysis}->>'summary'`,
+    redFlagCount: sql<number>`coalesce(jsonb_array_length(${titleAnalyses.analysis}->'redFlags'), 0)::int`,
     createdAt: titleAnalyses.createdAt,
   }).from(titleAnalyses)
     .where(and(eq(titleAnalyses.userId, user.id), eq(titleAnalyses.matterId, matterId)))
@@ -68,8 +71,7 @@ ${pending.map(i => `- ${i.title} (assigned: ${i.assignedTo ?? "unassigned"})`).j
 
 RECENT TITLE ANALYSES:
 ${recentAnalyses.length > 0 ? recentAnalyses.map(a => {
-  const analysis = a.analysis as any
-  return `- Analyzed: ${a.propertyAddress ?? matter.propertyAddress}\n  Red flags: ${analysis?.redFlags?.length ?? 0}\n  Summary: ${analysis?.summary ?? "N/A"}`
+  return `- Analyzed: ${a.propertyAddress ?? matter.propertyAddress}\n  Red flags: ${Number(a.redFlagCount) || 0}\n  Summary: ${a.summary ?? "N/A"}`
 }).join("\n") : "No title analyses linked to this matter yet"}
 
 ${SAFETY_PREAMBLE}
@@ -130,12 +132,17 @@ Provide a comprehensive closing coordinator report as JSON:
     }
 
     // Auto-apply suggested checklist updates
-    const reportData = report as any
+    const reportData = report as {
+      checklist_updates?: Array<{ item_title?: string; suggested_status?: string }>
+      draft_status_email?: { subject?: string; body?: string }
+    }
     let updatedItems = 0
     if (Array.isArray(reportData.checklist_updates)) {
       for (const update of reportData.checklist_updates) {
+        const needle = update.item_title?.toLowerCase().slice(0, 30)
+        if (!needle) continue
         const matchingItem = items.find(i =>
-          i.title.toLowerCase().includes(update.item_title?.toLowerCase().slice(0, 30))
+          i.title.toLowerCase().includes(needle)
         )
         if (matchingItem && update.suggested_status && matchingItem.status !== update.suggested_status) {
           await db.update(checklistItems)

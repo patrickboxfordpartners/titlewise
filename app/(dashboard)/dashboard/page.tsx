@@ -357,7 +357,7 @@ function DashboardContent() {
 
           <div className="bg-card border border-border rounded-xl p-6 mb-6 text-left">
             <p className="text-xs font-normal uppercase tracking-widest text-muted-foreground mb-3">
-              What you'll track
+              What you&apos;ll track
             </p>
             <div className="space-y-3">
               <div className="flex items-start gap-2">

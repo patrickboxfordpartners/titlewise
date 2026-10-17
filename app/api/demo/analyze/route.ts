@@ -89,17 +89,20 @@ Return ONLY the JSON array, no other text.`,
       }
 
       return NextResponse.json({ findings })
-    } catch (apiError: any) {
-      if (apiError?.status === 400 || apiError?.status === 404 || apiError?.status === 401) {
+    } catch (apiError: unknown) {
+      const status = typeof apiError === "object" && apiError !== null && "status" in apiError
+        ? (apiError as { status?: number }).status
+        : undefined
+      if (status === 400 || status === 404 || status === 401) {
         await new Promise((r) => setTimeout(r, 1500))
         return NextResponse.json({ findings: DEMO_FINDINGS, demo: true })
       }
       throw apiError
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Demo analysis error:", error)
     return NextResponse.json(
-      { error: "Analysis failed", detail: error?.message ?? String(error) },
+      { error: "Analysis failed" },
       { status: 500 }
     )
   }

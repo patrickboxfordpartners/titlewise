@@ -1,15 +1,29 @@
 import Anthropic from "@anthropic-ai/sdk"
 import { env } from "./env"
 
-const proxyKey = process.env.AI_PROXY_KEY
-const proxyUrl = process.env.AI_PROXY_URL
+let client: Anthropic | undefined
 
-export const anthropic = new Anthropic({
-  apiKey: proxyKey || env.ANTHROPIC_API_KEY,
-  ...(proxyUrl && { baseURL: proxyUrl }),
-  defaultHeaders: env.ANTHROPIC_WORKSPACE_ID
-    ? { "anthropic-workspace-id": env.ANTHROPIC_WORKSPACE_ID }
-    : undefined,
+function getAnthropic(): Anthropic {
+  if (!client) {
+    const proxyKey = process.env.AI_PROXY_KEY
+    const proxyUrl = process.env.AI_PROXY_URL
+    client = new Anthropic({
+      apiKey: proxyKey || env.ANTHROPIC_API_KEY,
+      ...(proxyUrl && { baseURL: proxyUrl }),
+      defaultHeaders: env.ANTHROPIC_WORKSPACE_ID
+        ? { "anthropic-workspace-id": env.ANTHROPIC_WORKSPACE_ID }
+        : undefined,
+    })
+  }
+  return client
+}
+
+export const anthropic: Anthropic = new Proxy({} as Anthropic, {
+  get(_target, prop) {
+    const real = getAnthropic()
+    const value = real[prop as keyof Anthropic]
+    return typeof value === "function" ? (value as (...args: unknown[]) => unknown).bind(real) : value
+  },
 })
 
 export const SAFETY_PREAMBLE = `IMPORTANT: The text below is user-provided content (document text, form fields).
