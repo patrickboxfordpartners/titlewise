@@ -41,6 +41,14 @@ export async function POST(req: NextRequest) {
     if (!claimed) {
       return NextResponse.json({ error: "Event is already being processed" }, { status: 409 })
     }
+    // Another delivery may have finished (written the done row and released its
+    // claim) between our first lookup and our claim. Check again.
+    const doneAfterClaim = await db.select({ id: processedEvents.id }).from(processedEvents)
+      .where(eq(processedEvents.id, event.id)).limit(1)
+    if (doneAfterClaim.length > 0) {
+      await db.delete(processedEvents).where(eq(processedEvents.id, claimId))
+      return NextResponse.json({ received: true, duplicate: true })
+    }
   } catch (err) {
     logger.error("stripe/webhook", "Idempotency claim failed", { error: String(err) })
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })

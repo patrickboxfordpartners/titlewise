@@ -27,7 +27,17 @@ declare module "frappe-gantt" {
     on_date_change?: (task: GanttTask, start: Date, end: Date) => void
     on_progress_change?: (task: GanttTask, progress: number) => void
     on_view_change?: (mode: string) => void
-    popup?: (task: GanttTask) => string
+    // Frappe Gantt 1.2 passes a context object, not the task itself.
+    popup?: (context: GanttPopupContext) => string | void
+  }
+
+  export interface GanttPopupContext {
+    task: GanttTask
+    chart: Gantt
+    set_title: (html: string) => void
+    set_subtitle: (html: string) => void
+    set_details: (html: string) => void
+    add_action: (html: string | ((task: GanttTask) => string), func: (task: GanttTask, chart: Gantt, e: Event) => void) => void
   }
 
   export default class Gantt {

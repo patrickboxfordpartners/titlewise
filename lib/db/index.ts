@@ -30,4 +30,7 @@ export const db: Database = new Proxy({} as Database, {
   getPrototypeOf() {
     return Object.getPrototypeOf(getDatabase())
   },
+  has(_target, prop) {
+    return prop in getDatabase()
+  },
 })

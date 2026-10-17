@@ -17,6 +17,8 @@ function matterInboxAddress(matterId: string): string {
   return `matter-${matterId.slice(0, 8)}@titlewise.app`
 }
 
+const EMAIL_LIMIT = 200
+
 async function getOwnedMatter(matterId: string, userId: string) {
   const user = await getOrCreateUser(userId)
   const [matter] = await db.select().from(matters)
@@ -33,13 +35,17 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ mat
   const { matter } = await getOwnedMatter(matterId, userId)
   if (!matter) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const emails = (await db.select().from(emailThreads)
+  // Newest EMAIL_LIMIT threads. Fetch one extra row to tell the client when
+  // older threads were left out.
+  const rows = await db.select().from(emailThreads)
     .where(eq(emailThreads.matterId, matterId))
     .orderBy(desc(emailThreads.createdAt))
-    .limit(200)).reverse()
+    .limit(EMAIL_LIMIT + 1)
+  const truncated = rows.length > EMAIL_LIMIT
+  const emails = rows.slice(0, EMAIL_LIMIT).reverse()
 
   const inboxAddress = matterInboxAddress(matterId)
-  return NextResponse.json({ emails, inboxAddress })
+  return NextResponse.json({ emails, inboxAddress, truncated })
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {

@@ -724,7 +724,7 @@ console.log("Updated:", JSON.stringify(data, null, 2))
 - [ ] **Step 2: Run the script**
 
 ```bash
-cd /Users/patrickmitchell/titlewise && POSTMARK_API_KEY=<POSTMARK_SERVER_TOKEN> npx tsx scripts/update-postmark-webhook.ts 2>&1
+cd /Users/patrickmitchell/titlewise && POSTMARK_API_KEY="<POSTMARK_SERVER_TOKEN>" npx tsx scripts/update-postmark-webhook.ts 2>&1
 ```
 
 Expected: JSON response showing `InboundHookUrl: "https://titlewise.app/api/postmark/inbound"`.

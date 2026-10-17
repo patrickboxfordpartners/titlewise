@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { matters, emailThreads } from "@/lib/db/schema"
-import { eq, like } from "drizzle-orm"
+import { eq, like, sql } from "drizzle-orm"
 import { isUniqueViolation } from "@/lib/db/errors"
 import { secretsMatch } from "@/lib/secret-compare"
 
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   // Find matter by first 8 chars of UUID
   const [matter] = await db.select()
     .from(matters)
-    .where(like(matters.id, `${shortId}%`))
+    .where(like(sql`${matters.id}::text`, `${shortId}%`))
     .limit(1)
 
   if (!matter) {

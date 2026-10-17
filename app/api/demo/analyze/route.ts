@@ -102,7 +102,7 @@ Return ONLY the JSON array, no other text.`,
   } catch (error: unknown) {
     console.error("Demo analysis error:", error)
     return NextResponse.json(
-      { error: "Analysis failed", detail: error instanceof Error ? error.message : String(error) },
+      { error: "Analysis failed" },
       { status: 500 }
     )
   }

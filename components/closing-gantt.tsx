@@ -82,7 +82,7 @@ export function ClosingGantt({ tasks, onDateChange, readonly = false }: ClosingG
           onDateChange?.(task.id, start, end)
         },
         on_click: () => {},
-        popup: (task: GanttTask) => {
+        popup: ({ task }) => {
           const start = new Date(task._start ?? task.start).toLocaleDateString("en-US", { month: "short", day: "numeric" })
           const end = new Date(task._end ?? task.end).toLocaleDateString("en-US", { month: "short", day: "numeric" })
           return `

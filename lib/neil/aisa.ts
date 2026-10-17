@@ -29,6 +29,18 @@ export type StreamChunk =
   | { type: "tool_call_end"; id: string }
   | { type: "done" }
 
+const MAX_RETRY_AFTER_MS = 10_000
+
+/** Parse a Retry-After header (seconds or HTTP date) into ms, or null if absent or invalid. */
+function retryAfterMs(header: string | null): number | null {
+  if (!header) return null
+  const seconds = Number(header)
+  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000
+  const date = Date.parse(header)
+  if (Number.isNaN(date)) return null
+  return Math.max(0, date - Date.now())
+}
+
 async function requestChatCompletion(body: string): Promise<Response> {
   const maxAttempts = 3
   let lastError: unknown
@@ -45,7 +57,15 @@ async function requestChatCompletion(body: string): Promise<Response> {
       if (res.ok) return res
       const retryable = res.status === 429 || res.status === 529 || res.status >= 500
       if (!retryable || attempt === maxAttempts - 1) return res
+      const waitMs = res.status === 429 ? retryAfterMs(res.headers.get("retry-after")) : null
       await res.text().catch(() => undefined)
+      if (waitMs !== null) {
+        // Honor the server's Retry-After when it fits our budget; otherwise
+        // return the 429 rather than retrying too early.
+        if (waitMs > MAX_RETRY_AFTER_MS) return res
+        await new Promise((resolve) => setTimeout(resolve, waitMs))
+        continue
+      }
     } catch (err) {
       lastError = err
       if (attempt === maxAttempts - 1) throw err
