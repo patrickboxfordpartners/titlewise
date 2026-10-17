@@ -6,6 +6,7 @@ import { eq, and, sql } from "drizzle-orm"
 import { getOrCreateUser, checkSubscriptionAccess } from "@/lib/db/get-user"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { logger } from "@/lib/logger"
+import { z } from "zod"
 
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
@@ -18,8 +19,9 @@ export async function POST(req: NextRequest) {
   const access = await checkSubscriptionAccess(user)
   if (!access.allowed) return NextResponse.json({ error: access.message }, { status: 403 })
 
-  const { matterId } = await req.json()
-  if (!matterId) return NextResponse.json({ error: "matterId required" }, { status: 400 })
+  const parsed = z.object({ matterId: z.string().uuid() }).safeParse(await req.json().catch(() => null))
+  if (!parsed.success) return NextResponse.json({ error: "matterId (uuid) required" }, { status: 400 })
+  const { matterId } = parsed.data
 
   const matterRows = await db.select().from(matters)
     .where(and(eq(matters.id, matterId), eq(matters.userId, user.id)))
