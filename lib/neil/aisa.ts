@@ -58,11 +58,12 @@ async function requestChatCompletion(body: string): Promise<Response> {
       const retryable = res.status === 429 || res.status === 529 || res.status >= 500
       if (!retryable || attempt === maxAttempts - 1) return res
       const waitMs = res.status === 429 ? retryAfterMs(res.headers.get("retry-after")) : null
+      // Return long Retry-After responses with their bodies intact for streamChat.
+      if (waitMs !== null && waitMs > MAX_RETRY_AFTER_MS) return res
       await res.text().catch(() => undefined)
       if (waitMs !== null) {
         // Honor the server's Retry-After when it fits our budget; otherwise
         // return the 429 rather than retrying too early.
-        if (waitMs > MAX_RETRY_AFTER_MS) return res
         await new Promise((resolve) => setTimeout(resolve, waitMs))
         continue
       }
