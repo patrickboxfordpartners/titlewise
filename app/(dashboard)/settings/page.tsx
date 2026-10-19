@@ -51,11 +51,11 @@ function SettingsContent() {
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
-      .then((data: Settings & { user?: { customLogoUrl?: string | null } }) => {
-        setSettings(data)
-        setName(data.name ?? "")
-        setFirmName(data.firmName ?? "")
-        setCustomLogoUrl(data.user?.customLogoUrl ?? "")
+      .then((data: { user: Settings & { customLogoUrl: string | null } }) => {
+        setSettings(data.user)
+        setName(data.user.name ?? "")
+        setFirmName(data.user.firmName ?? "")
+        setCustomLogoUrl(data.user.customLogoUrl ?? "")
       })
     fetch("/api/email/status")
       .then((r) => r.json())

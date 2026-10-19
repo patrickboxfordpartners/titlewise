@@ -27,6 +27,7 @@ export async function GET() {
       subscriptionStatus: user.subscriptionStatus,
       subscriptionTier: user.subscriptionTier,
       monthlyUsageCount: user.monthlyUsageCount,
+      usageResetAt: user.usageResetAt,
       hasStripeCustomer: !!user.stripeCustomerId,
       onboardingCompletedAt: user.onboardingCompletedAt,
       customLogoUrl: user.customLogoUrl,
