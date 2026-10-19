@@ -30,7 +30,22 @@ export async function PATCH(req: NextRequest, { params }: Props) {
   const body = await req.json()
   const [post] = await db
     .update(blogPosts)
-    .set({ ...body, updatedAt: new Date() })
+    .set({
+      slug: body.slug,
+      title: body.title,
+      excerpt: body.excerpt,
+      body: body.body,
+      author: body.author,
+      authorUrl: body.authorUrl,
+      category: body.category,
+      readTime: body.readTime,
+      brand: body.brand,
+      tags: body.tags,
+      status: body.status,
+      canonical: body.canonical,
+      publishedAt: body.publishedAt,
+      updatedAt: new Date(),
+    })
     .where(eq(blogPosts.slug, slug))
     .returning()
   if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 })
