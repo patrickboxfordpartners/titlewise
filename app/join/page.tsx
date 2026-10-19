@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react"
 
+/** Accept the invitation token from the URL and display the result before redirecting. */
 function JoinContent() {
   const searchParams = useSearchParams()
   const router = useRouter()

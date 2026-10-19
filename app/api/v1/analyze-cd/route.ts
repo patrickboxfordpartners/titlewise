@@ -80,6 +80,7 @@ const buildCDPrompt = (cdText: string) => `Analyze this Closing Disclosure and r
 Closing Disclosure:
 ${cdText}`
 
+/** Review a closing disclosure for an authorized Enterprise API key and record metered usage. */
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   const endpoint = "/api/v1/analyze-cd"

@@ -41,6 +41,7 @@ function retryAfterMs(header: string | null): number | null {
   return Math.max(0, date - Date.now())
 }
 
+/** Request a chat completion with up to three attempts for transient HTTP or network failures. */
 async function requestChatCompletion(body: string): Promise<Response> {
   const maxAttempts = 3
   let lastError: unknown
@@ -76,6 +77,7 @@ async function requestChatCompletion(body: string): Promise<Response> {
   throw lastError instanceof Error ? lastError : new Error("AIsa request failed")
 }
 
+/** Stream AIsa chat text and tool-call chunks, retrying transient failures before streaming begins. */
 export async function* streamChat(
   messages: AisaMessage[],
   tools: AisaTool[],

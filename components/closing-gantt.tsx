@@ -51,6 +51,7 @@ const GANTT_STYLES = `
   .gantt .today-highlight { fill: #3b82f6; opacity: 0.08; }
 `
 
+/** Render closing tasks in a Gantt chart and optionally report date changes. */
 export function ClosingGantt({ tasks, onDateChange, readonly = false }: ClosingGanttProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const ganttRef = useRef<Gantt | null>(null)

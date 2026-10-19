@@ -3,6 +3,7 @@ import { env } from "./env"
 
 let client: Anthropic | undefined
 
+/** Lazily create and cache the Anthropic client using configured credentials and proxy settings. */
 function getAnthropic(): Anthropic {
   if (!client) {
     const proxyKey = process.env.AI_PROXY_KEY
@@ -19,6 +20,7 @@ function getAnthropic(): Anthropic {
 }
 
 export const anthropic: Anthropic = new Proxy({} as Anthropic, {
+  /** Forward property reads to the lazy client and bind methods to the real instance. */
   get(_target, prop) {
     const real = getAnthropic()
     const value = real[prop as keyof Anthropic]

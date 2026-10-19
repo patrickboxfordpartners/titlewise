@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger"
 import { sendDripEmail } from "@/lib/email/drip"
 import { isUniqueViolation } from "@/lib/db/errors"
 
+/** Verify Stripe events, claim deliveries, and apply subscription changes with retryable failure handling. */
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const signature = req.headers.get("stripe-signature")

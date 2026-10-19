@@ -15,6 +15,7 @@ const FALLBACK: UnsplashPhoto = {
   photographerUrl: "https://unsplash.com/@jasperboer",
 };
 
+/** Return a landscape photo with attribution, using a daily local cache and a static fallback. */
 export function useUnsplashPhoto(): UnsplashPhoto {
   const [photo, setPhoto] = useState<UnsplashPhoto>(FALLBACK);
 

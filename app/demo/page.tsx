@@ -334,6 +334,7 @@ function extractDealInfo(text: string, deal: DealFacts): DealFacts {
   return d
 }
 
+/** Return updated deal facts by merging extracted entities, verification results, and audit flags. */
 function updateDealFromEvent(evt: AgentEvent, currentDeal: DealFacts): DealFacts {
   const d = { ...currentDeal }
   d.entities = { ...d.entities, beneficiaries: [...d.entities.beneficiaries], routingNumbers: [...d.entities.routingNumbers], banks: [...d.entities.banks], amounts: [...d.entities.amounts], addresses: [...d.entities.addresses] }
@@ -364,6 +365,7 @@ function updateDealFromEvent(evt: AgentEvent, currentDeal: DealFacts): DealFacts
 
 // ── Main Page ──
 
+/** Run the interactive closing demo and display document processing events and deal facts. */
 export default function DemoPage() {
   const c = useThemeColors()
   const logRef = useRef<HTMLDivElement>(null)
@@ -891,6 +893,7 @@ export default function DemoPage() {
 
 // ── Helper Components ──
 
+/** Render a numbered response step with optional critical styling. */
 function ResponseStep({ num, children, c, critical }: { num: number; children: React.ReactNode; c: ThemeColors; critical?: boolean }) {
   return (
     <div style={{
@@ -911,6 +914,7 @@ function ResponseStep({ num, children, c, critical }: { num: number; children: R
   )
 }
 
+/** Group demo facts under a heading with optional danger styling. */
 function FactGroup({ title, children, c, danger }: { title: string; children: React.ReactNode; c: ThemeColors; danger?: boolean }) {
   return (
     <div style={{ marginBottom: 12 }}>
@@ -920,6 +924,7 @@ function FactGroup({ title, children, c, danger }: { title: string; children: Re
   )
 }
 
+/** Display a deal fact or placeholder with its verification status. */
 function FactItem({ value, label, c, status, placeholder }: { value: string | null; label: string; c: ThemeColors; status?: string; placeholder?: string }) {
   const borderColor = status === "verified" ? "#4ade80" : status === "unverified" ? "#f87171" : status === "mismatch" ? "#f87171" : c.hairline
   const bg = status === "verified" ? (c.isDark ? "rgba(5,46,22,0.08)" : "transparent") : status === "unverified" ? (c.isDark ? "rgba(127,29,29,0.08)" : "transparent") : "transparent"

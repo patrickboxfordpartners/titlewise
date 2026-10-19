@@ -4,26 +4,32 @@ import { useSyncExternalStore } from "react"
 
 const listeners = new Set<() => void>()
 
+/** Register a theme listener and return a callback that removes it. */
 function subscribe(callback: () => void) {
   listeners.add(callback)
   return () => listeners.delete(callback)
 }
 
+/** Read whether the document currently uses the dark theme. */
 function getSnapshot() {
   return document.documentElement.classList.contains("dark")
 }
 
+/** Return the light theme snapshot used during server rendering and hydration. */
 function getServerSnapshot() {
   return false
 }
 
+/** Notify subscribed theme controls after the theme changes. */
 function emit() {
   listeners.forEach((listener) => listener())
 }
 
+/** Render a theme switch synchronized with the document theme store. */
 export default function ThemeToggle({ className }: { className?: string }) {
   const dark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
+  /** Toggle the document theme, persist the choice, and notify subscribers. */
   function toggle() {
     const next = !dark
     document.documentElement.classList.toggle("dark", next)

@@ -11,6 +11,7 @@ const DEMO_FINDINGS = [
   { title: "Notable Exception", description: "Easement for municipal drainage recorded Book 4821, Page 112. Should be reviewed for impact on planned additions." },
 ]
 
+/** Analyze an uploaded PDF, using sample findings without credentials or for selected API errors. */
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()

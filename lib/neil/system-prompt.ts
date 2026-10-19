@@ -2,6 +2,7 @@ import { db } from "@/lib/db"
 import { matters, matterParties, checklistItems } from "@/lib/db/schema"
 import { eq, and } from "drizzle-orm"
 
+/** Build Neil's prompt from an owned matter, its parties, and checklist progress; throw if absent. */
 export async function buildSystemPrompt(matterId: string, userId: string): Promise<string> {
   const [matter] = await db
     .select()

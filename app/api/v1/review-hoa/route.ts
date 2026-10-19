@@ -74,6 +74,7 @@ const buildHOAPrompt = (hoaText: string) => `Analyze these HOA documents and ret
 HOA Documents:
 ${hoaText}`
 
+/** Review HOA documents for an authorized Enterprise API key and record metered usage. */
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   const endpoint = "/api/v1/review-hoa"

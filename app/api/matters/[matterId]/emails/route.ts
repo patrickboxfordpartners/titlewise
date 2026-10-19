@@ -27,6 +27,7 @@ async function getOwnedMatter(matterId: string, userId: string) {
   return { matter: matter ?? null, user }
 }
 
+/** Return the newest 200 owned-matter emails oldest-first, with inbox address and truncation status. */
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
   const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

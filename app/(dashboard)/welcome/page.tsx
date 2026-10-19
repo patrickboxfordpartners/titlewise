@@ -51,6 +51,7 @@ const TOOLS = [
   },
 ]
 
+/** Render onboarding guidance and shortcuts for starting a closing matter. */
 function WelcomeContent() {
   const router = useRouter()
   const searchParams = useSearchParams()

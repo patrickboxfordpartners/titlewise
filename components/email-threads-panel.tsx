@@ -78,6 +78,7 @@ function EmailRow({ email }: { email: EmailItem }) {
   )
 }
 
+/** Display matter email threads, truncation notices, and email composition controls. */
 export default function EmailThreadsPanel({ matterId }: { matterId: string }) {
   const [emails, setEmails] = useState<EmailItem[]>([])
   const [inboxAddress, setInboxAddress] = useState("")

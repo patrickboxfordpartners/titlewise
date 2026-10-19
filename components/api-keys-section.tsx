@@ -23,6 +23,7 @@ type NewKeyResponse = {
   rateLimit: number
 }
 
+/** Manage API keys and display their monthly usage for eligible accounts. */
 export function ApiKeysSection() {
   const [keys, setKeys] = useState<ApiKey[]>([])
   const [loading, setLoading] = useState(true)

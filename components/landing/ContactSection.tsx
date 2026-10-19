@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, CheckCircle2, ArrowLeft } from "lucide-react"
 
+/** Render the demo request form, validate its fields, and submit contact details. */
 export default function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", firm: "", message: "" })
   const [submitting, setSubmitting] = useState(false)

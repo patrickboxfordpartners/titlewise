@@ -162,6 +162,7 @@ export const NEIL_TOOLS: AisaTool[] = [
   },
 ]
 
+/** Execute a named Neil tool in the supplied matter context and return its result as text. */
 export async function executeTool(
   name: string,
   args: Record<string, unknown>,

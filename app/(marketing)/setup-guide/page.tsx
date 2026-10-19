@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description: 'What to expect during your TITLEwise setup consultation.',
 };
 
+/** Render the setup guide for configuring TITLEwise and running its tools. */
 export default function SetupGuidePage() {
   const BG = "#0d253d";
   const PANEL = "#0d253d";

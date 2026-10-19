@@ -31,6 +31,7 @@ export default function SettingsPage() {
   )
 }
 
+/** Manage profile, firm branding, subscription, and account settings. */
 function SettingsContent() {
   const searchParams = useSearchParams()
   const [settings, setSettings] = useState<Settings | null>(null)
@@ -370,6 +371,7 @@ function SettingsContent() {
 
 type TeamMemberRow = { id: string; invitedEmail: string }
 
+/** Display team seat usage and manage invitations and member access. */
 function TeamSection() {
   const [data, setData] = useState<{ members: TeamMemberRow[]; pending: TeamMemberRow[]; seatLimit: number; seatsUsed: number } | null>(null)
   const [email, setEmail] = useState("")

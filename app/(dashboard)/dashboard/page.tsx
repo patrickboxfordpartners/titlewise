@@ -61,6 +61,7 @@ function formatRelative(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" })
 }
 
+/** Render the matter dashboard with usage, activity, and closing progress. */
 function DashboardContent() {
   const searchParams = useSearchParams()
   const router = useRouter()

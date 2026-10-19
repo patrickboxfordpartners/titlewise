@@ -25,6 +25,7 @@ function extractShortId(toEmail: string): string | null {
   return match ? match[1].slice(0, 8) : null
 }
 
+/** Store inbound matter email, checking the configured secret and accepting duplicate message IDs. */
 export async function POST(req: NextRequest) {
   // Verify secret if configured
   const secret = process.env.POSTMARK_INBOUND_WEBHOOK_SECRET

@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const CONSENT_KEY = "cookie_consent";
 
+/** Request cookie consent when no stored choice exists and persist the response. */
 export function CookieBanner() {
   const [visible, setVisible] = useState(false);
 

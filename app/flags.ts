@@ -12,6 +12,7 @@ async function getUserPlan(): Promise<PlanKey | null> {
   return null;
 }
 
+/** Return whether the selected plan enables a boolean feature; missing plans return false. */
 function planHasFeature(plan: PlanKey | null, feature: keyof typeof PLANS["solo"]): boolean {
   if (!plan) return false;
   const value = PLANS[plan][feature]

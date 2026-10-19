@@ -8,6 +8,7 @@ import ThemeToggle from "@/components/ThemeToggle"
 import HomepageDemo from "@/components/landing/HomepageDemo"
 import { useThemeColors } from "@/lib/useThemeColors"
 
+/** Render the marketing homepage with its navigation and interactive sections. */
 export default function HomePageClient() {
   const c = useThemeColors()
   const [hoveredStat, setHoveredStat] = useState<number | null>(null)

@@ -7,6 +7,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion"
 import HeroBackground from "./HeroBackground"
 import { useRef } from "react"
 
+/** Render a linked button that follows the pointer with spring motion. */
 const MagneticButton = ({
   children,
   href,

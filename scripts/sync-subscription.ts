@@ -20,6 +20,7 @@ if (!DATABASE_URL) {
   process.exit(1);
 }
 
+/** Sync the configured Stripe customer's first subscription to the user selected by legacy Clerk ID. */
 async function main() {
   console.log('\n🔄 Syncing subscription to database\n');
 

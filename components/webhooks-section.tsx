@@ -15,6 +15,7 @@ type WebhookData = {
   createdAt: string
 }
 
+/** Manage webhook endpoints, signing secrets, and event subscriptions. */
 export function WebhooksSection() {
   const [webhooks, setWebhooks] = useState<WebhookData[]>([])
   const [loading, setLoading] = useState(true)

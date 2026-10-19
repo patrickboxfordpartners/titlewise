@@ -147,6 +147,7 @@ function PremiumCard({ feature, index }: { feature: typeof premiumFeatures[0]; i
   )
 }
 
+/** Render a linked button that follows the pointer with spring motion. */
 const MagneticButton = ({
   children,
   href,

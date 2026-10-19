@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description: "Learn how TITLEwise collects, uses, and protects your personal information.",
 }
 
+/** Render the privacy policy and information about user data rights. */
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-background">

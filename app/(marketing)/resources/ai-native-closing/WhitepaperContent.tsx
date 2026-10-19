@@ -2,6 +2,7 @@
 
 import { WorkflowDiagram, ArchitectureDiagram, TimelineComparison } from "./diagrams";
 
+/** Render the whitepaper describing AI integration in closing workflows. */
 export function WhitepaperContent() {
   return (
     <article className="max-w-none" style={{ fontFamily: "var(--font-sans)" }}>

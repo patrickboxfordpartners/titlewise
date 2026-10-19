@@ -6,6 +6,7 @@ import { secretsMatch } from "@/lib/secret-compare"
 
 export const dynamic = "force-dynamic"
 
+/** Return metadata for the latest 100 published posts with shared-cache headers. */
 export async function GET() {
   const posts = await db
     .select({
@@ -34,6 +35,7 @@ export async function GET() {
   })
 }
 
+/** Create a blog post after validating the content API key. */
 export async function POST(req: NextRequest) {
   if (!secretsMatch(req.headers.get("x-api-key"), process.env.CONTENT_API_KEY)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

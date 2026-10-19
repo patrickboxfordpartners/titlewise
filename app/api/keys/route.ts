@@ -3,6 +3,7 @@ import { db } from "@/lib/db"
 import { apiKeys, apiUsageLogs, users } from "@/lib/db/schema"
 import { eq, and, gte, inArray, sql } from "drizzle-orm"
 
+/** List an Enterprise user's API key metadata and monthly usage without exposing key hashes. */
 export async function GET() {
   const userId = await requireAuth()
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 })

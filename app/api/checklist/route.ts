@@ -16,6 +16,7 @@ const createSchema = z.object({
 })
 
 // GET, list all matters with item counts
+/** List up to 50 owned matters with grouped total and completed checklist counts. */
 export async function GET() {
   const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

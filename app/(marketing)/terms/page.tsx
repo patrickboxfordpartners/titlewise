@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description: "Terms and conditions for using TITLEwise products and services.",
 }
 
+/** Render the terms governing use of the TITLEwise service. */
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">

@@ -4,6 +4,7 @@ import { db } from "@/lib/db"
 import { users, statusUpdates, titleAnalyses, cdReviews, hoaReviews, feeEstimates } from "@/lib/db/schema"
 import { eq, desc, and, ilike, or, sql } from "drizzle-orm"
 
+/** Return the authenticated user's saved tool history with search and date filters. */
 export async function GET(req: NextRequest) {
   const userId = await requireAuth()
   if (!userId) {

@@ -8,6 +8,7 @@ import { secretsMatch } from "@/lib/secret-compare"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+/** Send eligible day-three and day-seven drip emails after validating the cron bearer secret. */
 export async function GET(req: NextRequest) {
   const cronSecret = process.env.CRON_SECRET
   const authHeader = req.headers.get("authorization")

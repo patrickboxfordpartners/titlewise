@@ -56,6 +56,7 @@ const planDetails = {
   },
 }
 
+/** Render subscription plans, billing options, and pricing FAQs. */
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false)
 

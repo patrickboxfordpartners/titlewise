@@ -438,6 +438,7 @@ function HistoryRow({
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
+/** Display saved AI tool results with search, date filters, and copy actions. */
 export default function HistoryPage() {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>("updates")

@@ -57,6 +57,7 @@ const buildTitlePrompt = (commitment: string) => `Analyze this title commitment 
 Title Commitment:
 ${commitment}`
 
+/** Analyze and save a title commitment for an authorized Enterprise API key and record usage. */
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   const endpoint = "/api/v1/analyze-commitment"

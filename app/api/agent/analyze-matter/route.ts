@@ -11,6 +11,7 @@ import { z } from "zod"
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
 
+/** Analyze an owned matter for an eligible subscriber and save a closing coordinator report. */
 export async function POST(req: NextRequest) {
   const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
