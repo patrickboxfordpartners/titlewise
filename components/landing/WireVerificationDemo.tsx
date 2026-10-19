@@ -19,6 +19,7 @@ const CHECKS = [
   { id: 6, label: "Email domain spoofing check", status: "pass", detail: "Sender domain fnb.com verified — no lookalike detected" },
 ]
 
+/** Animate a sample wire verification and show completed checks on small screens. */
 export default function WireVerificationDemo() {
   const [visibleChecks, setVisibleChecks] = useState<number[]>([])
   const [verdict, setVerdict] = useState<"" | "reviewing" | "done">("")
@@ -50,13 +51,18 @@ export default function WireVerificationDemo() {
   }
 
   useEffect(() => {
-    if (window.innerWidth < 640) {
-      setVisibleChecks(CHECKS.map(c => c.id))
-      setVerdict("done")
-      return
+    const handle = window.setTimeout(() => {
+      if (window.innerWidth < 640) {
+        setVisibleChecks(CHECKS.map(c => c.id))
+        setVerdict("done")
+        return
+      }
+      run()
+    }, 0)
+    return () => {
+      window.clearTimeout(handle)
+      clear()
     }
-    run()
-    return clear
   }, [])
 
   const BG = "#0f1219"

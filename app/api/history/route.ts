@@ -4,6 +4,7 @@ import { db } from "@/lib/db"
 import { users, statusUpdates, titleAnalyses, cdReviews, hoaReviews, feeEstimates } from "@/lib/db/schema"
 import { eq, desc, and, ilike, or, sql } from "drizzle-orm"
 
+/** Return the authenticated user's saved tool history with search and date filters. */
 export async function GET(req: NextRequest) {
   const userId = await requireAuth()
   if (!userId) {
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
   const to = req.nextUrl.searchParams.get("to") ?? ""
   const limit = Math.min(parseInt(req.nextUrl.searchParams.get("limit") ?? "50", 10), 200)
 
-  const userRows = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+  const userRows = await db.select({ id: users.id }).from(users).where(eq(users.id, userId)).limit(1)
   if (userRows.length === 0) {
     return NextResponse.json({ updates: [], analyses: [] })
   }

@@ -13,7 +13,7 @@ type WebhookPayload = {
     endpoint: string
     userId: string
     status: "completed" | "failed"
-    result?: any
+    result?: unknown
     error?: string
   }
 }

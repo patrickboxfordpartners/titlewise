@@ -3,7 +3,7 @@ import {
   matters, checklistItems, matterParties, documentSlots,
   emailThreads,
 } from "@/lib/db/schema"
-import { eq, and, desc } from "drizzle-orm"
+import { eq, and, desc, sql } from "drizzle-orm"
 import { sendEmail } from "@/lib/email/send"
 import type { AisaTool } from "./aisa"
 
@@ -162,6 +162,7 @@ export const NEIL_TOOLS: AisaTool[] = [
   },
 ]
 
+/** Execute a named Neil tool in the supplied matter context and return its result as text. */
 export async function executeTool(
   name: string,
   args: Record<string, unknown>,
@@ -173,9 +174,17 @@ export async function executeTool(
         .where(and(eq(matters.id, ctx.matterId), eq(matters.userId, ctx.userId)))
         .limit(1)
       if (!matter) return "Matter not found"
-      const items = await db.select().from(checklistItems).where(eq(checklistItems.matterId, ctx.matterId))
-      const parties = await db.select().from(matterParties).where(eq(matterParties.matterId, ctx.matterId))
-      const complete = items.filter(i => i.status === "complete").length
+      const [counts, partyCounts] = await Promise.all([
+        db.select({
+          total: sql<number>`count(*)::int`,
+          complete: sql<number>`count(*) filter (where ${checklistItems.status} = 'complete')::int`,
+        }).from(checklistItems).where(eq(checklistItems.matterId, ctx.matterId)),
+        db.select({
+          total: sql<number>`count(*)::int`,
+        }).from(matterParties).where(eq(matterParties.matterId, ctx.matterId)),
+      ])
+      const total = Number(counts[0]?.total ?? 0)
+      const complete = Number(counts[0]?.complete ?? 0)
       return JSON.stringify({
         client: matter.clientName,
         address: matter.propertyAddress,
@@ -183,8 +192,8 @@ export async function executeTool(
         closing_date: matter.closingDate,
         state: matter.state,
         status: matter.status,
-        parties_count: parties.length,
-        checklist: `${complete}/${items.length} complete`,
+        parties_count: Number(partyCounts[0]?.total ?? 0),
+        checklist: `${complete}/${total} complete`,
       })
     }
 
@@ -225,7 +234,14 @@ export async function executeTool(
     }
 
     case "get_email_threads": {
-      const threads = await db.select().from(emailThreads)
+      const threads = await db.select({
+        direction: emailThreads.direction,
+        fromAddress: emailThreads.fromAddress,
+        toAddress: emailThreads.toAddress,
+        subject: emailThreads.subject,
+        createdAt: emailThreads.createdAt,
+        bodyText: emailThreads.bodyText,
+      }).from(emailThreads)
         .where(eq(emailThreads.matterId, ctx.matterId))
         .orderBy(desc(emailThreads.createdAt))
         .limit(20)

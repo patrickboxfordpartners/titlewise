@@ -147,7 +147,12 @@ function PremiumCard({ feature, index }: { feature: typeof premiumFeatures[0]; i
   )
 }
 
-const MagneticButton = ({ children, href, ...props }: any) => {
+/** Render a linked button that follows the pointer with spring motion. */
+const MagneticButton = ({
+  children,
+  href,
+  ...props
+}: { children: React.ReactNode; href: string } & Omit<React.ComponentProps<typeof Button>, "children">) => {
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const y = useMotionValue(0)

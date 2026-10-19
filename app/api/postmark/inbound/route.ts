@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { matters, emailThreads } from "@/lib/db/schema"
-import { eq, like } from "drizzle-orm"
+import { eq, like, sql } from "drizzle-orm"
+import { isUniqueViolation } from "@/lib/db/errors"
+import { secretsMatch } from "@/lib/secret-compare"
 
 // Postmark inbound payload shape (partial — only fields we use)
 type PostmarkInbound = {
@@ -23,12 +25,13 @@ function extractShortId(toEmail: string): string | null {
   return match ? match[1].slice(0, 8) : null
 }
 
+/** Store inbound matter email, checking the configured secret and accepting duplicate message IDs. */
 export async function POST(req: NextRequest) {
   // Verify secret if configured
   const secret = process.env.POSTMARK_INBOUND_WEBHOOK_SECRET
   if (secret) {
     const sig = req.headers.get("x-postmark-signature")
-    if (sig !== secret) {
+    if (!secretsMatch(sig, secret)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
   }
@@ -51,7 +54,7 @@ export async function POST(req: NextRequest) {
   // Find matter by first 8 chars of UUID
   const [matter] = await db.select()
     .from(matters)
-    .where(like(matters.id, `${shortId}%`))
+    .where(like(sql`${matters.id}::text`, `${shortId}%`))
     .limit(1)
 
   if (!matter) {
@@ -70,18 +73,24 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  await db.insert(emailThreads).values({
-    matterId: matter.id,
-    userId: matter.userId,
-    direction: "inbound",
-    fromAddress: payload.From,
-    toAddress: toEmail,
-    subject: payload.Subject ?? "(no subject)",
-    bodyText: payload.TextBody ?? null,
-    bodyHtml: payload.HtmlBody ?? null,
-    messageId: payload.MessageID ?? null,
-    inReplyTo: payload.InReplyTo ?? null,
-  })
+  try {
+    await db.insert(emailThreads).values({
+      matterId: matter.id,
+      userId: matter.userId,
+      direction: "inbound",
+      fromAddress: payload.From,
+      toAddress: toEmail,
+      subject: payload.Subject ?? "(no subject)",
+      bodyText: payload.TextBody ?? null,
+      bodyHtml: payload.HtmlBody ?? null,
+      messageId: payload.MessageID ?? null,
+      inReplyTo: payload.InReplyTo ?? null,
+    })
+  } catch (err) {
+    // Concurrent delivery of the same MessageID hits the unique index.
+    if (isUniqueViolation(err)) return NextResponse.json({ ok: true })
+    throw err
+  }
 
   return NextResponse.json({ ok: true })
 }
