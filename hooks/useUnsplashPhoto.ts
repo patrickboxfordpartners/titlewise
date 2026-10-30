@@ -15,6 +15,7 @@ const FALLBACK: UnsplashPhoto = {
   photographerUrl: "https://unsplash.com/@jasperboer",
 };
 
+/** Return a landscape photo with attribution, using a daily local cache and a static fallback. */
 export function useUnsplashPhoto(): UnsplashPhoto {
   const [photo, setPhoto] = useState<UnsplashPhoto>(FALLBACK);
 
@@ -23,7 +24,10 @@ export function useUnsplashPhoto(): UnsplashPhoto {
       const cached = localStorage.getItem(CACHE_KEY);
       if (cached) {
         const { data, ts } = JSON.parse(cached);
-        if (Date.now() - ts < CACHE_TTL) { setPhoto(data); return; }
+        if (Date.now() - ts < CACHE_TTL) {
+          queueMicrotask(() => setPhoto(data));
+          return;
+        }
       }
     } catch {}
 

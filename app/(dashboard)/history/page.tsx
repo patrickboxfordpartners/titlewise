@@ -438,6 +438,7 @@ function HistoryRow({
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
+/** Display saved AI tool results with search, date filters, and copy actions. */
 export default function HistoryPage() {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>("updates")
@@ -476,7 +477,10 @@ export default function HistoryPage() {
     setLoading(false)
   }, [debouncedSearch, fromDate, toDate])
 
-  useEffect(() => { fetchHistory() }, [fetchHistory])
+  useEffect(() => {
+    const handle = window.setTimeout(() => { void fetchHistory() }, 0)
+    return () => window.clearTimeout(handle)
+  }, [fetchHistory])
 
   function handleCopy(id: string, text: string) {
     navigator.clipboard.writeText(text)

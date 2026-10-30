@@ -2,6 +2,7 @@
 
 import { WorkflowDiagram, ArchitectureDiagram, TimelineComparison } from "./diagrams";
 
+/** Render the whitepaper describing AI integration in closing workflows. */
 export function WhitepaperContent() {
   return (
     <article className="max-w-none" style={{ fontFamily: "var(--font-sans)" }}>
@@ -83,7 +84,7 @@ export function WhitepaperContent() {
         Most title production systems are green-screen terminals dressed in a Windows wrapper. They
         speak mainframe protocols. They do not expose APIs. They do not integrate with modern tools.
         Coordinators still print PDFs to review them. They still fax documents to county recorders
-        because the recorder's office has no other intake mechanism. The industry has added a few web
+        because the recorder&apos;s office has no other intake mechanism. The industry has added a few web
         portals for lender communication, but these are bolt-on systems that do not talk to the title
         production core. Every document still passes through email at some point. Every status update
         still requires a human to type it and send it.
@@ -102,7 +103,7 @@ export function WhitepaperContent() {
           marginBottom: 16,
         }}
       >
-        Why "AI Features" Bolted onto Legacy Software Fail
+        Why &quot;AI Features&quot; Bolted onto Legacy Software Fail
       </h2>
       <p
         style={{
@@ -119,7 +120,7 @@ export function WhitepaperContent() {
         and an anomaly detector that flags unusual fee amounts. These features are built as isolated
         modules that sit on top of the legacy core. They read data from the production database via
         batch export. They present results in a separate UI panel. They do not write data back. They
-        do not take actions. They do not integrate into the closing coordinator's actual workflow.
+        do not take actions. They do not integrate into the closing coordinator&apos;s actual workflow.
       </p>
       <p
         style={{
@@ -133,7 +134,7 @@ export function WhitepaperContent() {
         The integration tax on these bolt-on features is high. The production system was not designed
         to be read by an AI. It stores data in COBOL flat files and proprietary binary formats. The
         export process is a nightly batch job that dumps tables to CSV. The chatbot ingests
-        yesterday's data. If a coordinator updates a file at 10 AM, the chatbot will not see that
+        yesterday&apos;s data. If a coordinator updates a file at 10 AM, the chatbot will not see that
         update until the next morning. If the coordinator asks the chatbot to verify wire
         instructions, the chatbot cannot, because wire instructions live in a different system
         entirely, one that does not participate in the nightly export.
@@ -198,8 +199,8 @@ export function WhitepaperContent() {
       >
         An agent-native system starts with a different assumption: that most closing work is pattern
         recognition and that patterns can be handled by software agents with no human in the loop.
-        The human's role is to handle exceptions, make judgment calls when the pattern does not fit,
-        and verify that the agent's work meets professional standards. The architecture is built
+        The human&apos;s role is to handle exceptions, make judgment calls when the pattern does not fit,
+        and verify that the agent&apos;s work meets professional standards. The architecture is built
         around this division of labor from the ground up.
       </p>
       <p
@@ -236,7 +237,7 @@ export function WhitepaperContent() {
         exceptions, identifies which are standard and which require action, and returns a JSON object
         listing each exception with a risk classification and a recommended next step. The verify_wire
         tool takes wire instructions, a file context, and a verification history, then runs an
-        adversarial check where a second agent challenges the first agent's findings. If the two
+        adversarial check where a second agent challenges the first agent&apos;s findings. If the two
         agents agree, the instructions are marked verified. If they disagree, the case is flagged for
         human review.
       </p>
@@ -252,9 +253,9 @@ export function WhitepaperContent() {
         The adversarial verification pipeline is the critical pattern. Wire fraud and compliance
         violations are high-stakes errors. A single false positive, approving fraudulent wire
         instructions or missing a TRID deadline, can cost hundreds of thousands of dollars and
-        destroy a firm's reputation. An agent that runs alone, even a very good one, will eventually
+        destroy a firm&apos;s reputation. An agent that runs alone, even a very good one, will eventually
         make a mistake. An adversarial pipeline where a second agent is tasked with finding fault in
-        the first agent's work catches a much higher percentage of errors. The two agents have
+        the first agent&apos;s work catches a much higher percentage of errors. The two agents have
         different prompts, different sampling temperatures, and different context windows. They are
         not redundant checks, they are independent analyses. When they agree, confidence is high. When
         they disagree, the case goes to a human.
@@ -275,7 +276,7 @@ export function WhitepaperContent() {
         expected workflow timeline, and sends alerts to the coordinator, the lender, and the real
         estate agents when a milestone is reached or a deadline is approaching. For Pro and
         Enterprise tiers, there is an eighth tool, a closing agent that orchestrates the other seven.
-        The closing agent is the system's decision-maker. It decides when to run each analysis, when
+        The closing agent is the system&apos;s decision-maker. It decides when to run each analysis, when
         to escalate a finding to a human, and when to proceed autonomously.
       </p>
 
@@ -304,7 +305,7 @@ export function WhitepaperContent() {
         }}
       >
         The file opens on Monday, June 2, 2026. The purchase price is $485,000. The buyer is
-        financing $388,000. The lender is a regional credit union. The seller's agent uploads the
+        financing $388,000. The lender is a regional credit union. The seller&apos;s agent uploads the
         contract to the TitleWise portal at 9:47 AM. The closing agent receives the contract,
         extracts the parties, the property address, the closing date (June 30), and the financing
         contingencies. It creates a file in the system, assigns a file number, and sends a
@@ -322,11 +323,11 @@ export function WhitepaperContent() {
       >
         On Tuesday, the title searcher delivers the commitment. The closing agent receives the PDF,
         runs the analyze_commitment tool, and extracts 14 Schedule B exceptions. Twelve are standard
-        form covenants and easements. One is a 2019 mechanic's lien for $8,400. One is a 2022
+        form covenants and easements. One is a 2019 mechanic&apos;s lien for $8,400. One is a 2022
         judgment lien for $12,750. The agent flags both liens as actionable items, estimates payoff
         amounts with accrued interest, and adds them to the settlement statement draft. It sends an
-        alert to the closing coordinator: "Two liens require payoff. Draft payoff demands sent to
-        lienholders." The coordinator reviews the agent's work, approves the payoff letters, and the
+        alert to the closing coordinator: &quot;Two liens require payoff. Draft payoff demands sent to
+        lienholders.&quot; The coordinator reviews the agent&apos;s work, approves the payoff letters, and the
         agent sends them. Elapsed time from commitment receipt to payoff demand transmission: 4
         minutes.
       </p>
@@ -342,9 +343,9 @@ export function WhitepaperContent() {
         On June 18, twelve days before the scheduled close, the lender uploads the initial Closing
         Disclosure. The closing agent runs the analyze_closing_disclosure tool, which is backed by a
         TRID compliance engine. The tool checks 47 line items against the purchase contract, the
-        title commitment, the lender's fee worksheet, and the HOA statement. It identifies three
+        title commitment, the lender&apos;s fee worksheet, and the HOA statement. It identifies three
         discrepancies. The title insurance premium on the CD is $1,840. The commitment quotes $1,680.
-        The HOA transfer fee on the CD is $250. The HOA statement shows $275. The lender's
+        The HOA transfer fee on the CD is $250. The HOA statement shows $275. The lender&apos;s
         origination charge is $2,995, but the loan estimate from May 12 showed $2,750, and the
         variance exceeds the TRID tolerance threshold. The agent flags all three, calculates the
         required corrections, and sends a detailed report to the lender with the specific line
@@ -361,15 +362,15 @@ export function WhitepaperContent() {
           marginBottom: 16,
         }}
       >
-        On June 27, three days before the close, the buyer's lender sends wire instructions for the
+        On June 27, three days before the close, the buyer&apos;s lender sends wire instructions for the
         loan proceeds. The closing agent receives the instructions, runs the verify_wire tool with
         adversarial checking enabled, and returns a verification failure. The challenger agent flags
         a discrepancy: the wire instructions show a Wells Fargo routing number (121000248), but the
-        lender's prior communications and the lender's website list a different routing number for
-        incoming wires (121042882). The instruction also arrived outside the lender's normal business
+        lender&apos;s prior communications and the lender&apos;s website list a different routing number for
+        incoming wires (121042882). The instruction also arrived outside the lender&apos;s normal business
         hours, at 7:18 PM. The agent escalates to the closing coordinator with a high-priority alert:
-        "Wire instruction verification failed. Possible fraud. Do not proceed." The coordinator calls
-        the lender's closing department at the known phone number the next morning. The lender
+        &quot;Wire instruction verification failed. Possible fraud. Do not proceed.&quot; The coordinator calls
+        the lender&apos;s closing department at the known phone number the next morning. The lender
         confirms that the 7:18 PM email was not sent by them. It was a spoofed message. The real wire
         instructions arrive at 10:05 AM on June 28. The agent verifies them, both agents agree, and
         the instructions are cleared for funding.
@@ -390,7 +391,7 @@ export function WhitepaperContent() {
         traditional workflow, the same file would have required 14 to 18 hours. The time savings
         compound across a portfolio. A solo practitioner handling 15 closings per month gains back
         two full weeks of time. A firm with three coordinators handling 60 closings per month gains
-        back a full employee's worth of capacity.
+        back a full employee&apos;s worth of capacity.
       </p>
 
       <TimelineComparison />
@@ -417,12 +418,12 @@ export function WhitepaperContent() {
           marginBottom: 16,
         }}
       >
-        The next phase is agent-to-agent communication between firms. A title company's closing agent
-        will send a status update not to a human at the lender, but to the lender's own agent. The
-        lender's agent will parse the update, check it against the lender's internal timeline, and if
+        The next phase is agent-to-agent communication between firms. A title company&apos;s closing agent
+        will send a status update not to a human at the lender, but to the lender&apos;s own agent. The
+        lender&apos;s agent will parse the update, check it against the lender&apos;s internal timeline, and if
         a discrepancy is found, initiate a clarification request back to the title agent. The two
-        agents will resolve the discrepancy in seconds. The humans will see a log entry: "Timeline
-        mismatch detected and resolved." Most closings will proceed with no human coordination at
+        agents will resolve the discrepancy in seconds. The humans will see a log entry: &quot;Timeline
+        mismatch detected and resolved.&quot; Most closings will proceed with no human coordination at
         all.
       </p>
       <p
@@ -437,7 +438,7 @@ export function WhitepaperContent() {
         The MCP gateway is the interoperability layer that makes this possible. A title company
         exposes its document intelligence tools via MCP. A lender exposes its underwriting and
         funding tools via MCP. A real estate brokerage exposes its transaction management tools via
-        MCP. Each firm's agent can discover and invoke the other firms' tools without custom
+        MCP. Each firm&apos;s agent can discover and invoke the other firms&apos; tools without custom
         integration work. The protocol handles authentication, authorization, rate limiting, and
         error handling. The firms remain independent. Their systems remain separate. But their agents
         can work together.

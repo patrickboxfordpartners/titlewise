@@ -1,24 +1,41 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 
+const listeners = new Set<() => void>()
+
+/** Register a theme listener and return a callback that removes it. */
+function subscribe(callback: () => void) {
+  listeners.add(callback)
+  return () => listeners.delete(callback)
+}
+
+/** Read whether the document currently uses the dark theme. */
+function getSnapshot() {
+  return document.documentElement.classList.contains("dark")
+}
+
+/** Return the light theme snapshot used during server rendering and hydration. */
+function getServerSnapshot() {
+  return false
+}
+
+/** Notify subscribed theme controls after the theme changes. */
+function emit() {
+  listeners.forEach((listener) => listener())
+}
+
+/** Render a theme switch synchronized with the document theme store. */
 export default function ThemeToggle({ className }: { className?: string }) {
-  const [dark, setDark] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const dark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
-  useEffect(() => {
-    setMounted(true)
-    setDark(document.documentElement.classList.contains("dark"))
-  }, [])
-
+  /** Toggle the document theme, persist the choice, and notify subscribers. */
   function toggle() {
     const next = !dark
-    setDark(next)
     document.documentElement.classList.toggle("dark", next)
     localStorage.setItem("tw-theme", next ? "dark" : "light")
+    emit()
   }
-
-  if (!mounted) return <div style={{ width: 32, height: 32 }} />
 
   return (
     <button

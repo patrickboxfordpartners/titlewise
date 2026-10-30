@@ -22,7 +22,7 @@ Get your first API call working in under 5 minutes.
 
 ```bash
 curl -X POST https://titlewise.app/api/v1/analyze-commitment \
-  -H "Authorization: Bearer YOUR_API_KEY_HERE" \
+  -H "Authorization: Bearer $TITLEWISE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "document_text": "COMMITMENT FOR TITLE INSURANCE\n\nSchedule A\n\n1. Policy Amount: $500,000.00\n2. Premium: $2,450.00\n3. Subject Property: 123 Main Street, Portsmouth, NH 03801\n4. Proposed Insured: John Smith and Jane Smith\n\nSchedule B - Requirements\n\n1. Payment of consideration.\n2. Proper execution and delivery of deed.\n\n Schedule B - Exceptions\n\n1. Rights or claims of parties in possession not shown by public records.\n2. Outstanding mortgage in favor of First National Bank, amount $350,000.",
@@ -139,7 +139,7 @@ X-Response-Time-Ms: 2314
 
 ```bash
 curl -X POST https://titlewise.app/api/v1/analyze-cd \
-  -H "Authorization: Bearer YOUR_API_KEY_HERE" \
+  -H "Authorization: Bearer $TITLEWISE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"document_text": "CLOSING DISCLOSURE\nLoan Amount: $400,000..."}'
 ```
@@ -148,7 +148,7 @@ curl -X POST https://titlewise.app/api/v1/analyze-cd \
 
 ```bash
 curl -X POST https://titlewise.app/api/v1/review-hoa \
-  -H "Authorization: Bearer YOUR_API_KEY_HERE" \
+  -H "Authorization: Bearer $TITLEWISE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"document_text": "HOMEOWNERS ASSOCIATION\nMonthly Dues: $285..."}'
 ```
@@ -157,7 +157,7 @@ curl -X POST https://titlewise.app/api/v1/review-hoa \
 
 ```bash
 curl -X POST https://titlewise.app/api/v1/verify-wire \
-  -H "Authorization: Bearer YOUR_API_KEY_HERE" \
+  -H "Authorization: Bearer $TITLEWISE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "document_text": "WIRE INSTRUCTIONS\nBank: TD Bank\nRouting: 011400071...",

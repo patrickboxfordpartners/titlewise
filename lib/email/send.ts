@@ -5,6 +5,7 @@ import { getGmailAccessToken, sendViaGmail } from "./gmail"
 import { getOutlookAccessToken, sendViaOutlook } from "./outlook"
 import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 
+/** Send through the user's Gmail or Outlook connection, falling back to Postmark with Reply-To set. */
 export async function sendEmail({
   userId,
   to,
@@ -16,7 +17,15 @@ export async function sendEmail({
   subject: string
   body: string
 }): Promise<void> {
-  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+  const [user] = await db
+    .select({
+      email: users.email,
+      googleRefreshToken: users.googleRefreshToken,
+      outlookRefreshToken: users.outlookRefreshToken,
+    })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1)
   if (!user) throw new Error("User not found")
 
   if (user.googleRefreshToken) {

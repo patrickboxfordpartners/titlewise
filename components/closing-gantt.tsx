@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import type Gantt from "frappe-gantt"
+import type { GanttTask } from "frappe-gantt"
 
 export interface ClosingTask {
   id: string
@@ -49,9 +51,10 @@ const GANTT_STYLES = `
   .gantt .today-highlight { fill: #3b82f6; opacity: 0.08; }
 `
 
+/** Render closing tasks in a Gantt chart and optionally report date changes. */
 export function ClosingGantt({ tasks, onDateChange, readonly = false }: ClosingGanttProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const ganttRef = useRef<any>(null)
+  const ganttRef = useRef<Gantt | null>(null)
   const styleRef = useRef<HTMLStyleElement | null>(null)
 
   useEffect(() => {
@@ -76,13 +79,13 @@ export function ClosingGantt({ tasks, onDateChange, readonly = false }: ClosingG
         scroll_to: "today",
         today_button: false,
         holidays: { "#1e293b40": "weekend" },
-        on_date_change: (task: any, start: Date, end: Date) => {
+        on_date_change: (task: GanttTask, start: Date, end: Date) => {
           onDateChange?.(task.id, start, end)
         },
         on_click: () => {},
-        popup: (task: any) => {
-          const start = new Date(task._start).toLocaleDateString("en-US", { month: "short", day: "numeric" })
-          const end = new Date(task._end).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+        popup: ({ task }) => {
+          const start = new Date(task._start ?? task.start).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+          const end = new Date(task._end ?? task.end).toLocaleDateString("en-US", { month: "short", day: "numeric" })
           return `
             <div class="title">${task.name}</div>
             <div class="subtitle">${start} → ${end} · ${task.progress}% complete</div>

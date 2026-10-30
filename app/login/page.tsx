@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useUnsplashPhoto } from "@/hooks/useUnsplashPhoto"
 
+/** Render the credentials login form and handle authentication feedback. */
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
@@ -102,7 +103,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-sm text-gray-500 text-center">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/signup" className="text-gray-900 font-medium hover:underline">
               Sign up
             </Link>

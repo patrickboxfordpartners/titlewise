@@ -75,11 +75,13 @@ export default function RootLayout({
         <SessionProvider>
           <PHProvider>{children}</PHProvider>
           <CookieBanner />
-          <Script
-            defer
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon='{"token": "30b945f51e3f499aa453d9af989b62a6"}'
-          />
+          {process.env.NEXT_PUBLIC_CF_BEACON_TOKEN ? (
+            <Script
+              defer
+              src="https://static.cloudflareinsights.com/beacon.min.js"
+              data-cf-beacon={JSON.stringify({ token: process.env.NEXT_PUBLIC_CF_BEACON_TOKEN })}
+            />
+          ) : null}
           <Script
             defer
             src="https://analytics.boxfordpartners.com/script.js"

@@ -3,13 +3,16 @@ import { db } from "@/lib/db"
 import { users } from "@/lib/db/schema"
 import { sendDripEmail } from "@/lib/email/drip"
 import { and, gte, lte, isNull, or, eq } from "drizzle-orm"
+import { secretsMatch } from "@/lib/secret-compare"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+/** Send eligible day-three and day-seven drip emails after validating the cron bearer secret. */
 export async function GET(req: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET
   const authHeader = req.headers.get("authorization")
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!secretsMatch(authHeader, cronSecret ? `Bearer ${cronSecret}` : undefined)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
@@ -22,7 +25,15 @@ export async function GET(req: NextRequest) {
   const day7End = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
   const candidates = await db
-    .select()
+    .select({
+      id: users.id,
+      email: users.email,
+      name: users.name,
+      subscriptionTier: users.subscriptionTier,
+      createdAt: users.createdAt,
+      dripDay3SentAt: users.dripDay3SentAt,
+      dripDay7SentAt: users.dripDay7SentAt,
+    })
     .from(users)
     .where(
       and(

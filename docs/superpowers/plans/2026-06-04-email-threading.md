@@ -724,7 +724,13 @@ console.log("Updated:", JSON.stringify(data, null, 2))
 - [ ] **Step 2: Run the script**
 
 ```bash
-cd /Users/patrickmitchell/titlewise && POSTMARK_API_KEY=3ee3632d-8656-47c7-b24c-53ce5ec4b2d5 npx tsx scripts/update-postmark-webhook.ts 2>&1
+cd /Users/patrickmitchell/titlewise && POSTMARK_API_KEY=<POSTMARK_SERVER_TOKEN> npx tsx scripts/update-postmark-webhook.ts 2>&1
+cd /Users/patrickmitchell/titlewise && (
+  read -r -s -p "Postmark token: " POSTMARK_API_KEY || exit 1
+  printf '\n'
+  export POSTMARK_API_KEY
+  npx tsx scripts/update-postmark-webhook.ts 2>&1
+)
 ```
 
 Expected: JSON response showing `InboundHookUrl: "https://titlewise.app/api/postmark/inbound"`.
@@ -734,7 +740,7 @@ Note: Postmark Server API uses `X-Postmark-Server-Token` for most endpoints, but
 - [ ] **Step 3: Verify the update**
 
 ```bash
-curl -s -H "X-Postmark-Server-Token: 3ee3632d-8656-47c7-b24c-53ce5ec4b2d5" https://api.postmarkapp.com/server | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('InboundHookUrl'))"
+curl -s -H "X-Postmark-Server-Token: <POSTMARK_SERVER_TOKEN>" https://api.postmarkapp.com/server | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('InboundHookUrl'))"
 ```
 
 Expected: `https://titlewise.app/api/postmark/inbound`
@@ -745,7 +751,8 @@ Expected: `https://titlewise.app/api/postmark/inbound`
 cd /Users/patrickmitchell/titlewise && npx vercel env add POSTMARK_API_KEY production
 ```
 
-When prompted for the value, enter: `3ee3632d-8656-47c7-b24c-53ce5ec4b2d5`
+When prompted for the value, enter the Postmark server token from the Postmark server settings page. Do not paste it into this file.
+When prompted for the value, enter: `<POSTMARK_SERVER_TOKEN>`
 
 Then:
 ```bash
@@ -809,7 +816,8 @@ cd /Users/patrickmitchell/titlewise && git tag v-email-threading
 
 **Key notes:**
 - `extractShortId` in the webhook uses `match[1].slice(0, 8)` — UUIDs start with 8 hex chars before the first `-`, so `like(matters.id, '${shortId}%')` correctly matches the UUID prefix.
-- The `X-Postmark-Account-Token` vs `X-Postmark-Server-Token` distinction: server settings (`/server` PUT) requires Account Token on some Postmark tiers. If Task 6 Step 2 returns 401, swap the header. The API key `3ee3632d-...` is a Server API Token.
+- The `X-Postmark-Account-Token` vs `X-Postmark-Server-Token` distinction: server settings (`/server` PUT) requires Account Token on some Postmark tiers. If Task 6 Step 2 returns 401, swap the header. The value used for Task 6 is a Server API Token. Keep it in the host environment only.
+- The `X-Postmark-Account-Token` vs `X-Postmark-Server-Token` distinction: server settings (`/server` PUT) requires Account Token on some Postmark tiers. If Task 6 Step 2 returns 401, swap the header. The configured value is a Server API Token.
 - Outbound emails use `MessageStream: "outbound"` — required for Postmark transactional sends.
 - The `dangerouslySetInnerHTML` in `EmailRow` is intentional for HTML emails, consistent with mailboxford's `DOMPurify` pattern. However, titlewise currently has no DOMPurify — for now the risk is low since only inbound emails from external senders get HTML rendered, and titlewise is a single-tenant tool. A follow-up should add DOMPurify.
 - `POSTMARK_INBOUND_WEBHOOK_SECRET` is optional (webhook verifies if set). Task 6 leaves it empty; it can be added later once Postmark's credential UI exposes it.
