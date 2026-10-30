@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, CheckCircle2, ArrowLeft } from "lucide-react"
 
+/** Render the demo request form, validate its fields, and submit contact details. */
 export default function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", firm: "", message: "" })
   const [submitting, setSubmitting] = useState(false)
@@ -196,7 +197,7 @@ export default function ContactSection() {
                   {submitting ? "Sending..." : <><Send className="mr-1 h-4 w-4" /> Send Request</>}
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
-                  We'll never share your information with third parties.
+                  We&apos;ll never share your information with third parties.
                 </p>
               </motion.form>
             )}

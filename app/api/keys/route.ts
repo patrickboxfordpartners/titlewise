@@ -1,14 +1,18 @@
 import { requireAuth } from "@/lib/auth-helpers"
 import { db } from "@/lib/db"
 import { apiKeys, apiUsageLogs, users } from "@/lib/db/schema"
-import { eq, and, gte, sql } from "drizzle-orm"
+import { eq, and, gte, inArray, sql } from "drizzle-orm"
 
+/** List an Enterprise user's API key metadata and monthly usage without exposing key hashes. */
 export async function GET() {
   const userId = await requireAuth()
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 })
 
-  // Get user
-  const [user] = await db.select().from(users).where(eq(users.id, userId))
+  const [user] = await db
+    .select({ id: users.id, subscriptionTier: users.subscriptionTier })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1)
   if (!user) return Response.json({ error: "User not found" }, { status: 404 })
 
   // Check if user has Enterprise plan
@@ -19,32 +23,44 @@ export async function GET() {
     })
   }
 
-  // Get all keys for this user
-  const keys = await db.select().from(apiKeys).where(eq(apiKeys.userId, user.id))
+  const keys = await db
+    .select({
+      id: apiKeys.id,
+      name: apiKeys.name,
+      keyPrefix: apiKeys.keyPrefix,
+      rateLimitPerMonth: apiKeys.rateLimitPerMonth,
+      isActive: apiKeys.isActive,
+      lastUsedAt: apiKeys.lastUsedAt,
+      createdAt: apiKeys.createdAt,
+    })
+    .from(apiKeys)
+    .where(eq(apiKeys.userId, user.id))
 
-  // Get usage counts for each key (this month)
   const startOfMonth = new Date()
   startOfMonth.setDate(1)
   startOfMonth.setHours(0, 0, 0, 0)
 
-  const keysWithUsage = await Promise.all(
-    keys.map(async (key) => {
-      const [{ count }] = await db
-        .select({ count: sql<number>`count(*)::int` })
+  const usageRows = keys.length === 0
+    ? []
+    : await db
+        .select({
+          apiKeyId: apiUsageLogs.apiKeyId,
+          count: sql<number>`count(*)::int`,
+        })
         .from(apiUsageLogs)
         .where(
           and(
-            eq(apiUsageLogs.apiKeyId, key.id),
+            inArray(apiUsageLogs.apiKeyId, keys.map((key) => key.id)),
             gte(apiUsageLogs.createdAt, startOfMonth)
           )
         )
+        .groupBy(apiUsageLogs.apiKeyId)
 
-      return {
-        ...key,
-        usageThisMonth: count || 0
-      }
-    })
-  )
+  const usageByKey = new Map(usageRows.map((row) => [row.apiKeyId, Number(row.count) || 0]))
+  const keysWithUsage = keys.map((key) => ({
+    ...key,
+    usageThisMonth: usageByKey.get(key.id) ?? 0,
+  }))
 
   return Response.json({ keys: keysWithUsage })
 }

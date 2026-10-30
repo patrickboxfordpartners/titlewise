@@ -12,9 +12,11 @@ async function getUserPlan(): Promise<PlanKey | null> {
   return null;
 }
 
+/** Return whether the selected plan enables a boolean feature; missing plans return false. */
 function planHasFeature(plan: PlanKey | null, feature: keyof typeof PLANS["solo"]): boolean {
   if (!plan) return false;
-  return !!(PLANS[plan] as any)[feature];
+  const value = PLANS[plan][feature]
+  return typeof value === "boolean" ? value : false
 }
 
 export const hasAgentFlag = flag<boolean>({

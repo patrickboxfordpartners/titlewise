@@ -725,6 +725,12 @@ console.log("Updated:", JSON.stringify(data, null, 2))
 
 ```bash
 cd /Users/patrickmitchell/titlewise && POSTMARK_API_KEY=<POSTMARK_SERVER_TOKEN> npx tsx scripts/update-postmark-webhook.ts 2>&1
+cd /Users/patrickmitchell/titlewise && (
+  read -r -s -p "Postmark token: " POSTMARK_API_KEY || exit 1
+  printf '\n'
+  export POSTMARK_API_KEY
+  npx tsx scripts/update-postmark-webhook.ts 2>&1
+)
 ```
 
 Expected: JSON response showing `InboundHookUrl: "https://titlewise.app/api/postmark/inbound"`.
@@ -746,6 +752,7 @@ cd /Users/patrickmitchell/titlewise && npx vercel env add POSTMARK_API_KEY produ
 ```
 
 When prompted for the value, enter the Postmark server token from the Postmark server settings page. Do not paste it into this file.
+When prompted for the value, enter: `<POSTMARK_SERVER_TOKEN>`
 
 Then:
 ```bash
@@ -810,6 +817,7 @@ cd /Users/patrickmitchell/titlewise && git tag v-email-threading
 **Key notes:**
 - `extractShortId` in the webhook uses `match[1].slice(0, 8)` — UUIDs start with 8 hex chars before the first `-`, so `like(matters.id, '${shortId}%')` correctly matches the UUID prefix.
 - The `X-Postmark-Account-Token` vs `X-Postmark-Server-Token` distinction: server settings (`/server` PUT) requires Account Token on some Postmark tiers. If Task 6 Step 2 returns 401, swap the header. The value used for Task 6 is a Server API Token. Keep it in the host environment only.
+- The `X-Postmark-Account-Token` vs `X-Postmark-Server-Token` distinction: server settings (`/server` PUT) requires Account Token on some Postmark tiers. If Task 6 Step 2 returns 401, swap the header. The configured value is a Server API Token.
 - Outbound emails use `MessageStream: "outbound"` — required for Postmark transactional sends.
 - The `dangerouslySetInnerHTML` in `EmailRow` is intentional for HTML emails, consistent with mailboxford's `DOMPurify` pattern. However, titlewise currently has no DOMPurify — for now the risk is low since only inbound emails from external senders get HTML rendered, and titlewise is a single-tenant tool. A follow-up should add DOMPurify.
 - `POSTMARK_INBOUND_WEBHOOK_SECRET` is optional (webhook verifies if set). Task 6 leaves it empty; it can be added later once Postmark's credential UI exposes it.

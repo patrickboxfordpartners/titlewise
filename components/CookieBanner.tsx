@@ -5,12 +5,15 @@ import Link from "next/link";
 
 const CONSENT_KEY = "cookie_consent";
 
+/** Request cookie consent when no stored choice exists and persist the response. */
 export function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem(CONSENT_KEY);
-    if (!consent) setVisible(true);
+    if (consent) return;
+    const handle = window.setTimeout(() => setVisible(true), 0);
+    return () => window.clearTimeout(handle);
   }, []);
 
   function accept() {

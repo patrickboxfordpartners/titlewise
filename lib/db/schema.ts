@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, integer, uuid, jsonb, index } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, integer, uuid, jsonb, index, type AnyPgColumn } from "drizzle-orm/pg-core"
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -26,12 +26,15 @@ export const users = pgTable("users", {
   customLogoUrl: text("custom_logo_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-})
+}, (table) => [
+  // Serves drip (status + created_at window) and monthly usage reset (status).
+  index("idx_users_status_created").on(table.subscriptionStatus, table.createdAt),
+])
 
 export const statusUpdates = pgTable("status_updates", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  matterId: uuid("matter_id").references((): AnyPgColumn => matters.id, { onDelete: "set null" }),
   clientName: text("client_name").notNull(),
   propertyAddress: text("property_address").notNull(),
   transactionType: text("transaction_type").notNull(),
@@ -51,7 +54,7 @@ export const statusUpdates = pgTable("status_updates", {
 export const titleAnalyses = pgTable("title_analyses", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  matterId: uuid("matter_id").references((): AnyPgColumn => matters.id, { onDelete: "set null" }),
   propertyAddress: text("property_address"),
   commitmentText: text("commitment_text").notNull(),
   analysis: jsonb("analysis").notNull(),
@@ -76,6 +79,7 @@ export const matters = pgTable("matters", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [
   index("idx_matters_user_id").on(table.userId),
+  index("idx_matters_user_updated").on(table.userId, table.updatedAt),
 ])
 
 export const checklistItems = pgTable("checklist_items", {
@@ -101,7 +105,7 @@ export const wireInstructions = pgTable("wire_instructions", {
   accountNumber: text("account_number"), // stored masked
   beneficiary: text("beneficiary"),
   verifiedAt: timestamp("verified_at").defaultNow().notNull(),
-  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  matterId: uuid("matter_id").references((): AnyPgColumn => matters.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (table) => [
   index("idx_wire_instructions_user").on(table.userId),
@@ -149,7 +153,7 @@ export const contactSubmissions = pgTable("contact_submissions", {
 export const cdReviews = pgTable("cd_reviews", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  matterId: uuid("matter_id").references((): AnyPgColumn => matters.id, { onDelete: "set null" }),
   propertyAddress: text("property_address"),
   buyer: text("buyer"),
   seller: text("seller"),
@@ -164,7 +168,7 @@ export const cdReviews = pgTable("cd_reviews", {
 export const hoaReviews = pgTable("hoa_reviews", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  matterId: uuid("matter_id").references((): AnyPgColumn => matters.id, { onDelete: "set null" }),
   associationName: text("association_name"),
   redFlagCount: integer("red_flag_count").default(0),
   result: jsonb("result").notNull(),
@@ -177,7 +181,7 @@ export const hoaReviews = pgTable("hoa_reviews", {
 export const feeEstimates = pgTable("fee_estimates", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  matterId: uuid("matter_id").references((): any => matters.id, { onDelete: "set null" }),
+  matterId: uuid("matter_id").references((): AnyPgColumn => matters.id, { onDelete: "set null" }),
   clientName: text("client_name").notNull(),
   transactionType: text("transaction_type").notNull(),
   jurisdiction: text("jurisdiction"),
@@ -288,6 +292,7 @@ export const emailThreads = pgTable("email_threads", {
 }, (table) => [
   index("idx_email_threads_matter_id").on(table.matterId),
   index("idx_email_threads_created").on(table.createdAt),
+  index("idx_email_threads_matter_created").on(table.matterId, table.createdAt),
 ])
 
 export type EmailThread = typeof emailThreads.$inferSelect
@@ -353,6 +358,7 @@ export const blogPosts = pgTable("blog_posts", {
   index("idx_blog_posts_slug").on(table.slug),
   index("idx_blog_posts_status").on(table.status),
   index("idx_blog_posts_published").on(table.publishedAt),
+  index("idx_blog_posts_status_published").on(table.status, table.publishedAt),
 ])
 
 export type BlogPost = typeof blogPosts.$inferSelect

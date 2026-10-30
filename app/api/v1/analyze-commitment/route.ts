@@ -57,6 +57,7 @@ const buildTitlePrompt = (commitment: string) => `Analyze this title commitment 
 Title Commitment:
 ${commitment}`
 
+/** Analyze and save a title commitment for an authorized Enterprise API key and record usage. */
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   const endpoint = "/api/v1/analyze-commitment"
@@ -180,7 +181,7 @@ export async function POST(request: NextRequest) {
 
     analysis = JSON.parse(jsonMatch[0])
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[API v1] Claude API error:", error)
 
     // Log failed request
@@ -200,7 +201,7 @@ export async function POST(request: NextRequest) {
       endpoint,
       userId,
       status: "failed",
-      error: error.message || "Unknown error"
+      error: error instanceof Error ? error.message : "Unknown error"
     }).catch((err) => {
       console.error("[Webhooks] Failed to trigger:", err)
     })
@@ -208,7 +209,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Analysis failed",
-        message: error.message || "Unknown error"
+        message: error instanceof Error ? error.message : "Unknown error"
       },
       { status: 500 }
     )

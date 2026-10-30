@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   description: 'What to expect during your TITLEwise setup consultation.',
 };
 
+/** Render the setup guide for configuring TITLEwise and running its tools. */
 export default function SetupGuidePage() {
   const BG = "#0d253d";
   const PANEL = "#0d253d";
@@ -26,7 +27,7 @@ export default function SetupGuidePage() {
             What to Expect
           </h1>
           <p style={{ color: MUTED, fontSize: 18, fontWeight: 300, lineHeight: 1.7 }}>
-            Your setup consultation is booked. Here's how we'll get you live with TITLEwise.
+            Your setup consultation is booked. Here&apos;s how we&apos;ll get you live with TITLEwise.
           </p>
         </div>
 
@@ -98,7 +99,7 @@ export default function SetupGuidePage() {
               <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${BLUE}`, flexShrink: 0, marginTop: 2 }} />
               <div>
                 <p style={{ color: TEXT, fontSize: 14, fontWeight: 300, marginBottom: 4 }}>Team Structure</p>
-                <p style={{ color: MUTED, fontSize: 12 }}>Attorneys, paralegals, and staff who'll use the system</p>
+                <p style={{ color: MUTED, fontSize: 12 }}>Attorneys, paralegals, and staff who&apos;ll use the system</p>
               </div>
             </div>
           </div>
@@ -143,7 +144,7 @@ export default function SetupGuidePage() {
                   <p style={{ color: MUTED, marginBottom: 4 }}><span style={{ color: TEXT, fontWeight: 300 }}>What we do:</span> Build your closing checklist with automated deadline tracking</p>
                 </div>
                 <div>
-                  <p style={{ color: MUTED, marginBottom: 4 }}><span style={{ color: TEXT, fontWeight: 300 }}>Why:</span> Every team member knows what's due and nothing falls through the cracks</p>
+                  <p style={{ color: MUTED, marginBottom: 4 }}><span style={{ color: TEXT, fontWeight: 300 }}>Why:</span> Every team member knows what&apos;s due and nothing falls through the cracks</p>
                 </div>
                 <div>
                   <p style={{ color: MUTED }}><span style={{ color: TEXT, fontWeight: 300 }}>What you need:</span> Confirm task order and typical timelines</p>
@@ -204,7 +205,7 @@ export default function SetupGuidePage() {
         <section style={{ background: PANEL, border: `1px solid ${BORDER}`, borderRadius: 8, padding: 32, textAlign: "center" }}>
           <h2 style={{ fontSize: 20, fontWeight: 300, color: TEXT, marginBottom: 12 }}>Questions Before Your Call?</h2>
           <p style={{ color: MUTED, fontSize: 14, marginBottom: 24 }}>
-            We're here to help. Reach out anytime.
+            We&apos;re here to help. Reach out anytime.
           </p>
           <a
             href="mailto:hello@titlewise.app"

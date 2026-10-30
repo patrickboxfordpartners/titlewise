@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
 import { db } from "@/lib/db"
 import { matters, emailThreads } from "@/lib/db/schema"
-import { eq, and, asc } from "drizzle-orm"
+import { eq, and, desc } from "drizzle-orm"
 import { getOrCreateUser } from "@/lib/db/get-user"
 import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
 
@@ -17,6 +17,8 @@ function matterInboxAddress(matterId: string): string {
   return `matter-${matterId.slice(0, 8)}@titlewise.app`
 }
 
+const EMAIL_LIMIT = 200
+
 async function getOwnedMatter(matterId: string, userId: string) {
   const user = await getOrCreateUser(userId)
   const [matter] = await db.select().from(matters)
@@ -25,6 +27,7 @@ async function getOwnedMatter(matterId: string, userId: string) {
   return { matter: matter ?? null, user }
 }
 
+/** Return the newest 200 owned-matter emails oldest-first, with inbox address and truncation status. */
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {
   const userId = await requireAuth()
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -33,12 +36,17 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ mat
   const { matter } = await getOwnedMatter(matterId, userId)
   if (!matter) return NextResponse.json({ error: "Not found" }, { status: 404 })
 
-  const emails = await db.select().from(emailThreads)
+  // Newest EMAIL_LIMIT threads. Fetch one extra row to tell the client when
+  // older threads were left out.
+  const rows = await db.select().from(emailThreads)
     .where(eq(emailThreads.matterId, matterId))
-    .orderBy(asc(emailThreads.createdAt))
+    .orderBy(desc(emailThreads.createdAt))
+    .limit(EMAIL_LIMIT + 1)
+  const truncated = rows.length > EMAIL_LIMIT
+  const emails = rows.slice(0, EMAIL_LIMIT).reverse()
 
   const inboxAddress = matterInboxAddress(matterId)
-  return NextResponse.json({ emails, inboxAddress })
+  return NextResponse.json({ emails, inboxAddress, truncated })
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ matterId: string }> }) {

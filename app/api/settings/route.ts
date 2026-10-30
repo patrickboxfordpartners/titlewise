@@ -12,6 +12,7 @@ const updateSchema = z.object({
   customLogoUrl: z.string().url().or(z.literal("")).nullable().optional(),
 })
 
+/** Return the authenticated user's profile, subscription, and usage settings. */
 export async function GET() {
   const userId = await requireAuth()
   if (!userId) {
@@ -27,6 +28,7 @@ export async function GET() {
       subscriptionStatus: user.subscriptionStatus,
       subscriptionTier: user.subscriptionTier,
       monthlyUsageCount: user.monthlyUsageCount,
+      usageResetAt: user.usageResetAt,
       hasStripeCustomer: !!user.stripeCustomerId,
       onboardingCompletedAt: user.onboardingCompletedAt,
       customLogoUrl: user.customLogoUrl,

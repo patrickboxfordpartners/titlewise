@@ -20,6 +20,7 @@ if (!DATABASE_URL) {
   process.exit(1);
 }
 
+/** Sync the configured Stripe customer's first subscription to the user selected by legacy Clerk ID. */
 async function main() {
   console.log('\n🔄 Syncing subscription to database\n');
 
@@ -42,7 +43,10 @@ async function main() {
     process.exit(1);
   }
 
-  const subscriptions = (customer as any).subscriptions.data;
+  const subscriptions =
+    "subscriptions" in customer && customer.subscriptions && "data" in customer.subscriptions
+      ? customer.subscriptions.data
+      : [];
   if (subscriptions.length === 0) {
     console.error('❌ No subscriptions found');
     process.exit(1);

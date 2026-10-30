@@ -6,8 +6,12 @@ import { users } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import bcrypt from "bcryptjs"
 
+// The adapter inspects the client immediately. Skip it during builds that
+// do not have DATABASE_URL; credentials sessions are JWT and do not use it.
+const adapter = process.env.DATABASE_URL ? DrizzleAdapter(db) : undefined
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: DrizzleAdapter(db),
+  ...(adapter ? { adapter } : {}),
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description: "Terms and conditions for using TITLEwise products and services.",
 }
 
+/** Render the terms governing use of the TITLEwise service. */
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">
@@ -21,7 +22,7 @@ export default function TermsPage() {
 
         <div className="mt-12 space-y-8 text-foreground font-light leading-relaxed">
 
-          <p>These Terms of Service ("Terms") govern your access to and use of the websites and services operated by Boxford Partners LLC DBA TITLEwise ("TITLEwise," "we," "us," or "our"), including titlewise.app and our SaaS platform. By accessing or using our services, you agree to these Terms.</p>
+          <p>These Terms of Service (&quot;Terms&quot;) govern your access to and use of the websites and services operated by Boxford Partners LLC DBA TITLEwise (&quot;TITLEwise,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;), including titlewise.app and our SaaS platform. By accessing or using our services, you agree to these Terms.</p>
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Services</h2>
@@ -40,7 +41,7 @@ export default function TermsPage() {
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Payments and Subscriptions</h2>
-            <p>Paid services are billed in advance on a monthly or annual basis. All fees are non-refundable except as required by law or as expressly stated in a separate agreement. We use Stripe to process payments - your payment information is subject to Stripe's terms and privacy policy. We reserve the right to change pricing with 30 days' notice to existing subscribers.</p>
+            <p>Paid services are billed in advance on a monthly or annual basis. All fees are non-refundable except as required by law or as expressly stated in a separate agreement. We use Stripe to process payments - your payment information is subject to Stripe&apos;s terms and privacy policy. We reserve the right to change pricing with 30 days&apos; notice to existing subscribers.</p>
           </div>
 
           <div>
@@ -55,7 +56,7 @@ export default function TermsPage() {
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Disclaimer of Warranties</h2>
-            <p>Our services are provided "as is" and "as available" without warranties of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement. TITLEwise is a productivity tool and does not provide legal advice. You are responsible for verifying all outputs and making independent professional judgments.</p>
+            <p>Our services are provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement. TITLEwise is a productivity tool and does not provide legal advice. You are responsible for verifying all outputs and making independent professional judgments.</p>
           </div>
 
           <div>
@@ -65,7 +66,7 @@ export default function TermsPage() {
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Indemnification</h2>
-            <p>You agree to indemnify and hold harmless TITLEwise and its officers, directors, employees, and agents from any claims, damages, or expenses (including reasonable attorney's fees) arising from your violation of these Terms or misuse of our services.</p>
+            <p>You agree to indemnify and hold harmless TITLEwise and its officers, directors, employees, and agents from any claims, damages, or expenses (including reasonable attorney&apos;s fees) arising from your violation of these Terms or misuse of our services.</p>
           </div>
 
           <div>
@@ -75,7 +76,7 @@ export default function TermsPage() {
 
           <div>
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Changes to These Terms</h2>
-            <p>We may revise these Terms at any time. Material changes will be communicated by updating the "Last updated" date and, where appropriate, by email. Continued use of our services after changes take effect constitutes your acceptance of the revised Terms.</p>
+            <p>We may revise these Terms at any time. Material changes will be communicated by updating the &quot;Last updated&quot; date and, where appropriate, by email. Continued use of our services after changes take effect constitutes your acceptance of the revised Terms.</p>
           </div>
 
           <div>

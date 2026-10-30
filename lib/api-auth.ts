@@ -83,12 +83,14 @@ export async function authenticateApiKey(request: Request): Promise<AuthResult> 
     }
   }
 
-  // 6. Update last_used_at (fire and forget)
-  db.update(apiKeys)
-    .set({ lastUsedAt: new Date() })
-    .where(eq(apiKeys.id, validKey.id))
-    .execute()
-    .catch(() => {}) // Don't fail request if update fails
+  // Await so the write finishes before the serverless isolate freezes.
+  try {
+    await db.update(apiKeys)
+      .set({ lastUsedAt: new Date() })
+      .where(eq(apiKeys.id, validKey.id))
+  } catch {
+    // Don't fail the request if the timestamp update fails.
+  }
 
   // 7. Return success with IDs
   return {

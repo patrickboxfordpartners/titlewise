@@ -2,6 +2,7 @@ import { db } from "@/lib/db"
 import { matters, matterParties, checklistItems } from "@/lib/db/schema"
 import { eq, and } from "drizzle-orm"
 
+/** Build Neil's prompt from an owned matter, its parties, and checklist progress; throw if absent. */
 export async function buildSystemPrompt(matterId: string, userId: string): Promise<string> {
   const [matter] = await db
     .select()
@@ -11,15 +12,10 @@ export async function buildSystemPrompt(matterId: string, userId: string): Promi
 
   if (!matter) throw new Error("Matter not found")
 
-  const parties = await db
-    .select()
-    .from(matterParties)
-    .where(eq(matterParties.matterId, matterId))
-
-  const items = await db
-    .select()
-    .from(checklistItems)
-    .where(eq(checklistItems.matterId, matterId))
+  const [parties, items] = await Promise.all([
+    db.select().from(matterParties).where(eq(matterParties.matterId, matterId)),
+    db.select().from(checklistItems).where(eq(checklistItems.matterId, matterId)),
+  ])
 
   const complete = items.filter((i) => i.status === "complete").length
   const partiesList = parties
