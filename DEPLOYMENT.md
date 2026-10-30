@@ -131,7 +131,7 @@ vercel --prod
 
 # Test analyze-commitment
 curl -X POST https://titlewise.app/api/v1/analyze-commitment \
-  -H "Authorization: Bearer YOUR_PRODUCTION_KEY" \
+  -H "Authorization: Bearer $TITLEWISE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"document_text": "COMMITMENT..."}'
 

@@ -34,7 +34,7 @@ echo ""
 # Test 2: Invalid API key format
 echo -e "${YELLOW}Test 2: Invalid API key format${NC}"
 curl -s -X POST "$BASE_URL/api/v1/analyze-commitment" \
-  -H "Authorization: Bearer invalid_key" \
+  -H "Authorization: Bearer ${INVALID_API_KEY:-not-a-key}" \
   -H "Content-Type: application/json" \
   -d '{"document_text":"test"}' | jq .
 
