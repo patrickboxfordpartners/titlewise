@@ -67,17 +67,20 @@ export function hashUsesActiveKey(stored: string): boolean {
   return Boolean(fp) && stored.startsWith(`v1:${fp}:`)
 }
 
-/** True when a model-extracted routing number appears, digits only, in the text the user pasted. */
+/** True when a model-extracted routing number appears in the pasted text, not inside a longer digit run. */
 export function routingAppearsInSource(source: string, routing: string | null): boolean {
   if (!routing) return false
-  return source.replace(/\D/g, "").includes(routing.replace(/\D/g, ""))
+  const digits = routing.replace(/\D/g, "")
+  if (!digits) return false
+  return new RegExp(`(?<!\\d)${digits.split("").join("[\\s-]*")}(?!\\d)`).test(source)
 }
 
-/** True when a model-extracted account number appears in the pasted text (ignoring spaces, dashes and case). */
+/** True when a model-extracted account number appears in the pasted text in full (only spaces or dashes may separate its characters). */
 export function accountAppearsInSource(source: string, account: string | null | undefined): boolean {
   const normalized = normalizeAccount(account)
   if (!normalized) return false
-  return source.replace(/[\s-]/g, "").toUpperCase().includes(normalized)
+  const pattern = normalized.split("").map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("[\\s-]*")
+  return new RegExp(`(?<![A-Z0-9])${pattern}(?![A-Z0-9])`, "i").test(source)
 }
 
 export function maskAccount(account: string | null | undefined): string | null {
