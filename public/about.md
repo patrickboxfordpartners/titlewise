@@ -34,7 +34,7 @@ We built TITLEwise on a modern tech stack designed for reliability, security, an
 
 - **Infrastructure:** Hosted on Vercel with global edge deployment
 - **Database:** Neon Postgres with connection pooling for high availability
-- **Authentication:** Clerk for secure user authentication and API key management
+- **Authentication:** NextAuth (email and password) for user sign-in; API keys managed in-app
 - **AI Models:** GPT-4o and Claude 3.5 Sonnet for document analysis
 - **Monitoring:** Sentry for error tracking, Vercel Analytics for performance monitoring
 

@@ -56,7 +56,6 @@ export default function PrivacyPage() {
             <h2 className="mb-3 text-[22px] font-light tracking-[-0.22px] text-foreground">Third-Party Service Providers</h2>
             <p className="mb-3">We use trusted third-party providers to operate our services. These providers process data only as directed by us:</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li><strong>Clerk</strong> - authentication and user management</li>
               <li><strong>Stripe</strong> - payment processing (we do not store full card numbers)</li>
               <li><strong>Postmark</strong> - transactional email delivery</li>
               <li><strong>Anthropic</strong> - AI-powered document analysis features</li>

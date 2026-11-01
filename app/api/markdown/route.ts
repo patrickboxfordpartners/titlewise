@@ -16,7 +16,7 @@ TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered
 - **Status Updates** — AI generates plain-language updates from checklist progress, emails them to all parties
 - **Title Analysis** — Parses title commitments, flags exceptions, identifies potential issues
 - **CD Reviewer** — TRID-compliant closing disclosure review engine
-- **Wire Verification** — Cross-matter memory detects anomalies in wire instructions
+- **Wire Fraud Screening** — AI red-flag screening, ABA routing checksum, drafted callback request, and comparison against wires you confirmed by phone
 - **HOA Reviewer** — Extracts key terms, fees, and restrictions from HOA documents
 - **Fee Estimate** — County-specific recording fees, transfer taxes, title insurance premiums
 - **Tax Proration** — Calculates buyer/seller tax responsibilities with per-diem precision
@@ -28,8 +28,8 @@ TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered
 |------|-------|-------|
 | Solo | $149/mo | 1 attorney |
 | Small Firm | $349/mo | Up to 5 |
-| Pro | $599/mo | Up to 15, includes Closing Agent |
-| Enterprise | $999/mo | Unlimited, API access |
+| Pro | $599/mo | Up to 10, includes Closing Agent |
+| Enterprise | $999/mo | Up to 25, API access |
 
 ## API Access
 
@@ -65,13 +65,13 @@ Enterprise plan includes API access for AI agent integration.
 - Shared matter templates
 
 ### Pro — $599/month
-- Up to 15 users
+- Up to 10 users
 - Everything in Small Firm
 - Closing Agent AI assistant
 - Priority support
 
 ### Enterprise — $999/month
-- Unlimited users
+- Up to 25 users
 - Everything in Pro
 - API access (v1 endpoints)
 - Webhooks
@@ -98,7 +98,7 @@ Status Updates, Title Analysis, CD Reviewer, Wire Verification, HOA Reviewer, Fe
 Yes. Enterprise plan ($999/mo) includes full API access with Bearer token authentication. See [/auth.md](/auth.md).
 
 ## How does wire verification work?
-The system cross-references wire instructions against historical data from your previous transactions, detecting account changes and potential fraud indicators.
+The system screens wire instructions for red flags, checks the routing number checksum, and compares them against wires you previously confirmed by phone. Always confirm by phone before wiring.
 
 ## Is my data secure?
 Yes. All data is encrypted in transit and at rest. We do not train AI models on your documents.

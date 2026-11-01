@@ -47,6 +47,11 @@ function WireVerificationContent() {
   const [sendTo, setSendTo] = useState("")
   const [sendMode, setSendMode] = useState<"idle" | "compose" | "sending" | "sent">("idle")
   const [sendError, setSendError] = useState("")
+  const [confirmToken, setConfirmToken] = useState<string | null>(null)
+  const [checks, setChecks] = useState<{ routingChecksum: "valid" | "invalid" | "not_found"; accountCheck: "compared" | "no_known_account" | "unavailable"; skippedOldKeyHashes?: number } | null>(null)
+  const [calledBack, setCalledBack] = useState(false)
+  const [confirmState, setConfirmState] = useState<"idle" | "saving" | "saved" | "error">("idle")
+  const [confirmError, setConfirmError] = useState("")
 
   useEffect(() => {
     fetch("/api/email/status")
@@ -58,7 +63,7 @@ function WireVerificationContent() {
   async function handleAnalyze() {
     setError("")
     if (wire.trim().length < 20) { setError("Paste the wire instructions."); return }
-    setLoading(true); setResult(null)
+    setLoading(true); setResult(null); setConfirmToken(null); setChecks(null); setCalledBack(false); setConfirmState("idle"); setConfirmError("")
     try {
       const res = await fetch("/api/verify-wire", {
         method: "POST",
@@ -69,9 +74,29 @@ function WireVerificationContent() {
       const data = await res.json()
       setResult(data.result)
       setInstitutionalDeviations(data.institutionalDeviations ?? [])
+      setConfirmToken(data.confirmToken ?? null)
+      setChecks(data.deterministicChecks ?? null)
       trackEvent(EVENTS.WIRE_VERIFIED, { riskLevel: data.result?.riskLevel, hasDeviations: (data.institutionalDeviations?.length ?? 0) > 0 })
     } catch (err) { setError(err instanceof Error ? err.message : "Something went wrong") }
     finally { setLoading(false) }
+  }
+
+  async function handleConfirm() {
+    if (!confirmToken || !calledBack) return
+    setConfirmState("saving"); setConfirmError("")
+    try {
+      const res = await fetch("/api/verify-wire/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmToken, calledBack: true }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(data.error || "Could not save")
+      setConfirmState("saved")
+    } catch (err) {
+      setConfirmError(err instanceof Error ? err.message : "Could not save")
+      setConfirmState("error")
+    }
   }
 
   async function copyEmail() {
@@ -127,7 +152,7 @@ function WireVerificationContent() {
           {matterId && <Link href={`/matters/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-          Analyze wire instructions for fraud indicators and generate a verification communication.
+          AI red-flag screening of wire instructions, plus a drafted callback request. Always confirm by phone before wiring.
         </p>
       </motion.div>
 
@@ -246,7 +271,7 @@ function WireVerificationContent() {
                     </li>
                   ))}
                 </ul>
-                <p className="text-xs text-red-600/70 mt-2">This routing number has been used in previous verifications with different details. Verify directly with the lender before wiring funds.</p>
+                <p className="text-xs text-red-600/70 mt-2">This routing number was previously confirmed with different details. Verify directly with the lender before wiring funds.</p>
               </motion.div>
             )}
 
@@ -408,6 +433,44 @@ function WireVerificationContent() {
                 {result.verificationEmail}
               </pre>
             </motion.div>
+
+            {checks && (
+              <div className="bg-card rounded-xl border border-border p-5 text-sm">
+                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Automated checks</h2>
+                <p className={cn(checks.routingChecksum === "invalid" ? "text-red-600" : "text-foreground/80")}>
+                  Routing number checksum: {checks.routingChecksum === "valid" ? "valid format" : checks.routingChecksum === "invalid" ? "INVALID (not a real ABA number)" : "no routing number found"}
+                </p>
+                <p className="text-foreground/80">
+                  Account number: {checks.accountCheck === "compared" ? "compared against accounts you previously confirmed" : checks.accountCheck === "no_known_account" ? "no previously confirmed account on file for this routing number" : (checks.skippedOldKeyHashes ?? 0) > 0 ? "NOT compared: previously confirmed accounts were saved under an older key. Confirm by phone." : "NOT compared: the account number was missing or could not be verified against the pasted text, or saved accounts could not be checked. Confirm by phone."}
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">These checks and the AI screening do not confirm who owns the account. Always confirm by phone with a known contact.</p>
+              </div>
+            )}
+
+            {confirmToken && (
+              <div className="bg-card rounded-xl border border-border p-5">
+                <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">After your callback</h2>
+                {confirmState === "saved" ? (
+                  <p className="text-sm text-green-600 flex items-center gap-2"><Check className="h-4 w-4" />Saved as confirmed. Future instructions on this routing number will be compared against it.</p>
+                ) : (
+                  <>
+                    <label className="flex items-start gap-2 text-sm text-foreground/80">
+                      <input type="checkbox" className="mt-1" checked={calledBack} onChange={(e) => setCalledBack(e.target.checked)} />
+                      I confirmed these wire instructions by phone, using a number I already had on file (not one from this email).
+                    </label>
+                    <button
+                      type="button"
+                      onClick={handleConfirm}
+                      disabled={!calledBack || confirmState === "saving"}
+                      className="mt-3 text-sm font-medium px-4 py-2 rounded-lg bg-primary text-primary-foreground disabled:opacity-50"
+                    >
+                      {confirmState === "saving" ? "Saving..." : "Save as confirmed wire"}
+                    </button>
+                    {confirmError && <p className="text-xs text-red-500 mt-1">{confirmError}</p>}
+                  </>
+                )}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

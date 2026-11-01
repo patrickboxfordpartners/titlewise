@@ -16,8 +16,8 @@ last-updated: 2026-08-27
 
 - 1 attorney seat
 - All AI document review tools
-- Unlimited document analysis
-- Wire fraud verification
+- 100 AI generations/month
+- Wire fraud screening (AI red flags + drafted callback request)
 - Email status updates
 - Basic support
 - API access (100 req/min)
@@ -35,6 +35,7 @@ last-updated: 2026-08-27
 Everything in Solo, plus:
 
 - Up to 5 attorney seats
+- 500 AI generations/month
 - Shared matter dashboard
 - Team collaboration features
 - Priority support
@@ -52,7 +53,8 @@ Everything in Solo, plus:
 
 Everything in Small Firm, plus:
 
-- Up to 15 attorney seats
+- Up to 10 attorney seats
+- 1,500 AI generations/month
 - Closing Agent AI assistant
 - Automated checklist updates
 - Client portal access
@@ -60,7 +62,7 @@ Everything in Small Firm, plus:
 - API access (500 req/min)
 
 **Limits:**
-- 15 user accounts
+- 10 user accounts
 - 10,000 API calls/month
 - Phone + email support
 
@@ -71,7 +73,8 @@ Everything in Small Firm, plus:
 
 Everything in Pro, plus:
 
-- Unlimited attorney seats
+- Up to 25 attorney seats
+- 5,000 AI generations/month
 - Full API access (1000 req/min)
 - Custom integrations
 - Dedicated account manager
@@ -81,7 +84,7 @@ Everything in Pro, plus:
 - Webhook support
 
 **Limits:**
-- Unlimited users
+- Up to 25 users
 - 50,000 API calls/month (negotiable)
 - 24/7 phone + email support
 

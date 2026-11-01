@@ -60,8 +60,8 @@ Shareable read-only checklist view for buyers and sellers
 
 - **Solo:** $149/month (1 attorney, all AI tools)
 - **Small Firm:** $349/month (up to 5 users)
-- **Pro:** $599/month (up to 15 users, Closing Agent)
-- **Enterprise:** $999/month (unlimited users, API access, custom integrations)
+- **Pro:** $599/month (up to 10 users, Closing Agent)
+- **Enterprise:** $999/month (up to 25 users, API access, custom integrations)
 
 [View detailed pricing →](https://titlewise.app/pricing)
 

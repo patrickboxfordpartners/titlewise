@@ -173,7 +173,7 @@ export default function HomePageClient() {
       <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, padding: "72px 32px", backgroundColor: c.bg }}>
         <div className="tw-stats-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "48px 40px" }}>
           {[
-            { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise cross-references every wire instruction against institutional memory across all your closings.", source: "FBI Internet Crime Complaint Center, 2023 Annual Report" },
+            { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise screens every wire instruction for red flags and compares it against wires you previously confirmed by phone on the same routing number.", source: "FBI Internet Crime Complaint Center, 2023 Annual Report" },
             { stat: "93%", label: "Faster title commitment review", body: "What takes 45 minutes by hand takes 30 seconds with TITLEwise. Exceptions flagged, requirements listed, red flags surfaced, structured and ready to act on.", source: "Based on average manual review time of 45 min vs. 30 sec AI analysis" },
             { stat: "$4,100", label: "Average TRID violation penalty", body: "Tolerance violations and fee misclassifications add up fast. TITLEwise automatically checks Bucket A/B/C classifications and cure amount calculations.", source: "CFPB enforcement actions, average per-loan TRID penalty" },
             { stat: "12", label: "AI tools in one platform", body: "Title analysis, CD review, wire verification, HOA review, fee estimates, tax proration, status updates, and more. Everything closing attorneys need.", source: "Title analysis, CD review, wire verification, HOA review, fee estimate, tax proration, status update, client portal, team invites, email integration, closing checklist, autonomous agent" },
@@ -203,9 +203,9 @@ export default function HomePageClient() {
           <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: c.ink, marginBottom: 64 }}>Open a matter. Close the deal.</h2>
           <div className="tw-how-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "48px 56px" }}>
             {[
-              { n: "01", title: "Create the matter", body: "Client name, property address, transaction type. TITLEwise generates a state-specific closing checklist and sets up the workspace in seconds.", detail: "Checklists are tailored to your state's requirements. NH, MA, CA, TX, FL, and 45 more. Each transaction type gets its own workflow." },
+              { n: "01", title: "Create the matter", body: "Client name, property address, transaction type. TITLEwise generates a state-specific closing checklist and sets up the workspace in seconds.", detail: "State-specific checklist items for NH, MA, NY, CA, FL, TX, and PA, plus a standard checklist for every other state. Each transaction type gets its own workflow." },
               { n: "02", title: "Let AI handle the analysis", body: "Upload title commitments, closing disclosures, HOA docs, or wire instructions. TITLEwise reads them, flags issues, and drafts status updates, ready to review.", detail: "AI reads the full document, not just keywords. It understands exception schedules, requirement sections, fee tables, and HOA transfer provisions." },
-              { n: "03", title: "Close with confidence", body: "Wire verification cross-checks every instruction against prior closings. Compliance runs automatically. Your checklist tracks every step to clear-to-close.", detail: "Every wire instruction is compared against your historical closing data. Changed account numbers, new routing numbers, and last-minute changes are flagged instantly." },
+              { n: "03", title: "Close with confidence", body: "Wire screening flags red flags and drafts a callback request. Once you confirm a wire by phone, later instructions are compared against it. Your checklist tracks every step to clear-to-close.", detail: "Routing numbers are checked against the ABA checksum. Instructions are compared against wires you previously confirmed by phone, so a changed account number, bank, or beneficiary on a known routing number is flagged." },
             ].map((item) => (
               <div
                 key={item.n}
@@ -237,7 +237,7 @@ export default function HomePageClient() {
             {[
               ["Title Commitment Analysis", "Exceptions, requirements, and red flags in 30 seconds", "Upload a PDF or paste text. AI identifies Schedule B exceptions, flags actionable requirements, and highlights risks like open liens or unreleased mortgages."],
               ["Closing Disclosure Reviewer", "TRID compliance against federal tolerances, automatic", "Checks Bucket A/B/C fee classifications, calculates tolerance thresholds, and flags cure amounts before they become violations."],
-              ["Wire Fraud Prevention", "Cross-matter verification catches fraudulent instructions", "Compares wire instructions against your historical closings. Flags changed account numbers, new routing numbers, domain spoofing, and last-minute changes."],
+              ["Wire Fraud Screening", "AI red-flag screening plus a drafted callback request", "Screens wire instructions for common fraud indicators, checks the routing number checksum, and compares against wires you previously confirmed by phone. Always confirm by phone before wiring."],
               ["HOA Document Review", "Fees, restrictions, and pending assessments surfaced instantly", "Reads HOA resale certificates, CC&Rs, and estoppel letters. Surfaces transfer fees, special assessments, rental restrictions, and pending litigation."],
               ["Status Update Generator", "AI drafts client updates from checklist state, one click to send", "Reads your matter's current state and drafts a professional status email with next steps. Review, edit, and send directly from TITLEwise."],
               ["Fee Estimate Tool", "County-specific closing cost breakdowns for any transaction type", "Generates buyer and seller fee estimates using county-specific recording fees, transfer taxes, and title insurance rates."],
@@ -285,8 +285,8 @@ export default function HomePageClient() {
             {[
               { name: "Solo", price: "$149", note: "1 attorney &middot; 100 AI generations/mo", features: ["1 user seat", "100 AI generations/mo", "All 12 tools included", "Unlimited matters", "Email support"] },
               { name: "Small Firm", price: "$349", note: "Up to 5 seats &middot; Client portal", featured: true, features: ["Up to 5 user seats", "500 AI generations/mo", "Client portal access", "Team collaboration", "Priority email support"] },
-              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,000 AI generations/mo", "Client portal access", "API access", "Priority support with SLA"] },
-              { name: "Enterprise", price: "$999", note: "25 seats &middot; Custom onboarding", features: ["Up to 25 user seats", "Unlimited AI generations", "Custom onboarding", "Dedicated account manager", "SSO and audit logs"] },
+              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,500 AI generations/mo", "Client portal access", "Autonomous closing agent", "Priority support with SLA"] },
+              { name: "Enterprise", price: "$999", note: "25 seats &middot; Custom onboarding", features: ["Up to 25 user seats", "5,000 AI generations/mo", "Custom onboarding", "Dedicated account manager", "API access"] },
             ].map((plan) => {
               const isExpanded = expandedPlan === plan.name
               const fg = plan.featured ? c.sectionDarkText : c.ink

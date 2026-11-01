@@ -10,18 +10,18 @@ const coreTools = [
   { icon: FileText, title: "Status Update Generator", description: "Draft professional client update emails in seconds." },
   { icon: FileSearch, title: "Title Commitment Analyzer", description: "Plain-English breakdown of Schedule B requirements, exceptions, and red flags." },
   { icon: FileCheck, title: "Closing Disclosure Reviewer", description: "Compare a CD against contract terms and flag discrepancies." },
-  { icon: Shield, title: "Wire Fraud Prevention", description: "Analyze wire instructions for fraud indicators and generate verification emails." },
+  { icon: Shield, title: "Wire Fraud Screening", description: "AI red-flag screening of wire instructions, plus a drafted callback request." },
   { icon: Building, title: "HOA Document Reviewer", description: "Extract dues, assessments, restrictions, and litigation from HOA docs." },
   { icon: DollarSign, title: "Fee Estimate Generator", description: "Generate a professional fee estimate letter for client intake." },
   { icon: Calculator, title: "Tax Proration Calculator", description: "Calculate buyer/seller tax prorations with per-diem breakdown." },
-  { icon: ClipboardList, title: "Closing Checklist Tracker", description: "State-specific checklists for NH, MA, NY, CA, FL, TX, PA and more." },
+  { icon: ClipboardList, title: "Closing Checklist Tracker", description: "State-specific items for NH, MA, NY, CA, FL, TX, and PA, plus a standard checklist for every state." },
 ]
 
 const premiumFeatures = [
   { icon: Bot, title: "Autonomous Closing Agent", description: "AI agent that analyzes your matter, updates checklists, and drafts status emails automatically.", badge: "Pro" },
   { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "Small Firm+" },
   { icon: Scale, title: "TRID Compliance Engine", description: "Automatic Bucket A/B/C fee classification and tolerance cure amount calculation.", badge: "Pro" },
-  { icon: Brain, title: "Wire Fraud Memory", description: "Institutional memory that stores verified wires and flags routing number deviations across matters.", badge: "Small Firm+" },
+  { icon: Brain, title: "Wire Fraud Memory", description: "Remembers wires you confirmed by phone and flags changed accounts, banks, or beneficiaries on the same routing number.", badge: "Small Firm+" },
 ]
 
 function ToolCard({ tool, index }: { tool: typeof coreTools[0]; index: number }) {

@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server"
+import { PLANS } from "@/lib/plans"
 
 export const dynamic = "force-static"
+
+const generations = (plan: keyof typeof PLANS) =>
+  `${PLANS[plan].monthlyGenerationLimit.toLocaleString("en-US")} AI generations/month`
 
 const CONTENT = `---
 title: TITLEwise Pricing
@@ -20,8 +24,8 @@ last-updated: 2026-08-27
 
 - 1 attorney seat
 - All AI document review tools
-- Unlimited document analysis
-- Wire fraud verification
+- ${generations("solo")}
+- Wire fraud screening (AI red flags + drafted callback request)
 - Email status updates
 - Basic support
 - API access (100 req/min)
@@ -39,6 +43,7 @@ last-updated: 2026-08-27
 Everything in Solo, plus:
 
 - Up to 5 attorney seats
+- ${generations("small_firm")}
 - Shared matter dashboard
 - Team collaboration features
 - Priority support
@@ -56,7 +61,8 @@ Everything in Solo, plus:
 
 Everything in Small Firm, plus:
 
-- Up to 15 attorney seats
+- Up to 10 attorney seats
+- ${generations("pro")}
 - Closing Agent AI assistant
 - Automated checklist updates
 - Client portal access
@@ -64,7 +70,7 @@ Everything in Small Firm, plus:
 - API access (500 req/min)
 
 **Limits:**
-- 15 user accounts
+- 10 user accounts
 - 10,000 API calls/month
 - Phone + email support
 
@@ -75,7 +81,8 @@ Everything in Small Firm, plus:
 
 Everything in Pro, plus:
 
-- Unlimited attorney seats
+- Up to 25 attorney seats
+- ${generations("enterprise")}
 - Full API access (1000 req/min)
 - Custom integrations
 - Dedicated account manager
@@ -85,7 +92,7 @@ Everything in Pro, plus:
 - Webhook support
 
 **Limits:**
-- Unlimited users
+- Up to 25 users
 - 50,000 API calls/month (negotiable)
 - 24/7 phone + email support
 

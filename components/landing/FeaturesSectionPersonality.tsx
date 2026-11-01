@@ -10,18 +10,18 @@ const coreTools = [
   { icon: FileText, title: "Status Updates", description: "Client emails drafted. Seconds, not minutes.", color: "blue" },
   { icon: FileSearch, title: "Title Analyzer", description: "Schedule B requirements in plain English. Red flags caught.", color: "blue" },
   { icon: FileCheck, title: "CD Reviewer", description: "Compare CD against contract. Discrepancies flagged.", color: "purple" },
-  { icon: Shield, title: "Wire Fraud Prevention", description: "Fraud indicators detected. Verification emails auto-sent.", color: "red" },
+  { icon: Shield, title: "Wire Fraud Screening", description: "Red flags caught. Callback request drafted for you.", color: "red" },
   { icon: Building, title: "HOA Reviewer", description: "Dues, assessments, restrictions extracted. Litigation flagged.", color: "purple" },
   { icon: DollarSign, title: "Fee Estimator", description: "Professional estimate letters for intake. Auto-generated.", color: "green" },
   { icon: Calculator, title: "Tax Proration", description: "Buyer/seller prorations calculated. Per-diem breakdown included.", color: "green" },
-  { icon: ClipboardList, title: "Closing Checklist", description: "State-specific checklists. NH, MA, NY, CA, FL, TX, PA.", color: "blue" },
+  { icon: ClipboardList, title: "Closing Checklist", description: "State-specific items for NH, MA, NY, CA, FL, TX, PA. Standard list everywhere else.", color: "blue" },
 ]
 
 const premiumFeatures = [
   { icon: Bot, title: "Autonomous Agent", description: "Analyzes matters, updates checklists, drafts status emails. Automatic.", badge: "Pro", color: "purple" },
   { icon: Users, title: "Client Portal", description: "Clients track checklist progress and status in real time.", badge: "Small Firm+", color: "blue" },
   { icon: Scale, title: "TRID Engine", description: "Bucket A/B/C classification. Tolerance cure amounts calculated.", badge: "Pro", color: "orange" },
-  { icon: Brain, title: "Wire Fraud Memory", description: "Verified wires stored. Routing number deviations flagged across matters.", badge: "Small Firm+", color: "red" },
+  { icon: Brain, title: "Wire Fraud Memory", description: "Phone-confirmed wires remembered. Changed accounts flagged.", badge: "Small Firm+", color: "red" },
 ]
 
 const colorClasses = {
