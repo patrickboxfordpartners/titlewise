@@ -106,7 +106,7 @@ export default function FeaturesSection() {
             Everything you need to close faster
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            12 tools and an autonomous AI agent -- built around the real estate closing workflow
+            12 tools and an on-demand closing agent -- built around the real estate closing workflow
           </p>
         </motion.div>
 

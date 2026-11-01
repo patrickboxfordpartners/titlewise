@@ -152,8 +152,8 @@ export function WhitepaperContent() {
         make the system intelligent. The architecture of a legacy title production system assumes
         that every action will be initiated by a human operator. The operator logs in, navigates to a
         file, opens a form, fills fields, saves, and logs out. The system records the state change.
-        There is no concept of an agent that watches the file, detects a condition, and takes an
-        action autonomously. There is no event stream. There is no workflow engine. There is no
+        There is no concept of an agent that reads the whole file, detects a condition, and proposes
+        the next action. There is no event stream. There is no workflow engine. There is no
         decision log. The system is a database with a UI wrapper, nothing more.
       </p>
       <p
@@ -271,13 +271,12 @@ export function WhitepaperContent() {
       >
         The production TitleWise platform has seven AI tools. Four of them analyze documents: title
         commitment analysis, closing disclosure review, HOA document review, and wire instruction
-        verification. Two of them generate outputs: fee estimates and tax proration calculations. One
-        of them coordinates: the status update tool, which watches the file state, compares it to the
-        expected workflow timeline, and sends alerts to the coordinator, the lender, and the real
-        estate agents when a milestone is reached or a deadline is approaching. For Pro and
-        Enterprise tiers, there is an eighth tool, a closing agent that orchestrates the other seven.
-        The closing agent is the system&apos;s decision-maker. It decides when to run each analysis, when
-        to escalate a finding to a human, and when to proceed autonomously.
+        screening. Two of them generate outputs: fee estimates and tax proration calculations. One
+        of them communicates: the status update tool, which drafts a client update from the file
+        state for the attorney to review and send. On every plan there is an eighth tool, a closing
+        agent that runs on demand when the attorney clicks Run Agent on a matter. It reads the
+        matter, updates the checklist, drafts the status update, and surfaces blockers for a human
+        to act on.
       </p>
 
       <ArchitectureDiagram />
@@ -489,9 +488,8 @@ export function WhitepaperContent() {
         closing agent coordinates across all of them. TitleWise won the External Track at the Agent
         Natives Builders Hackathon in August 2026 with titlewise-agent, an MCP server that exposes
         document intelligence via the Model Context Protocol. The platform is built on Next.js 16,
-        deployed on Vercel, and uses Claude 4 for document analysis. Firms on the Pro and Enterprise
-        tiers get access to the full closing agent. Firms on the Starter tier get access to
-        individual tools a la carte.
+        deployed on Vercel, and uses Claude for document analysis. Every plan includes every tool,
+        including the on-demand closing agent.
       </p>
       <p
         style={{

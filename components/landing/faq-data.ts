@@ -5,14 +5,14 @@ export const faqs = [
     category: "Product",
     featured: true,
     question: "What is TITLEwise?",
-    answer: "TITLEwise is an AI-powered closing platform built specifically for real estate attorneys. It combines seven document analysis tools, an autonomous closing coordinator agent, client portals, TRID compliance checks, and wire fraud protection — so you can close faster with fewer errors.",
+    answer: "TITLEwise is an AI-powered closing platform built specifically for real estate attorneys. It combines document analysis tools, an on-demand closing agent that runs when you click Run Agent, client portals, TRID compliance checks, and wire fraud protection — so you can close faster with fewer errors.",
   },
   {
     value: "tools",
     category: "Product",
     featured: true,
     question: "Which tools are included?",
-    answer: "Every plan includes seven core tools: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Fraud Prevention, HOA Document Reviewer, Fee Estimate Generator, and Tax Proration Calculator. Higher plans add the Autonomous Closing Agent, Client Matter Portal, and Wire Fraud Memory.",
+    answer: "Every plan includes every tool: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Fraud Screening, HOA Document Reviewer, Fee Estimate Generator, Tax Proration Calculator, Closing Agent, Client Matter Portal, and Wire Fraud Memory.",
   },
   {
     value: "vs-production",

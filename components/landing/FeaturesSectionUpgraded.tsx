@@ -18,7 +18,7 @@ const coreTools = [
 ]
 
 const premiumFeatures = [
-  { icon: Bot, title: "Autonomous Closing Agent", description: "AI agent that analyzes your matter, updates checklists, and drafts status emails automatically.", badge: "Pro" },
+  { icon: Bot, title: "Closing Agent", description: "On-demand AI that analyzes your matter, updates checklists, and drafts status emails when you click Run Agent.", badge: "All plans" },
   { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "Small Firm+" },
   { icon: Scale, title: "TRID Compliance Engine", description: "Automatic Bucket A/B/C fee classification and tolerance cure amount calculation.", badge: "Pro" },
   { icon: Brain, title: "Wire Fraud Memory", description: "Remembers wires you confirmed by phone and flags changed accounts, banks, or beneficiaries on the same routing number.", badge: "Small Firm+" },
@@ -118,7 +118,7 @@ export default function FeaturesSectionUpgraded() {
             Everything you need to close faster
           </h2>
           <p className="mt-5 text-base text-muted-foreground leading-relaxed">
-            12 tools and an autonomous AI agent—built around the real estate closing workflow
+            12 tools and an on-demand closing agent—built around the real estate closing workflow
           </p>
         </motion.div>
 

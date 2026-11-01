@@ -207,7 +207,7 @@ export default function FeaturesSectionPersonality() {
             Close faster. Work less.
           </h2>
           <p className="mt-4 text-base text-muted-foreground leading-relaxed font-medium">
-            12 tools + autonomous agent. Built for the closing workflow.
+            12 tools + on-demand closing agent. Built for the closing workflow.
           </p>
         </motion.div>
 

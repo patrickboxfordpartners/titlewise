@@ -51,12 +51,12 @@ const PRODUCT_UPDATES = {
   },
   pro: {
     name: 'TITLEwise Pro',
-    description: 'Full platform with autonomous AI agent. TRID compliance engine, 1,500 generations, and priority support for up to 10 attorneys.',
+    description: 'Full platform with on-demand AI closing agent. TRID compliance engine, 1,500 generations, and priority support for up to 10 attorneys.',
     features: [
       { name: 'Up to 10 attorney seats' },
       { name: '1,500 AI generations per month' },
       { name: 'All Small Firm features' },
-      { name: 'Autonomous closing agent' },
+      { name: 'On-demand closing agent' },
       { name: 'TRID compliance engine' },
       { name: 'Document version history' },
       { name: 'API access' },

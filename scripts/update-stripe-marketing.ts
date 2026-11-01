@@ -49,12 +49,12 @@ const PRODUCTS = {
   },
   pro: {
     name: 'TITLEwise Pro',
-    description: 'The complete platform with autonomous AI. Your closing agent handles routine tasks automatically, TRID compliance is built-in, and your team of up to 10 attorneys works from one source of truth.',
+    description: 'The complete platform with an on-demand AI closing agent. Click Run Agent to update checklists and draft updates, TRID review is built-in, and your team of up to 10 attorneys works from one source of truth.',
     marketing_features: [
       { name: '✓ Up to 10 attorney seats' },
       { name: '✓ 1,500 AI generations per month' },
       { name: '✓ All Small Firm features' },
-      { name: '✓ Autonomous closing agent' },
+      { name: '✓ On-demand closing agent' },
       { name: '✓ TRID compliance engine' },
       { name: '✓ Document version history' },
       { name: '✓ API access for integrations' },

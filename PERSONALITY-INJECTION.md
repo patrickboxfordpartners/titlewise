@@ -13,7 +13,7 @@
 **After:** Product-specific color system
 - **Blue** → Core tools (Status Updates, Title Analyzer, Closing Checklist)
 - **Red** → Security/wire fraud tools (Wire Fraud Prevention, Wire Fraud Memory)
-- **Purple** → Analysis tools (CD Reviewer, HOA Reviewer, Autonomous Agent)
+- **Purple** → Analysis tools (CD Reviewer, HOA Reviewer, Closing Agent)
 - **Green** → Financial tools (Fee Estimator, Tax Proration)
 - **Orange** → Compliance (TRID Engine)
 
@@ -82,7 +82,7 @@ Matter cards with dynamic colors:
 - Magnetic buttons with spring physics
 - Animated grain texture overlay
 - Hard shadows on trust cards (8px offset)
-- Multiple accent colors (blue badge, red wire fraud card, purple AI tools card, green autonomous card)
+- Multiple accent colors (blue badge, red wire fraud card, purple AI tools card, green closing agent card)
 - Punchier headline: "30 minutes back. Every file."
 - Fixed animations: `initial={{ opacity: 1, y: 0 }}` (no viewport fade-in)
 
