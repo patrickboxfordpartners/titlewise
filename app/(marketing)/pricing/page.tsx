@@ -55,6 +55,34 @@ const planDetails = {
 /** Render subscription plans, billing options, and pricing FAQs. */
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false)
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
+  const [checkoutError, setCheckoutError] = useState("")
+
+  // Signed-in users go straight to Stripe Checkout; visitors without an account sign up first and carry the plan along.
+  async function startCheckout(plan: string) {
+    setCheckoutError("")
+    setLoadingPlan(plan)
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan, annual }),
+      })
+      if (res.status === 401) {
+        window.location.assign(`/signup?plan=${plan}&annual=${annual}`)
+        return
+      }
+      const data = await res.json().catch(() => ({}))
+      if (res.ok && data.url) {
+        window.location.assign(data.url)
+        return
+      }
+      setCheckoutError(data.error || "Could not start checkout. Please try again or email hello@titlewise.app.")
+    } catch {
+      setCheckoutError("Could not start checkout. Please try again or email hello@titlewise.app.")
+    }
+    setLoadingPlan(null)
+  }
 
   const entries = Object.entries(PLANS) as [keyof typeof PLANS, (typeof PLANS)[keyof typeof PLANS]][]
 
@@ -171,22 +199,25 @@ export default function PricingPage() {
                   </ul>
                 </div>
 
-                <Link
-                  href={`/sign-up?plan=${key}`}
-                  className="mt-auto pt-8 block"
-                >
+                <div className="mt-auto pt-8">
                   <Button
                     variant="hero"
-                    className={`w-full pointer-events-none ${isPopular ? "bg-primary hover:bg-primary/90 text-white" : "bg-primary hover:bg-primary/90 text-white"}`}
+                    className="w-full bg-primary hover:bg-primary/90 text-white"
                     size="lg"
+                    disabled={loadingPlan !== null}
+                    onClick={() => startCheckout(key)}
                   >
-                    Get Started
+                    {loadingPlan === key ? "Redirecting..." : "Get Started"}
                   </Button>
-                </Link>
+                </div>
               </motion.div>
             )
           })}
         </div>
+
+        {checkoutError && (
+          <p role="alert" className="mx-auto mt-6 max-w-xl text-center text-sm text-red-600">{checkoutError}</p>
+        )}
 
         {/* Cream band spacer */}
         <div className="w-full h-24" style={{ backgroundColor: "var(--surface)" }} />
