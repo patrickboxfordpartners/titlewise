@@ -68,7 +68,8 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan, annual }),
       })
-      if (res.status === 401) {
+      // Middleware answers an unauthenticated API call with a redirect to /login (fetch follows it), not a 401.
+      if (res.status === 401 || res.redirected) {
         window.location.assign(`/signup?plan=${plan}&annual=${annual}`)
         return
       }
