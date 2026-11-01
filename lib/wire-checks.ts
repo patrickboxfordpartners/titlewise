@@ -75,12 +75,23 @@ export function routingAppearsInSource(source: string, routing: string | null): 
   return new RegExp(`(?<!\\d)${digits.split("").join("[\\s-]*")}(?!\\d)`).test(source)
 }
 
+function accountRegex(account: string | null | undefined, flags: string): RegExp | null {
+  const normalized = normalizeAccount(account)
+  if (!normalized) return null
+  const pattern = normalized.split("").map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("[\\s-]*")
+  return new RegExp(`(?<![A-Z0-9])${pattern}(?![A-Z0-9])`, flags)
+}
+
 /** True when a model-extracted account number appears in the pasted text in full (only spaces or dashes may separate its characters). */
 export function accountAppearsInSource(source: string, account: string | null | undefined): boolean {
-  const normalized = normalizeAccount(account)
-  if (!normalized) return false
-  const pattern = normalized.split("").map((ch) => ch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("[\\s-]*")
-  return new RegExp(`(?<![A-Z0-9])${pattern}(?![A-Z0-9])`, "i").test(source)
+  return accountRegex(account, "i")?.test(source) ?? false
+}
+
+/** Replaces every occurrence of the full account number in `text` with its masked form. */
+export function redactAccount(text: string, account: string | null | undefined): string {
+  const re = accountRegex(account, "gi")
+  const masked = maskAccount(account)
+  return re && masked ? text.replace(re, masked) : text
 }
 
 export function maskAccount(account: string | null | undefined): string | null {

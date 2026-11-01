@@ -2,7 +2,7 @@ import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { wireInstructions } from "@/lib/db/schema"
-import { eq, and, desc } from "drizzle-orm"
+import { eq, and, desc, like } from "drizzle-orm"
 import { z } from "zod/v4"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger"
 import {
   isValidAbaRouting, normalizeRouting, hashAccount, maskAccount,
   encodeStoredAccount, decodeStoredAccount, signConfirmToken, hashUsesActiveKey,
-  routingAppearsInSource, accountAppearsInSource,
+  routingAppearsInSource, accountAppearsInSource, redactAccount,
 } from "@/lib/wire-checks"
 
 const requestSchema = z.object({
@@ -154,6 +154,7 @@ export async function POST(req: NextRequest) {
     const source = parsed.data.wireInstructions
     let routing = normalizeRouting(result.extracted.routingNumber)
     let fullAccount = result.extracted.accountNumber
+    const extractedAccount = fullAccount
     let extractionUnverified = false
     if (routing && !routingAppearsInSource(source, routing)) {
       routing = null
@@ -179,6 +180,17 @@ export async function POST(req: NextRequest) {
     result.extracted.routingNumber = routing
     result.extracted.accountNumber = maskedAccount
 
+    // The prompt asks the model not to repeat the full account number, but nothing guarantees it,
+    // so scrub it from every free-text field before anything is returned.
+    const scrub = (text: string) => redactAccount(text, extractedAccount)
+    result.summary = scrub(result.summary)
+    result.verificationEmail = scrub(result.verificationEmail)
+    for (const f of result.redFlags) { f.issue = scrub(f.issue); f.detail = scrub(f.detail) }
+    for (const c of result.changes) { c.field = scrub(c.field); c.previous = scrub(c.previous); c.current = scrub(c.current) }
+    if (result.extracted.bankName) result.extracted.bankName = scrub(result.extracted.bankName)
+    if (result.extracted.beneficiary) result.extracted.beneficiary = scrub(result.extracted.beneficiary)
+    if (result.extracted.reference) result.extracted.reference = scrub(result.extracted.reference)
+
     const deterministicChecks = {
       routingChecksum: routing ? (isValidAbaRouting(routing) ? "valid" : "invalid") : "not_found",
       accountCheck: "unavailable",
@@ -203,6 +215,9 @@ export async function POST(req: NextRequest) {
           .where(and(
             eq(wireInstructions.userId, user.id),
             eq(wireInstructions.routingNumber, routing),
+            // Only rows saved through the callback-confirm path carry an account hash ("|h:"). Rows from
+            // the old auto-save path were never phone-confirmed and must not count as known-good.
+            like(wireInstructions.accountNumber, "%|h:%"),
           ))
           .orderBy(desc(wireInstructions.verifiedAt))
           .limit(100)
@@ -229,6 +244,7 @@ export async function POST(req: NextRequest) {
             deterministicChecks.accountCheck = "compared"
             if (!knownHashes.includes(accountHash)) {
               deviations.push(`Account number ${maskedAccount ?? ""} does not match any account previously confirmed for this routing number`)
+              if (result.riskLevel === "low" || result.riskLevel === "medium") result.riskLevel = "high"
             }
           }
         }

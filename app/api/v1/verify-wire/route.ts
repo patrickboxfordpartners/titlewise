@@ -4,7 +4,7 @@ import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { authenticateApiKey, verifyEnterpriseTier } from "@/lib/api-auth"
 import { checkRateLimit, logApiUsage } from "@/lib/api-rate-limit"
 import { triggerWebhooks } from "@/lib/webhook-dispatcher"
-import { isValidAbaRouting } from "@/lib/wire-checks"
+import { isValidAbaRouting, routingAppearsInSource } from "@/lib/wire-checks"
 
 const requestSchema = z.object({
   document_text: z.string().min(50, "Document text must be at least 50 characters").max(100_000, "Document text is too long (max 100KB)"),
@@ -211,7 +211,15 @@ export async function POST(request: NextRequest) {
     const rawRouting = analysis.bankInformation && typeof analysis.bankInformation === "object"
       ? analysis.bankInformation.routingNumber
       : null
-    const routing = typeof rawRouting === "string" ? rawRouting.replace(/[\s-]/g, "") || null : null
+    let routing = typeof rawRouting === "string" ? rawRouting.replace(/[\s-]/g, "") || null : null
+    // Only trust a model-extracted routing number that appears in the submitted text
+    if (routing && !routingAppearsInSource(document_text, routing)) {
+      analysis.redFlags = [
+        { severity: "high", issue: "Routing number could not be matched to the submitted text", explanation: "The extracted routing number does not appear in the document, so it was discarded. Read it from the original document." },
+        ...(Array.isArray(analysis.redFlags) ? analysis.redFlags : []),
+      ]
+      routing = null
+    }
     if (!analysis.verification || typeof analysis.verification !== "object" || Array.isArray(analysis.verification)) {
       analysis.verification = {}
     }

@@ -40,7 +40,7 @@ console.log(`${BLUE}╚═══════════════════
 let errors = 0;
 let warnings = 0;
 
-function checkRequired(key, format) {
+function checkRequired(key, format, { redact = false } = {}) {
   const value = process.env[key];
 
   if (!value || value.includes('YOUR_') || value.includes('_HERE')) {
@@ -52,7 +52,7 @@ function checkRequired(key, format) {
 
   if (format && !format.test(value)) {
     console.log(`${RED}✗ ${key}${RESET}`);
-    console.log(`  Invalid format: ${value}\n`);
+    console.log(`  Invalid format: ${redact ? '[redacted]' : value}\n`);
     errors++;
     return false;
   }
@@ -157,7 +157,7 @@ if (process.env.POSTMARK_API_KEY === 'POSTMARK_API_TEST') {
 
 // Wire verification (set explicitly: the AUTH_SECRET fallback breaks saved account hashes if AUTH_SECRET rotates)
 console.log(`\n${BLUE}━━━ Wire Verification ━━━${RESET}\n`);
-checkRequired('WIRE_HASH_SECRET', /^.{32,}$/);
+checkRequired('WIRE_HASH_SECRET', /^.{32,}$/, { redact: true });
 
 // AI Services
 console.log(`\n${BLUE}━━━ AI Services ━━━${RESET}\n`);
