@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server"
+import { PLANS } from "@/lib/plans"
 
 export const dynamic = "force-static"
+
+const generations = (plan: keyof typeof PLANS) =>
+  `${PLANS[plan].monthlyGenerationLimit.toLocaleString("en-US")} AI generations/month`
 
 const CONTENT = `---
 title: TITLEwise Pricing
@@ -20,7 +24,7 @@ last-updated: 2026-08-27
 
 - 1 attorney seat
 - All AI document review tools
-- 100 AI generations/month
+- ${generations("solo")}
 - Wire fraud screening (AI red flags + drafted callback request)
 - Email status updates
 - Basic support
@@ -39,6 +43,7 @@ last-updated: 2026-08-27
 Everything in Solo, plus:
 
 - Up to 5 attorney seats
+- ${generations("small_firm")}
 - Shared matter dashboard
 - Team collaboration features
 - Priority support
@@ -57,6 +62,7 @@ Everything in Solo, plus:
 Everything in Small Firm, plus:
 
 - Up to 10 attorney seats
+- ${generations("pro")}
 - Closing Agent AI assistant
 - Automated checklist updates
 - Client portal access
@@ -76,6 +82,7 @@ Everything in Small Firm, plus:
 Everything in Pro, plus:
 
 - Up to 25 attorney seats
+- ${generations("enterprise")}
 - Full API access (1000 req/min)
 - Custom integrations
 - Dedicated account manager

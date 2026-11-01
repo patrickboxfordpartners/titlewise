@@ -35,6 +35,7 @@ last-updated: 2026-08-27
 Everything in Solo, plus:
 
 - Up to 5 attorney seats
+- 500 AI generations/month
 - Shared matter dashboard
 - Team collaboration features
 - Priority support
@@ -53,6 +54,7 @@ Everything in Solo, plus:
 Everything in Small Firm, plus:
 
 - Up to 10 attorney seats
+- 1,500 AI generations/month
 - Closing Agent AI assistant
 - Automated checklist updates
 - Client portal access
@@ -72,6 +74,7 @@ Everything in Small Firm, plus:
 Everything in Pro, plus:
 
 - Up to 25 attorney seats
+- 5,000 AI generations/month
 - Full API access (1000 req/min)
 - Custom integrations
 - Dedicated account manager
