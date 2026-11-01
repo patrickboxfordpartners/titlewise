@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod/v4"
-import { and, eq } from "drizzle-orm"
+import { and, eq, isNull, type Column } from "drizzle-orm"
 import { requireAuth } from "@/lib/auth-helpers"
 import { db } from "@/lib/db"
 import { matters, wireInstructions } from "@/lib/db/schema"
@@ -12,6 +12,9 @@ const bodySchema = z.object({
   confirmToken: z.string().min(10).max(4000),
   calledBack: z.literal(true),
 })
+
+// Null-safe equality: SQL "= NULL" never matches, so a missing value needs IS NULL.
+const eqOrNull = (column: Column, value: string | null) => (value === null ? isNull(column) : eq(column, value))
 
 // POST /api/verify-wire/confirm
 // The attorney confirms they verified these instructions by phone with a known contact.
@@ -42,10 +45,15 @@ export async function POST(req: NextRequest) {
     const existing = await db.select({ id: wireInstructions.id }).from(wireInstructions)
       .where(and(
         eq(wireInstructions.userId, user.id),
-        eq(wireInstructions.routingNumber, payload.routing ?? ""),
-        eq(wireInstructions.accountNumber, payload.acct ?? ""),
+        eqOrNull(wireInstructions.routingNumber, payload.routing),
+        eqOrNull(wireInstructions.accountNumber, payload.acct),
+        eqOrNull(wireInstructions.bankName, payload.bank),
+        eqOrNull(wireInstructions.beneficiary, payload.ben),
       )).limit(1)
-    if (existing.length === 0) {
+    if (existing.length > 0) {
+      // Same wire already on file: record the fresh callback instead of silently doing nothing.
+      await db.update(wireInstructions).set({ verifiedAt: new Date() }).where(eq(wireInstructions.id, existing[0].id))
+    } else {
       await db.insert(wireInstructions).values({
         userId: user.id,
         bankName: payload.bank,

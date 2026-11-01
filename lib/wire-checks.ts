@@ -1,4 +1,5 @@
 import { createHash, createHmac, timingSafeEqual } from "crypto"
+import { logger } from "@/lib/logger"
 
 /**
  * Deterministic wire-instruction checks that run alongside the AI screening.
@@ -29,8 +30,15 @@ export function normalizeAccount(account: string | null | undefined): string | n
   return cleaned
 }
 
+let warnedMissingKey = false
+
 function hashKey(): string | null {
-  return process.env.WIRE_HASH_SECRET || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || null
+  const key = process.env.WIRE_HASH_SECRET || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || null
+  if (!key && !warnedMissingKey) {
+    warnedMissingKey = true
+    logger.error("wire-checks", "No WIRE_HASH_SECRET, AUTH_SECRET or NEXTAUTH_SECRET is set, so account comparison and confirm tokens are disabled")
+  }
+  return key
 }
 
 /** Short fingerprint of the active hash key, stored with each hash so a key change is detectable. */
@@ -57,6 +65,19 @@ export function hashAccount(userId: string, account: string | null | undefined):
 export function hashUsesActiveKey(stored: string): boolean {
   const fp = hashKeyFingerprint()
   return Boolean(fp) && stored.startsWith(`v1:${fp}:`)
+}
+
+/** True when a model-extracted routing number appears, digits only, in the text the user pasted. */
+export function routingAppearsInSource(source: string, routing: string | null): boolean {
+  if (!routing) return false
+  return source.replace(/\D/g, "").includes(routing.replace(/\D/g, ""))
+}
+
+/** True when a model-extracted account number appears in the pasted text (ignoring spaces, dashes and case). */
+export function accountAppearsInSource(source: string, account: string | null | undefined): boolean {
+  const normalized = normalizeAccount(account)
+  if (!normalized) return false
+  return source.replace(/[\s-]/g, "").toUpperCase().includes(normalized)
 }
 
 export function maskAccount(account: string | null | undefined): string | null {

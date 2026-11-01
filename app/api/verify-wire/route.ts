@@ -11,6 +11,7 @@ import { logger } from "@/lib/logger"
 import {
   isValidAbaRouting, normalizeRouting, hashAccount, maskAccount,
   encodeStoredAccount, decodeStoredAccount, signConfirmToken, hashUsesActiveKey,
+  routingAppearsInSource, accountAppearsInSource,
 } from "@/lib/wire-checks"
 
 const requestSchema = z.object({
@@ -122,6 +123,7 @@ export async function POST(req: NextRequest) {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 3000,
+      temperature: 0,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: buildPrompt(parsed.data) }],
     })
@@ -147,8 +149,31 @@ export async function POST(req: NextRequest) {
     const deviations: string[] = []
 
     // Deterministic checks (no AI): ABA checksum + keyed account-number hash
-    const routing = normalizeRouting(result.extracted.routingNumber)
-    const fullAccount = result.extracted.accountNumber
+    // The model's extraction is only trusted where it appears verbatim in the pasted text. A value it
+    // "fixed" or mistranscribed would otherwise pass the checksum, be hashed, and be signed as confirmed.
+    const source = parsed.data.wireInstructions
+    let routing = normalizeRouting(result.extracted.routingNumber)
+    let fullAccount = result.extracted.accountNumber
+    let extractionUnverified = false
+    if (routing && !routingAppearsInSource(source, routing)) {
+      routing = null
+      extractionUnverified = true
+      result.redFlags.unshift({
+        severity: "high",
+        issue: "Routing number could not be matched to the pasted text",
+        detail: "The extracted routing number does not appear in the instructions you pasted, so it was discarded. Read the routing number from the original document.",
+      })
+    }
+    if (fullAccount && !accountAppearsInSource(source, fullAccount)) {
+      fullAccount = null
+      extractionUnverified = true
+      result.redFlags.unshift({
+        severity: "high",
+        issue: "Account number could not be matched to the pasted text",
+        detail: "The extracted account number does not appear in the instructions you pasted, so it was discarded. Read the account number from the original document.",
+      })
+    }
+    if (extractionUnverified && (result.riskLevel === "low" || result.riskLevel === "medium")) result.riskLevel = "high"
     const accountHash = hashAccount(user.id, fullAccount)
     const maskedAccount = maskAccount(fullAccount)
     result.extracted.routingNumber = routing
@@ -156,9 +181,9 @@ export async function POST(req: NextRequest) {
 
     const deterministicChecks = {
       routingChecksum: routing ? (isValidAbaRouting(routing) ? "valid" : "invalid") : "not_found",
-      accountCompared: false,
+      accountCheck: "unavailable",
       skippedOldKeyHashes: 0,
-    } as { routingChecksum: "valid" | "invalid" | "not_found"; accountCompared: boolean; skippedOldKeyHashes: number }
+    } as { routingChecksum: "valid" | "invalid" | "not_found"; accountCheck: "compared" | "no_known_account" | "unavailable"; skippedOldKeyHashes: number }
 
     if (deterministicChecks.routingChecksum === "invalid") {
       result.redFlags.unshift({
@@ -182,7 +207,9 @@ export async function POST(req: NextRequest) {
           .orderBy(desc(wireInstructions.verifiedAt))
           .limit(100)
 
-        if (known.length > 0) {
+        if (known.length === 0) {
+          deterministicChecks.accountCheck = "no_known_account"
+        } else {
           const knownBanks = [...new Set(known.map(w => w.bankName).filter(Boolean))]
           const knownBeneficiaries = [...new Set(known.map(w => w.beneficiary).filter(Boolean))]
           const storedHashes = known.map(w => decodeStoredAccount(w.accountNumber).hash).filter((h): h is string => Boolean(h))
@@ -199,7 +226,7 @@ export async function POST(req: NextRequest) {
             deviations.push(`Beneficiary "${result.extracted.beneficiary}" differs from previously confirmed wires (previously: ${knownBeneficiaries.join(", ")})`)
           }
           if (accountHash && knownHashes.length > 0) {
-            deterministicChecks.accountCompared = true
+            deterministicChecks.accountCheck = "compared"
             if (!knownHashes.includes(accountHash)) {
               deviations.push(`Account number ${maskedAccount ?? ""} does not match any account previously confirmed for this routing number`)
             }
@@ -212,7 +239,7 @@ export async function POST(req: NextRequest) {
 
     // Nothing is saved automatically. The attorney confirms after a verbal callback.
     // A routing number that fails the checksum can never be saved as confirmed.
-    const confirmToken = routing && deterministicChecks.routingChecksum === "valid"
+    const confirmToken = routing && deterministicChecks.routingChecksum === "valid" && !extractionUnverified
       ? signConfirmToken({
           u: user.id,
           bank: result.extracted.bankName,
