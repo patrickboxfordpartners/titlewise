@@ -30,7 +30,8 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
       .finally(() => setTierLoading(false))
   }, [])
 
-  const hasAccess = tier === "pro" || tier === "enterprise"
+  // Every plan includes the Closing Agent; plans differ by seats and monthly generations.
+  const hasAccess = tier !== null
 
   async function runAgent() {
     setRunning(true)
@@ -61,13 +62,13 @@ export default function ClosingAgentPanel({ matterId }: { matterId: string }) {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-foreground">Closing Agent</p>
-          <p className="text-xs text-muted-foreground">Analyzes your matter, updates checklist, drafts status email. Pro plan.</p>
+          <p className="text-xs text-muted-foreground">Analyzes your matter, updates checklist, drafts status email. Choose a plan to get started.</p>
         </div>
         <a
           href="/pricing"
           className="shrink-0 text-xs font-semibold text-primary hover:text-primary/80 transition-colors uppercase tracking-wide"
         >
-          Upgrade
+          View plans
         </a>
       </div>
     )

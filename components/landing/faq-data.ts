@@ -26,14 +26,14 @@ export const faqs = [
     category: "Product",
     featured: false,
     question: "What does the AI closing agent do?",
-    answer: "The autonomous closing coordinator analyzes your entire matter, auto-updates checklist items as they complete, drafts status update emails, and flags potential issues — all without you lifting a finger. Available on Pro and Enterprise plans.",
+    answer: "The closing agent analyzes your matter, updates checklist items, drafts a status update email, and flags potential issues. It runs on demand when you click Run Agent on a matter, not on a schedule. Included on every plan.",
   },
   {
     value: "portal",
     category: "Product",
     featured: false,
     question: "How does the client portal work?",
-    answer: "Share a secure link with your client and they can track checklist progress, closing status, and key milestones in real time. No login required for clients — just a unique, secure URL. Available on Small Firm plans and above.",
+    answer: "Share a secure link with your client and they can track checklist progress, closing status, and key milestones in real time. No login required for clients — just a unique, secure URL. Included on every plan.",
   },
   {
     value: "ai-automate",
@@ -130,7 +130,7 @@ export const faqs = [
     category: "Pricing & Plans",
     featured: false,
     question: "Which plan is right for a solo attorney?",
-    answer: "The Solo plan at $149/month is built for solo practitioners and small practices. It includes all seven core AI tools and unlimited matters. The Small Firm plan adds client portals and team seats for attorneys with support staff.",
+    answer: "The Solo plan at $149/month is built for solo practitioners and small practices. It includes every TITLEwise tool and unlimited matters. Larger plans add seats and monthly generations for firms with more attorneys.",
   },
   {
     value: "upgrade",

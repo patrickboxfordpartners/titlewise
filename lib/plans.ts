@@ -1,3 +1,5 @@
+// Every plan includes every tool. Plans differ by seats, monthly generations, and
+// Enterprise API access. The has* flags are kept for compatibility and are all true.
 export const PLANS = {
   solo: {
     name: "Solo",
@@ -7,10 +9,10 @@ export const PLANS = {
     seats: 1,
     monthlyGenerationLimit: 100,
     description: "For solo practitioners",
-    hasAgent: false,
-    hasClientPortal: false,
-    hasTridEngine: false,
-    hasWireFraudMemory: false,
+    hasAgent: true,
+    hasClientPortal: true,
+    hasTridEngine: true,
+    hasWireFraudMemory: true,
   },
   small_firm: {
     name: "Small Firm",
@@ -20,9 +22,9 @@ export const PLANS = {
     seats: 5,
     monthlyGenerationLimit: 500,
     description: "Up to 5 attorneys",
-    hasAgent: false,
+    hasAgent: true,
     hasClientPortal: true,
-    hasTridEngine: false,
+    hasTridEngine: true,
     hasWireFraudMemory: true,
   },
   pro: {

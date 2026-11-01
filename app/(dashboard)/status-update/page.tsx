@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
@@ -88,7 +88,13 @@ function StatusUpdateContent() {
       .catch(() => {})
   }, [])
 
+  // Apply URL prefill only when the query string actually changes, so a re-render
+  // with an equivalent searchParams object never overwrites the user's edits.
+  const appliedQuery = useRef<string | null>(null)
   useEffect(() => {
+    const query = searchParams.toString()
+    if (appliedQuery.current === query) return
+    appliedQuery.current = query
     const prefill: Partial<FormData> = {}
     const fields: (keyof FormData)[] = [
       "clientName", "propertyAddress", "transactionType", "closingStage",
@@ -99,6 +105,7 @@ function StatusUpdateContent() {
       if (val) prefill[field] = val
     }
     if (Object.keys(prefill).length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync from URL params once per distinct query string
       setForm((prev) => ({ ...prev, ...prefill }))
     }
   }, [searchParams])

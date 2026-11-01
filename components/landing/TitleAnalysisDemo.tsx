@@ -94,6 +94,7 @@ export default function TitleAnalysisDemo() {
   useEffect(() => {
     // On mobile, skip straight to results — left panel is hidden so animation is invisible
     if (window.innerWidth < 640) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mobile fallback on mount; window is only available client-side
       setPhase("results")
       setVisibleItems(TITLE_EXCEPTIONS.map(i => i.id))
       return

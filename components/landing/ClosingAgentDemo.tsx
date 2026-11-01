@@ -86,6 +86,7 @@ Next step: we are still awaiting wire instructions from the lender. I will follo
 
   useEffect(() => {
     if (window.innerWidth < 640) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mobile fallback on mount; window is only available client-side
       setLog(AGENT_STEPS.map(s => s.text))
       setCompleted([1, 2, 3])
       setBlocker(true)
@@ -121,7 +122,7 @@ Next step: we are still awaiting wire instructions from the lender. I will follo
             Your AI closing coordinator.
           </h2>
           <p style={{ fontSize: "0.9rem", color: MUTED, maxWidth: 480 }}>
-            The Closing Agent reads your matter, updates the checklist from emails and documents, drafts the status update, and surfaces blockers — without being asked.
+            The Closing Agent reads your matter, updates the checklist from emails and documents, drafts the status update, and surfaces blockers. It runs when you click Run Agent on a matter.
           </p>
         </div>
 

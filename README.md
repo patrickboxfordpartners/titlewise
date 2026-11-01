@@ -7,6 +7,8 @@ AI-powered tools for real estate closing attorneys. Save 30+ minutes per file.
 - **Status Update Generator** -- Enter file details, get a professional client update email in seconds. Supports streaming for instant feedback.
 - **Title Commitment Analyzer** -- Paste or upload a PDF title commitment and get a structured breakdown of requirements, exceptions, and red flags.
 - **Wire Fraud Screening** -- AI red-flag screening of wire instructions, ABA routing checksum, and a drafted callback request. Wires the attorney confirms by phone are remembered, and later instructions with a changed account, bank, or beneficiary on the same routing number are flagged. It does not verify account ownership with any outside source.
+- **Closing Disclosure Reviewer** -- AI review of the CD against TRID tolerances. Bucket classifications and cure amounts are AI estimates; verify against the LE and CD before issuing a cure.
+- **Closing Agent** -- Runs on demand when the user clicks Run Agent on a matter: updates the checklist, drafts a status update, surfaces blockers. There is no scheduled agent.
 - **History** -- All generated content saved and searchable. Re-generate from past entries with one click.
 
 ## Tech Stack
@@ -80,6 +82,8 @@ lib/
 | Small Firm | $349/mo | 5 seats, 500/mo |
 | Pro | $599/mo | 10 seats, 1,500/mo |
 | Enterprise | $999/mo | 25 seats, 5,000/mo |
+
+Every plan includes every tool (the `has*` flags in `lib/plans.ts` are all true). Plans differ by seats and generations; Enterprise adds API access and webhooks.
 
 Source of truth: `lib/plans.ts` (prices map to the `STRIPE_*_PRICE_ID` env vars).
 

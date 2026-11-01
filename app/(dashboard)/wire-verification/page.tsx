@@ -152,7 +152,7 @@ function WireVerificationContent() {
           {matterId && <Link href={`/matters/${matterId}`} className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full hover:bg-primary/20 transition-colors">← Back to matter</Link>}
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-          AI red-flag screening of wire instructions, plus a drafted callback request. Always confirm by phone before wiring.
+          AI red flags, an ABA routing checksum, and a comparison to wires you confirmed by phone, plus a drafted callback request. It does not check account ownership with any outside source, so always confirm by phone before wiring.
         </p>
       </motion.div>
 
