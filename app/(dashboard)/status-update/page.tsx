@@ -99,6 +99,7 @@ function StatusUpdateContent() {
       if (val) prefill[field] = val
     }
     if (Object.keys(prefill).length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time sync from URL params on mount
       setForm((prev) => ({ ...prev, ...prefill }))
     }
   }, [searchParams])

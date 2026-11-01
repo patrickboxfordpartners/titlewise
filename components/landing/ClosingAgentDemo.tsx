@@ -86,6 +86,7 @@ Next step: we are still awaiting wire instructions from the lender. I will follo
 
   useEffect(() => {
     if (window.innerWidth < 640) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mobile fallback on mount; window is only available client-side
       setLog(AGENT_STEPS.map(s => s.text))
       setCompleted([1, 2, 3])
       setBlocker(true)

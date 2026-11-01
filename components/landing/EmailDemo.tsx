@@ -112,6 +112,7 @@ export default function EmailDemo() {
 
   useEffect(() => {
     if (window.innerWidth < 640) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mobile fallback on mount; window is only available client-side
       setFields({ matter: "18 Harbor View Drive", address: "18 Harbor View Dr, Portland ME 04101", stage: "Clear to Close", completed: "Title, Wire, CD" })
       setEmailText(EMAIL)
       setEmailStarted(true)
@@ -130,11 +131,11 @@ export default function EmailDemo() {
   const BLUE = "#3b82f6"
   const LABEL = "rgba(237,238,240,0.35)"
 
-  function Field({ fieldKey, label, multiline }: { fieldKey: string; label: string; multiline?: boolean }) {
+  function renderField(fieldKey: string, label: string, multiline?: boolean) {
     const isActive = activeField === fieldKey
     const value = fields[fieldKey]
     return (
-      <div style={{ marginBottom: 14 }}>
+      <div key={fieldKey} style={{ marginBottom: 14 }}>
         <p style={{ fontSize: "0.7rem", color: LABEL, marginBottom: 4, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>{label}</p>
         <div style={{
           background: "rgba(255,255,255,0.04)",
@@ -182,10 +183,10 @@ export default function EmailDemo() {
             <p style={{ fontSize: "0.6875rem", fontWeight: 700, color: DIM, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 20 }}>
               File Details
             </p>
-            <Field fieldKey="client" label="Client Name" />
-            <Field fieldKey="address" label="Property Address" />
-            <Field fieldKey="stage" label="Current Stage" />
-            <Field fieldKey="completed" label="Completed Items" multiline />
+            {renderField("client", "Client Name")}
+            {renderField("address", "Property Address")}
+            {renderField("stage", "Current Stage")}
+            {renderField("completed", "Completed Items", true)}
 
             <div style={{ marginTop: 20 }}>
               <div style={{

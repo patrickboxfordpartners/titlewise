@@ -154,6 +154,7 @@ export default function HomepageDemo() {
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.innerWidth < 640) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mobile fallback on mount; window is only available client-side
       setIsMobile(true)
       setPhase("done")
       setFields(Object.fromEntries(FORM_FIELDS.map(f => [f.key, f.value])))
