@@ -155,6 +155,10 @@ if (process.env.POSTMARK_API_KEY === 'POSTMARK_API_TEST') {
   errors++;
 }
 
+// Wire verification (set explicitly: the AUTH_SECRET fallback breaks saved account hashes if AUTH_SECRET rotates)
+console.log(`\n${BLUE}━━━ Wire Verification ━━━${RESET}\n`);
+checkRequired('WIRE_HASH_SECRET', /^.{32,}$/);
+
 // AI Services
 console.log(`\n${BLUE}━━━ AI Services ━━━${RESET}\n`);
 checkRequired('ANTHROPIC_API_KEY', /^sk-ant-/);

@@ -44,7 +44,7 @@ npm run dev
 | `STRIPE_SECRET_KEY` | stripe.com |
 | `STRIPE_WEBHOOK_SECRET` | stripe.com |
 | `ANTHROPIC_API_KEY` | console.anthropic.com |
-| `WIRE_HASH_SECRET` (optional) | any random 32+ byte string; keys account-number hashes for wire memory. Falls back to `AUTH_SECRET` |
+| `WIRE_HASH_SECRET` | any random 32+ byte string (`openssl rand -hex 32`); keys account-number hashes and confirm tokens for wire memory. Set it explicitly in production: it falls back to `AUTH_SECRET`, and changing either value disables account comparison for wires saved earlier and invalidates outstanding confirm tokens |
 
 ## Architecture
 
