@@ -173,7 +173,7 @@ export default function HomePageClient() {
       <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, padding: "72px 32px", backgroundColor: c.bg }}>
         <div className="tw-stats-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "48px 40px" }}>
           {[
-            { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise cross-references every wire instruction against institutional memory across all your closings.", source: "FBI Internet Crime Complaint Center, 2023 Annual Report" },
+            { stat: "$1.2B", label: "Lost to wire fraud in 2023", body: "The FBI reported $1.2 billion in real estate wire fraud losses. TITLEwise screens every wire instruction for red flags and compares it against wires you previously confirmed by phone on the same routing number.", source: "FBI Internet Crime Complaint Center, 2023 Annual Report" },
             { stat: "93%", label: "Faster title commitment review", body: "What takes 45 minutes by hand takes 30 seconds with TITLEwise. Exceptions flagged, requirements listed, red flags surfaced, structured and ready to act on.", source: "Based on average manual review time of 45 min vs. 30 sec AI analysis" },
             { stat: "$4,100", label: "Average TRID violation penalty", body: "Tolerance violations and fee misclassifications add up fast. TITLEwise automatically checks Bucket A/B/C classifications and cure amount calculations.", source: "CFPB enforcement actions, average per-loan TRID penalty" },
             { stat: "12", label: "AI tools in one platform", body: "Title analysis, CD review, wire verification, HOA review, fee estimates, tax proration, status updates, and more. Everything closing attorneys need.", source: "Title analysis, CD review, wire verification, HOA review, fee estimate, tax proration, status update, client portal, team invites, email integration, closing checklist, autonomous agent" },
@@ -285,7 +285,7 @@ export default function HomePageClient() {
             {[
               { name: "Solo", price: "$149", note: "1 attorney &middot; 100 AI generations/mo", features: ["1 user seat", "100 AI generations/mo", "All 12 tools included", "Unlimited matters", "Email support"] },
               { name: "Small Firm", price: "$349", note: "Up to 5 seats &middot; Client portal", featured: true, features: ["Up to 5 user seats", "500 AI generations/mo", "Client portal access", "Team collaboration", "Priority email support"] },
-              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,500 AI generations/mo", "Client portal access", "API access", "Priority support with SLA"] },
+              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,500 AI generations/mo", "Client portal access", "Autonomous closing agent", "Priority support with SLA"] },
               { name: "Enterprise", price: "$999", note: "25 seats &middot; Custom onboarding", features: ["Up to 25 user seats", "5,000 AI generations/mo", "Custom onboarding", "Dedicated account manager", "API access"] },
             ].map((plan) => {
               const isExpanded = expandedPlan === plan.name

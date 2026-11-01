@@ -48,7 +48,7 @@ function WireVerificationContent() {
   const [sendMode, setSendMode] = useState<"idle" | "compose" | "sending" | "sent">("idle")
   const [sendError, setSendError] = useState("")
   const [confirmToken, setConfirmToken] = useState<string | null>(null)
-  const [checks, setChecks] = useState<{ routingChecksum: "valid" | "invalid" | "not_found"; accountCompared: boolean } | null>(null)
+  const [checks, setChecks] = useState<{ routingChecksum: "valid" | "invalid" | "not_found"; accountCompared: boolean; skippedOldKeyHashes?: number } | null>(null)
   const [calledBack, setCalledBack] = useState(false)
   const [confirmState, setConfirmState] = useState<"idle" | "saving" | "saved" | "error">("idle")
   const [confirmError, setConfirmError] = useState("")
@@ -441,7 +441,7 @@ function WireVerificationContent() {
                   Routing number checksum: {checks.routingChecksum === "valid" ? "valid format" : checks.routingChecksum === "invalid" ? "INVALID (not a real ABA number)" : "no routing number found"}
                 </p>
                 <p className="text-foreground/80">
-                  Account number: {checks.accountCompared ? "compared against accounts you previously confirmed" : "no previously confirmed account on file for this routing number"}
+                  Account number: {checks.accountCompared ? "compared against accounts you previously confirmed" : (checks.skippedOldKeyHashes ?? 0) > 0 ? "NOT compared: previously confirmed accounts were saved under an older key. Confirm by phone." : "no previously confirmed account on file for this routing number (or no full account number found)"}
                 </p>
                 <p className="text-xs text-muted-foreground mt-2">These checks and the AI screening do not confirm who owns the account. Always confirm by phone with a known contact.</p>
               </div>

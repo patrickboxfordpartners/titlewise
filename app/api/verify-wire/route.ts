@@ -2,7 +2,7 @@ import { requireAuth } from "@/lib/auth-helpers"
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { wireInstructions } from "@/lib/db/schema"
-import { eq, and } from "drizzle-orm"
+import { eq, and, desc } from "drizzle-orm"
 import { z } from "zod/v4"
 import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
@@ -157,7 +157,8 @@ export async function POST(req: NextRequest) {
     const deterministicChecks = {
       routingChecksum: routing ? (isValidAbaRouting(routing) ? "valid" : "invalid") : "not_found",
       accountCompared: false,
-    } as { routingChecksum: "valid" | "invalid" | "not_found"; accountCompared: boolean }
+      skippedOldKeyHashes: 0,
+    } as { routingChecksum: "valid" | "invalid" | "not_found"; accountCompared: boolean; skippedOldKeyHashes: number }
 
     if (deterministicChecks.routingChecksum === "invalid") {
       result.redFlags.unshift({
@@ -178,13 +179,15 @@ export async function POST(req: NextRequest) {
             eq(wireInstructions.userId, user.id),
             eq(wireInstructions.routingNumber, routing),
           ))
-          .limit(20)
+          .orderBy(desc(wireInstructions.verifiedAt))
+          .limit(100)
 
         if (known.length > 0) {
           const knownBanks = [...new Set(known.map(w => w.bankName).filter(Boolean))]
           const knownBeneficiaries = [...new Set(known.map(w => w.beneficiary).filter(Boolean))]
           const storedHashes = known.map(w => decodeStoredAccount(w.accountNumber).hash).filter((h): h is string => Boolean(h))
           const knownHashes = storedHashes.filter(hashUsesActiveKey)
+          deterministicChecks.skippedOldKeyHashes = storedHashes.length - knownHashes.length
           if (storedHashes.length > knownHashes.length) {
             logger.warn("verify-wire", "Some stored account hashes were made with a different key and were skipped", { skipped: storedHashes.length - knownHashes.length })
           }

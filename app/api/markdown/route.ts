@@ -98,7 +98,7 @@ Status Updates, Title Analysis, CD Reviewer, Wire Verification, HOA Reviewer, Fe
 Yes. Enterprise plan ($999/mo) includes full API access with Bearer token authentication. See [/auth.md](/auth.md).
 
 ## How does wire verification work?
-The system cross-references wire instructions against historical data from your previous transactions, detecting account changes and potential fraud indicators.
+The system screens wire instructions for red flags, checks the routing number checksum, and compares them against wires you previously confirmed by phone. Always confirm by phone before wiring.
 
 ## Is my data secure?
 Yes. All data is encrypted in transit and at rest. We do not train AI models on your documents.
