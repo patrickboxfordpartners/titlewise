@@ -6,6 +6,7 @@ AI-powered tools for real estate closing attorneys. Save 30+ minutes per file.
 
 - **Status Update Generator** -- Enter file details, get a professional client update email in seconds. Supports streaming for instant feedback.
 - **Title Commitment Analyzer** -- Paste or upload a PDF title commitment and get a structured breakdown of requirements, exceptions, and red flags.
+- **Wire Fraud Screening** -- AI red-flag screening of wire instructions, ABA routing checksum, and a drafted callback request. Wires the attorney confirms by phone are remembered, and later instructions with a changed account, bank, or beneficiary on the same routing number are flagged. It does not verify account ownership with any outside source.
 - **History** -- All generated content saved and searchable. Re-generate from past entries with one click.
 
 ## Tech Stack
@@ -13,7 +14,7 @@ AI-powered tools for real estate closing attorneys. Save 30+ minutes per file.
 - Next.js 16 (App Router)
 - TypeScript (strict)
 - Tailwind CSS 4
-- Clerk (auth)
+- NextAuth v5 (email/password, Drizzle adapter)
 - Neon PostgreSQL + Drizzle ORM
 - Stripe (subscriptions, billing portal)
 - Anthropic Claude (AI generation)
@@ -38,12 +39,12 @@ npm run dev
 
 | Variable | Source |
 |----------|--------|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | clerk.com |
-| `CLERK_SECRET_KEY` | clerk.com |
+| `AUTH_SECRET` | `npx auth secret` |
 | `DATABASE_URL` | neon.tech |
 | `STRIPE_SECRET_KEY` | stripe.com |
 | `STRIPE_WEBHOOK_SECRET` | stripe.com |
 | `ANTHROPIC_API_KEY` | console.anthropic.com |
+| `WIRE_HASH_SECRET` (optional) | any random 32+ byte string; keys account-number hashes for wire memory. Falls back to `AUTH_SECRET` |
 
 ## Architecture
 
@@ -75,9 +76,12 @@ lib/
 
 | Tier | Price | Seats |
 |------|-------|-------|
-| Solo | $99/mo | 1 |
-| Small Firm | $249/mo | 5 |
-| Team | $499/mo | 15 |
+| Solo | $149/mo | 1 seat, 100 AI generations/mo |
+| Small Firm | $349/mo | 5 seats, 500/mo |
+| Pro | $599/mo | 10 seats, 1,500/mo |
+| Enterprise | $999/mo | 25 seats, 5,000/mo |
+
+Source of truth: `lib/plans.ts` (prices map to the `STRIPE_*_PRICE_ID` env vars).
 
 14-day free trial on signup. 5 free generations/month on free tier.
 
@@ -98,7 +102,7 @@ npm run verify:prod  # Verify production environment configuration
 See [PRODUCTION_DEPLOYMENT.md](./PRODUCTION_DEPLOYMENT.md) for complete production setup guide.
 
 **Quick steps:**
-1. Create production Clerk instance (pk_live_ keys)
+1. Set `AUTH_SECRET` for NextAuth
 2. Create production Stripe products and webhooks
 3. Create production database
 4. Copy `.env.production.template` to `.env.production` and fill in all values

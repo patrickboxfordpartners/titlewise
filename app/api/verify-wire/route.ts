@@ -8,6 +8,10 @@ import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { getOrCreateUser, checkSubscriptionAccess, incrementUsage } from "@/lib/db/get-user"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import {
+  isValidAbaRouting, normalizeRouting, hashAccount, maskAccount,
+  encodeStoredAccount, decodeStoredAccount, signConfirmToken,
+} from "@/lib/wire-checks"
 
 const requestSchema = z.object({
   wireInstructions: z.string().min(20, "Paste the wire instructions.").max(500_000, "Document text is too long (max 500,000 characters)."),
@@ -30,7 +34,7 @@ function buildPrompt(data: z.infer<typeof requestSchema>) {
   "extracted": {
     "bankName": "receiving bank name or null",
     "routingNumber": "ABA routing number or null",
-    "accountNumber": "account number (partially masked) or null",
+    "accountNumber": "full account number exactly as written, or null",
     "beneficiary": "beneficiary name or null",
     "reference": "reference/memo or null"
   },
@@ -63,7 +67,7 @@ Rules:
 - Flag unusual account types (personal accounts for business transactions)
 - The verification email should be ready to send, professional and firm
 - If no previous instructions provided, skip the changes array
-- Partially mask account numbers in output (show last 4 digits only)
+- Return the full account number in extracted.accountNumber (the server masks it before display); never repeat it in any other field
 
 Wire Instructions:
 ${data.wireInstructions}
@@ -127,7 +131,7 @@ export async function POST(req: NextRequest) {
 
     let rawJson: unknown
     try { rawJson = JSON.parse(textBlock.text.trim()) } catch {
-      logger.error("verify-wire", "JSON parse failed", { preview: textBlock.text.slice(0, 200) })
+      logger.error("verify-wire", "JSON parse failed", { length: textBlock.text.length })
       return NextResponse.json({ error: "Failed to parse analysis." }, { status: 502 })
     }
 
@@ -142,47 +146,77 @@ export async function POST(req: NextRequest) {
     const result = validated.data
     const deviations: string[] = []
 
-    // Institutional memory: compare against known-good wires for this routing number
-    if (result.extracted.routingNumber) {
+    // Deterministic checks (no AI): ABA checksum + keyed account-number hash
+    const routing = normalizeRouting(result.extracted.routingNumber)
+    const fullAccount = result.extracted.accountNumber
+    const accountHash = hashAccount(user.id, fullAccount)
+    const maskedAccount = maskAccount(fullAccount)
+    result.extracted.routingNumber = routing
+    result.extracted.accountNumber = maskedAccount
+
+    const deterministicChecks = {
+      routingChecksum: routing ? (isValidAbaRouting(routing) ? "valid" : "invalid") : "not_found",
+      accountCompared: false,
+    } as { routingChecksum: "valid" | "invalid" | "not_found"; accountCompared: boolean }
+
+    if (deterministicChecks.routingChecksum === "invalid") {
+      result.redFlags.unshift({
+        severity: "high",
+        issue: "Routing number fails ABA checksum",
+        detail: `"${routing}" is not a valid ABA routing number (checksum failed). It may be mistyped or fabricated. Do not wire until confirmed by phone with a known contact.`,
+      })
+      if (result.riskLevel === "low" || result.riskLevel === "medium") result.riskLevel = "high"
+    }
+
+    // Institutional memory: compare against wires an attorney previously confirmed by callback
+    if (routing) {
       try {
         const known = await db
           .select()
           .from(wireInstructions)
           .where(and(
             eq(wireInstructions.userId, user.id),
-            eq(wireInstructions.routingNumber, result.extracted.routingNumber),
+            eq(wireInstructions.routingNumber, routing),
           ))
-          .limit(5)
+          .limit(20)
 
         if (known.length > 0) {
           const knownBanks = [...new Set(known.map(w => w.bankName).filter(Boolean))]
           const knownBeneficiaries = [...new Set(known.map(w => w.beneficiary).filter(Boolean))]
+          const knownHashes = known.map(w => decodeStoredAccount(w.accountNumber).hash).filter((h): h is string => Boolean(h))
 
-          if (result.extracted.bankName && knownBanks.length > 0 && !knownBanks.includes(result.extracted.bankName)) {
-            deviations.push(`Bank name "${result.extracted.bankName}" differs from previous uses of this routing number (previously: ${knownBanks.join(", ")})`)
+          if (result.extracted.bankName && knownBanks.length > 0 && !knownBanks.some(b => b?.toLowerCase() === result.extracted.bankName?.toLowerCase())) {
+            deviations.push(`Bank name "${result.extracted.bankName}" differs from previously confirmed wires on this routing number (previously: ${knownBanks.join(", ")})`)
           }
           if (result.extracted.beneficiary && knownBeneficiaries.length > 0 && !knownBeneficiaries.some(b => result.extracted.beneficiary?.toLowerCase().includes(b?.toLowerCase() ?? ""))) {
-            deviations.push(`Beneficiary "${result.extracted.beneficiary}" differs from previous uses (previously: ${knownBeneficiaries.join(", ")})`)
+            deviations.push(`Beneficiary "${result.extracted.beneficiary}" differs from previously confirmed wires (previously: ${knownBeneficiaries.join(", ")})`)
           }
-        }
-
-        // Store this wire for future comparisons if low/medium risk
-        if (result.riskLevel === "low" || result.riskLevel === "medium") {
-          await db.insert(wireInstructions).values({
-            userId: user.id,
-            bankName: result.extracted.bankName,
-            routingNumber: result.extracted.routingNumber,
-            accountNumber: result.extracted.accountNumber ? `****${result.extracted.accountNumber.slice(-4)}` : null,
-            beneficiary: result.extracted.beneficiary,
-            matterId: parsed.data.matterId ?? null,
-          })
+          if (accountHash && knownHashes.length > 0) {
+            deterministicChecks.accountCompared = true
+            if (!knownHashes.includes(accountHash)) {
+              deviations.push(`Account number ${maskedAccount ?? ""} does not match any account previously confirmed for this routing number`)
+            }
+          }
         }
       } catch (err) {
         logger.error("verify-wire", "Institutional memory check failed (non-blocking)", { error: String(err) })
       }
     }
 
-    return NextResponse.json({ result, institutionalDeviations: deviations })
+    // Nothing is saved automatically. The attorney confirms after a verbal callback.
+    const confirmToken = routing
+      ? signConfirmToken({
+          u: user.id,
+          bank: result.extracted.bankName,
+          routing,
+          acct: encodeStoredAccount(maskedAccount, accountHash),
+          ben: result.extracted.beneficiary,
+          matter: parsed.data.matterId ?? null,
+          exp: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        })
+      : null
+
+    return NextResponse.json({ result, institutionalDeviations: deviations, deterministicChecks, confirmToken })
   } catch (err) {
     logger.error("verify-wire", "API error", { error: String(err) })
     return NextResponse.json({ error: "Failed to analyze. Please try again." }, { status: 502 })

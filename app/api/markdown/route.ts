@@ -28,8 +28,8 @@ TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered
 |------|-------|-------|
 | Solo | $149/mo | 1 attorney |
 | Small Firm | $349/mo | Up to 5 |
-| Pro | $599/mo | Up to 15, includes Closing Agent |
-| Enterprise | $999/mo | Unlimited, API access |
+| Pro | $599/mo | Up to 10, includes Closing Agent |
+| Enterprise | $999/mo | Up to 25, API access |
 
 ## API Access
 
@@ -65,13 +65,13 @@ Enterprise plan includes API access for AI agent integration.
 - Shared matter templates
 
 ### Pro — $599/month
-- Up to 15 users
+- Up to 10 users
 - Everything in Small Firm
 - Closing Agent AI assistant
 - Priority support
 
 ### Enterprise — $999/month
-- Unlimited users
+- Up to 25 users
 - Everything in Pro
 - API access (v1 endpoints)
 - Webhooks

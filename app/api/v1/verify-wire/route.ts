@@ -4,6 +4,7 @@ import { anthropic, SAFETY_PREAMBLE } from "@/lib/anthropic"
 import { authenticateApiKey, verifyEnterpriseTier } from "@/lib/api-auth"
 import { checkRateLimit, logApiUsage } from "@/lib/api-rate-limit"
 import { triggerWebhooks } from "@/lib/webhook-dispatcher"
+import { isValidAbaRouting } from "@/lib/wire-checks"
 
 const requestSchema = z.object({
   document_text: z.string().min(50, "Document text must be at least 50 characters").max(100_000, "Document text is too long (max 100KB)"),
@@ -202,6 +203,21 @@ export async function POST(request: NextRequest) {
     }
 
     analysis = JSON.parse(jsonMatch[0])
+
+    // Deterministic ABA checksum overrides the model's opinion of the routing format
+    const routing = typeof analysis?.bankInformation?.routingNumber === "string"
+      ? analysis.bankInformation.routingNumber.replace(/[\s-]/g, "")
+      : null
+    if (routing && analysis.verification && typeof analysis.verification === "object") {
+      const valid = isValidAbaRouting(routing)
+      analysis.verification.routingNumberFormat = valid ? "valid" : "invalid"
+      if (!valid) {
+        analysis.redFlags = [
+          { severity: "high", issue: "Routing number fails ABA checksum", explanation: `"${routing}" is not a valid ABA routing number. Confirm by phone with a known contact before wiring.` },
+          ...(Array.isArray(analysis.redFlags) ? analysis.redFlags : []),
+        ]
+      }
+    }
 
   } catch (error: unknown) {
     console.error("[API v1] Claude API error:", error)
