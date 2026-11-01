@@ -1,6 +1,6 @@
 ---
 title: TITLEwise Pricing
-description: Machine-readable pricing plans for AI agents. Plans from $149/month to $999/month with 14-day free trial.
+description: Machine-readable pricing plans for AI agents. Plans from $149/month to $999/month.
 canonical: https://titlewise.app/pricing
 last-updated: 2026-08-27
 ---
@@ -57,15 +57,6 @@ Every plan includes every TITLEwise tool: title analysis, CD/TRID review, wire f
 - Every tool, including the Closing Agent
 - REST API access and webhooks
 - Dedicated onboarding
-
----
-
-## Free Trial
-
-- 14-day free trial on all plans
-- No credit card required
-- Full feature access during trial
-- Cancel anytime
 
 ---
 

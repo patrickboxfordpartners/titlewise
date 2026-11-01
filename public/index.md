@@ -102,6 +102,6 @@ TITLEwise is built by Boxford Partners, an embedded operations consulting firm b
 
 ## Sign Up
 
-Start your 14-day free trial at [https://titlewise.app](https://titlewise.app)
+Choose a plan at [https://titlewise.app/pricing](https://titlewise.app/pricing)
 
-No credit card required. Full feature access during trial. Cancel anytime.
+TITLEwise is a paid subscription with no free trial. Billing starts when you subscribe. Cancel anytime.
