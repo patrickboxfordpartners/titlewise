@@ -24,6 +24,7 @@ const PRODUCTS = {
     description: 'Everything you need to automate your closing workflow. AI-powered document analysis, compliance checks, and client communications — all in one platform designed for solo practitioners.',
     marketing_features: [
       { name: '✓ 100 AI generations per month' },
+      { name: '✓ Every tool, including the on-demand closing agent' },
       { name: '✓ All 12 closing automation tools' },
       { name: '✓ State-specific checklists (7 states)' },
       { name: '✓ Document analysis & generation' },
@@ -35,27 +36,23 @@ const PRODUCTS = {
   },
   small_firm: {
     name: 'TITLEwise Small Firm',
-    description: 'Built for growing firms. Share knowledge across your team, give clients real-time access to their matters, and protect against wire fraud with institutional memory. Perfect for 2-5 attorneys.',
+    description: 'Built for growing firms. Every TITLEwise tool, shared across a team of up to 5 attorneys.',
     marketing_features: [
       { name: '✓ Up to 5 attorney seats' },
       { name: '✓ 500 AI generations per month' },
       { name: '✓ All Solo features included' },
       { name: '✓ Shared history across team' },
-      { name: '✓ Branded client portal' },
-      { name: '✓ Wire fraud memory system' },
       { name: '✓ Team invitations & management' },
       { name: '✓ Priority email support' },
     ],
   },
   pro: {
     name: 'TITLEwise Pro',
-    description: 'The complete platform with an on-demand AI closing agent. Click Run Agent to update checklists and draft updates, TRID review is built-in, and your team of up to 10 attorneys works from one source of truth.',
+    description: 'Every TITLEwise tool for a team of up to 10 attorneys working from one source of truth, with 1,500 generations and priority support.',
     marketing_features: [
       { name: '✓ Up to 10 attorney seats' },
       { name: '✓ 1,500 AI generations per month' },
       { name: '✓ All Small Firm features' },
-      { name: '✓ On-demand closing agent' },
-      { name: '✓ TRID compliance engine' },
       { name: '✓ Document version history' },
       { name: '✓ API access for integrations' },
       { name: '✓ Priority support (2hr response)' },

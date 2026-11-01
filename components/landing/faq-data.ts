@@ -12,7 +12,7 @@ export const faqs = [
     category: "Product",
     featured: true,
     question: "Which tools are included?",
-    answer: "Every plan includes every tool: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Fraud Screening, HOA Document Reviewer, Fee Estimate Generator, Tax Proration Calculator, Closing Agent, Client Matter Portal, and Wire Fraud Memory.",
+    answer: "Every plan includes every tool: Status Update Generator, Title Commitment Analyzer, Closing Disclosure Reviewer, Wire Fraud Screening, HOA Document Reviewer, Fee Estimate Generator, Tax Proration Calculator, Closing Checklist Tracker, TRID review, Closing Agent, Client Matter Portal, and Wire Fraud Memory.",
   },
   {
     value: "vs-production",

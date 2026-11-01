@@ -26,7 +26,7 @@ const faqs = [
   {
     value: "portal",
     question: "How does the client portal work?",
-    answer: "Share a secure link with your client and they can track checklist progress, closing status, and key milestones in real time. No login required for clients—just a unique, secure URL. Available on Small Firm plans and above.",
+    answer: "Share a secure link with your client and they can track checklist progress, closing status, and key milestones in real time. No login required for clients—just a unique, secure URL. Included on every plan.",
   },
   {
     value: "states",

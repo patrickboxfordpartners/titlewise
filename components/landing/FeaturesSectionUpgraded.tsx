@@ -19,9 +19,9 @@ const coreTools = [
 
 const premiumFeatures = [
   { icon: Bot, title: "Closing Agent", description: "On-demand AI that analyzes your matter, updates checklists, and drafts status emails when you click Run Agent.", badge: "All plans" },
-  { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "Small Firm+" },
-  { icon: Scale, title: "TRID Compliance Engine", description: "Automatic Bucket A/B/C fee classification and tolerance cure amount calculation.", badge: "Pro" },
-  { icon: Brain, title: "Wire Fraud Memory", description: "Remembers wires you confirmed by phone and flags changed accounts, banks, or beneficiaries on the same routing number.", badge: "Small Firm+" },
+  { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "All plans" },
+  { icon: Scale, title: "TRID Compliance Engine", description: "AI Bucket A/B/C fee classification with estimated cure amounts to verify.", badge: "All plans" },
+  { icon: Brain, title: "Wire Fraud Memory", description: "Remembers wires you confirmed by phone and flags changed accounts, banks, or beneficiaries on the same routing number.", badge: "All plans" },
 ]
 
 function ToolCard({ tool, index }: { tool: typeof coreTools[0]; index: number }) {
@@ -145,7 +145,7 @@ export default function FeaturesSectionUpgraded() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.01 }}
         >
-          <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">Advanced Capabilities — Available on higher plans</p>
+          <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">Advanced Capabilities — Included on every plan</p>
         </motion.div>
 
         <div className="mx-auto grid max-w-[1400px] gap-6 sm:grid-cols-2 lg:grid-cols-4">

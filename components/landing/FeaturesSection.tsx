@@ -133,7 +133,7 @@ export default function FeaturesSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.01 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Advanced Capabilities -- Available on higher plans</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Advanced Capabilities -- Included on every plan</p>
         </motion.div>
 
         <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">

@@ -269,12 +269,13 @@ export function WhitepaperContent() {
           marginBottom: 16,
         }}
       >
-        The production TitleWise platform has seven AI tools. Four of them analyze documents: title
-        commitment analysis, closing disclosure review, HOA document review, and wire instruction
-        screening. Two of them generate outputs: fee estimates and tax proration calculations. One
-        of them communicates: the status update tool, which drafts a client update from the file
-        state for the attorney to review and send. On every plan there is an eighth tool, a closing
-        agent that runs on demand when the attorney clicks Run Agent on a matter. It reads the
+        The production TitleWise platform has 12 tools, all included on every plan. Four of them
+        analyze documents: title commitment analysis, closing disclosure review, HOA document
+        review, and wire instruction screening. Two generate outputs: fee estimates and tax
+        proration calculations. The status update tool drafts a client update from the file state
+        for the attorney to review and send. The rest run the matter: closing checklists, the client
+        portal, team invites, and email integration. Tying them together is the closing agent,
+        which runs on demand when the attorney clicks Run Agent on a matter. It reads the
         matter, updates the checklist, drafts the status update, and surfaces blockers for a human
         to act on.
       </p>
@@ -482,10 +483,10 @@ export function WhitepaperContent() {
           marginBottom: 16,
         }}
       >
-        TitleWise is an AI-native document intelligence platform for title attorneys. Seven tools
-        handle the pattern work of closings: title commitment analysis, closing disclosure review,
-        wire verification, HOA review, fee estimates, tax proration, and automated status updates. A
-        closing agent coordinates across all of them. TitleWise won the External Track at the Agent
+        TitleWise is an AI-native document intelligence platform for title attorneys. Twelve tools
+        handle the pattern work of closings, including title commitment analysis, closing disclosure
+        review, wire fraud screening, HOA review, fee estimates, tax proration, and status update
+        drafts. An on-demand closing agent works across them when the attorney clicks Run Agent. TitleWise won the External Track at the Agent
         Natives Builders Hackathon in August 2026 with titlewise-agent, an MCP server that exposes
         document intelligence via the Model Context Protocol. The platform is built on Next.js 16,
         deployed on Vercel, and uses Claude for document analysis. Every plan includes every tool,

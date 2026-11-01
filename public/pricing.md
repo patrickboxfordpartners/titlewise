@@ -60,7 +60,6 @@ Every plan includes every TITLEwise tool: title analysis, CD/TRID review, wire f
 
 ---
 
-
 ## Free Trial
 
 - 14-day free trial on all plans

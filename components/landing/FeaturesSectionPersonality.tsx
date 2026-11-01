@@ -232,7 +232,7 @@ export default function FeaturesSectionPersonality() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.01 }}
         >
-          <p className="text-[11px] font-black uppercase tracking-widest text-purple-600">Advanced — Higher Plans</p>
+          <p className="text-[11px] font-black uppercase tracking-widest text-purple-600">Advanced — Every Plan</p>
         </motion.div>
 
         <div className="mx-auto grid max-w-[1200px] gap-6 sm:grid-cols-2 lg:grid-cols-4">

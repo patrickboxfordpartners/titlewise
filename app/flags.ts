@@ -21,7 +21,7 @@ function planHasFeature(plan: PlanKey | null, feature: keyof typeof PLANS["solo"
 
 export const hasAgentFlag = flag<boolean>({
   key: "has-agent",
-  description: "Access to the AI Closing Agent (Pro+)",
+  description: "Access to the AI Closing Agent (all plans)",
   async decide() {
     const plan = await getUserPlan();
     return planHasFeature(plan, "hasAgent");
@@ -30,7 +30,7 @@ export const hasAgentFlag = flag<boolean>({
 
 export const hasClientPortalFlag = flag<boolean>({
   key: "has-client-portal",
-  description: "Access to the Client Portal (Small Firm+)",
+  description: "Access to the Client Portal (all plans)",
   async decide() {
     const plan = await getUserPlan();
     return planHasFeature(plan, "hasClientPortal");
@@ -39,7 +39,7 @@ export const hasClientPortalFlag = flag<boolean>({
 
 export const hasTridEngineFlag = flag<boolean>({
   key: "has-trid-engine",
-  description: "Access to the TRID Compliance Engine (Pro+)",
+  description: "Access to the TRID Compliance Engine (all plans)",
   async decide() {
     const plan = await getUserPlan();
     return planHasFeature(plan, "hasTridEngine");
@@ -48,7 +48,7 @@ export const hasTridEngineFlag = flag<boolean>({
 
 export const hasWireFraudMemoryFlag = flag<boolean>({
   key: "has-wire-fraud-memory",
-  description: "Access to Wire Fraud Memory (Small Firm+)",
+  description: "Access to Wire Fraud Memory (all plans)",
   async decide() {
     const plan = await getUserPlan();
     return planHasFeature(plan, "hasWireFraudMemory");
