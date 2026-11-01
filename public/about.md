@@ -22,8 +22,8 @@ We saw attorneys spending hours manually reviewing title commitments, closing di
 TITLEwise combines natural language processing, document parsing, and cross-matter memory to automate the core workflows of real estate closing attorneys:
 
 - **Title Analysis:** Parse title commitments, flag Schedule B exceptions, identify liens and encumbrances
-- **Closing Disclosure Review:** TRID-compliant CD analysis with tolerance violation detection
-- **Wire Verification:** Cross-reference wire instructions against historical patterns to detect fraud
+- **Closing Disclosure Review:** AI CD analysis against TRID tolerances, with estimated cure amounts to verify
+- **Wire Fraud Screening:** AI red flags, ABA routing checksum, and comparison to wires you confirmed by phone. No outside check of account ownership; always confirm by phone
 - **HOA Document Review:** Extract fees, special assessments, and transfer restrictions
 - **Automated Status Updates:** AI-generated plain-language updates to buyers, sellers, agents, and lenders
 - **Closing Checklists:** Intelligent task tracking with automatic progress detection

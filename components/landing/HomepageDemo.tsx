@@ -27,12 +27,10 @@ const CHECKLIST = [
 const WIRE = { bank: "First National Bank", account: "****4821", routing: "021000021", amount: "$487,250.00" }
 
 const WIRE_CHECKS = [
-  { id: 1, label: "Account matches prior closing", status: "pass" },
-  { id: 2, label: "Routing number verified", status: "pass" },
-  { id: 3, label: "Beneficiary cross-reference", status: "pass" },
-  { id: 4, label: "Amount within expected range", status: "pass" },
-  { id: 5, label: "Last-minute change detection", status: "warn" },
-  { id: 6, label: "Email domain spoofing check", status: "pass" },
+  { id: 1, label: "Routing number passes ABA checksum", status: "pass" },
+  { id: 2, label: "Account matches your phone-confirmed wire", status: "pass" },
+  { id: 3, label: "Beneficiary matches your phone-confirmed wire", status: "pass" },
+  { id: 4, label: "AI red flags: last-minute change language", status: "warn" },
 ]
 
 const ANALYSIS_LINES = [
@@ -53,8 +51,8 @@ const AGENT_STEPS = [
   "Reading email thread for updates...",
   "Title commitment found in inbox (Sep 2)",
   "Marking: Title commitment received",
-  "Running wire fraud verification...",
-  "6 checks complete. 1 caution flag.",
+  "Running wire fraud screening...",
+  "4 checks complete. 1 caution flag. Confirm by phone.",
   "Drafting status update email...",
   "Surfacing blocker: wire instructions received late",
   "Done. 1 item updated, 1 blocker flagged.",
@@ -142,7 +140,7 @@ export default function HomepageDemo() {
         setAgentLog(prev => [...prev, step])
         if (step.includes("Title commitment")) sched(() => setCompleted(prev => [...prev, 3]), 200)
         if (step.includes("wire fraud")) setWireVisible(true)
-        if (step.includes("6 checks")) { WIRE_CHECKS.forEach((wc, ci) => sched(() => setWireChecks(prev => [...prev, wc.id]), ci * 180)) }
+        if (step.includes("4 checks")) { WIRE_CHECKS.forEach((wc, ci) => sched(() => setWireChecks(prev => [...prev, wc.id]), ci * 180)) }
         if (step.includes("Surfacing blocker")) sched(() => setBlocker(true), 200)
         if (step.includes("Drafting")) typeText(EMAIL_DRAFT, setEmailDraft, 12)
       }, t + idx * 800)
@@ -176,7 +174,7 @@ export default function HomepageDemo() {
         <div style={{ marginBottom: 48 }}>
           <p style={{ fontSize: "10px", fontWeight: 400, color: c.primary, letterSpacing: "0.1px", textTransform: "uppercase", marginBottom: 16 }}>Live Demo</p>
           <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: textColor, marginBottom: 12 }}>Watch TITLEwise work a real closing</h2>
-          <p className="tw-hp-demo-desc" style={{ fontSize: "15px", fontWeight: 300, color: mutedColor, maxWidth: 520 }}>Document entry on the left. File details in the center. AI agents working live on the right.</p>
+          <p className="tw-hp-demo-desc" style={{ fontSize: "15px", fontWeight: 300, color: mutedColor, maxWidth: 520 }}>Document entry on the left. File details in the center. The Closing Agent, run with one click, on the right.</p>
         </div>
 
         {/* Status pill */}
@@ -188,7 +186,7 @@ export default function HomepageDemo() {
               {phase === "uploading" && "Uploading title commitment..."}
               {phase === "filling" && "Populating matter details..."}
               {phase === "analyzing" && "Analyzing title commitment..."}
-              {phase === "agents" && "Agent analyzing, verifying wire, drafting email..."}
+              {phase === "agents" && "Agent analyzing, screening wire, drafting email..."}
               {phase === "done" && "Complete. Restarting..."}
             </span>
           </div>

@@ -16,7 +16,7 @@ const planDetails = {
     features: [
       "1 attorney seat",
       "100 generations / month",
-      "All 8 core tools",
+      "Every TITLEwise tool, including the Closing Agent",
       "State-specific checklists (7 states)",
       "PDF export on all tools",
       "Full-text search & date filters",
@@ -29,8 +29,6 @@ const planDetails = {
     features: [
       "Up to 5 attorney seats",
       "500 generations / month",
-      "Wire fraud institutional memory",
-      "Client matter portal",
       "Team invitations & seat management",
       "Priority email support",
     ],
@@ -40,8 +38,6 @@ const planDetails = {
     features: [
       "Up to 10 attorney seats",
       "1,500 generations / month",
-      "TRID compliance engine",
-      "Autonomous closing agent",
       "Priority support",
     ],
   },
@@ -226,19 +222,19 @@ export default function PricingPage() {
             <AccordionItem value="upgrade">
               <AccordionTrigger className="text-sm font-light text-foreground">Can I upgrade later?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                Absolutely. You can upgrade at any time and the change takes effect immediately with a prorated charge. Start with Solo and move to Pro when you need the AI agent and TRID compliance — no data is lost.
+                Absolutely. You can upgrade at any time and the change takes effect immediately with a prorated charge. Every plan includes every tool, so you only move up for more seats or generations. No data is lost.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="agent">
-              <AccordionTrigger className="text-sm font-light text-foreground">What does the autonomous closing agent do?</AccordionTrigger>
+              <AccordionTrigger className="text-sm font-light text-foreground">What does the closing agent do?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                The AI closing agent analyzes your entire matter, automatically updates checklist items, drafts status update emails, and flags potential issues. It runs from the matter detail page with one click. Available on Pro and Enterprise plans.
+                The closing agent analyzes your matter, updates checklist items, drafts a status update email, and flags potential issues. It runs on demand when you click Run Agent on a matter; it does not run on a schedule. Included on every plan.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="portal">
               <AccordionTrigger className="text-sm font-light text-foreground">How does the client portal work?</AccordionTrigger>
               <AccordionContent className="text-sm font-light text-muted-foreground">
-                Generate a shareable link for any matter. Your client can view checklist progress and closing status in real time without needing a TITLEwise account. Available on Small Firm, Pro, and Enterprise plans.
+                Generate a shareable link for any matter. Your client can view checklist progress and closing status in real time without needing a TITLEwise account. Included on every plan.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="cancel">

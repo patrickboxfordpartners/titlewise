@@ -18,10 +18,10 @@ const coreTools = [
 ]
 
 const premiumFeatures = [
-  { icon: Bot, title: "Autonomous Closing Agent", description: "AI agent that analyzes your matter, updates checklists, and drafts status emails automatically.", badge: "Pro" },
-  { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "Small Firm+" },
-  { icon: Scale, title: "TRID Compliance Engine", description: "Automatic Bucket A/B/C fee classification and tolerance cure amount calculation.", badge: "Pro" },
-  { icon: Brain, title: "Wire Fraud Memory", description: "Remembers wires you confirmed by phone and flags changed accounts, banks, or beneficiaries on the same routing number.", badge: "Small Firm+" },
+  { icon: Bot, title: "Closing Agent", description: "On-demand AI that analyzes your matter, updates checklists, and drafts status emails when you click Run Agent.", badge: "All plans" },
+  { icon: Users, title: "Client Matter Portal", description: "Shareable portal where clients track checklist progress and closing status in real time.", badge: "All plans" },
+  { icon: Scale, title: "TRID Compliance Engine", description: "Automatic Bucket A/B/C fee classification and tolerance cure amount calculation.", badge: "All plans" },
+  { icon: Brain, title: "Wire Fraud Memory", description: "Remembers wires you confirmed by phone and flags changed accounts, banks, or beneficiaries on the same routing number.", badge: "All plans" },
 ]
 
 function ToolCard({ tool, index }: { tool: typeof coreTools[0]; index: number }) {

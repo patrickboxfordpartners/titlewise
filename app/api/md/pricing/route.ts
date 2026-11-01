@@ -19,39 +19,29 @@ last-updated: 2026-08-27
 
 ## Plans
 
+Every plan includes every TITLEwise tool: title analysis, CD/TRID review, wire fraud screening, HOA review, fee estimates, tax proration, status updates, closing checklists, client portal, and the Closing Agent. Plans differ by seats, monthly AI generations, and Enterprise API access.
+
+- Wire fraud screening = AI red flags + ABA routing checksum + comparison to wires you confirmed by phone, plus a drafted callback request. It does not check account ownership with any outside source. Always confirm by phone before wiring.
+- TRID classifications and cure amounts are AI estimates. Verify them against the LE and CD before issuing a cure.
+- The Closing Agent runs on demand when you click Run Agent on a matter. It does not run on a schedule.
+
 ### Solo
 **$149/month**
 
 - 1 attorney seat
-- All AI document review tools
 - ${generations("solo")}
-- Wire fraud screening (AI red flags + drafted callback request)
-- Email status updates
-- Basic support
-- API access (100 req/min)
-
-**Limits:**
-- 1 user account
-- 1,000 API calls/month
-- Email support only
+- Every tool, including the Closing Agent
+- Email support
 
 ---
 
 ### Small Firm
 **$349/month**
 
-Everything in Solo, plus:
-
 - Up to 5 attorney seats
 - ${generations("small_firm")}
-- Shared matter dashboard
-- Team collaboration features
-- Priority support
-- API access (250 req/min)
-
-**Limits:**
-- 5 user accounts
-- 5,000 API calls/month
+- Every tool, including the Closing Agent
+- Team invitations and seat management
 - Priority email support
 
 ---
@@ -59,42 +49,22 @@ Everything in Solo, plus:
 ### Pro
 **$599/month**
 
-Everything in Small Firm, plus:
-
 - Up to 10 attorney seats
 - ${generations("pro")}
-- Closing Agent AI assistant
-- Automated checklist updates
-- Client portal access
-- Advanced reporting
-- API access (500 req/min)
-
-**Limits:**
-- 10 user accounts
-- 10,000 API calls/month
-- Phone + email support
+- Every tool, including the Closing Agent
+- Team invitations and seat management
+- Priority support
 
 ---
 
 ### Enterprise
 **$999/month**
 
-Everything in Pro, plus:
-
 - Up to 25 attorney seats
 - ${generations("enterprise")}
-- Full API access (1000 req/min)
-- Custom integrations
-- Dedicated account manager
-- SLA guarantees (99.9% uptime)
-- Advanced security controls
-- Custom training sessions
-- Webhook support
-
-**Limits:**
-- Up to 25 users
-- 50,000 API calls/month (negotiable)
-- 24/7 phone + email support
+- Every tool, including the Closing Agent
+- REST API access and webhooks
+- Dedicated onboarding
 
 ---
 

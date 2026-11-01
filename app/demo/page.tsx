@@ -73,52 +73,29 @@ const EMPTY_DEAL: DealFacts = {
 // ── Recorded Events ──
 
 const WIRE_SAFE_EVENTS: RecordedEvent[] = [
-  { stage: "pipeline", agent: "Closing Coordinator", status: "start", message: "New document received. I'm seeing wire transfer instructions. Let me pull the team together.", delay: 800 },
-  { stage: "extract", agent: "Entity Extractor", status: "start", message: "Extracting entities from document", delay: 600 },
-  { stage: "extract", agent: "Entity Extractor", status: "complete", message: "Found: 1 routing numbers, 1 beneficiaries, 4 amounts", delay: 1200, data: { banks: ["JPMorgan Chase"], routingNumbers: ["021000089"], beneficiaries: ["Pacific Coast Settlements LLC"], amounts: ["$1,285,000", "$1,028,000", "$257,000", "$257,000.00"], addresses: [] } },
-  { stage: "pipeline", agent: "Closing Coordinator", status: "progress", message: "Got it — found 1 routing number(s), 1 beneficiary name(s), 4 dollar amount(s), 1 bank reference(s). Sending these to the team now. Everyone works independently so nobody biases anyone else.", delay: 1000 },
-  { stage: "analysis", agent: "Primary Analyst (Claude Sonnet 5)", status: "start", message: "Running verify_wire analysis", delay: 400 },
-  { stage: "tavily", agent: "Tavily Web Verifier", status: "start", message: "Verifying entities against public web data", delay: 200 },
-  { stage: "memory", agent: "Mitosis Memory", status: "start", message: "Checking persistent memory for prior encounters", delay: 200 },
-  { stage: "pattern", agent: "Pattern Matcher", status: "start", message: "Querying fraud pattern database for known entities", delay: 300 },
-  { stage: "tavily", agent: "Tavily Web Verifier", status: "progress", message: "JPMorgan Chase: routing 021000089 — CONFIRMED via FDIC registry", delay: 2400, data: { entity: "021000089", verified: true } },
-  { stage: "tavily", agent: "Tavily Web Verifier", status: "progress", message: "Pacific Coast Settlements LLC — California Secretary of State: active corporation, filed 2019", delay: 1800, data: { entity: "Pacific Coast Settlements LLC", verified: true } },
-  { stage: "memory", agent: "Mitosis Memory", status: "complete", message: "No prior encounters with these entities. First-time document.", delay: 1200 },
-  { stage: "pattern", agent: "Pattern Matcher", status: "complete", message: "No matches found in fraud pattern database", delay: 800 },
-  { stage: "analysis", agent: "Primary Analyst (Claude Sonnet 5)", status: "complete", message: "Wire analysis complete. All entities verified. Amount $257,000 matches Cash to Close. Routing number confirmed JPMorgan Chase.", delay: 3200 },
-  { stage: "adversarial", agent: "Adversarial Panel", status: "start", message: "3 independent reviewers examining findings", delay: 600 },
-  { stage: "adversarial", agent: "Reviewer 1 (Skeptic)", status: "complete", message: "AGREE — routing number verified, beneficiary registered, amount consistent. No indicators of compromise.", delay: 2000 },
-  { stage: "adversarial", agent: "Reviewer 2 (Devil's Advocate)", status: "complete", message: "AGREE — document formatting consistent, no urgency language, callback number provided. Low risk.", delay: 1600 },
-  { stage: "adversarial", agent: "Reviewer 3 (Compliance)", status: "complete", message: "AGREE — all CFPB wire verification requirements met. Recommend proceeding with standard callback confirmation.", delay: 1400 },
-  { stage: "synthesis", agent: "Risk Synthesizer", status: "complete", message: "VERDICT: LOW RISK (12/100). All 3 reviewers agree. Wire instructions verified against public records.", delay: 1200 },
-  { stage: "pipeline", agent: "Closing Coordinator", status: "complete", message: "Analysis complete. 14 agents participated. Wire instructions are clean — proceed with standard verification call.", delay: 800 },
+  { stage: "pipeline", agent: "TITLEwise", status: "start", message: "Wire instructions received. Running wire screening.", delay: 800 },
+  { stage: "extract", agent: "AI Extraction", status: "start", message: "Reading the bank, routing, account, beneficiary, and amount from the document", delay: 600 },
+  { stage: "extract", agent: "AI Extraction", status: "complete", message: "Found: 1 routing number, 1 beneficiary, 4 amounts. Every value appears in the pasted text.", delay: 1200, data: { banks: ["JPMorgan Chase"], routingNumbers: ["021000089"], beneficiaries: ["Pacific Coast Settlements LLC"], amounts: ["$1,285,000", "$1,028,000", "$257,000", "$257,000.00"], addresses: [] } },
+  { stage: "checksum", agent: "ABA Checksum", status: "complete", message: "Routing 021000089 passes the ABA checksum.", delay: 700 },
+  { stage: "memory", agent: "Confirmed Wires", status: "start", message: "Comparing against wires your firm confirmed by phone", delay: 500 },
+  { stage: "memory", agent: "Confirmed Wires", status: "complete", message: "Matches the account and beneficiary you confirmed by phone for this routing number.", delay: 1200 },
+  { stage: "analysis", agent: "AI Red Flags", status: "start", message: "Screening the text for common fraud indicators", delay: 500 },
+  { stage: "analysis", agent: "AI Red Flags", status: "complete", message: "No red flags. Amount $257,000 matches Cash to Close. Callback number provided. No urgency language.", delay: 2600 },
+  { stage: "pipeline", agent: "TITLEwise", status: "complete", message: "Low risk. Callback request drafted. Confirm by phone with a known contact before wiring.", delay: 800 },
 ]
 
 const WIRE_FRAUD_EVENTS: RecordedEvent[] = [
-  { stage: "pipeline", agent: "Closing Coordinator", status: "start", message: "New document received. I'm seeing wire transfer instructions. Let me pull the team together.", delay: 800 },
-  { stage: "extract", agent: "Entity Extractor", status: "start", message: "Extracting entities from document", delay: 600 },
-  { stage: "extract", agent: "Entity Extractor", status: "complete", message: "Found: 1 routing numbers, 1 beneficiaries, 4 amounts", delay: 1200, data: { banks: ["Bank of the West"], routingNumbers: ["021000021"], beneficiaries: ["Pacfic Coast Setlements LLC"], amounts: ["$1,285,000", "$1,028,000", "$257,000", "$847,921.00"], addresses: [] } },
-  { stage: "pipeline", agent: "Closing Coordinator", status: "progress", message: "Got it — found 1 routing number(s), 1 beneficiary name(s), 4 dollar amount(s), 1 bank reference(s). Sending these to the team now. Everyone works independently so nobody biases anyone else.", delay: 1000 },
-  { stage: "analysis", agent: "Primary Analyst (Claude Sonnet 5)", status: "start", message: "Running verify_wire analysis", delay: 400 },
-  { stage: "tavily", agent: "Tavily Web Verifier", status: "start", message: "Verifying entities against public web data", delay: 200 },
-  { stage: "memory", agent: "Mitosis Memory", status: "start", message: "Checking persistent memory for prior encounters", delay: 200 },
-  { stage: "pattern", agent: "Pattern Matcher", status: "start", message: "Querying fraud pattern database for known entities", delay: 300 },
-  { stage: "tavily", agent: "Tavily Web Verifier", status: "progress", message: "Bank of the West: routing 021000021 — MISMATCH. This routing belongs to JPMorgan Chase, not Bank of the West.", delay: 2400, data: { entity: "021000021", verified: false } },
-  { stage: "tavily", agent: "Tavily Web Verifier", status: "progress", message: "\"Pacfic Coast Setlements LLC\" — ALERT: Misspelled entity. No California SOS record found. Possible typosquat of \"Pacific Coast Settlements LLC\".", delay: 2000, data: { entity: "Pacfic Coast Setlements LLC", verified: false } },
-  { stage: "memory", agent: "Mitosis Memory", status: "complete", message: "WARNING: Prior document for File #2024-SM-78432 had DIFFERENT wire instructions. Bank was JPMorgan Chase, routing was 021000089.", delay: 1600 },
-  { stage: "pattern", agent: "Pattern Matcher", status: "complete", message: "ALERT: Routing 021000021 flagged in 3 prior fraud reports. Beneficiary name pattern matches known BEC template.", delay: 1200 },
-  { stage: "analysis", agent: "Primary Analyst (Claude Sonnet 5)", status: "complete", message: "CRITICAL: 7 fraud indicators detected. Amount $847,921 does NOT match Cash to Close ($257,000) — $590,921 discrepancy. Urgency language (\"IMMEDIATELY\", \"Do NOT call\"). Beneficiary misspelled. Routing/bank mismatch.", delay: 3600 },
-  { stage: "audit", agent: "Cross-Document Auditor", status: "progress", message: "DISCREPANCY: wire_bank changed from \"JPMorgan Chase\" to \"Bank of the West\"", delay: 800, data: { field: "wire_bank", current_value: "Bank of the West", prior_value: "JPMorgan Chase", prior_document: "Original Wire Instructions" } },
-  { stage: "audit", agent: "Cross-Document Auditor", status: "progress", message: "DISCREPANCY: wire_routing changed from \"021000089\" to \"021000021\"", delay: 600, data: { field: "wire_routing", current_value: "021000021", prior_value: "021000089", prior_document: "Original Wire Instructions" } },
-  { stage: "audit", agent: "Cross-Document Auditor", status: "progress", message: "DISCREPANCY: wire_amount changed from \"$257,000.00\" to \"$847,921.00\"", delay: 600, data: { field: "wire_amount", current_value: "$847,921.00", prior_value: "$257,000.00", prior_document: "Original Wire Instructions" } },
-  { stage: "adversarial", agent: "Adversarial Panel", status: "start", message: "3 independent reviewers examining findings", delay: 600 },
-  { stage: "adversarial", agent: "Reviewer 1 (Skeptic)", status: "complete", message: "CONFIRMED FRAUD — routing number belongs to wrong bank, beneficiary is misspelled, amount inflated 3.3x. Classic BEC pattern.", delay: 2200 },
-  { stage: "adversarial", agent: "Reviewer 2 (Devil's Advocate)", status: "complete", message: "CONFIRMED FRAUD — \"Do NOT call the office\" is textbook social engineering. Urgency + communication isolation = BEC attack.", delay: 1800 },
-  { stage: "adversarial", agent: "Reviewer 3 (Compliance)", status: "complete", message: "CONFIRMED FRAUD — IMMEDIATE HOLD required. FBI IC3 filing recommended. All parties must be notified via verified channels.", delay: 1600 },
-  { stage: "alert", agent: "Alert Dispatcher", status: "start", message: "TRANSACTION FROZEN. Dispatching SMS + voice alerts to all parties.", delay: 400 },
-  { stage: "alert", agent: "Alert Dispatcher", status: "complete", message: "Closing coordinator, buyer agent, and seller agent notified. Hold confirmed.", delay: 1200 },
-  { stage: "synthesis", agent: "Risk Synthesizer", status: "complete", message: "VERDICT: CRITICAL RISK (94/100). All 3 reviewers CONFIRMED fraud. 7 indicators, 3 cross-document discrepancies. DO NOT WIRE.", delay: 1400 },
-  { stage: "pipeline", agent: "Closing Coordinator", status: "complete", message: "Analysis complete. 14 agents participated. THIS IS A BEC ATTACK. Transaction frozen. Do not wire funds under any circumstances.", delay: 800 },
+  { stage: "pipeline", agent: "TITLEwise", status: "start", message: "Wire instructions received. Running wire screening.", delay: 800 },
+  { stage: "extract", agent: "AI Extraction", status: "start", message: "Reading the bank, routing, account, beneficiary, and amount from the document", delay: 600 },
+  { stage: "extract", agent: "AI Extraction", status: "complete", message: "Found: 1 routing number, 1 beneficiary, 4 amounts. Every value appears in the pasted text.", delay: 1200, data: { banks: ["Bank of the West"], routingNumbers: ["021000089"], beneficiaries: ["Pacfic Coast Setlements LLC"], amounts: ["$1,285,000", "$1,028,000", "$257,000", "$847,921.00"], addresses: [] } },
+  { stage: "checksum", agent: "ABA Checksum", status: "complete", message: "Routing 021000089 passes the ABA checksum. A valid number is not proof of who owns the account.", delay: 700 },
+  { stage: "memory", agent: "Confirmed Wires", status: "start", message: "Comparing against wires your firm confirmed by phone", delay: 500 },
+  { stage: "audit", agent: "Confirmed Wires", status: "progress", message: "DISCREPANCY: account number differs from the one you confirmed by phone for routing 021000089", delay: 900, data: { field: "account", current_value: "****1038", prior_value: "****1756", prior_document: "phone-confirmed wire" } },
+  { stage: "audit", agent: "Confirmed Wires", status: "progress", message: "DISCREPANCY: bank changed from \"JPMorgan Chase\" to \"Bank of the West\"", delay: 600, data: { field: "bank", current_value: "Bank of the West", prior_value: "JPMorgan Chase", prior_document: "phone-confirmed wire" } },
+  { stage: "audit", agent: "Confirmed Wires", status: "progress", message: "DISCREPANCY: beneficiary changed from \"Pacific Coast Settlements LLC\" to \"Pacfic Coast Setlements LLC\"", delay: 600, data: { field: "beneficiary", current_value: "Pacfic Coast Setlements LLC", prior_value: "Pacific Coast Settlements LLC", prior_document: "phone-confirmed wire" } },
+  { stage: "analysis", agent: "AI Red Flags", status: "start", message: "Screening the text for common fraud indicators", delay: 500 },
+  { stage: "analysis", agent: "AI Red Flags", status: "complete", message: "CRITICAL: Amount $847,921 does not match Cash to Close ($257,000). Urgency language (\"IMMEDIATELY\", \"Do NOT call\"). \"Disregard previous\" instructions. Beneficiary name misspelled.", delay: 3000 },
+  { stage: "pipeline", agent: "TITLEwise", status: "complete", message: "HIGH RISK. DO NOT WIRE. Callback request drafted. Call the title company on a number you already know.", delay: 800 },
 ]
 
 // ── Verdict Data ──
@@ -128,13 +105,13 @@ const SAFE_VERDICT = {
     risk_level: "LOW",
     composite_risk_score: 12,
     signals: [
-      "All entities verified against public records",
-      "Amount matches closing disclosure",
-      "Routing number confirmed via FDIC",
+      "Matches the wire you confirmed by phone",
+      "Amount matches Cash to Close",
+      "Routing number passes ABA checksum",
       "Callback number provided",
     ],
   },
-  pipeline: { agents_invoked: new Array(14), duration_ms: 18400 },
+  pipeline: { agents_invoked: new Array(4), duration_ms: 8400 },
 }
 
 const FRAUD_VERDICT = {
@@ -142,16 +119,16 @@ const FRAUD_VERDICT = {
     risk_level: "CRITICAL",
     composite_risk_score: 94,
     signals: [
-      "Routing number belongs to different bank than claimed",
-      "Beneficiary name misspelled — possible typosquat",
+      "Account differs from the one you confirmed by phone",
+      "Bank and beneficiary changed on the same routing number",
+      "Beneficiary name misspelled",
       "Wire amount $847,921 does not match Cash to Close $257,000",
       "Urgency language: \"IMMEDIATELY\", \"Do NOT call\"",
       "Communication isolation: \"Reply to this email\"",
-      "Prior document on file has different wire instructions",
-      "Routing number flagged in 3 prior fraud reports",
+      "\"Please disregard previous\" instructions",
     ],
   },
-  pipeline: { agents_invoked: new Array(14), duration_ms: 24600 },
+  pipeline: { agents_invoked: new Array(4), duration_ms: 9800 },
 }
 
 // ── Constants ──
@@ -160,7 +137,7 @@ const STAGE_COLORS: Record<string, { bg: string; text: string; label: string }> 
   pipeline:      { bg: "#1e293b", text: "#94a3b8", label: "Coordinator" },
   extract:       { bg: "#164e63", text: "#67e8f9", label: "Extract" },
   analysis:      { bg: "#3b0764", text: "#d8b4fe", label: "Analyst" },
-  tavily:        { bg: "#422006", text: "#fbbf24", label: "Web Verify" },
+  checksum:      { bg: "#422006", text: "#fbbf24", label: "Checksum" },
   memory:        { bg: "#052e16", text: "#86efac", label: "Memory" },
   adversarial:   { bg: "#7f1d1d", text: "#fca5a5", label: "Panel" },
   synthesis:     { bg: "#1e1b4b", text: "#a5b4fc", label: "Synthesis" },
@@ -229,7 +206,7 @@ Settlement Agent: First American Title Company
 
 UPDATED WIRE INSTRUCTIONS — PLEASE DISREGARD PREVIOUS:
 Bank: Bank of the West
-Routing: 021000021
+Routing: 021000089
 Account: 927461038
 Beneficiary: Pacfic Coast Setlements LLC
 Amount: $847,921.00
@@ -350,11 +327,6 @@ function updateDealFromEvent(evt: AgentEvent, currentDeal: DealFacts): DealFacts
     data.addresses?.forEach((a: string) => { if (!d.entities.addresses.includes(a)) d.entities.addresses.push(a) })
   }
 
-  if (evt.stage === "tavily" && evt.status === "progress" && evt.data) {
-    const v = evt.data
-    if (v.entity) d.verifiedEntities[v.entity] = v.verified ? "verified" : "unverified"
-  }
-
   if (evt.stage === "audit" && evt.status === "progress" && evt.data?.field) {
     const ad = evt.data
     d.flags.push(`${ad.field?.replace(/_/g, " ")}: "${ad.current_value}" vs "${ad.prior_value}" (${ad.prior_document})`)
@@ -473,17 +445,17 @@ export default function DemoPage() {
         dealRef.current = currentDeal
         setDeal(currentDeal)
 
-        if (rec.stage === "alert" && rec.status === "start") {
+        if (demoKey === "fraud" && rec.stage === "analysis" && rec.status === "complete") {
           setAlertTime(Date.now())
           setNotifyStatus("sending")
         }
-        if (rec.stage === "alert" && rec.status === "complete") {
+        if (demoKey === "fraud" && i === recordedEvents.length - 1) {
           setNotifyStatus("sent")
         }
 
         if (i === recordedEvents.length - 1) {
           setVerdict(verdictData)
-          setAgentCount(14)
+          setAgentCount(4)
           setRunning(false)
 
           const restartT = setTimeout(() => {
@@ -593,18 +565,18 @@ export default function DemoPage() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 6 }}>
                   <ShieldAlert size={20} color="#ef4444" />
                   <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#ef4444", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                    Transaction Frozen
+                    Do Not Wire
                   </span>
                   <ShieldAlert size={20} color="#ef4444" />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
                   <Clock size={12} color="#fca5a5" />
                   <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#fca5a5", fontFamily: FONT_MONO, fontVariantNumeric: "tabular-nums" }}>
-                    Alert active: {formatElapsed(alertElapsed)}
+                    Flagged {formatElapsed(alertElapsed)} ago
                   </span>
                 </div>
                 <p style={{ fontSize: "0.625rem", color: "#fca5a5", marginTop: 4 }}>
-                  {riskScore}/100 risk score -- {agentCount} agents flagged this document
+                  {riskScore}/100 risk score -- {agentCount} checks ran on this document
                 </p>
               </div>
 
@@ -617,13 +589,13 @@ export default function DemoPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
                     <Phone size={12} color={notifyStatus === "sent" ? "#4ade80" : "#f87171"} />
                     <span style={{ fontSize: "0.6875rem", fontWeight: 600, color: notifyStatus === "sent" ? "#4ade80" : "#f87171", textTransform: "uppercase" }}>
-                      {notifyStatus === "sending" && "Dispatching alerts..."}
-                      {notifyStatus === "sent" && "All parties notified via SMS + Voice"}
-                      {notifyStatus === "idle" && "Preparing notifications..."}
+                      {notifyStatus === "sending" && "Drafting callback request..."}
+                      {notifyStatus === "sent" && "Callback request drafted"}
+                      {notifyStatus === "idle" && "Callback request drafted"}
                     </span>
                   </div>
                   <p style={{ fontSize: "0.625rem", color: dimText }}>
-                    Closing coordinator, buyer agent, and seller agent have been instructed to HOLD.
+                    Review and send it yourself. TITLEwise screens and drafts; it does not contact parties or hold funds.
                   </p>
                 </div>
 
@@ -677,7 +649,7 @@ export default function DemoPage() {
                 {deal.flags.length > 0 && (
                   <>
                     <p style={{ fontSize: "0.625rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#f87171", marginTop: 12, marginBottom: 6 }}>
-                      Cross-Document Discrepancies ({deal.flags.length})
+                      Changed vs. Phone-Confirmed Wire ({deal.flags.length})
                     </p>
                     {deal.flags.map((f, i) => (
                       <div key={i} style={{
@@ -700,7 +672,7 @@ export default function DemoPage() {
                     padding: "8px 14px", borderRadius: 6, border: "1px solid #f87171", fontSize: "0.72rem", fontWeight: 500,
                     backgroundColor: "transparent", color: "#f87171", cursor: "default", display: "flex", alignItems: "center", gap: 6,
                   }}>
-                    <Ban size={12} /> Re-notify All Parties
+                    <Ban size={12} /> Copy Callback Request
                   </button>
                 </div>
               </div>
@@ -805,9 +777,9 @@ export default function DemoPage() {
 
           {/* Agent counter */}
           <div style={{ padding: "10px 14px", borderTop: `1px solid ${border}`, backgroundColor: isHighRisk ? (c.isDark ? "rgba(127,29,29,0.15)" : "#fef2f2") : panelBg, display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ fontSize: "1.75rem", fontWeight: 700, color: isHighRisk ? "#ef4444" : c.primary, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{agentCount || 15}</span>
+            <span style={{ fontSize: "1.75rem", fontWeight: 700, color: isHighRisk ? "#ef4444" : c.primary, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{agentCount || 4}</span>
             <span style={{ fontSize: "0.625rem", color: isHighRisk ? "#fca5a5" : dimText, textTransform: "uppercase", letterSpacing: "0.04em" }}>
-              {isHighRisk ? "Agents Flagged This" : "Agents Available"}
+              {isHighRisk ? "Checks Flagged This" : "Checks Per Wire"}
             </span>
           </div>
         </div>
@@ -817,14 +789,14 @@ export default function DemoPage() {
           <div style={{ padding: "8px 14px", borderBottom: `1px solid ${border}`, backgroundColor: panelBg, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               {running && <div style={{ width: 7, height: 7, borderRadius: "50%", backgroundColor: "#ef4444", animation: "pulse 1s infinite" }} />}
-              <span style={{ fontSize: "0.6875rem", fontWeight: 500, color: dimText, textTransform: "uppercase", letterSpacing: "0.08em" }}>Agent Activity</span>
+              <span style={{ fontSize: "0.6875rem", fontWeight: 500, color: dimText, textTransform: "uppercase", letterSpacing: "0.08em" }}>Screening Activity</span>
             </div>
             {events.length > 0 && <span style={{ fontSize: "0.625rem", color: dimText }}>{events.length} events</span>}
           </div>
 
           <div style={{ padding: "6px 14px", backgroundColor: c.isDark ? "#0a0d12" : "#f8fafc", borderBottom: `1px solid ${border}`, display: "flex", alignItems: "center", gap: 6 }}>
             {running && <div style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#ef4444", animation: "blink 1s infinite" }} />}
-            <span style={{ fontSize: "0.6875rem", fontWeight: 500, color: dimText, textTransform: "uppercase", letterSpacing: "0.08em" }}>Agent Conversation</span>
+            <span style={{ fontSize: "0.6875rem", fontWeight: 500, color: dimText, textTransform: "uppercase", letterSpacing: "0.08em" }}>Screening Log</span>
           </div>
 
           {/* Log */}
@@ -836,7 +808,7 @@ export default function DemoPage() {
           }}>
             {events.length === 0 && !running ? (
               <div style={{ padding: "40px 20px", textAlign: "center", color: dimText, fontSize: "0.78rem" }}>
-                Click &quot;BEC Attack&quot; to see 14 agents catch wire fraud in real-time, or &quot;Safe Wire&quot; for a clean verification.
+                Click &quot;BEC Attack&quot; to see wire screening flag a fraudulent instruction, or &quot;Safe Wire&quot; for a clean one. Screening = AI red flags + ABA checksum + comparison to wires you confirmed by phone. It does not check account ownership with any outside source, so always confirm by phone.
               </div>
             ) : (
               events.map((evt, i) => {
@@ -874,7 +846,7 @@ export default function DemoPage() {
                   </p>
                   <p style={{ fontSize: "0.72rem", color: dimText }}>{(rs.signals || []).slice(0, 2).join(" | ")}</p>
                 </div>
-                <span style={{ fontSize: "0.72rem", color: dimText, fontVariantNumeric: "tabular-nums" }}>{agentCount} agents | {((pipelineInfo?.duration_ms || 0) / 1000).toFixed(1)}s</span>
+                <span style={{ fontSize: "0.72rem", color: dimText, fontVariantNumeric: "tabular-nums" }}>{agentCount} checks | {((pipelineInfo?.duration_ms || 0) / 1000).toFixed(1)}s</span>
               </motion.div>
             )}
           </AnimatePresence>

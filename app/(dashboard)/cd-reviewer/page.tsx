@@ -306,8 +306,9 @@ function CDReviewerContent() {
                   <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">TRID Compliance</h2>
                   {review.trid.trid_compliant === true && <span className="text-xs font-semibold text-green-600 bg-green-500/10 px-2 py-1 rounded-md">Compliant</span>}
                   {review.trid.trid_compliant === false && <span className="text-xs font-semibold text-red-600 bg-red-500/10 px-2 py-1 rounded-md">Violations Found</span>}
-                  {review.trid.cure_amount && <span className="text-xs font-semibold text-red-600">Cure required: {review.trid.cure_amount}</span>}
+                  {review.trid.cure_amount && <span className="text-xs font-semibold text-red-600">Est. cure: {review.trid.cure_amount}</span>}
                 </div>
+                <p className="text-xs text-muted-foreground mb-3">TRID classifications and cure amounts are AI estimates. Verify against the LE and CD before issuing a cure.</p>
                 {review.trid.trid_notes && <p className="text-sm text-foreground/80 mb-3">{review.trid.trid_notes}</p>}
                 {(review.trid.bucketA_violations?.length ?? 0) > 0 && (
                   <div className="mb-3">

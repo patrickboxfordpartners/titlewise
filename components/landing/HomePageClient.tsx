@@ -158,7 +158,7 @@ export default function HomePageClient() {
               The average closing takes 47 days.<br /><span style={{ color: c.primary }}>Yours doesn&apos;t have to.</span>
             </h1>
             <p className="tw-hero-sub" style={{ fontSize: "1.0625rem", fontWeight: 300, color: c.muted, lineHeight: 1.6, maxWidth: 640, margin: "0 auto 40px" }}>
-              AI closing coordinator for real estate attorneys. Title analysis in 30 seconds. TRID compliance checks automatic. Wire fraud caught before it happens.
+              AI closing coordinator for real estate attorneys. Title analysis in 30 seconds. TRID tolerance checks on every CD. Wire fraud screening before funds move.
             </p>
             <div className="tw-hero-buttons" style={{ display: "flex", gap: 12, flexWrap: "wrap" as const, justifyContent: "center" }}>
               <Link href="/pricing" style={{ display: "inline-flex", alignItems: "center", backgroundColor: c.primary, color: "#fff", fontSize: "1rem", fontWeight: 400, padding: "10px 24px", borderRadius: 9999, textDecoration: "none" }}>See pricing</Link>
@@ -175,8 +175,8 @@ export default function HomePageClient() {
           {[
             { stat: "$2.9B", label: "Lost to business email compromise in 2023", body: "The FBI reported $2.9 billion in business email compromise losses, the scheme behind most closing wire fraud. TITLEwise screens every wire instruction for red flags and compares it against wires you previously confirmed by phone on the same routing number.", source: "FBI Internet Crime Complaint Center, 2023 Annual Report" },
             { stat: "93%", label: "Faster title commitment review", body: "What takes 45 minutes by hand takes 30 seconds with TITLEwise. Exceptions flagged, requirements listed, red flags surfaced, structured and ready to act on.", source: "Based on average manual review time of 45 min vs. 30 sec AI analysis" },
-            { stat: "$4,100", label: "Average TRID violation penalty", body: "Tolerance violations and fee misclassifications add up fast. TITLEwise automatically checks Bucket A/B/C classifications and cure amount calculations.", source: "CFPB enforcement actions, average per-loan TRID penalty" },
-            { stat: "12", label: "AI tools in one platform", body: "Title analysis, CD review, wire verification, HOA review, fee estimates, tax proration, status updates, and more. Everything closing attorneys need.", source: "Title analysis, CD review, wire verification, HOA review, fee estimate, tax proration, status update, client portal, team invites, email integration, closing checklist, autonomous agent" },
+            { stat: "$4,100", label: "Average TRID violation penalty", body: "Tolerance violations and fee misclassifications add up fast. TITLEwise flags Bucket A/B/C classifications and estimates cure amounts for you to verify.", source: "CFPB enforcement actions, average per-loan TRID penalty" },
+            { stat: "12", label: "AI tools in one platform", body: "Title analysis, CD review, wire screening, HOA review, fee estimates, tax proration, status updates, and more. Everything closing attorneys need.", source: "Title analysis, CD review, wire verification, HOA review, fee estimate, tax proration, status update, client portal, team invites, email integration, closing checklist, closing agent" },
           ].map((item, idx) => (
             <div
               key={item.stat}
@@ -232,12 +232,12 @@ export default function HomePageClient() {
       <section className="tw-section-pad tw-section-lg" style={{ borderTop: `1px solid ${c.hairline}`, backgroundColor: c.canvasSoft, padding: "96px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 300, letterSpacing: "-0.64px", color: c.ink, marginBottom: 16 }}>Everything built in.</h2>
-          <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, marginBottom: 56, maxWidth: 480 }}>12 AI tools and an autonomous closing agent. Every plan includes every tool.</p>
+          <p style={{ fontSize: "15px", fontWeight: 300, color: c.muted, marginBottom: 56, maxWidth: 480 }}>12 AI tools and an on-demand closing agent. Every plan includes every tool.</p>
           <div className="tw-features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0 48px" }}>
             {[
               ["Title Commitment Analysis", "Exceptions, requirements, and red flags in 30 seconds", "Upload a PDF or paste text. AI identifies Schedule B exceptions, flags actionable requirements, and highlights risks like open liens or unreleased mortgages."],
-              ["Closing Disclosure Reviewer", "TRID compliance against federal tolerances, automatic", "Checks Bucket A/B/C fee classifications, calculates tolerance thresholds, and flags cure amounts before they become violations."],
-              ["Wire Fraud Screening", "AI red-flag screening plus a drafted callback request", "Screens wire instructions for common fraud indicators, checks the routing number checksum, and compares against wires you previously confirmed by phone. Always confirm by phone before wiring."],
+              ["Closing Disclosure Reviewer", "TRID tolerance review against federal limits", "AI reviews Bucket A/B/C fee classifications against tolerance thresholds and estimates cure amounts. Verify cures against the LE and CD before issuing."],
+              ["Wire Fraud Screening", "AI red-flag screening plus a drafted callback request", "AI red flags, an ABA routing checksum, and a comparison to wires you confirmed by phone. It does not check account ownership with any outside source, so always confirm by phone before wiring."],
               ["HOA Document Review", "Fees, restrictions, and pending assessments surfaced instantly", "Reads HOA resale certificates, CC&Rs, and estoppel letters. Surfaces transfer fees, special assessments, rental restrictions, and pending litigation."],
               ["Status Update Generator", "AI drafts client updates from checklist state, one click to send", "Reads your matter's current state and drafts a professional status email with next steps. Review, edit, and send directly from TITLEwise."],
               ["Fee Estimate Tool", "County-specific closing cost breakdowns for any transaction type", "Generates buyer and seller fee estimates using county-specific recording fees, transfer taxes, and title insurance rates."],
@@ -246,7 +246,7 @@ export default function HomePageClient() {
               ["Team Invites", "Role-based access for colleagues across matters", "Invite paralegals and associates with role-based permissions. Everyone sees the matters they need, nothing they don't."],
               ["Email Integration", "Postmark, Gmail, or custom SMTP, sends from your inbox", "Connect your email and send status updates, closing instructions, and follow-ups directly from TITLEwise. Logged to the matter automatically."],
               ["Closing Checklist", "State-specific checklists auto-generated per transaction", "Each new matter gets a checklist tailored to your state and transaction type. Purchase, sale, refinance, and cash purchase workflows built in."],
-              ["Autonomous Closing Agent", "AI that monitors matters, updates checklists, surfaces blockers", "Neil monitors your matters continuously. Reads incoming emails, checks off completed items, flags overdue tasks, and drafts communications."],
+              ["Closing Agent", "On-demand AI that updates checklists and surfaces blockers", "Click Run Agent on a matter and Neil reads it, checks off completed items, flags overdue tasks, and drafts the status update. It runs when you click, not on a schedule."],
             ].map(([title, sub, detail]) => (
               <div
                 key={title}
@@ -284,8 +284,8 @@ export default function HomePageClient() {
           <div className="tw-pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {[
               { name: "Solo", price: "$149", note: "1 attorney &middot; 100 AI generations/mo", features: ["1 user seat", "100 AI generations/mo", "All 12 tools included", "Unlimited matters", "Email support"] },
-              { name: "Small Firm", price: "$349", note: "Up to 5 seats &middot; Client portal", featured: true, features: ["Up to 5 user seats", "500 AI generations/mo", "Client portal access", "Team collaboration", "Priority email support"] },
-              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,500 AI generations/mo", "Client portal access", "Autonomous closing agent", "Priority support with SLA"] },
+              { name: "Small Firm", price: "$349", note: "Up to 5 seats &middot; 500 AI generations/mo", featured: true, features: ["Up to 5 user seats", "500 AI generations/mo", "All 12 tools included", "Team collaboration", "Priority email support"] },
+              { name: "Pro", price: "$599", note: "Up to 10 seats &middot; Priority support", features: ["Up to 10 user seats", "1,500 AI generations/mo", "All 12 tools included", "Team collaboration", "Priority support with SLA"] },
               { name: "Enterprise", price: "$999", note: "25 seats &middot; Custom onboarding", features: ["Up to 25 user seats", "5,000 AI generations/mo", "Custom onboarding", "Dedicated account manager", "API access"] },
             ].map((plan) => {
               const isExpanded = expandedPlan === plan.name

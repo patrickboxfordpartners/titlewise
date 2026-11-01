@@ -18,10 +18,10 @@ const coreTools = [
 ]
 
 const premiumFeatures = [
-  { icon: Bot, title: "Autonomous Agent", description: "Analyzes matters, updates checklists, drafts status emails. Automatic.", badge: "Pro", color: "purple" },
-  { icon: Users, title: "Client Portal", description: "Clients track checklist progress and status in real time.", badge: "Small Firm+", color: "blue" },
-  { icon: Scale, title: "TRID Engine", description: "Bucket A/B/C classification. Tolerance cure amounts calculated.", badge: "Pro", color: "orange" },
-  { icon: Brain, title: "Wire Fraud Memory", description: "Phone-confirmed wires remembered. Changed accounts flagged.", badge: "Small Firm+", color: "red" },
+  { icon: Bot, title: "Closing Agent", description: "Analyzes a matter, updates checklists, drafts status emails. Runs when you click.", badge: "All plans", color: "purple" },
+  { icon: Users, title: "Client Portal", description: "Clients track checklist progress and status in real time.", badge: "All plans", color: "blue" },
+  { icon: Scale, title: "TRID Engine", description: "Bucket A/B/C classification. AI-estimated cure amounts to verify.", badge: "All plans", color: "orange" },
+  { icon: Brain, title: "Wire Fraud Memory", description: "Phone-confirmed wires remembered. Changed accounts flagged.", badge: "All plans", color: "red" },
 ]
 
 const colorClasses = {
