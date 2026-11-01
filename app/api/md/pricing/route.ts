@@ -21,7 +21,7 @@ last-updated: 2026-08-27
 - 1 attorney seat
 - All AI document review tools
 - 100 AI generations/month
-- Wire fraud verification
+- Wire fraud screening (AI red flags + drafted callback request)
 - Email status updates
 - Basic support
 - API access (100 req/min)
@@ -64,7 +64,7 @@ Everything in Small Firm, plus:
 - API access (500 req/min)
 
 **Limits:**
-- 15 user accounts
+- 10 user accounts
 - 10,000 API calls/month
 - Phone + email support
 

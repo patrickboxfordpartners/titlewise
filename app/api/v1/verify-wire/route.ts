@@ -205,12 +205,19 @@ export async function POST(request: NextRequest) {
     analysis = JSON.parse(jsonMatch[0])
 
     // Deterministic ABA checksum overrides the model's opinion of the routing format
-    const routing = typeof analysis?.bankInformation?.routingNumber === "string"
-      ? analysis.bankInformation.routingNumber.replace(/[\s-]/g, "")
+    if (!analysis || typeof analysis !== "object" || Array.isArray(analysis)) {
+      throw new Error("Model returned a non-object analysis")
+    }
+    const rawRouting = analysis.bankInformation && typeof analysis.bankInformation === "object"
+      ? analysis.bankInformation.routingNumber
       : null
-    if (routing && analysis.verification && typeof analysis.verification === "object") {
-      const valid = isValidAbaRouting(routing)
-      analysis.verification.routingNumberFormat = valid ? "valid" : "invalid"
+    const routing = typeof rawRouting === "string" ? rawRouting.replace(/[\s-]/g, "") || null : null
+    if (!analysis.verification || typeof analysis.verification !== "object" || Array.isArray(analysis.verification)) {
+      analysis.verification = {}
+    }
+    const valid = routing ? isValidAbaRouting(routing) : false
+    analysis.verification.routingNumberFormat = routing ? (valid ? "valid" : "invalid") : "not found"
+    if (routing) {
       if (!valid) {
         analysis.redFlags = [
           { severity: "high", issue: "Routing number fails ABA checksum", explanation: `"${routing}" is not a valid ABA routing number. Confirm by phone with a known contact before wiring.` },

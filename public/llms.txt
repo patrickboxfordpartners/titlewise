@@ -54,7 +54,7 @@ TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered
 - **Status Updates** — AI generates plain-language updates from checklist progress, emails them to all parties
 - **Title Analysis** — Parses title commitments, flags exceptions, identifies potential issues
 - **CD Reviewer** — TRID-compliant closing disclosure review engine
-- **Wire Verification** — Cross-matter memory detects anomalies in wire instructions
+- **Wire Fraud Screening** — AI red-flag screening, ABA routing checksum, drafted callback request, and comparison against wires you confirmed by phone
 - **HOA Reviewer** — Extracts key terms, fees, and restrictions from HOA documents
 - **Fee Estimate** — County-specific recording fees, transfer taxes, title insurance premiums
 - **Tax Proration** — Calculates buyer/seller tax responsibilities with per-diem precision
@@ -64,8 +64,8 @@ TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered
 ## Pricing
 - Solo: $149/month (1 attorney, all AI tools)
 - Small Firm: $349/month (up to 5 users)
-- Pro: $599/month (up to 15 users, Closing Agent)
-- Enterprise: $999/month (unlimited users, API access, custom integrations)
+- Pro: $599/month (up to 10 users, Closing Agent)
+- Enterprise: $999/month (up to 25 users, API access, custom integrations)
 
 ## Company
 TITLEwise is built by Boxford Partners, an embedded operations consulting firm based in San Francisco. The product was built from problems observed inside real estate closing operations during consulting engagements.

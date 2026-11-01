@@ -10,7 +10,7 @@ import { checkRateLimit } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 import {
   isValidAbaRouting, normalizeRouting, hashAccount, maskAccount,
-  encodeStoredAccount, decodeStoredAccount, signConfirmToken,
+  encodeStoredAccount, decodeStoredAccount, signConfirmToken, hashUsesActiveKey,
 } from "@/lib/wire-checks"
 
 const requestSchema = z.object({
@@ -183,7 +183,11 @@ export async function POST(req: NextRequest) {
         if (known.length > 0) {
           const knownBanks = [...new Set(known.map(w => w.bankName).filter(Boolean))]
           const knownBeneficiaries = [...new Set(known.map(w => w.beneficiary).filter(Boolean))]
-          const knownHashes = known.map(w => decodeStoredAccount(w.accountNumber).hash).filter((h): h is string => Boolean(h))
+          const storedHashes = known.map(w => decodeStoredAccount(w.accountNumber).hash).filter((h): h is string => Boolean(h))
+          const knownHashes = storedHashes.filter(hashUsesActiveKey)
+          if (storedHashes.length > knownHashes.length) {
+            logger.warn("verify-wire", "Some stored account hashes were made with a different key and were skipped", { skipped: storedHashes.length - knownHashes.length })
+          }
 
           if (result.extracted.bankName && knownBanks.length > 0 && !knownBanks.some(b => b?.toLowerCase() === result.extracted.bankName?.toLowerCase())) {
             deviations.push(`Bank name "${result.extracted.bankName}" differs from previously confirmed wires on this routing number (previously: ${knownBanks.join(", ")})`)
@@ -204,7 +208,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Nothing is saved automatically. The attorney confirms after a verbal callback.
-    const confirmToken = routing
+    // A routing number that fails the checksum can never be saved as confirmed.
+    const confirmToken = routing && deterministicChecks.routingChecksum === "valid"
       ? signConfirmToken({
           u: user.id,
           bank: result.extracted.bankName,

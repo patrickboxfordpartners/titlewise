@@ -16,7 +16,7 @@ TITLEwise is a SaaS platform that gives real estate closing attorneys AI-powered
 - **Status Updates** — AI generates plain-language updates from checklist progress, emails them to all parties
 - **Title Analysis** — Parses title commitments, flags exceptions, identifies potential issues
 - **CD Reviewer** — TRID-compliant closing disclosure review engine
-- **Wire Verification** — Cross-matter memory detects anomalies in wire instructions
+- **Wire Fraud Screening** — AI red-flag screening, ABA routing checksum, drafted callback request, and comparison against wires you confirmed by phone
 - **HOA Reviewer** — Extracts key terms, fees, and restrictions from HOA documents
 - **Fee Estimate** — County-specific recording fees, transfer taxes, title insurance premiums
 - **Tax Proration** — Calculates buyer/seller tax responsibilities with per-diem precision

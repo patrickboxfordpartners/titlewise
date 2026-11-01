@@ -103,7 +103,6 @@ We do NOT sell your personal information. We share data only in these limited ci
 
 ### Service Providers
 We share data with trusted third parties who help us operate:
-- **Clerk:** Authentication and user management
 - **Stripe:** Payment processing
 - **OpenAI & Anthropic:** AI document analysis (zero-data-retention agreements)
 - **Vercel:** Hosting and infrastructure

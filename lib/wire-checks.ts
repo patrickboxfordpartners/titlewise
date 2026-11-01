@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "crypto"
+import { createHash, createHmac, timingSafeEqual } from "crypto"
 
 /**
  * Deterministic wire-instruction checks that run alongside the AI screening.
@@ -33,12 +33,30 @@ function hashKey(): string | null {
   return process.env.WIRE_HASH_SECRET || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || null
 }
 
-/** Keyed hash of a full account number, scoped to a user. Returns null if no key is configured. */
+/** Short fingerprint of the active hash key, stored with each hash so a key change is detectable. */
+export function hashKeyFingerprint(): string | null {
+  const key = hashKey()
+  if (!key) return null
+  return createHash("sha256").update(`wire-key:${key}`).digest("hex").slice(0, 8)
+}
+
+/**
+ * Keyed hash of a full account number, scoped to a user, formatted "v1:<keyFingerprint>:<hmac>".
+ * Returns null if no key is configured or the number is missing/masked.
+ */
 export function hashAccount(userId: string, account: string | null | undefined): string | null {
   const key = hashKey()
+  const fp = hashKeyFingerprint()
   const normalized = normalizeAccount(account)
-  if (!key || !normalized) return null
-  return createHmac("sha256", key).update(`acct:${userId}:${normalized}`).digest("hex").slice(0, 32)
+  if (!key || !fp || !normalized) return null
+  const mac = createHmac("sha256", key).update(`acct:${userId}:${normalized}`).digest("hex").slice(0, 32)
+  return `v1:${fp}:${mac}`
+}
+
+/** True when a stored hash was made with the currently active key (so it can be compared). */
+export function hashUsesActiveKey(stored: string): boolean {
+  const fp = hashKeyFingerprint()
+  return Boolean(fp) && stored.startsWith(`v1:${fp}:`)
 }
 
 export function maskAccount(account: string | null | undefined): string | null {
