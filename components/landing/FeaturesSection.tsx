@@ -106,7 +106,7 @@ export default function FeaturesSection() {
             Everything you need to close faster
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            12 tools and an autonomous AI agent -- built around the real estate closing workflow
+            12 tools and an on-demand closing agent -- built around the real estate closing workflow
           </p>
         </motion.div>
 
@@ -133,7 +133,7 @@ export default function FeaturesSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, amount: 0.01 }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Advanced Capabilities -- Available on higher plans</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">Advanced Capabilities -- Included on every plan</p>
         </motion.div>
 
         <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">

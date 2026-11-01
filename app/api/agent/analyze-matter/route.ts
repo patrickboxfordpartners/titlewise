@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   const totalItems = items.length
   const pct = totalItems > 0 ? Math.round((complete.length / totalItems) * 100) : 0
 
-  const prompt = `You are an autonomous closing coordinator AI. Analyze this real estate closing matter and provide actionable intelligence.
+  const prompt = `You are a closing coordinator AI. Analyze this real estate closing matter and provide actionable intelligence.
 
 MATTER:
 - Client: ${matter.clientName}

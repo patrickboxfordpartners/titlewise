@@ -26,6 +26,7 @@ const PRODUCT_UPDATES = {
     description: 'AI-powered closing platform for solo practitioners. Includes all 12 core tools, 100 AI generations per month, and email support.',
     features: [
       { name: '1 attorney seat' },
+      { name: 'Every TITLEwise tool, including the closing agent' },
       { name: '100 AI generations per month' },
       { name: 'All 12 core closing tools' },
       { name: 'State-specific checklists (7 states)' },
@@ -37,27 +38,23 @@ const PRODUCT_UPDATES = {
   },
   small_firm: {
     name: 'TITLEwise Small Firm',
-    description: 'Built for growing firms. Up to 5 attorneys with shared history, client portals, and wire fraud protection.',
+    description: 'Built for growing firms. Up to 5 attorneys with shared history and every TITLEwise tool.',
     features: [
       { name: 'Up to 5 attorney seats' },
       { name: '500 AI generations per month' },
       { name: 'All Solo features' },
       { name: 'Shared history across firm' },
-      { name: 'Client matter portal' },
-      { name: 'Wire fraud institutional memory' },
       { name: 'Team invitations & seat management' },
       { name: 'Priority email support' },
     ],
   },
   pro: {
     name: 'TITLEwise Pro',
-    description: 'Full platform with autonomous AI agent. TRID compliance engine, 1,500 generations, and priority support for up to 10 attorneys.',
+    description: 'Every TITLEwise tool, 1,500 generations, and priority support for up to 10 attorneys.',
     features: [
       { name: 'Up to 10 attorney seats' },
       { name: '1,500 AI generations per month' },
       { name: 'All Small Firm features' },
-      { name: 'Autonomous closing agent' },
-      { name: 'TRID compliance engine' },
       { name: 'Document version history' },
       { name: 'API access' },
       { name: 'Priority support' },

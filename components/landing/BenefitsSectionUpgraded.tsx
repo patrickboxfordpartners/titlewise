@@ -5,7 +5,7 @@ import { CheckCircle, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const benefits = [
-  "12 tools and an autonomous AI agent covering every stage of the closing workflow",
+  "12 tools and an on-demand AI closing agent covering every stage of the closing workflow",
   "Built for real estate closing attorneys, not title companies",
   "State-specific checklist templates for NH, MA, NY, CA, FL, TX, PA",
   "Client-facing portals so buyers and sellers can track progress themselves",

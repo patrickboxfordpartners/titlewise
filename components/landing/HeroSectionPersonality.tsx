@@ -220,11 +220,11 @@ export default function HeroSectionPersonality() {
                     <Bot className="h-5 w-5 text-green-600" strokeWidth={2.5} />
                   </div>
                   <div className="text-3xl font-black tracking-tighter bg-gradient-to-br from-green-600 to-green-400 bg-clip-text text-transparent">
-                    24/7
+                    1-click
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground font-bold">
-                  Autonomous Agent
+                  On-Demand Agent
                 </p>
               </motion.div>
             </div>

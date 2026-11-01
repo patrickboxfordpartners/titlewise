@@ -30,7 +30,7 @@
 #### Fixed Issues:
 4. ✅ **pricing.md** - Created `/public/pricing.md`
    - Machine-readable pricing with all 4 plans detailed
-   - Add-ons, free trial, and payment terms documented
+   - Free trial and payment terms documented
    - Expected gain: +2 pts
 
 5. ✅ **Trust anchor pages** - Created `/public/about.md`, `/public/contact.md`, `/public/privacy.md`

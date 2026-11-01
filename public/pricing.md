@@ -60,15 +60,6 @@ Every plan includes every TITLEwise tool: title analysis, CD/TRID review, wire f
 
 ---
 
-## Add-ons
-
-- **Extra API calls:** $0.01 per request over plan limit
-- **Additional storage:** $10/month per 10GB
-- **Dedicated instance:** Contact sales
-- **Custom integrations:** Starting at $2,500
-
----
-
 ## Free Trial
 
 - 14-day free trial on all plans
