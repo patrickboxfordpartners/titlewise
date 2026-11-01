@@ -46,6 +46,21 @@ export default function SignupPage() {
         setError("Account created but login failed. Please try logging in.")
         router.push("/login")
       } else {
+        // Arrived from a plan's "Get Started" button: continue straight to Stripe Checkout.
+        const params = new URLSearchParams(window.location.search)
+        const plan = params.get("plan")
+        if (plan) {
+          const res = await fetch("/api/stripe/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ plan, annual: params.get("annual") === "true" }),
+          }).catch(() => null)
+          const data = res?.ok ? await res.json().catch(() => null) : null
+          if (data?.url) {
+            window.location.assign(data.url)
+            return
+          }
+        }
         router.push("/pricing")
         router.refresh()
       }
