@@ -1,10 +1,3 @@
----
-title: TITLEwise Pricing
-description: Machine-readable pricing plans for AI agents. Plans from $149/month to $999/month.
-canonical: https://titlewise.app/pricing
-last-updated: 2026-08-27
----
-
 # TITLEwise Pricing
 
 > Machine-readable pricing for AI agents

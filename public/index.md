@@ -1,10 +1,3 @@
----
-title: TITLEwise — AI Closing Platform for Real Estate Attorneys
-description: From intake to clear-to-close. AI tools for title analysis, CD review, wire fraud prevention, and status updates. Built for real estate closing attorneys.
-canonical: https://titlewise.app
-last-updated: 2026-08-27
----
-
 # TITLEwise
 
 > AI-powered tools for real estate closing attorneys. Automate document review, wire fraud screening, closing checklists, and client communication.
