@@ -20,6 +20,7 @@ const PUBLIC_ROUTES = [
   "/api/v1",
   "/api/contact",
   "/api/agent-discovery",
+  "/api/openapi.yaml",
   "/api/stripe/webhook",
   "/api/postmark/inbound",
   "/api/auth",
@@ -60,8 +61,12 @@ const PROTECTED_PREFIXES = [
   "/wire-verification",
   "/analyze",
   "/api-docs",
+  "/try",
   "/api",
 ]
+// Keep this list in sync with app/(dashboard) and any other signed-in route:
+// a page missing here is served to signed-out visitors (its own auth checks
+// still apply) instead of redirecting to /login.
 
 const MARKDOWN_PATHS = new Set(["/", "/pricing", "/faq"])
 // Pages whose markdown twin is a static file in public/.

@@ -107,7 +107,15 @@ export async function POST(req: NextRequest) {
   const requests = batch.filter(m => m && m.id !== undefined && m.id !== null)
   // Notifications only (e.g. notifications/initialized): acknowledge with 202.
   if (requests.length === 0) return new NextResponse(null, { status: 202 })
-  const results = await Promise.all(requests.map(m => handle(m, req)))
+  // One failing request must not drop the others' responses.
+  const results = await Promise.all(
+    requests.map(m =>
+      handle(m, req).catch(err => {
+        console.error("[mcp] request failed", err)
+        return rpcError(m.id, -32603, "Internal error")
+      })
+    )
+  )
   return NextResponse.json(Array.isArray(body) ? results : results[0], {
     headers: { "MCP-Protocol-Version": PROTOCOL_VERSION },
   })
