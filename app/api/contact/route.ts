@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse, after } from "next/server"
 import { db } from "@/lib/db"
 import { contactSubmissions } from "@/lib/db/schema"
-import { postmark, POSTMARK_FROM_EMAIL } from "@/lib/postmark"
+import { postmark, POSTMARK_FROM_EMAIL, notifySignup } from "@/lib/postmark"
 import { z } from "zod"
 
 const contactSchema = z.object({
@@ -58,6 +58,13 @@ IP: ${req.headers.get("x-forwarded-for") || "unknown"}
       TextBody: emailBody,
       MessageStream: "outbound",
     })
+
+    after(() => notifySignup({
+      kind: "demo request",
+      email,
+      name,
+      details: { Firm: firm, Source: "/api/contact" },
+    }))
 
     return NextResponse.json({ success: true })
   } catch (err) {
