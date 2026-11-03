@@ -3,6 +3,7 @@ import { db } from "@/lib/db"
 import { users } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import bcrypt from "bcryptjs"
+import { notifySignup } from "@/lib/postmark"
 
 export async function POST(req: Request) {
   try {
@@ -38,6 +39,13 @@ export async function POST(req: Request) {
       firmName: firmName || null,
       subscriptionStatus: "inactive",
     }).returning()
+
+    await notifySignup({
+      kind: "signup",
+      email: newUser.email,
+      name: newUser.name,
+      details: { Firm: newUser.firmName, Source: "/api/auth/signup" },
+    })
 
     return NextResponse.json({
       success: true,
