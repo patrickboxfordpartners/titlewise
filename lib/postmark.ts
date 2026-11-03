@@ -54,7 +54,7 @@ export async function notifySignup({ kind, email, name, details }: SignupAlertIn
     // Dedicated client with a hard 5s timeout so a slow Postmark actually
     // cancels instead of holding a serverless invocation open.
     const client = new ServerClient(process.env.POSTMARK_API_KEY, {
-      timeout: 5000,
+      timeout: 5,
     })
     await client.sendEmail({
       From: POSTMARK_FROM_EMAIL,
