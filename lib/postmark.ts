@@ -31,8 +31,9 @@ export type SignupAlertInput = {
 }
 
 /**
- * Best-effort internal alert for new signups/leads. Never throws, never blocks
- * longer than 5s, and no-ops when POSTMARK_API_KEY is unset.
+ * Best-effort internal alert for new signups/leads. Never throws and no-ops
+ * when POSTMARK_API_KEY is unset. Callers should schedule this with after()
+ * from next/server so it never blocks the response.
  */
 export async function notifySignup({ kind, email, name, details }: SignupAlertInput): Promise<void> {
   try {
@@ -50,21 +51,18 @@ export async function notifySignup({ kind, email, name, details }: SignupAlertIn
       if (value) lines.push(`${key}: ${value}`)
     }
 
-    const signal = AbortSignal.timeout(5000)
-    const timeout = new Promise<never>((_, reject) => {
-      signal.addEventListener("abort", () => reject(new Error("notifySignup timed out")), { once: true })
+    // Dedicated client with a hard 5s timeout so a slow Postmark actually
+    // cancels instead of holding a serverless invocation open.
+    const client = new ServerClient(process.env.POSTMARK_API_KEY, {
+      timeout: 5000,
     })
-
-    await Promise.race([
-      postmark.sendEmail({
-        From: POSTMARK_FROM_EMAIL,
-        To: to,
-        Subject: `[TITLEwise] New ${kind}: ${email}`,
-        TextBody: lines.join("\n"),
-        MessageStream: "outbound",
-      }),
-      timeout,
-    ])
+    await client.sendEmail({
+      From: POSTMARK_FROM_EMAIL,
+      To: to,
+      Subject: `[TITLEwise] New ${kind}: ${email}`,
+      TextBody: lines.join("\n"),
+      MessageStream: "outbound",
+    })
   } catch (error) {
     console.error("notifySignup failed:", error)
   }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse, after } from "next/server"
 import { db } from "@/lib/db"
 import { contactSubmissions } from "@/lib/db/schema"
 import { postmark, POSTMARK_FROM_EMAIL, notifySignup } from "@/lib/postmark"
@@ -59,12 +59,12 @@ IP: ${req.headers.get("x-forwarded-for") || "unknown"}
       MessageStream: "outbound",
     })
 
-    await notifySignup({
+    after(() => notifySignup({
       kind: "demo request",
       email,
       name,
       details: { Firm: firm, Source: "/api/contact" },
-    })
+    }))
 
     return NextResponse.json({ success: true })
   } catch (err) {

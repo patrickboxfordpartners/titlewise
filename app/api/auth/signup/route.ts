@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextResponse, after } from "next/server"
 import { db } from "@/lib/db"
 import { users } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
@@ -40,12 +40,12 @@ export async function POST(req: Request) {
       subscriptionStatus: "inactive",
     }).returning()
 
-    await notifySignup({
+    after(() => notifySignup({
       kind: "signup",
       email: newUser.email,
       name: newUser.name,
       details: { Firm: newUser.firmName, Source: "/api/auth/signup" },
-    })
+    }))
 
     return NextResponse.json({
       success: true,
