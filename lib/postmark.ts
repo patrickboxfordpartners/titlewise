@@ -22,3 +22,48 @@ export const postmark = {
 }
 
 export const POSTMARK_FROM_EMAIL = process.env.POSTMARK_FROM_EMAIL || "hello@titlewise.app"
+
+export type SignupAlertInput = {
+  kind: string
+  email: string
+  name?: string | null
+  details?: Record<string, string | null | undefined>
+}
+
+/**
+ * Best-effort internal alert for new signups/leads. Never throws and no-ops
+ * when POSTMARK_API_KEY is unset. Callers should schedule this with after()
+ * from next/server so it never blocks the response.
+ */
+export async function notifySignup({ kind, email, name, details }: SignupAlertInput): Promise<void> {
+  try {
+    if (!process.env.POSTMARK_API_KEY) return
+
+    const to = process.env.SIGNUP_ALERT_TO ?? "patrick@boxfordpartners.com"
+    const lines = [
+      "App: TITLEwise",
+      `Kind: ${kind}`,
+      `Email: ${email}`,
+      `Name: ${name || "Not provided"}`,
+      `Time: ${new Date().toISOString()}`,
+    ]
+    for (const [key, value] of Object.entries(details ?? {})) {
+      if (value) lines.push(`${key}: ${value}`)
+    }
+
+    // Dedicated client with a hard 5s timeout so a slow Postmark actually
+    // cancels instead of holding a serverless invocation open.
+    const client = new ServerClient(process.env.POSTMARK_API_KEY, {
+      timeout: 5,
+    })
+    await client.sendEmail({
+      From: POSTMARK_FROM_EMAIL,
+      To: to,
+      Subject: `[TITLEwise] New ${kind}: ${email}`,
+      TextBody: lines.join("\n"),
+      MessageStream: "outbound",
+    })
+  } catch (error) {
+    console.error("notifySignup failed:", error)
+  }
+}
