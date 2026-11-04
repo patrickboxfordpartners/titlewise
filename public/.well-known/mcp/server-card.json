@@ -38,5 +38,11 @@
     "name": "titlewise",
     "version": "1.0.0",
     "description": "AI-powered tools for real estate closing attorneys: title analysis, CD review, wire verification, HOA review"
-  }
+  },
+  "icons": [
+    {
+      "src": "https://titlewise.app/icon-only.svg",
+      "mimeType": "image/svg+xml"
+    }
+  ]
 }

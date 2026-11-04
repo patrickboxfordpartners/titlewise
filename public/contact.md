@@ -1,10 +1,3 @@
----
-title: Contact TITLEwise
-description: Contact TITLEwise for support, sales inquiries, partnerships, or security questions. Email hello@titlewise.app or support@titlewise.app.
-canonical: https://titlewise.app/contact
-last-updated: 2026-08-27
----
-
 # Contact TITLEwise
 
 ## Get in Touch

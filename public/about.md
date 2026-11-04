@@ -1,10 +1,3 @@
----
-title: About TITLEwise
-description: TITLEwise is an AI-powered platform for real estate closing attorneys, built by Boxford Partners to automate document review and reduce errors.
-canonical: https://titlewise.app/about
-last-updated: 2026-08-27
----
-
 # About TITLEwise
 
 ## Who We Are
